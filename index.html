@@ -103,7 +103,7 @@
     
 <div class="header" role="banner" aria-label="School Header">
   <div class="logo-badge" aria-hidden="true">
-    <img src="banner_logo.png" alt="S.B. Public School Logo"/>
+    
   </div>
   <div class="shield" aria-hidden="true"></div>
   <div class="header-content">
@@ -114,7 +114,7 @@
 </div>
 
       <div style="display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap">
-        <img src="banner_logo.png" alt="S.B. Public School Banner" style="height:64px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.12);" />
+        
         <div style="text-align:center;min-width:280px">
           <h1 style="margin:0;font-size:20px">S.B. PUBLIC SCHOOL CHHITAUNA — POST MEGHAULI KALA, PIN CODE 273305</h1>
           <div class="sub" style="margin-top:6px;font-size:13px;opacity:0.95">PRINCIPAL: MR. GAJENDRA YADAV — CALL: +91 6389259200</div>
@@ -195,11 +195,10 @@ async function fetchGvizJson(sheetId, sheetName) {
 function extractCellValue(cell) {
   if (!cell) return "";
   if (cell.f && typeof cell.f === "string") {
-    const m = cell.f.match(/<img[^>]+src="([^"]+)"/i);
+    const m = cell.f.match(/]+src="([^"]+)"/i);
     if (m) return m[1];
   }
-  if (typeof cell.v === "string" && cell.v.includes("<img")) {
-    const m = String(cell.v).match(/<img[^>]+src="([^"]+)"/i);
+  if (typeof cell.v === "string" && cell.v.includes("]+src="([^"]+)"/i);
     if (m) return m[1];
   }
   if (typeof cell.v === "string" && cell.v.startsWith("http")) return cell.v;
