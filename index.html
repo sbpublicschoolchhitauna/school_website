@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>S.B. PUBLIC SCHOOL CHHITAUNA — Student Portal</title>
+  <style>
+    /* Premium Blue theme, attractive cards */
+    :root{
+      --bg: #f3f7fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #1167b1;
+      --accent-2: #0b5fa8;
+      --glass: rgba(255,255,255,0.7);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial;
+      background: linear-gradient(180deg,#eaf4ff 0%, #f7fbff 100%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+    }
+    .container{max-width:1100px;margin:28px auto;padding:18px}
+    .header{
+      background: linear-gradient(90deg, rgba(17,103,177,0.95), rgba(11,95,168,0.95));
+      color:white;
+      padding:20px;border-radius:12px;box-shadow:0 8px 30px rgba(12,40,80,0.12);
+      text-align:center;
+    }
+    .header h1{margin:0;font-size:20px;letter-spacing:0.6px}
+    .header .addr{margin-top:8px;font-size:13px;opacity:0.95}
+    .header .meta{margin-top:10px;font-size:13px;opacity:0.95}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px;align-items:start}
+    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 8px 22px rgba(15,23,42,0.06)}
+    h2.section{margin:0 0 10px;font-size:18px;color:var(--accent)}
+    .small{font-size:13px;color:var(--muted)}
+    /* search */
+    .search-row{display:flex;gap:10px}
+    input[type="text"]{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #e6eefc;font-size:15px;background:#fbfdff}
+    button.btn{background:linear-gradient(180deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    /* student details */
+    .student-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .field{padding:10px;border-radius:8px;background:linear-gradient(180deg,#fbfdff,#f6fbff);border:1px solid rgba(11,95,168,0.06)}
+    .field strong{display:block;margin-bottom:6px;color:#0f172a}
+    .portals{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .portals a{display:inline-block;padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,#eef6ff,#e6f0ff);color:var(--accent);text-decoration:none;border:1px solid rgba(11,95,168,0.08)}
+    /* notifications - attractive */
+    .notify {height:240px; overflow:hidden; position:relative; background:linear-gradient(180deg,#ffffff,#f8fbff); border-radius:10px; box-shadow:0 6px 18px rgba(11,95,168,0.06); border-left:6px solid #dbeeff}
+    .notify-list{position:absolute;left:0;right:0;top:0;transform:translateY(0);will-change:transform}
+    .notify-item{display:flex;gap:10px;align-items:flex-start;padding:12px;border-bottom:1px solid rgba(11,95,168,0.03)}
+    .notify-item .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(180deg,#1167b1,#0b5fa8);flex:0 0 12px;margin-top:6px}
+    .notify-item .content{flex:1}
+    .notify-item .date{font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px}
+    .notify-item .text{font-size:14px;color:#0f172a}
+    /* footer small */
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    /* responsive */
+    @media (max-width:960px){.grid{grid-template-columns:1fr}.header h1{font-size:18px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header" role="banner" aria-label="School Header">
+      <h1>S.B. PUBLIC SCHOOL CHHITAUNA — POST MEGHAULI KALA, PIN CODE 273305</h1>
+      <div class="addr">PRINCIPAL: MR. GAJENDRA YADAV — CALL: +91 6389259200</div>
+      <div class="meta">CREATED BY: UPENDRA VISHWAKARMA</div>
+      <div style="margin-top:12px;color:rgba(255,255,255,0.92);font-size:14px">Student Lookup • Notifications • Fee & Marksheet Portals</div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="grid" role="main">
+      <!-- left: student lookup -->
+      <div>
+        <div class="card" aria-labelledby="lookup-title">
+          <h2 id="lookup-title" class="section">Student Details Lookup</h2>
+          <div class="small">Admission No. डालकर Enter दबाएँ या Search बटन दबाएँ</div>
+
+          <div style="height:12px"></div>
+          <div class="search-row">
+            <input id="admissionInput" placeholder="Admission Number (उदा. 1001)" aria-label="Admission Number">
+            <button id="searchBtn" class="btn">Search</button>
+          </div>
+
+          <div id="studentCard" style="margin-top:12px;display:none"></div>
+        </div>
+
+        <!-- Quick portals (also left) -->
+        <div class="card" style="margin-top:14px">
+          <h2 class="section">Quick Portals</h2>
+          <div class="small">नीचे उपलब्ध portals पर क्लिक कर के फीस या मार्कशीट चेक करें</div>
+          <div class="portals" id="portalLinks" style="margin-top:12px">
+            <!-- links inserted by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- right: notifications -->
+      <div>
+        <div class="card">
+          <h2 class="section">Notifications</h2>
+          <div class="small" style="margin-bottom:8px">नोटिफिकेशन्स स्वचालित रूप से Google Sheet से लोड होते हैं और continuous ऊपर की ओर चलेंगे</div>
+          <div id="notifyWrap" class="notify" aria-live="polite" aria-atomic="true">
+            <div id="notifyList" class="notify-list" role="list"></div>
+          </div>
+        </div>
+
+        <!-- contact card -->
+        <div class="card" style="margin-top:14px;text-align:center">
+          <div style="font-weight:700;color:var(--accent)">Contact</div>
+          <div class="small" style="margin-top:6px">PRINCIPAL: MR. GAJENDRA YADAV</div>
+          <div style="margin-top:6px;font-weight:700;color:var(--accent)"><a href="tel:+916389259200" style="color:var(--accent);text-decoration:none">+91 6389259200</a></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>© <span id="year"></span> S.B. PUBLIC SCHOOL — All rights reserved</footer>
+  </div>
+
+<script>
+/* ------------------ CONFIG ------------------ */
+/* Your Google Sheet ID (change if needed) */
+const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+
+/* Sheet tab names */
+const SHEET_STUDENTS = "Student's Details";
+const SHEET_NOTIFS = "Notification";
+
+/* Student's Details exact column names in your sheet (first row) */
+const COL_ADM = "Admission No.";
+const COL_NAME = "Student Name";
+const COL_FATHER = "Father Name";
+const COL_MOTHER = "Mother Name";
+const COL_DOB = "Date of Birth";
+const COL_CLASS = "Class";
+const COL_ADDRESS = "Address";
+
+/* Notification columns */
+const COL_NOTIF_DATE = "Date";
+const COL_NOTIF_TEXT = "Notification's";
+
+/* Fixed Portal URLs (you provided) */
+const FIXED_MARKSHEET_URL = "https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec";
+const FIXED_FEE_URL = "https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec";
+
+/* Notification scroll speed (pixels per frame) */
+const NOTIF_SPEED = 0.3;
+
+/* ------------------ Helpers to read sheet ------------------ */
+async function fetchGvizJson(sheetId, sheetName) {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+  const r = await fetch(url);
+  const text = await r.text();
+  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+  return JSON.parse(jsonText);
+}
+
+function extractCellValue(cell) {
+  if (!cell) return "";
+  if (cell.f && typeof cell.f === "string") {
+    // if Google returns formatted HTML with <img> etc.
+    const m = cell.f.match(/<img[^>]+src="([^"]+)"/i);
+    if (m) return m[1];
+  }
+  if (typeof cell.v === "string" && cell.v.includes("<img")) {
+    const m = String(cell.v).match(/<img[^>]+src="([^"]+)"/i);
+    if (m) return m[1];
+  }
+  if (typeof cell.v === "string" && cell.v.startsWith("http")) return cell.v;
+  return cell.v !== undefined ? cell.v : "";
+}
+
+async function fetchRecords(sheetName) {
+  const data = await fetchGvizJson(SHEET_ID, sheetName);
+  const table = data.table;
+  const headers = table.cols.map(c => (c.label || c.id || "").trim());
+  const rows = table.rows.map(r => r.c);
+  return rows.map(rCells => {
+    const obj = {};
+    for (let i=0;i<headers.length;i++){
+      const key = headers[i] || `col${i}`;
+      obj[key] = extractCellValue(rCells[i]);
+    }
+    return obj;
+  });
+}
+
+/* ------------------ Init ------------------ */
+async function init() {
+  try {
+    const [students, notifs] = await Promise.all([
+      fetchRecords(SHEET_STUDENTS),
+      fetchRecords(SHEET_NOTIFS)
+    ]);
+
+    // Setup portals (fixed)
+    setupPortalLinks();
+
+    // Setup notifications (continuous scroll)
+    setupNotifications(notifs);
+
+    // Setup search
+    document.getElementById('searchBtn').addEventListener('click', ()=> searchAdmission(students));
+    document.getElementById('admissionInput').addEventListener('keydown', (e)=> { if (e.key === 'Enter') searchAdmission(students); });
+
+  } catch (err) {
+    console.error(err);
+    alert("डेटा लोड करने में समस्या: " + err.message + "\nकृपया check करें कि Google Sheet 'Anyone with the link can view' पर है।");
+  }
+}
+
+/* ------------------ Portal Links ------------------ */
+function setupPortalLinks() {
+  const wrap = document.getElementById('portalLinks');
+  wrap.innerHTML = "";
+  const aFee = document.createElement('a');
+  aFee.href = FIXED_FEE_URL;
+  aFee.target = "_blank"; aFee.rel = "noopener";
+  aFee.textContent = "Fee Checking Portal";
+  wrap.appendChild(aFee);
+
+  const aMark = document.createElement('a');
+  aMark.href = FIXED_MARKSHEET_URL;
+  aMark.target = "_blank"; aMark.rel = "noopener";
+  aMark.textContent = "Marksheet Checking Portal";
+  wrap.appendChild(aMark);
+}
+
+/* ------------------ Notifications (continuous) ------------------ */
+function setupNotifications(notifs) {
+  const list = document.getElementById('notifyList');
+  if (!notifs || notifs.length === 0) {
+    list.innerHTML = "<div class='notify-item'><div class='dot'></div><div class='content'><div class='date'>--</div><div class='text'>कोई notification नहीं मिला।</div></div></div>";
+    return;
+  }
+  list.innerHTML = "";
+  notifs.forEach(n => {
+    const item = document.createElement('div');
+    item.className = 'notify-item';
+    item.innerHTML = `<div class="dot" aria-hidden="true"></div>
+                      <div class="content">
+                        <div class="date">${escapeHtml(n[COL_NOTIF_DATE] || "")}</div>
+                        <div class="text">${escapeHtml(n[COL_NOTIF_TEXT] || "")}</div>
+                      </div>`;
+    list.appendChild(item);
+  });
+
+  // duplicate items to allow seamless loop
+  const originalCount = list.children.length;
+  for (let i=0;i<originalCount;i++){
+    const clone = list.children[i].cloneNode(true);
+    list.appendChild(clone);
+  }
+
+  const wrap = document.getElementById('notifyWrap');
+  let pos = 0;
+  let rafId = null;
+
+  function step() {
+    pos -= NOTIF_SPEED;
+    // when scrolled past first original block, reset
+    const totalHeight = list.scrollHeight / 2; // because duplicated
+    if (Math.abs(pos) >= totalHeight) pos = 0;
+    list.style.transform = `translateY(${pos}px)`;
+    rafId = requestAnimationFrame(step);
+  }
+  // start
+  if (rafId) cancelAnimationFrame(rafId);
+  step();
+
+  // pause on hover
+  wrap.addEventListener('mouseenter', () => { if (rafId) cancelAnimationFrame(rafId); rafId = null; });
+  wrap.addEventListener('mouseleave', () => { if (!rafId) step(); });
+}
+
+/* ------------------ Admission Search ------------------ */
+function searchAdmission(records) {
+  const q = document.getElementById('admissionInput').value.trim();
+  const out = document.getElementById('studentCard');
+  out.style.display = 'none';
+  if (!q) { alert('कृपया Admission Number डालें'); return; }
+
+  const rec = records.find(r => String(r[COL_ADM]) === q || String(r[COL_ADM]) === ("0"+q));
+  if (!rec) {
+    out.innerHTML = `<div class="field"><strong>रोल नहीं मिला</strong><div class="small">Admission No. ${escapeHtml(q)} के लिए कोई रिकॉर्ड नहीं मिला</div></div>`;
+    out.style.display = 'block';
+    return;
+  }
+
+  // render fields
+  out.innerHTML = `
+    <div class="student-row">
+      <div class="field"><strong>Admission No.</strong><div>${escapeHtml(rec[COL_ADM] || "")}</div></div>
+      <div class="field"><strong>Class</strong><div>${escapeHtml(rec[COL_CLASS] || "")}</div></div>
+      <div class="field"><strong>Student Name</strong><div>${escapeHtml(rec[COL_NAME] || "")}</div></div>
+      <div class="field"><strong>Father Name</strong><div>${escapeHtml(rec[COL_FATHER] || "")}</div></div>
+      <div class="field"><strong>Mother Name</strong><div>${escapeHtml(rec[COL_MOTHER] || "")}</div></div>
+      <div class="field"><strong>Date of Birth</strong><div>${escapeHtml(rec[COL_DOB] || "")}</div></div>
+      <div class="field" style="grid-column:1 / -1"><strong>Address</strong><div>${escapeHtml(rec[COL_ADDRESS] || "")}</div></div>
+    </div>
+    <div class="portals">
+      <a href="${FIXED_FEE_URL}" target="_blank" rel="noopener">Fee Portal</a>
+      <a href="${FIXED_MARKSHEET_URL}" target="_blank" rel="noopener">Marksheet</a>
+    </div>
+  `;
+  out.style.display = 'block';
+}
+
+/* ------------------ Utilities ------------------ */
+function escapeHtml(s) {
+  if (s===null || s===undefined) return "";
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
+}
+
+/* start */
+document.getElementById('year').textContent = new Date().getFullYear();
+init();
+</script>
+</body>
+</html>
