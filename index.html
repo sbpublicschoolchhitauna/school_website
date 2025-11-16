@@ -120,6 +120,7 @@
       right:0;
       top:0;
       transform:translateY(0);
+      will-change:transform;
     }
     .notify-item{
       padding:10px 12px;
@@ -176,7 +177,7 @@
 
       <div class="card">
         <h2>Notifications</h2>
-        <div class="notify">
+        <div id="notifyWrap" class="notify">
           <div id="notifs" class="notify-list"></div>
         </div>
       </div>
@@ -188,63 +189,132 @@
 
 <script>
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+const NOTIF_SPEED = 0.3; // px per frame
 
-async function loadSheet(sheetName){
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
-  let data = await fetch(url).then(r=>r.text());
-  data = JSON.parse(data.substr(47).slice(0,-2));
-  let rows = data.table.rows;
-  let cols = data.table.cols.map(c=>c.label);
-  return rows.map(r=>Object.fromEntries(r.c.map((v,i)=>[cols[i], v? v.v : ""])));
+function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function loadSheetGviz(sheetName){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
+  const text = await res.text();
+  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+  return JSON.parse(jsonText);
 }
 
-async function searchStudent(){
-  let adm = document.getElementById("admission").value.trim();
-  if(!adm) return alert("Admission Number डालें");
+/* Robust notifications loader */
+async function loadNotificationsRobust(){
+  const sheet = "Notification";
+  try{
+    const data = await loadSheetGviz(sheet);
+    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim().replace(/\u200B/g,''));
+    const rows = (data.table.rows||[]).map(r=> r.c || []);
+    // build records
+    const records = rows.map(cells=>{
+      const obj = {};
+      for(let i=0;i<cols.length;i++){
+        let v = "";
+        const cell = cells[i];
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i]||('col'+i)] = v;
+      }
+      return obj;
+    });
 
-  let data = await loadSheet("Student's Details");
-  let st = data.find(s=>String(s["Admission No."])===adm);
+    // detect keys
+    const textKey = cols.find(k=>/notif|notification|text|message/i.test(k)) || cols.find(k=>!/date|time|id/i.test(k)) || cols[1] || cols[0] || 'Notification';
+    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
 
-  let out = document.getElementById("result");
+    const wrap = document.getElementById("notifs");
+    wrap.innerHTML = "";
 
-  if(!st){
-    out.innerHTML="<div class='field'><strong>Not Found</strong><div>No details available.</div></div>";
-    return;
+    records.forEach(r=>{
+      const d = r[dateKey] || "";
+      const t = r[textKey] || "";
+      const node = document.createElement("div");
+      node.className = "notify-item";
+      node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`;
+      wrap.appendChild(node);
+    });
+
+    // duplicate for seamless loop
+    const orig = wrap.children.length;
+    for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); }
+
+    // smooth scroll using requestAnimationFrame
+    let pos = 0;
+    let raf = null;
+    function step(){
+      pos -= NOTIF_SPEED;
+      const total = wrap.scrollHeight/2;
+      if(Math.abs(pos) >= total) pos = 0;
+      wrap.style.transform = `translateY(${pos}px)`;
+      raf = requestAnimationFrame(step);
+    }
+    if(raf) cancelAnimationFrame(raf);
+    step();
+
+    const outer = document.getElementById("notifyWrap");
+    outer.addEventListener('mouseenter', ()=>{ if(raf) cancelAnimationFrame(raf); raf=null; });
+    outer.addEventListener('mouseleave', ()=>{ if(!raf) step(); });
+
+  }catch(err){
+    console.error('Notifications load error', err);
+    const wrap = document.getElementById("notifs");
+    wrap.innerHTML = "<div class='notify-item'><div class='date'>--</div><div class='text'>नोटिफिकेशन लोड नहीं हुए — sheet की sharing settings और sheet name जाँचें।</div></div>";
   }
-
-  out.innerHTML = `
-    <div class="field"><strong>Student Name</strong>${st["Student Name"]}</div>
-    <div class="field"><strong>Father</strong>${st["Father Name"]}</div>
-    <div class="field"><strong>Mother</strong>${st["Mother Name"]}</div>
-    <div class="field"><strong>DOB</strong>${st["Date of Birth"]}</div>
-    <div class="field"><strong>Class</strong>${st["Class"]}</div>
-    <div class="field"><strong>Address</strong>${st["Address"]}</div>
-  `;
 }
 
-async function loadNotifications(){
-  let data = await loadSheet("Notification");
-  let box = document.getElementById("notifs");
+/* Student search (same as before) */
+async function searchStudent(){
+  const adm = document.getElementById("admission").value.trim();
+  if(!adm) return alert("Admission Number डालें");
+  try{
+    const data = await loadSheetGviz("Student's Details");
+    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (data.table.rows||[]).map(r=> r.c || []);
+    const records = rows.map(cells=>{
+      const obj={};
+      for(let i=0;i<cols.length;i++){
+        const cell = cells[i];
+        let v = "";
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i]||('col'+i)] = v;
+      }
+      return obj;
+    });
 
-  data.forEach(n=>{
-    box.innerHTML += `
-      <div class="notify-item">
-        <div class="date">${n["Date"]}</div>
-        <div class="text">${n["Notification's"]}</div>
-      </div>
+    const rec = records.find(r => String(r["Admission No."]) === adm || String(r["Admission No."]) === ("0"+adm));
+    const out = document.getElementById("result");
+    out.style.display = 'block';
+    if(!rec){
+      out.innerHTML = "<div class='field'><strong>Not Found</strong><div>No details available.</div></div>";
+      return;
+    }
+
+    out.innerHTML = `
+      <div class="field"><strong>Student Name</strong>${escapeHtml(rec["Student Name"]||"")}</div>
+      <div class="field"><strong>Father</strong>${escapeHtml(rec["Father Name"]||"")}</div>
+      <div class="field"><strong>Mother</strong>${escapeHtml(rec["Mother Name"]||"")}</div>
+      <div class="field"><strong>DOB</strong>${escapeHtml(rec["Date of Birth"]||"")}</div>
+      <div class="field"><strong>Class</strong>${escapeHtml(rec["Class"]||"")}</div>
+      <div class="field"><strong>Address</strong>${escapeHtml(rec["Address"]||"")}</div>
     `;
-  });
 
-  let pos=0;
-  setInterval(()=>{
-    pos -= 0.4;
-    box.style.transform = `translateY(${pos}px)`;
-    if(Math.abs(pos) > box.scrollHeight/2) pos=0;
-  },20);
+  }catch(e){
+    console.error("Search error", e);
+    alert("डेटा लोड में समस्या — console देखें।");
+  }
 }
 
 document.getElementById("year").innerText = new Date().getFullYear();
-loadNotifications();
+loadNotificationsRobust();
 </script>
 
 </body>
