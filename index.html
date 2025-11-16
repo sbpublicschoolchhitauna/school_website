@@ -3,298 +3,249 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>S.B. PUBLIC SCHOOL CHHITAUNA — Student Portal</title>
+  <title>S.B. Public School Chhitauna — Student Portal</title>
+
   <style>
-    /* Premium Blue dynamic theme */
     :root{
-      --bg: #eaf6ff;
-      --card: #ffffff;
-      --muted: #54607a;
-      --accent: #0b5fa8;
-      --accent-2: #1167b1;
+      --accent:#0b5fa8;
+      --accent2:#1167b1;
+      --card:#ffffff;
+      --muted:#54607a;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Arial;background:linear-gradient(180deg,#eaf4ff 0%, #f7fbff 100%);color:#0f172a;-webkit-font-smoothing:antialiased;}
-    .container{max-width:1100px;margin:24px auto;padding:18px}
-    .header{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:22px;border-radius:12px;box-shadow:0 10px 30px rgba(11,95,168,0.12);text-align:center}
-    .header h1{margin:0;font-size:20px;letter-spacing:0.6px}
-    .header .sub{margin-top:8px;font-size:13px;opacity:0.95}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:18px;margin-top:18px;align-items:start}
-    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,0.06)}
-    h2.section{margin:0 0 10px;font-size:18px;color:var(--accent)}
-    .small{font-size:13px;color:var(--muted)}
-    /* search */
-    .search-row{display:flex;gap:10px;margin-top:10px}
-    input[type="text"]{flex:1;padding:12px 14px;border-radius:10px;border:1px solid #dfeefb;background:#fbfdff;font-size:15px}
-    button.btn{background:linear-gradient(180deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-    /* student details */
-    .student-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    .field{padding:12px;border-radius:10px;background:linear-gradient(180deg,#fbfdff,#f6fbff);border:1px solid rgba(11,95,168,0.04)}
-    .field strong{display:block;margin-bottom:6px;color:#0f172a}
-    .portals{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-    .portals a{display:inline-block;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,#eef6ff,#e6f0ff);color:var(--accent);text-decoration:none;border:1px solid rgba(11,95,168,0.08);font-weight:600}
-    /* notifications - attractive */
-    .notify{height:260px;overflow:hidden;position:relative;background:linear-gradient(180deg,#ffffff,#f8fbff);border-radius:12px;box-shadow:0 6px 18px rgba(11,95,168,0.06);border-left:6px solid #dbeeff}
-    .notify-list{position:absolute;left:0;right:0;top:0;transform:translateY(0);will-change:transform}
-    .notify-item{display:flex;gap:12px;align-items:flex-start;padding:12px;border-bottom:1px solid rgba(11,95,168,0.03)}
-    .notify-item .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(180deg,var(--accent),var(--accent-2));flex:0 0 12px;margin-top:6px}
-    .notify-item .content{flex:1}
-    .notify-item .date{font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px}
-    .notify-item .text{font-size:14px;color:#0f172a}
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-    @media (max-width:960px){.grid{grid-template-columns:1fr}.header h1{font-size:18px}}
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:linear-gradient(180deg,#eaf4ff,#f7fbff);
+      color:#0f172a;
+    }
+    .container{max-width:1100px;margin:20px auto;padding:15px;}
+
+    .header{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      padding:28px;
+      text-align:center;
+      color:#fff;
+      border-radius:12px;
+      box-shadow:0 8px 22px rgba(0,0,0,0.18);
+    }
+    .header h1{
+      margin:0;
+      font-size:26px;
+      font-weight:700;
+    }
+    .header .mid{
+      font-size:15px;
+      opacity:0.95;
+      margin-top:6px;
+    }
+    .header .last{
+      margin-top:16px;
+      font-size:14px;
+      opacity:0.9;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:16px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.grid{grid-template-columns:1fr;}}
+
+    .card{
+      background:var(--card);
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.07);
+    }
+    h2{
+      margin:0;
+      color:var(--accent);
+      font-size:18px;
+      margin-bottom:8px;
+    }
+    .small{color:var(--muted);font-size:13px;}
+
+    input{
+      width:100%;
+      padding:11px;
+      border-radius:8px;
+      border:1px solid #dce6f7;
+      font-size:15px;
+    }
+    .btn{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      color:#fff;
+      padding:10px 18px;
+      border:0;
+      border-radius:10px;
+      cursor:pointer;
+      margin-top:8px;
+    }
+
+    .field{
+      background:#f9fcff;
+      border:1px solid #e3eef9;
+      padding:10px;
+      border-radius:8px;
+      margin-top:8px;
+    }
+    .field strong{display:block;margin-bottom:4px;}
+
+    .portals a{
+      display:inline-block;
+      background:#e9f3ff;
+      padding:8px 12px;
+      border-radius:8px;
+      margin-top:8px;
+      text-decoration:none;
+      color:var(--accent);
+      font-weight:600;
+      border:1px solid #d3e7ff;
+      margin-right:6px;
+    }
+
+    .notify{
+      height:240px;
+      overflow:hidden;
+      position:relative;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.07);
+      border-left:6px solid #d2e9ff;
+    }
+    .notify-list{
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      transform:translateY(0);
+    }
+    .notify-item{
+      padding:10px 12px;
+      border-bottom:1px solid #eef4ff;
+    }
+    .notify-item .date{
+      font-size:12px;
+      color:var(--accent);
+      font-weight:700;
+    }
+    .notify-item .text{
+      font-size:14px;
+      margin-top:3px;
+    }
+
+    footer{text-align:center;margin-top:20px;color:#555;}
   </style>
-
-<style>
-/* Logo badge / shield and glow effect */
-.header { position: relative; padding: 28px 20px 22px 100px; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; }
-.header .logo-badge {
-  position: absolute;
-  left:20px;
-  top:18px;
-  width:76px;
-  height:76px;
-  border-radius:50%;
-  background: #fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow: 0 8px 24px rgba(11,95,168,0.18), inset 0 -6px 20px rgba(11,95,168,0.04);
-  overflow: hidden;
-  border:4px solid rgba(255,255,255,0.6);
-  animation: glow 2.8s ease-in-out infinite;
-}
-.logo-badge img{ width:64px; height:64px; object-fit:cover; border-radius:50%; display:block; }
-@keyframes glow {
-  0% { box-shadow: 0 8px 24px rgba(11,95,168,0.06), 0 0 0 0 rgba(11,95,168,0.00); transform: translateY(0px); }
-  50% { box-shadow: 0 10px 34px rgba(11,95,168,0.18), 0 0 30px rgba(17,103,177,0.08); transform: translateY(-2px); }
-  100% { box-shadow: 0 8px 24px rgba(11,95,168,0.06), 0 0 0 0 rgba(11,95,168,0.00); transform: translateY(0px); }
-}
-
-/* Shield-style accent behind header text */
-.header .shield {
-  position:absolute;
-  left:110px;
-  top:8px;
-  width:calc(100% - 140px);
-  height:110px;
-  border-radius:14px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-  filter: blur(0.6px);
-  z-index:0;
-  pointer-events:none;
-}
-.header .header-content{position:relative;z-index:1}
-.header h1{margin:0;font-size:20px;letter-spacing:0.6px}
-.header .sub{margin-top:8px;font-size:13px;opacity:0.95}
-
-/* Responsive adjustments */
-@media (max-width:560px){
-  .header { padding-left:92px; padding-top:20px; padding-bottom:20px; }
-  .header .logo-badge{left:14px; top:12px; width:56px; height:56px;}
-  .header .logo-badge img{width:44px;height:44px;}
-  .header .shield{left:84px; top:6px; height:96px; width:calc(100% - 110px);}
-}
-</style>
-
 </head>
+
 <body>
   <div class="container">
-    
-<div class="header" role="banner" aria-label="School Header">
-  <div class="logo-badge" aria-hidden="true">
-    
-  </div>
-  <div class="shield" aria-hidden="true"></div>
-  <div class="header-content">
-    <h1>S.B. PUBLIC SCHOOL CHHITAUNA — POST MEGHAULI KALA, PIN CODE 273305</h1>
-    <div class="sub">PRINCIPAL: MR. GAJENDRA YADAV — CALL: +91 6389259200</div>
-    <div class="sub" style="margin-top:8px">CREATED BY: UPENDRA VISHWAKARMA</div>
-  </div>
-</div>
 
-      <div style="display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap">
-        
-        <div style="text-align:center;min-width:280px">
-          <h1 style="margin:0;font-size:20px">S.B. PUBLIC SCHOOL CHHITAUNA — POST MEGHAULI KALA, PIN CODE 273305</h1>
-          <div class="sub" style="margin-top:6px;font-size:13px;opacity:0.95">PRINCIPAL: MR. GAJENDRA YADAV — CALL: +91 6389259200</div>
-          <div class="sub" style="margin-top:6px;font-size:13px;opacity:0.95">CREATED BY: UPENDRA VISHWAKARMA</div>
-        </div>
-      </div>
-    </div>
-      <h1>S.B. PUBLIC SCHOOL CHHITAUNA — POST MEGHAULI KALA, PIN CODE 273305</h1>
-      <div class="sub">PRINCIPAL: MR. GAJENDRA YADAV — CALL: +91 6389259200</div>
-      <div class="sub" style="margin-top:8px">CREATED BY: UPENDRA VISHWAKARMA</div>
+    <div class="header">
+      <h1>S.B. PUBLIC SCHOOL CHHITAUNA</h1>
+      <div class="mid">POST MEGHAULI KALA — PIN 273305</div>
+
+      <div class="last">PRINCIPAL : MR. GAJENDRA YADAV — CALL : +91 6389259200</div>
+      <div class="last">CREATED BY : UPENDRA VISHWAKARMA</div>
     </div>
 
-    <div class="grid" role="main">
-      <div>
-        <div class="card" aria-labelledby="lookup-title">
-          <h2 id="lookup-title" class="section">Student Details Lookup</h2>
-          <div class="small">Admission No. डालकर Enter या Search दबाएँ</div>
-          <div class="search-row">
-            <input id="admissionInput" placeholder="Admission Number (उदा. 1001)" aria-label="Admission">
-            <button id="searchBtn" class="btn">Search</button>
-          </div>
-          <div id="studentCard" style="margin-top:12px;display:none"></div>
-        </div>
 
-        <div class="card" style="margin-top:14px">
-          <h2 class="section">Quick Portals</h2>
-          <div class="small">Fee और Marksheet portals — क्लिक करके चेक करें</div>
-          <div class="portals" id="portalLinks" style="margin-top:12px"></div>
-        </div>
-      </div>
+    <div class="grid">
 
       <div>
         <div class="card">
-          <h2 class="section">Notifications</h2>
-          <div class="small" style="margin-bottom:8px">Notifications sheet से auto-load होंगे और continuous scroll में दिखेंगे</div>
-          <div id="notifyWrap" class="notify" aria-live="polite" aria-atomic="true">
-            <div id="notifyList" class="notify-list" role="list"></div>
+          <h2>Student Details Lookup</h2>
+          <div class="small">Admission Number डालकर Search करें</div>
+
+          <input id="admission" placeholder="Enter Admission Number">
+          <button class="btn" onclick="searchStudent()">Search</button>
+
+          <div id="result"></div>
+        </div>
+
+        <div class="card" style="margin-top:14px;">
+          <h2>Quick Portals</h2>
+          <div class="portals">
+            <a href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
+            <a href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank">Marksheet</a>
           </div>
         </div>
+      </div>
 
-        <div class="card" style="margin-top:14px;text-align:center">
-          <div style="font-weight:700;color:var(--accent)">Contact</div>
-          <div class="small" style="margin-top:6px">PRINCIPAL: MR. GAJENDRA YADAV</div>
-          <div style="margin-top:6px;font-weight:700;color:var(--accent)"><a href="tel:+916389259200" style="color:var(--accent);text-decoration:none">+91 6389259200</a></div>
+
+      <div class="card">
+        <h2>Notifications</h2>
+        <div class="notify">
+          <div id="notifs" class="notify-list"></div>
         </div>
       </div>
+
     </div>
 
-    <footer>© <span id="year"></span> S.B. PUBLIC SCHOOL — All rights reserved</footer>
+    <footer>© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</footer>
   </div>
 
 <script>
-/* CONFIG */
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
-const SHEET_STUDENTS = "Student's Details";
-const SHEET_NOTIFS = "Notification";
-const COL_ADM = "Admission No.";
-const COL_NAME = "Student Name";
-const COL_FATHER = "Father Name";
-const COL_MOTHER = "Mother Name";
-const COL_DOB = "Date of Birth";
-const COL_CLASS = "Class";
-const COL_ADDRESS = "Address";
-const COL_NOTIF_DATE = "Date";
-const COL_NOTIF_TEXT = "Notification's";
-const FIXED_MARKSHEET_URL = "https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec";
-const FIXED_FEE_URL = "https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec";
-const NOTIF_SPEED = 0.3;
 
-/* Helpers */
-async function fetchGvizJson(sheetId, sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
-  const r = await fetch(url);
-  const text = await r.text();
-  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-  return JSON.parse(jsonText);
-}
-function extractCellValue(cell) {
-  if (!cell) return "";
-  if (cell.f && typeof cell.f === "string") {
-    const m = cell.f.match(/]+src="([^"]+)"/i);
-    if (m) return m[1];
-  }
-  if (typeof cell.v === "string" && cell.v.includes("]+src="([^"]+)"/i);
-    if (m) return m[1];
-  }
-  if (typeof cell.v === "string" && cell.v.startsWith("http")) return cell.v;
-  return cell.v !== undefined ? cell.v : "";
-}
-async function fetchRecords(sheetName) {
-  const data = await fetchGvizJson(SHEET_ID, sheetName);
-  const table = data.table;
-  const headers = table.cols.map(c => (c.label || c.id || "").trim());
-  const rows = table.rows.map(r => r.c);
-  return rows.map(rCells => {
-    const obj = {};
-    for (let i=0;i<headers.length;i++){
-      const key = headers[i] || `col${i}`;
-      obj[key] = extractCellValue(rCells[i]);
-    }
-    return obj;
-  });
+async function loadSheet(sheetName){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
+  let data = await fetch(url).then(r=>r.text());
+  data = JSON.parse(data.substr(47).slice(0,-2));
+  let rows = data.table.rows;
+  let cols = data.table.cols.map(c=>c.label);
+  return rows.map(r=>Object.fromEntries(r.c.map((v,i)=>[cols[i], v? v.v : ""])));
 }
 
-/* Init */
-async function init() {
-  try {
-    const [students, notifs] = await Promise.all([fetchRecords(SHEET_STUDENTS), fetchRecords(SHEET_NOTIFS)]);
-    setupPortalLinks();
-    setupNotifications(notifs);
-    document.getElementById('searchBtn').addEventListener('click', ()=> searchAdmission(students));
-    document.getElementById('admissionInput').addEventListener('keydown', (e)=> { if (e.key === 'Enter') searchAdmission(students); });
-  } catch (err) {
-    console.error(err);
-    alert("डेटा लोड करने में समस्या: " + err.message + "\nकृपया check करें कि Google Sheet 'Anyone with the link can view' पर है।");
-  }
-}
+async function searchStudent(){
+  let adm = document.getElementById("admission").value.trim();
+  if(!adm) return alert("Admission Number डालें");
 
-/* Portals */
-function setupPortalLinks() {
-  const wrap = document.getElementById('portalLinks');
-  wrap.innerHTML = "";
-  const aFee = document.createElement('a'); aFee.href = FIXED_FEE_URL; aFee.target="_blank"; aFee.rel="noopener"; aFee.textContent = "Fee Checking Portal"; wrap.appendChild(aFee);
-  const aMark = document.createElement('a'); aMark.href = FIXED_MARKSHEET_URL; aMark.target="_blank"; aMark.rel="noopener"; aMark.textContent = "Marksheet Checking Portal"; wrap.appendChild(aMark);
-}
+  let data = await loadSheet("Student's Details");
+  let st = data.find(s=>String(s["Admission No."])===adm);
 
-/* Notifications continuous */
-function setupNotifications(notifs) {
-  const list = document.getElementById('notifyList');
-  if (!notifs || notifs.length === 0) {
-    list.innerHTML = "<div class='notify-item'><div class='dot'></div><div class='content'><div class='date'>--</div><div class='text'>कोई notification नहीं मिला।</div></div></div>";
+  let out = document.getElementById("result");
+
+  if(!st){
+    out.innerHTML="<div class='field'><strong>Not Found</strong><div>No details available.</div></div>";
     return;
   }
-  list.innerHTML = "";
-  notifs.forEach(n => {
-    const item = document.createElement('div');
-    item.className = 'notify-item';
-    item.innerHTML = `<div class="dot" aria-hidden="true"></div><div class="content"><div class="date">${escapeHtml(n[COL_NOTIF_DATE]||"")}</div><div class="text">${escapeHtml(n[COL_NOTIF_TEXT]||"")}</div></div>`;
-    list.appendChild(item);
-  });
-  // duplicate to loop smoothly
-  const originalCount = list.children.length;
-  for (let i=0;i<originalCount;i++){ list.appendChild(list.children[i].cloneNode(true)); }
-  const wrap = document.getElementById('notifyWrap');
-  let pos = 0; let rafId = null;
-  function step(){ pos -= NOTIF_SPEED; const totalHeight = list.scrollHeight/2; if (Math.abs(pos) >= totalHeight) pos = 0; list.style.transform = `translateY(${pos}px)`; rafId = requestAnimationFrame(step); }
-  if (rafId) cancelAnimationFrame(rafId); step();
-  wrap.addEventListener('mouseenter', ()=>{ if (rafId) cancelAnimationFrame(rafId); rafId = null; });
-  wrap.addEventListener('mouseleave', ()=>{ if (!rafId) step(); });
-}
 
-/* Search */
-function searchAdmission(records) {
-  const q = document.getElementById('admissionInput').value.trim();
-  const out = document.getElementById('studentCard');
-  out.style.display='none';
-  if (!q) { alert('कृपया Admission Number डालें'); return; }
-  const rec = records.find(r => String(r[COL_ADM]) === q || String(r[COL_ADM]) === ("0"+q));
-  if (!rec) { out.innerHTML = `<div class="field"><strong>रोल नहीं मिला</strong><div class="small">Admission No. ${escapeHtml(q)} के लिए रिकॉर्ड नहीं मिला</div></div>`; out.style.display='block'; return; }
   out.innerHTML = `
-    <div class="student-row">
-      <div class="field"><strong>Admission No.</strong><div>${escapeHtml(rec[COL_ADM]||"")}</div></div>
-      <div class="field"><strong>Class</strong><div>${escapeHtml(rec[COL_CLASS]||"")}</div></div>
-      <div class="field"><strong>Student Name</strong><div>${escapeHtml(rec[COL_NAME]||"")}</div></div>
-      <div class="field"><strong>Father Name</strong><div>${escapeHtml(rec[COL_FATHER]||"")}</div></div>
-      <div class="field"><strong>Mother Name</strong><div>${escapeHtml(rec[COL_MOTHER]||"")}</div></div>
-      <div class="field"><strong>Date of Birth</strong><div>${escapeHtml(rec[COL_DOB]||"")}</div></div>
-      <div class="field" style="grid-column:1 / -1"><strong>Address</strong><div>${escapeHtml(rec[COL_ADDRESS]||"")}</div></div>
-    </div>
-    <div class="portals" style="margin-top:10px">
-      <a href="${FIXED_FEE_URL}" target="_blank" rel="noopener">Fee Portal</a>
-      <a href="${FIXED_MARKSHEET_URL}" target="_blank" rel="noopener">Marksheet</a>
-    </div>`;
-  out.style.display='block';
+    <div class="field"><strong>Student Name</strong>${st["Student Name"]}</div>
+    <div class="field"><strong>Father</strong>${st["Father Name"]}</div>
+    <div class="field"><strong>Mother</strong>${st["Mother Name"]}</div>
+    <div class="field"><strong>DOB</strong>${st["Date of Birth"]}</div>
+    <div class="field"><strong>Class</strong>${st["Class"]}</div>
+    <div class="field"><strong>Address</strong>${st["Address"]}</div>
+  `;
 }
 
-/* util */
-function escapeHtml(s){ if (s===null||s===undefined) return ""; return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;"); }
-document.getElementById('year').textContent = new Date().getFullYear();
-init();
+async function loadNotifications(){
+  let data = await loadSheet("Notification");
+  let box = document.getElementById("notifs");
+
+  data.forEach(n=>{
+    box.innerHTML += `
+      <div class="notify-item">
+        <div class="date">${n["Date"]}</div>
+        <div class="text">${n["Notification's"]}</div>
+      </div>
+    `;
+  });
+
+  let pos=0;
+  setInterval(()=>{
+    pos -= 0.4;
+    box.style.transform = `translateY(${pos}px)`;
+    if(Math.abs(pos) > box.scrollHeight/2) pos=0;
+  },20);
+}
+
+document.getElementById("year").innerText = new Date().getFullYear();
+loadNotifications();
 </script>
+
 </body>
 </html>
