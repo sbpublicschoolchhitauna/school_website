@@ -1,1 +1,0 @@
-Responsive Index-final package. Ensure sheets are shared 'Anyone with link (Viewer)'.
