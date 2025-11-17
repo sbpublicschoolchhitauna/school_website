@@ -9,15 +9,11 @@
 <body>
   <div class="container">
     <div class="header">
-      <img src="assets/logo.png" alt="School Logo">
-      <div>
-        <h1>S.B. PUBLIC SCHOOL CHHITAUNA</h1>
-        <div class="mid">POST MEGHAULI KALA — PIN 273304</div>
-        <div class="last">PRINCIPAL : MR. GAJENDRA YADAV — CALL : +916389259200</div>
-        <div class="last">CREATED BY : UPENDRA VISHWAKARMA</div>
-      </div>
+      <h1>S.B. PUBLIC SCHOOL CHHITAUNA</h1>
+      <div class="mid">POST MEGHAULI KALA — PIN 273304</div>
+      <div class="last">PRINCIPAL : MR. GAJENDRA YADAV — CALL : +916389259200</div>
+      <div class="last">CREATED BY : UPENDRA VISHWAKARMA</div>
     </div>
-
     <div class="grid">
       <div>
         <div class="card">
@@ -27,22 +23,28 @@
           <button class="btn" onclick="searchStudent()">Search</button>
           <div id="result"></div>
         </div>
-
         <div class="card" style="margin-top:14px;">
           <h2>Quick Portals</h2>
           <div class="portals">
-            <a href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-            <a href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank">Marksheet</a>
+            <a href="#" target="_blank">Fee Portal</a>
+            <a href="#" target="_blank">Marksheet</a>
           </div>
         </div>
-
-        <div class="card" style="margin-top:14px;">
-          <h2>Exam Time Table</h2>
-          <div class="small">नीचे पर क्लिक कर के Time Table खोलें / डाउनलोड करें</div>
-          <div id="simpleTT" style="margin-top:12px;"></div>
+        <div class="card" style="margin-top:14px; padding:0; background:none; box-shadow:none;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div class="card">
+              <h2>Fee Student Details</h2>
+              <div class="small">नीचे सभी Fee Student Details दिखाई दे रहे हैं (Mobile/Aadhar masked)</div>
+              <div id="feeResult" style="margin-top:12px; max-height:420px; overflow:auto;"></div>
+            </div>
+            <div class="card">
+              <h2>Marksheet Details</h2>
+              <div class="small">नीचे पूरी Marksheet Details सूची दिखाई देगी</div>
+              <div id="msResult" style="margin-top:12px; max-height:420px; overflow:auto;"></div>
+            </div>
+          </div>
         </div>
       </div>
-
       <div class="card">
         <h2>Notifications</h2>
         <div id="notifyWrap" class="notify">
@@ -50,186 +52,16 @@
         </div>
       </div>
     </div>
-
     <footer>© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</footer>
   </div>
-
 <script>
-const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
-const NOTIF_SPEED = 0.3; // px per frame
-function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-async function loadSheetGviz(sheetName){
-  const url = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?sheet=" + encodeURIComponent(sheetName) + "&tqx=out:json";
-  const res = await fetch(url);
-  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
-  const text = await res.text();
-  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-  return JSON.parse(jsonText);
-}
-
-/* Notifications */
-async function loadNotificationsRobust(){
-  const sheet = "Notification";
-  try{
-    const data = await loadSheetGviz(sheet);
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim().replace(/\u200B/g,''));
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const records = rows.map(cells=>{
-      const obj = {};
-      for(let i=0;i<cols.length;i++){
-        let v = "";
-        const cell = cells[i];
-        if(cell){
-          if(cell.v !== undefined) v = cell.v;
-          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-        }
-        obj[cols[i]||('col'+i)] = v;
-      }
-      return obj;
-    });
-
-    const textKey = cols.find(k=>/notif|notification|text|message/i.test(k)) || cols.find(k=>!/date|time|id/i.test(k)) || cols[1] || cols[0] || 'Notification';
-    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-
-    const wrap = document.getElementById("notifs");
-    wrap.innerHTML = "";
-    records.forEach(r=>{
-      const d = r[dateKey] || "";
-      const t = r[textKey] || "";
-      const node = document.createElement("div");
-      node.className = "notify-item";
-      node.innerHTML = "<div class='date'>"+escapeHtml(d)+"</div><div class='text'>"+escapeHtml(t)+"</div>";
-      wrap.appendChild(node);
-    });
-
-    const orig = wrap.children.length;
-    for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); }
-
-    let pos = 0;
-    let raf = null;
-    function step(){
-      pos -= NOTIF_SPEED;
-      const total = wrap.scrollHeight/2;
-      if(Math.abs(pos) >= total) pos = 0;
-      wrap.style.transform = "translateY("+pos+"px)";
-      raf = requestAnimationFrame(step);
-    }
-    if(raf) cancelAnimationFrame(raf);
-    step();
-
-    const outer = document.getElementById("notifyWrap");
-    outer.addEventListener('mouseenter', ()=>{ if(raf) cancelAnimationFrame(raf); raf=null; });
-    outer.addEventListener('mouseleave', ()=>{ if(!raf) step(); });
-
-  }catch(err){
-    console.error('Notifications load error', err);
-    const wrap = document.getElementById("notifs");
-    wrap.innerHTML = "<div class='notify-item'><div class='date'>--</div><div class='text'>नोटिफिकेशन लोड नहीं हुए — sheet की sharing settings और sheet name जाँचें।</div></div>";
-  }
-}
-
-/* Student search */
-async function searchStudent(){
-  const adm = document.getElementById("admission").value.trim();
-  if(!adm) return alert("Admission Number डालें");
-  try{
-    const data = await loadSheetGviz("Student's Details");
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const records = rows.map(cells=>{
-      const obj={};
-      for(let i=0;i<cols.length;i++){
-        const cell = cells[i];
-        let v = "";
-        if(cell){
-          if(cell.v !== undefined) v = cell.v;
-          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-        }
-        obj[cols[i]||('col'+i)] = v;
-      }
-      return obj;
-    });
-
-    const rec = records.find(r => String(r["Admission No."]) === adm || String(r["Admission No."]) === ("0"+adm));
-    const out = document.getElementById("result");
-    out.style.display = 'block';
-    if(!rec){
-      out.innerHTML = "<div class='field'><strong>Not Found</strong><div>No details available.</div></div>";
-      return;
-    }
-
-    out.innerHTML = "<div class='field'><strong>Student Name</strong>"+escapeHtml(rec["Student Name"]||"")+"</div>"
-      + "<div class='field'><strong>Father</strong>"+escapeHtml(rec["Father Name"]||"")+"</div>"
-      + "<div class='field'><strong>Mother</strong>"+escapeHtml(rec["Mother Name"]||"")+"</div>"
-      + "<div class='field'><strong>DOB</strong>"+escapeHtml(rec["Date of Birth"]||"")+"</div>"
-      + "<div class='field'><strong>Class</strong>"+escapeHtml(rec["Class"]||"")+"</div>"
-      + "<div class='field'><strong>Address</strong>"+escapeHtml(rec["Address"]||"")+"</div>";
-  }catch(e){
-    console.error("Search error", e);
-    alert("डेटा लोड में समस्या — console देखें।");
-  }
-}
-
-/* Simple Time Table loader (Download Time Table column) */
-async function loadSimpleTimeTable_DownloadColumn() {
-  try {
-    const data = await loadSheetGviz("Time Table");
-    const cols = (data.table.cols || []).map(c => (c.label || c.id || '').trim());
-    const rows = (data.table.rows || []).map(r => r.c || []);
-    const records = rows.map(cells => {
-      const obj = {};
-      for (let i = 0; i < cols.length; i++) {
-        const cell = cells[i];
-        obj[cols[i]] = cell && (cell.v !== undefined ? cell.v : (cell.f || "")) ;
-      }
-      return obj;
-    });
-
-    const wrap = document.getElementById("simpleTT");
-    wrap.innerHTML = "";
-    const dlCol = "Download Time Table";
-    const titleCandidates = ["Title","Class","Name","Description","Subject"];
-    let count = 0;
-    records.forEach((r, idx) => {
-      const link = r[dlCol];
-      if (link && String(link).trim()) {
-        count++;
-        let label = "";
-        for (const t of titleCandidates) {
-          if (r[t] && String(r[t]).trim()) { label = String(r[t]).trim(); break; }
-        }
-        if (!label) {
-          try {
-            const u = new URL(String(link));
-            label = u.pathname.split('/').pop() || "Time Table " + count;
-          } catch(e){
-            label = "Time Table " + count;
-          }
-        }
-
-        const div = document.createElement("div");
-        div.style.margin = "10px 0";
-        const safeLink = String(link).replace(/"/g,'&quot;');
-        const safeLabel = String(label).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        div.innerHTML = '<a href="'+safeLink+'" target="_blank" rel="noopener noreferrer" class="link-item">📄 '+safeLabel+'</a>';
-        wrap.appendChild(div);
-      }
-    });
-
-    if (count === 0) {
-      wrap.innerHTML = "<div class='small'>Sheet में 'Download Time Table' कॉलम नहीं मिला या लिंक मौजूद नहीं है।</div>";
-    }
-
-  } catch (e) {
-    console.error(e);
-    document.getElementById("simpleTT").innerHTML =
-      "<div class='small'>Time Table लोड नहीं हो पाया! (Sheet नाम और sharing settings जाँचें)</div>";
-  }
-}
-
-setTimeout(loadSimpleTimeTable_DownloadColumn, 500);
-document.getElementById("year").innerText = new Date().getFullYear();
-loadNotificationsRobust();
+const SHEET_ID = '1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8';
+function escapeHtml(s){ if(s===null||s===undefined) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+async function loadSheetGviz(sheetName){ const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?sheet='+encodeURIComponent(sheetName)+'&tqx=out:json'; const res=await fetch(url); const text=await res.text(); const jsonText=text.replace(/^[^{]*/,'').replace(/\);\s*$/,''); return JSON.parse(jsonText); }
+async function loadAllFee(){ try{ const data=await loadSheetGviz('Fee Student Details'); const cols=(data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim()); const rows=(data.table.rows||[]).map(r=> r.c || []); let html='<table class="timetable"><thead><tr>'; const show=['Adm. No.','Student Name','Father Name','Mother Name','Address','Mobile No.','Aadhar No.','Date of Birth','Class']; show.forEach(c=> html+='<th>'+escapeHtml(c)+'</th>'); html+='</tr></thead><tbody>'; function maskLast4(str){str=String(str||''); if(str.length<=4) return str; return str.slice(0,-4).replace(/./g,'*')+str.slice(-4);} rows.forEach(c=>{ const obj={}; cols.forEach((cl,i)=>{ obj[cl]=c[i]? (c[i].v!==undefined?c[i].v:(c[i].f||'')) : ''; }); html+='<tr>'; show.forEach(col=>{ let v=obj[col]||''; if(col=='Mobile No.'||col=='Aadhar No.') v=maskLast4(v); html+='<td>'+escapeHtml(v)+'</td>'; }); html+='</tr>'; }); html+='</tbody></table>'; document.getElementById('feeResult').innerHTML=html;}catch(e){ console.error(e); document.getElementById('feeResult').innerHTML='<div class="small">Fee data लोड में त्रुटि।</div>'; } }
+async function loadAllMarksheet(){ try{ const data=await loadSheetGviz('Marksheet Details'); const cols=(data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim()); const rows=(data.table.rows||[]).map(r=> r.c || []); let html='<table class="timetable">'; const show=['Admission No.','Student Name','Father Name','Mother Name','Date of Birth','Class','Address']; html+='<thead><tr>'; show.forEach(c=> html+='<th>'+escapeHtml(c)+'</th>'); html+='</tr></thead><tbody>'; rows.forEach(c=>{ const obj={}; cols.forEach((cl,i)=>{ obj[cl]=c[i]? (c[i].v!==undefined?c[i].v:(c[i].f||'')) : ''; }); html+='<tr>'; show.forEach(col=>{ let v=obj[col]||''; html+='<td>'+escapeHtml(v)+'</td>'; }); html+='</tr>'; }); html+='</tbody></table>'; document.getElementById('msResult').innerHTML=html;}catch(e){ console.error(e); document.getElementById('msResult').innerHTML='<div class="small">Marksheet data लोड में त्रुटि।</div>'; } }
+async function loadNotificationsRobust(){ try{ const data=await loadSheetGviz('Notification'); const cols=(data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim().replace(/\u200B/g,'')); const rows=(data.table.rows||[]).map(r=> r.c || []); const wrap=document.getElementById('notifs'); wrap.innerHTML=''; rows.forEach(cells=>{ const obj={}; cols.forEach((cl,i)=>{ obj[cl]=cells[i]? (cells[i].v!==undefined?cells[i].v:(cells[i].f||'')) : ''; }); const d=obj['Date']||obj['date']||obj['Day']||''; const t=obj['Notification']||obj['Text']||obj['Message']||Object.values(obj).slice(0,1).join('')||''; const node=document.createElement('div'); node.className='notify-item'; node.innerHTML='<div class="date">'+escapeHtml(d)+'</div><div class="text">'+escapeHtml(t)+'</div>'; wrap.appendChild(node); }); const orig=wrap.children.length; for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); } let pos=0; function step(){ pos-=0.3; const total=wrap.scrollHeight/2; if(Math.abs(pos)>=total) pos=0; wrap.style.transform='translateY('+pos+'px)'; requestAnimationFrame(step);} step(); }catch(e){ console.error(e); const wrap=document.getElementById('notifs'); wrap.innerHTML='<div class="notify-item"><div class="date">--</div><div class="text">नोटिफिकेशन लोड नहीं हुए — sheet की sharing settings और sheet name जाँचें।</div></div>'; } }
+window.addEventListener('load', function(){ document.getElementById('year').innerText=new Date().getFullYear(); loadNotificationsRobust(); loadAllFee(); loadAllMarksheet(); });
 </script>
 </body>
 </html>
