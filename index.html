@@ -3,25 +3,35 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>S.B. Public School — Student Portal (Final Updated)</title>
+<title>S.B. Public School — Student Portal (Tabs)</title>
 <style>
 :root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;font-family:Arial, sans-serif;background:linear-gradient(180deg,#eaf4ff,#f7fbff);color:#0f172a}
-.container{max-width:1100px;margin:18px auto;padding:14px}
-.header{background:linear-gradient(90deg,var(--accent),var(--accent2));padding:18px;text-align:center;color:#fff;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,0.12)}
+.container{max-width:1100px;margin:14px auto;padding:12px}
+.header{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  padding:18px 14px;
+  text-align:center;
+  color:#fff;
+  border-radius:12px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+}
 .header h1{margin:0;font-size:20px}
-.small{color:var(--muted);font-size:13px}
+.header .sub{margin-top:6px;font-size:13px;opacity:0.95}
 .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06);margin-bottom:12px}
 h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
+.small{color:var(--muted);font-size:13px}
 .table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
 th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
 thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
-.mask{font-family:monospace}
+.tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
+.tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
 .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
 .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
 .search-row{display:flex;gap:8px;margin-bottom:8px}
@@ -30,9 +40,9 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <h1>S.B. PUBLIC SCHOOL CHHITAUNA</h1>
-    <div class="small">Final Update — सभी डेटा दिखेगा; Mobile/Aadhar masked (last 4) — Responsive (Mobile/Tablet/Laptop)</div>
+  <div class="header" id="schoolHeader">
+    <h1 id="schoolName">S.B. PUBLIC SCHOOL CHHITAUNA</h1>
+    <div class="sub" id="schoolMeta">POST MEGHAULI KALA — PIN 273305 · PRINCIPAL: MR. GAJENDRA YADAV</div>
   </div>
 
   <div class="grid">
@@ -47,17 +57,20 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
         <div id="result"></div>
       </div>
 
+      <!-- Single card containing both Fee and Marksheet with tabs -->
       <div class="card">
-        <h2>All Fee Student Details (बिना सर्च)</h2>
-        <div class="small">Sheet: <strong>Fee Student Details</strong> — Columns: Adm. No., Student Name, Father Name, Mother Name, Address, Mobile No., Aadhar No., Date of Birth, Class</div>
-        <div id="feeWrap" class="table-wrap" style="margin-top:10px">लोड हो रहा है...</div>
+        <h2>Student Records</h2>
+        <div class="small">नीचे टैब बदल कर Fee या Marksheet देखें — Mobile/Aadhar masked (last 4)</div>
+
+        <div class="tabbar" role="tablist">
+          <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
+          <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
+        </div>
+
+        <div id="feeContainer" class="table-wrap" style="display:block">लोड हो रहा है...</div>
+        <div id="marksContainer" class="table-wrap" style="display:none; margin-top:10px">लोड हो रहा है...</div>
       </div>
 
-      <div class="card">
-        <h2>All Marksheet Details (बिना सर्च)</h2>
-        <div class="small">Sheet: <strong>Marksheet Details</strong> — Columns expected: Admission No., Student Name, Father Name, Mother Name, Date of Birth, Class, Address</div>
-        <div id="marksWrap" class="table-wrap" style="margin-top:10px">लोड हो रहा है...</div>
-      </div>
     </div>
 
     <div>
@@ -68,13 +81,14 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
         </div>
       </div>
 
-      <div class="card" style="margin-top:12px;">
+      <div class="card" style="margin-top:12px">
         <h2>Quick Portals</h2>
         <div style="margin-top:8px">
           <a class="btn" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
           <a class="btn" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -84,7 +98,7 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 <script>
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
 
-/* Utility */
+/* Utils */
 function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 async function loadSheetGviz(sheetName){
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
@@ -95,7 +109,7 @@ async function loadSheetGviz(sheetName){
   return JSON.parse(jsonText);
 }
 
-/* Masking: show only last 4 digits, keep formatting minimal */
+/* Mask */
 function maskLast4(val){
   if(val===null||val===undefined) return "";
   const s = String(val).trim();
@@ -104,20 +118,15 @@ function maskLast4(val){
   const last4 = digits.slice(-4);
   return '****' + last4;
 }
-
-/* detect headers */
 function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h); }
 function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h); }
 
-/* Generic table renderer that preserves all columns and masks mobile/aadhar */
-function renderTable(containerId, gvizJson){
+/* Render table keeping all columns */
+function renderTableTo(containerId, gvizJson){
   const cols = (gvizJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
   const rows = (gvizJson.table.rows||[]).map(r=> r.c || []);
   const wrap = document.getElementById(containerId);
-  if(rows.length === 0){
-    wrap.innerHTML = "<div style='padding:12px;color:#666'>कोई रिकॉर्ड नहीं मिला।</div>";
-    return;
-  }
+  if(rows.length === 0){ wrap.innerHTML = "<div style='padding:12px;color:#666'>कोई रिकॉर्ड नहीं मिला।</div>"; return; }
 
   const table = document.createElement('table');
   const thead = document.createElement('thead');
@@ -154,7 +163,15 @@ function renderTable(containerId, gvizJson){
   wrap.appendChild(table);
 }
 
-/* Notifications simple loader */
+/* Tabs */
+function showTab(name){
+  document.getElementById('feeContainer').style.display = name==='fee' ? 'block' : 'none';
+  document.getElementById('marksContainer').style.display = name==='marks' ? 'block' : 'none';
+  document.getElementById('tabFee').classList.toggle('active', name==='fee');
+  document.getElementById('tabMarks').classList.toggle('active', name==='marks');
+}
+
+/* Loaders */
 async function loadNotifications(){
   try{
     const data = await loadSheetGviz("Notification");
@@ -189,28 +206,24 @@ async function loadNotifications(){
   }
 }
 
-/* Load Fee and Marks (auto set for device sizes via CSS) */
 async function loadFeeAndMarks(){
-  // Fee Student Details
   try{
     const feeJson = await loadSheetGviz("Fee Student Details");
-    renderTable("feeWrap", feeJson);
-  }catch(err){
-    console.error('Fee load error', err);
-    document.getElementById("feeWrap").innerHTML = "<div style='padding:12px;color:#c33'>Fee Student Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
+    renderTableTo("feeContainer", feeJson);
+  }catch(e){
+    console.error(e);
+    document.getElementById("feeContainer").innerHTML = "<div style='padding:12px;color:#c33'>Fee Student Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
   }
-
-  // Marksheet Details
   try{
-    const markJson = await loadSheetGviz("Marksheet Details");
-    renderTable("marksWrap", markJson);
-  }catch(err){
-    console.error('Marksheet load error', err);
-    document.getElementById("marksWrap").innerHTML = "<div style='padding:12px;color:#c33'>Marksheet Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
+    const marksJson = await loadSheetGviz("Marksheet Details");
+    renderTableTo("marksContainer", marksJson);
+  }catch(e){
+    console.error(e);
+    document.getElementById("marksContainer").innerHTML = "<div style='padding:12px;color:#c33'>Marksheet Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
   }
 }
 
-/* Student Search uses Student's Details sheet or Marksheet depending on availability */
+/* Search uses Student's Details if present */
 async function searchStudent(){
   const adm = document.getElementById("admission").value.trim();
   if(!adm) return alert("Admission Number डालें");
@@ -255,8 +268,30 @@ async function searchStudent(){
   }
 }
 
+/* Make header responsive: adjust school name / meta based on width */
+function adjustHeader(){
+  const w = window.innerWidth;
+  const name = document.getElementById('schoolName');
+  const meta = document.getElementById('schoolMeta');
+  if(w < 420){
+    name.style.fontSize = '16px';
+    meta.style.display = 'block';
+    meta.style.fontSize = '12px';
+  } else if(w < 700){
+    name.style.fontSize = '18px';
+    meta.style.fontSize = '13px';
+    meta.style.display = 'block';
+  } else {
+    name.style.fontSize = '20px';
+    meta.style.fontSize = '13px';
+    meta.style.display = 'block';
+  }
+}
+
 /* Init */
 document.getElementById("year").innerText = new Date().getFullYear();
+window.addEventListener('resize', adjustHeader);
+adjustHeader();
 loadNotifications();
 loadFeeAndMarks();
 </script>
