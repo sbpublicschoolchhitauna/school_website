@@ -1,276 +1,35 @@
 <!doctype html>
 <html lang="hi">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>S.B. Public School — Student Portal (Header from Notifications)</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>S.B. Public School — Centered Header</title>
 <style>
-:root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:Arial,Segoe UI,Roboto,sans-serif;color:#0f172a;background:linear-gradient(180deg,#eaf4ff,#f7fbff)}
-.header-card{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  color:#fff;border-radius:0 0 12px 12px;padding:10px 12px;position:sticky;top:0;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,0.12)
+body{margin:0;font-family:Arial;background:#f6faff}
+.header{
+  background:linear-gradient(90deg,#0b5fa8,#1167b1);
+  color:#fff;text-align:center;padding:18px 10px;
+  border-radius:0 0 16px 16px;
 }
-.header-top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.school-title{font-weight:800;font-size:clamp(16px,4.5vw,20px)}
-.school-sub{font-size:13px;opacity:0.95}
-.school-meta{font-size:13px;opacity:0.95}
-.school-strip-outer{overflow:hidden;width:100%;margin-top:8px}
-.school-strip{white-space:nowrap;display:flex;gap:24px;align-items:center;will-change:transform;transform:translateX(0)}
-.school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px}
-.container{max-width:1100px;margin:0 auto;padding:0 12px 28px}
-.main{max-width:1100px;margin:14px auto;padding:12px}
-.grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06);margin-bottom:12px}
-h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
-.small{color:var(--muted);font-size:13px}
-.table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:340px}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
-th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
-thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
-.notify-wrap{height:220px;overflow:hidden;position:relative;border-radius:8px}
-.notify-list{position:absolute;left:0;right:0;top:0;will-change:transform}
-.notify-item{padding:10px 12px;border-bottom:1px solid #eef4ff;background:#fff}
-.notify-item .date{font-size:12px;color:var(--accent);font-weight:700}
-.notify-item .text{font-size:14px;margin-top:4px}
-.tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
-.tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
-.search-row{display:flex;gap:8px;margin-bottom:8px}
-@media(max-width:640px){.search-row{flex-direction:column} .tabbar{gap:6px}}
-.footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
+.header h1{
+  margin:0;font-size:28px;font-weight:800;
+}
+.header p{
+  margin:4px 0;font-size:14px;opacity:0.95;
+}
+.container{padding:20px;font-size:16px}
 </style>
 </head>
 <body>
-  <div class="header-card" role="banner" aria-label="School header">
-    <div class="header-top">
-      <div>
-        <div id="schoolTitle" class="school-title">S.B. PUBLIC SCHOOL CHHITAUNA</div>
-        <div id="schoolSub" class="school-sub">POST MEGHAULI KALA — PIN 273305</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div id="schoolContact" class="school-meta">PRINCIPAL: MR. GAJENDRA YADAV</div>
-        <div id="schoolCreated" class="school-meta">CALL: +91 6389259200</div>
-      </div>
-    </div>
+<div class="header">
+  <h1>S.B. PUBLIC SCHOOL</h1>
+  <p>Village Chhitauna · Post Meghauli Kala · Pin Code 273304</p>
+  <p>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200</p>
+  <p>Created By — Upendra Vishwakarma</p>
+</div>
 
-    <!-- Horizontal strip: NOW populated from Notification sheet -->
-    <div class="school-strip-outer" id="schoolStripOuter">
-      <div id="schoolStrip" class="school-strip" aria-live="polite"></div>
-    </div>
-  </div>
-
-  <div class="main">
-    <div class="grid">
-      <div>
-        <div class="card">
-          <h2>Student Details Lookup</h2>
-          <div class="small">Admission Number डालकर Search करें</div>
-          <div style="margin-top:8px" class="search-row">
-            <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
-            <button class="btn" onclick="searchStudent()">Search</button>
-          </div>
-          <div id="result"></div>
-        </div>
-
-        <div class="card">
-          <h2>Student Records</h2>
-          <div class="small">टैब बदल कर Fee या Marksheet देखें — Mobile/Aadhar masked (last 4)।</div>
-          <div class="tabbar" role="tablist">
-            <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
-            <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
-          </div>
-
-          <div id="feeContainer" class="table-wrap" style="display:block">लोड हो रहा है...</div>
-          <div id="marksContainer" class="table-wrap" style="display:none;margin-top:10px">लोड हो रहा है...</div>
-        </div>
-      </div>
-
-      <div>
-        <div class="card">
-          <h2>Notifications</h2>
-          <div id="notifyOuter" class="notify-wrap" aria-live="polite">
-            <div id="notifs" class="notify-list"></div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h2>Quick Portals</h2>
-          <div style="margin-top:8px">
-            <a class="btn" href="#" target="_blank">Fee Portal</a>
-            <a class="btn" href="#" target="_blank" style="margin-left:8px">Marksheet</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
-  </div>
-
-<script>
-const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
-const NOTIF_SPEED = 0.45;
-const HEADER_SPEED = 0.6;
-
-/* helpers */
-function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-async function loadSheetGviz(sheetName){
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
-  const res = await fetch(url);
-  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
-  const text = await res.text();
-  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-  return JSON.parse(jsonText);
-}
-function maskLast4(val){
-  if(val===null||val===undefined) return "";
-  const s = String(val).trim();
-  const digits = s.replace(/\D/g,'');
-  if(digits.length === 0) return '';
-  const last4 = digits.slice(-4);
-  return '****' + last4;
-}
-function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h); }
-function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h); }
-
-/* render tables */
-function renderTableTo(containerId, gvizJson){
-  const cols = (gvizJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-  const rows = (gvizJson.table.rows||[]).map(r=> r.c || []);
-  const wrap = document.getElementById(containerId);
-  if(rows.length === 0){ wrap.innerHTML = "<div style='padding:12px;color:#666'>कोई रिकॉर्ड नहीं मिला।</div>"; return; }
-  const table = document.createElement('table');
-  const thead = document.createElement('thead');
-  const trh = document.createElement('tr');
-  cols.forEach(h=>{ const th = document.createElement('th'); th.innerText = h||''; trh.appendChild(th); });
-  thead.appendChild(trh); table.appendChild(thead);
-  const tbody = document.createElement('tbody');
-  rows.forEach(r=>{
-    const tr = document.createElement('tr');
-    for(let i=0;i<cols.length;i++){
-      const cell = r[i]; let v = "";
-      if(cell){ if(cell.f !== undefined && String(cell.f).trim()!=='') v = String(cell.f).replace(/<[^>]*>/g,'').trim(); else if(cell.v !== undefined) v = cell.v; }
-      const header = cols[i]||'';
-      if(isMobileHeader(header)) v = maskLast4(v);
-      if(isAadharHeader(header)) v = maskLast4(v);
-      const td = document.createElement('td'); td.innerText = v; tr.appendChild(td);
-    }
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody); wrap.innerHTML = ""; wrap.appendChild(table);
-}
-
-/* tabs */
-function showTab(name){
-  document.getElementById('feeContainer').style.display = name==='fee' ? 'block' : 'none';
-  document.getElementById('marksContainer').style.display = name==='marks' ? 'block' : 'none';
-  document.getElementById('tabFee').classList.toggle('active', name==='fee');
-  document.getElementById('tabMarks').classList.toggle('active', name==='marks');
-}
-
-/* search */
-async function searchStudent(){
-  const adm = document.getElementById("admission").value.trim();
-  if(!adm) return alert("Admission Number डालें");
-  try{
-    const data = await loadSheetGviz("Student's Details");
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const records = rows.map(cells=>{ const obj={}; for(let i=0;i<cols.length;i++){ const cell=cells[i]; let v=""; if(cell){ if(cell.v !== undefined) v=cell.v; else if(cell.f !== undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim(); } obj[cols[i]||('col'+i)] = v;} return obj; });
-    const admKeys = ["Admission No.","Adm. No.","Admission Number","Adm No","Admission No"];
-    const rec = records.find(r => admKeys.some(k=> String((r[k]||'')).trim() === adm || String((r[k]||'')).trim() === ("0"+adm)));
-    const out = document.getElementById("result"); out.style.display = 'block';
-    if(!rec){ out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>"; return; }
-    const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
-    let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
-    fields.forEach(f=>{ html += `<div style="margin-bottom:8px"><strong>${f}:</strong> ${escapeHtml(rec[f]||'')}</div>`; });
-    html += '</div>'; out.innerHTML = html;
-  }catch(e){ console.error("Search error", e); alert("Search में समस्या — console देखें।"); }
-}
-
-/* notifications vertical scroll */
-let notifRAF=null, notifPos=0;
-function startNotifScroll(){ const wrap = document.getElementById('notifs'); if(!wrap) return; cancelAnimationFrame(notifRAF); function step(){ notifPos -= NOTIF_SPEED; const half = wrap.scrollHeight/2 || 0; if(Math.abs(notifPos) >= half) notifPos = 0; wrap.style.transform = `translateY(${notifPos}px)`; notifRAF = requestAnimationFrame(step);} step(); }
-function stopNotifScroll(){ if(notifRAF) cancelAnimationFrame(notifRAF); notifRAF = null; }
-
-/* header horizontal scroll */
-let headerRAF=null, headerPos=0;
-function startHeaderScroll(){ const strip = document.getElementById('schoolStrip'); if(!strip) return; cancelAnimationFrame(headerRAF); function step(){ headerPos -= HEADER_SPEED; const half = strip.scrollWidth/2 || 0; if(Math.abs(headerPos) >= half) headerPos = 0; strip.style.transform = `translateX(${headerPos}px)`; headerRAF = requestAnimationFrame(step);} step(); }
-function stopHeaderScroll(){ if(headerRAF) cancelAnimationFrame(headerRAF); headerRAF = null; }
-
-/* Build horizontal strip from Notification sheet */
-async function buildStripFromNotifications(){
-  try{
-    const data = await loadSheetGviz("Notification");
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    // find best text field and date
-    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
-    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-    const strip = document.getElementById('schoolStrip');
-    strip.innerHTML = "";
-    const items = [];
-    rows.forEach(cells=>{
-      const obj={};
-      for(let i=0;i<cols.length;i++){
-        const cell=cells[i]; let v=""; if(cell){ if(cell.v !== undefined) v=cell.v; else if(cell.f !== undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim(); } obj[cols[i]] = v;
-      }
-      const t = obj[textKey] || '';
-      const d = obj[dateKey] || '';
-      if(t || d) items.push({date: d, text: t});
-    });
-    if(items.length === 0){
-      // fallback default
-      const span = document.createElement('div'); span.className='school-chip'; span.innerText = 'No notifications to show in header.'; strip.appendChild(span);
-      return;
-    }
-    // create chips from items (shortened if long)
-    function makeChip(it){ const txt = (it.date ? (it.date + ' - ') : '') + it.text; const short = txt.length > 120 ? txt.slice(0,117)+'...' : txt; const span=document.createElement('div'); span.className='school-chip'; span.title = txt; span.innerText = short; return span; }
-    items.forEach(it=> strip.appendChild(makeChip(it)));
-    // duplicate for smooth loop
-    items.forEach(it=> strip.appendChild(makeChip(it)));
-    // start scroll
-    startHeaderScroll();
-    const outer = document.getElementById('schoolStripOuter'); outer.addEventListener('mouseenter', stopHeaderScroll); outer.addEventListener('mouseleave', startHeaderScroll);
-  }catch(e){
-    console.error('Strip build error', e);
-    const strip = document.getElementById('schoolStrip'); strip.innerHTML = '<div class="school-chip">Unable to load header notifications — check sheet name and sharing.</div>';
-  }
-}
-
-/* load notifications list (vertical) */
-async function loadNotifications(){
-  try{
-    const data = await loadSheetGviz("Notification");
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
-    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-    const wrap = document.getElementById('notifs');
-    wrap.innerHTML = "";
-    rows.forEach(cells=>{
-      const obj={};
-      for(let i=0;i<cols.length;i++){ const cell=cells[i]; let v=""; if(cell){ if(cell.v !== undefined) v=cell.v; else if(cell.f !== undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim(); } obj[cols[i]] = v; }
-      const d = obj[dateKey] || ''; const t = obj[textKey] || '';
-      const node = document.createElement('div'); node.className='notify-item'; node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`; wrap.appendChild(node);
-    });
-    // duplicate for loop
-    const orig = wrap.children.length; for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); }
-    startNotifScroll();
-    const outer = document.getElementById('notifyOuter'); outer.addEventListener('mouseenter', stopNotifScroll); outer.addEventListener('mouseleave', startNotifScroll);
-  }catch(e){ console.error('Notification load error', e); document.getElementById('notifs').innerHTML = '<div style="padding:12px;color:#c33">Notification लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>'; }
-}
-
-/* load fee & marks */
-async function loadFeeAndMarks(){ try{ const feeJson = await loadSheetGviz("Fee Student Details"); renderTableTo("feeContainer", feeJson); }catch(e){ console.error(e); document.getElementById("feeContainer").innerHTML = "<div style='padding:12px;color:#c33'>Fee Student Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>"; } try{ const marksJson = await loadSheetGviz("Marksheet Details"); renderTableTo("marksContainer", marksJson); }catch(e){ console.error(e); document.getElementById("marksContainer").innerHTML = "<div style='padding:12px;color:#c33'>Marksheet Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>"; } }
-
-/* init */
-document.getElementById("year").innerText = new Date().getFullYear();
-showTab('fee'); buildStripFromNotifications(); loadNotifications(); loadFeeAndMarks();
-</script>
+<div class="container">
+Website under construction preview...
+</div>
 </body>
 </html>
