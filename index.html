@@ -3,183 +3,261 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>S.B. Public School Chhitauna — Student Portal</title>
+<title>S.B. Public School — Light, Eye-friendly Theme</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:Arial,Segoe UI,Roboto,sans-serif;color:#0f172a;background:linear-gradient(180deg,#eaf4ff,#f7fbff)}
-/* Centered header */
-.header{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  color:#fff;text-align:center;padding:18px 12px;border-radius:0 0 14px 14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.12); position:sticky; top:0; z-index:9999;
+:root{
+  /* Light, eye-friendly palette */
+  --bg: #fbfdff;
+  --surface: #ffffff;
+  --text: #0f1724;
+  --muted: #5b6b75;
+  --accent1: #0ea5a4; /* teal */
+  --accent2: #6b8cff; /* soft blue */
+  --glass: rgba(15,23,36,0.03);
+  --glass-2: rgba(15,23,36,0.02);
+  --glass-border: rgba(15,23,36,0.06);
+  --notif-speed: 0.35;
+  --header-speed: 0.45;
+  --card-shadow: rgba(16,24,40,0.06);
 }
-.header h1{margin:0;font-size:clamp(20px,4.5vw,30px);font-weight:800;letter-spacing:0.4px}
-.header .meta{margin-top:6px;font-size:14px;opacity:0.95}
-.header .meta small{display:block;font-size:13px;opacity:0.9;margin-top:4px}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.container{max-width:1100px;margin:14px auto;padding:16px}
 
-/* horizontal strip under header */
-.school-strip-outer{overflow:hidden;width:100%;margin-top:12px;padding-bottom:8px}
-.school-strip{white-space:nowrap;display:flex;gap:18px;align-items:center;will-change:transform;transform:translateX(0)}
-.school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.06);padding:6px 12px;border-radius:8px}
-
-/* main layout */
-.container{max-width:1100px;margin:14px auto;padding:12px}
-.grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06);margin-bottom:12px}
-h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
+/* header (light, soft) */
+.header{
+  padding:18px;border-radius:12px;position:relative;background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  color: #fff; overflow:hidden;
+  box-shadow: 0 8px 20px var(--card-shadow);
+}
+.header-inner{text-align:center}
+.header h1{margin:0;font-size:clamp(20px,4.5vw,32px);font-weight:800;color:white}
+.header p{margin:6px 0;color:rgba(255,255,255,0.95)}
+.controls{display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.control{background:rgba(255,255,255,0.12);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);display:flex;gap:8px;align-items:center}
+.control label{font-size:13px;color:rgba(255,255,255,0.95)}
+.color-input{width:42px;height:28px;border:0;padding:0;background:transparent;cursor:pointer}
+.range{width:140px}
 .small{color:var(--muted);font-size:13px}
-.tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
-.tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
-.search-row{display:flex;gap:8px;margin-bottom:8px}
-@media(max-width:640px){.search-row{flex-direction:column} .tabbar{gap:6px}}
+
+/* strip */
+.strip-wrap{margin-top:14px;overflow:hidden;border-radius:10px;padding:8px;background:rgba(255,255,255,0.08)}
+.strip{display:flex;gap:12px;white-space:nowrap;will-change:transform;align-items:center}
+.school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.92);color:var(--text);padding:6px 12px;border-radius:8px;box-shadow:0 2px 6px rgba(16,24,40,0.04)}
+
+/* grid & cards */
+.grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid rgba(15,23,36,0.04);padding:14px;border-radius:12px;box-shadow:0 6px 18px var(--card-shadow)}
+.btn{padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:white;cursor:pointer;font-weight:700}
+.tabbar{display:flex;gap:8px;margin-bottom:8px}
+.tab{padding:8px 12px;border-radius:999px;background:transparent;border:1px solid rgba(15,23,36,0.04);color:var(--text);cursor:pointer;font-weight:600}
+.tab.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 8px 20px rgba(11,84,120,0.08);color:#fff;transform:translateY(-2px)}
 
 /* tables */
-.table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:360px}
-@media(max-width:900px){.table-wrap{max-height:300px}}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
-th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
-thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
+.table-wrap{overflow:auto;border-radius:10px;border:1px solid rgba(15,23,36,0.03);padding:6px;background:var(--surface);max-height:420px}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(15,23,36,0.04);color:var(--text)}
+thead th{position:sticky;top:0;background:linear-gradient(180deg,rgba(255,255,255,0.98),transparent);font-weight:700;cursor:pointer}
+thead th.sort-asc:after{content:" ▲";font-size:12px}
+thead th.sort-desc:after{content:" ▼";font-size:12px}
+tbody tr:hover{background:rgba(11,84,120,0.03);transform:translateY(-1px)}
+
+/* pagination */
+.pagination{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:8px}
+.page-btn{padding:6px 10px;border-radius:8px;border:1px solid rgba(15,23,36,0.04);background:transparent;color:var(--text);cursor:pointer}
 
 /* notifications */
-.notify-wrap{height:220px;overflow:hidden;position:relative;border-radius:8px}
-.notify-list{position:absolute;left:0;right:0;top:0;will-change:transform}
-.notify-item{padding:10px 12px;border-bottom:1px solid #eef4ff;background:#fff}
-.notify-item .date{font-size:12px;color:var(--accent);font-weight:700}
-.notify-item .text{font-size:14px;margin-top:4px}
+.notify-wrap{height:220px;overflow:hidden;border-radius:10px}
+.notify-list{position:relative;will-change:transform}
+.notify-item{padding:10px;border-bottom:1px solid rgba(15,23,36,0.04);background:linear-gradient(90deg,rgba(255,255,255,0.98),transparent)}
+.notify-item .date{font-weight:700;color:var(--accent2)}
+.notify-item .text{margin-top:6px;color:var(--text)}
 
 /* footer */
-.footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
+.footer{ text-align:center;margin-top:12px;color:var(--muted);font-size:13px}
+
+/* responsive tweaks */
+@media(max-width:640px){
+  .controls{flex-direction:column;align-items:center}
+  thead th, td{padding:8px}
+}
 </style>
 </head>
 <body>
 
-  <!-- CENTERED HEADER -->
-  <div class="header" role="banner" aria-label="School header">
-    <h1>S.B. PUBLIC SCHOOL</h1>
-    <div class="meta">
-      Village Chhitauna · Post Meghauli Kala · Pin Code 273304
-      <small>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</small>
-    </div>
+<div class="container">
 
-    <!-- horizontal strip populated from Notification sheet -->
-    <div class="school-strip-outer" id="schoolStripOuter" aria-live="polite">
-      <div id="schoolStrip" class="school-strip"></div>
-    </div>
-  </div>
+  <header class="header" role="banner" aria-label="School header">
+    <div class="header-inner">
+      <h1>S.B. PUBLIC SCHOOL</h1>
+      <p>Village Chhitauna · Post Meghauli Kala · Pin Code 273304</p>
+      <p class="small">Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</p>
 
-  <div class="container">
-    <div class="grid">
-      <div>
-
-        <!-- QUICK PORTALS moved to TOP -->
-        <div class="card">
-          <h2>Quick Portals</h2>
-          <div style="margin-top:8px">
-            <a class="btn" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-            <a class="btn" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
-          </div>
+      <!-- Controls (kept for customization) -->
+      <div class="controls" aria-hidden="false">
+        <div class="control">
+          <label>Accent 1</label>
+          <input id="accent1" class="color-input" type="color" value="#0ea5a4">
         </div>
-
-      <div>
-        <div class="card">
-          <h2>Student Details Lookup</h2>
-          <div class="small">Admission Number डालकर Search करें</div>
-          <div style="margin-top:8px" class="search-row">
-            <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
-            <button class="btn" onclick="searchStudent()">Search</button>
-          </div>
-          <div id="result"></div>
+        <div class="control">
+          <label>Accent 2</label>
+          <input id="accent2" class="color-input" type="color" value="#6b8cff">
         </div>
-
-        <div class="card">
-          <h2>Student Records</h2>
-          <div class="small">टैब बदल कर Fee या Marksheet देखें — Mobile/Aadhar masked (last 4)।</div>
-          <div class="tabbar" role="tablist">
-            <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
-            <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
-          </div>
-          <div id="feeContainer" class="table-wrap" style="display:block">लोड हो रहा है...</div>
-          <div id="marksContainer" class="table-wrap" style="display:none;margin-top:10px">लोड हो रहा है...</div>
+        <div class="control">
+          <label>Notif speed</label>
+          <input id="notifSpeed" class="range" type="range" min="0.1" max="1.2" step="0.05" value="0.35">
+        </div>
+        <div class="control">
+          <label>Header speed</label>
+          <input id="hdrSpeed" class="range" type="range" min="0.1" max="1.2" step="0.05" value="0.45">
         </div>
       </div>
 
-      <div>
-        <div class="card">
-          <h2>Notifications</h2>
-          <div id="notifyOuter" class="notify-wrap" aria-live="polite">
-            <div id="notifs" class="notify-list"></div>
+      <div class="strip-wrap" style="margin-top:12px">
+        <div id="schoolStrip" class="strip" aria-live="polite"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="grid" style="margin-top:18px">
+    <div>
+      <!-- Quick Portals moved ABOVE Student Records as requested -->
+      <section class="card">
+        <h3 style="margin-top:0">Quick Portals</h3>
+        <div style="display:flex;flex-direction:row;gap:10px;margin-top:8px;flex-wrap:wrap">
+          <a class="btn" href="#" target="_blank">Fee Portal</a>
+          <a class="btn" href="#" target="_blank">Marksheet Portal</a>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:12px">
+        <h2 style="margin-bottom:8px">Student Details Lookup</h2>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <input id="admission" placeholder="Admission Number" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(15,23,36,0.06);background:transparent;color:var(--text)">
+          <button class="btn" onclick="searchStudent()">Search</button>
+        </div>
+        <div id="result"></div>
+      </section>
+
+      <section class="card" style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <h2 style="margin:0">Student Records</h2>
+          <div style="display:flex;gap:8px">
+            <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee</button>
+            <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet</button>
           </div>
         </div>
 
-        
+        <div id="feeContainer" class="table-wrap">लोड हो रहा है...</div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div class="small">Rows per page:
+            <select id="feePageSize">
+              <option>10</option><option>25</option><option>50</option>
+            </select>
+          </div>
+          <div id="feePagination" class="pagination"></div>
         </div>
-      </div>
+
+        <div style="margin-top:12px;display:none">
+          <div id="marksContainer" class="table-wrap">लोड हो रहा है...</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="small">Rows per page:
+              <select id="marksPageSize">
+                <option>10</option><option>25</option><option>50</option>
+              </select>
+            </div>
+            <div id="marksPagination" class="pagination"></div>
+          </div>
+        </div>
+
+      </section>
     </div>
 
-    <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
-  </div>
+    <aside>
+      <section class="card">
+        <h3 style="margin-top:0">Notifications</h3>
+        <div id="notifyOuter" class="notify-wrap">
+          <div id="notifs" class="notify-list"></div>
+        </div>
+      </section>
+
+      <!-- removed Quick Portals from aside as requested -->
+
+    </aside>
+  </main>
+
+  <footer class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</footer>
+</div>
 
 <script>
-/* CONFIG */
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
-const NOTIF_SPEED = 0.45;
-const HEADER_SPEED = 0.6;
 
-/* HELPERS */
-function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-async function loadSheetGviz(sheetName){
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
-  const res = await fetch(url);
-  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
-  const text = await res.text();
-  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-  return JSON.parse(jsonText);
-}
-function maskLast4(val){
-  if(val===null||val===undefined) return "";
-  const s = String(val).trim();
-  const digits = s.replace(/\D/g,'');
-  if(digits.length === 0) return '';
-  const last4 = digits.slice(-4);
-  return '****' + last4;
-}
-function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h); }
-function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h); }
+/* simple helpers */
+function $(id){ return document.getElementById(id) }
+function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+async function loadSheetGviz(sheetName){ const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`; const res = await fetch(url); if(!res.ok) throw new Error('Network response not ok: ' + res.status); const text = await res.text(); const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,''); return JSON.parse(jsonText); }
+function maskLast4(v){ if(v==null) return ''; const s=String(v).replace(/\D/g,''); if(s.length<=4) return '****'+s; return '****'+s.slice(-4) }
+function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h) }
+function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h) }
 
-/* TABLE RENDER */
-function renderTableTo(containerId, gvizJson){
-  const cols = (gvizJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-  const rows = (gvizJson.table.rows||[]).map(r=> r.c || []);
-  const wrap = document.getElementById(containerId);
-  if(rows.length === 0){
-    wrap.innerHTML = "<div style='padding:12px;color:#666'>कोई रिकॉर्ड नहीं मिला।</div>";
-    return;
+/* pagination state */
+const tableState = { fee:{rows:[],cols:[],sortCol:null,sortDir:1,page:1,pageSize:10}, marks:{rows:[],cols:[],sortCol:null,sortDir:1,page:1,pageSize:10} };
+
+/* color & speed controls */
+$('accent1').addEventListener('input', e=> document.documentElement.style.setProperty('--accent1', e.target.value));
+$('accent2').addEventListener('input', e=> document.documentElement.style.setProperty('--accent2', e.target.value));
+$('notifSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--notif-speed', e.target.value));
+$('hdrSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--header-speed', e.target.value));
+
+/* render table with pagination & sorting */
+function renderPaginatedTable(key, containerId, paginationId){
+  const state = tableState[key];
+  const cols = state.cols;
+  const rows = state.rows.slice();
+  if(state.sortCol !== null){
+    rows.sort((a,b)=>{
+      const A = (a[state.sortCol] && a[state.sortCol].v !== undefined) ? String(a[state.sortCol].v) : (a[state.sortCol] && a[state.sortCol].f !== undefined ? String(a[state.sortCol].f) : '');
+      const B = (b[state.sortCol] && b[state.sortCol].v !== undefined) ? String(b[state.sortCol].v) : (b[state.sortCol] && b[state.sortCol].f !== undefined ? String(b[state.sortCol].f) : '');
+      if(!isNaN(Number(A)) && !isNaN(Number(B))) return (Number(A)-Number(B))*state.sortDir;
+      return A.localeCompare(B)*state.sortDir;
+    });
   }
+  const pageSize = state.pageSize;
+  const totalPages = Math.max(1, Math.ceil(rows.length/pageSize));
+  state.page = Math.max(1, Math.min(state.page, totalPages));
+  const start = (state.page-1)*pageSize;
+  const pageRows = rows.slice(start, start+pageSize);
+
+  const wrap = $(containerId);
   const table = document.createElement('table');
   const thead = document.createElement('thead');
   const trh = document.createElement('tr');
-  cols.forEach(h=>{
+  cols.forEach((h, idx)=>{
     const th = document.createElement('th');
-    th.innerText = h || '';
+    th.innerText = h||'';
+    if(state.sortCol === idx) th.classList.add(state.sortDir===1 ? 'sort-asc' : 'sort-desc');
+    th.addEventListener('click', ()=>{
+      if(state.sortCol === idx) state.sortDir = -state.sortDir;
+      else { state.sortCol = idx; state.sortDir = 1; }
+      renderPaginatedTable(key, containerId, paginationId);
+    });
     trh.appendChild(th);
   });
   thead.appendChild(trh);
   table.appendChild(thead);
 
   const tbody = document.createElement('tbody');
-  rows.forEach(r=>{
+  pageRows.forEach(r=>{
     const tr = document.createElement('tr');
     for(let i=0;i<cols.length;i++){
       const cell = r[i];
-      let v = "";
+      let v = '';
       if(cell){
-        if(cell.f !== undefined && String(cell.f).trim()!=='') v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-        else if(cell.v !== undefined) v = cell.v;
+        if(cell.v !== undefined) v = cell.v;
+        else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
       }
       const header = cols[i]||'';
       if(isMobileHeader(header)) v = maskLast4(v);
@@ -191,214 +269,103 @@ function renderTableTo(containerId, gvizJson){
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
-  wrap.innerHTML = "";
+  wrap.innerHTML = '';
   wrap.appendChild(table);
+
+  // pagination controls
+  const pagWrap = $(paginationId);
+  pagWrap.innerHTML = '';
+  const prev = document.createElement('button'); prev.className='page-btn'; prev.innerText='Prev'; prev.disabled = state.page<=1;
+  prev.addEventListener('click', ()=>{ state.page = Math.max(1, state.page-1); renderPaginatedTable(key, containerId, paginationId); });
+  pagWrap.appendChild(prev);
+  const info = document.createElement('div'); info.className='small'; info.style.margin='0 8px'; info.innerText = `Page ${state.page} of ${totalPages}`;
+  pagWrap.appendChild(info);
+  const next = document.createElement('button'); next.className='page-btn'; next.innerText='Next'; next.disabled = state.page>=totalPages;
+  next.addEventListener('click', ()=>{ state.page = Math.min(totalPages, state.page+1); renderPaginatedTable(key, containerId, paginationId); });
+  pagWrap.appendChild(next);
 }
 
-/* TABS */
-function showTab(name){
-  document.getElementById('feeContainer').style.display = name==='fee' ? 'block' : 'none';
-  document.getElementById('marksContainer').style.display = name==='marks' ? 'block' : 'none';
-  document.getElementById('tabFee').classList.toggle('active', name==='fee');
-  document.getElementById('tabMarks').classList.toggle('active', name==='marks');
-}
-
-/* SEARCH */
-async function searchStudent(){
-  const adm = document.getElementById("admission").value.trim();
-  if(!adm) return alert("Admission Number डालें");
+/* load fee & marks */
+async function loadAndRenderTables(){
   try{
-    const data = await loadSheetGviz("Student's Details");
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const records = rows.map(cells=>{
-      const obj = {};
-      for(let i=0;i<cols.length;i++){
-        const cell = cells[i];
-        let v = "";
-        if(cell){
-          if(cell.v !== undefined) v = cell.v;
-          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-        }
-        obj[cols[i]||('col'+i)] = v;
-      }
-      return obj;
-    });
+    const feeJson = await loadSheetGviz('Fee Student Details');
+    tableState.fee.cols = (feeJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    tableState.fee.rows = (feeJson.table.rows||[]).map(r=> r.c || []);
+    tableState.fee.pageSize = Number($('feePageSize').value);
+    renderPaginatedTable('fee','feeContainer','feePagination');
+  }catch(e){ console.error(e); $('feeContainer').innerHTML='<div style="padding:12px;color:var(--muted)">Fee लोड नहीं हुए</div>' }
 
-    const admKeys = ["Admission No.","Adm. No.","Admission Number","Adm No","Admission No"];
-    const rec = records.find(r => admKeys.some(k=> String((r[k]||'')).trim() === adm || String((r[k]||'')).trim() === ("0"+adm)));
-    const out = document.getElementById("result");
-    out.style.display = 'block';
-    if(!rec){
-      out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
-      return;
-    }
-
-    const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
-    let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
-    fields.forEach(f=>{
-      html += `<div style="margin-bottom:8px"><strong>${f}:</strong> ${escapeHtml(rec[f]||'')}</div>`;
-    });
-    html += '</div>';
-    out.innerHTML = html;
-
-  }catch(e){
-    console.error("Search error", e);
-    alert("Search में समस्या — console देखें।");
-  }
-}
-
-/* NOTIFICATIONS vertical scroll */
-let notifRAF = null;
-let notifPos = 0;
-function startNotifScroll(){
-  const wrap = document.getElementById('notifs');
-  if(!wrap) return;
-  cancelAnimationFrame(notifRAF);
-  function step(){
-    notifPos -= NOTIF_SPEED;
-    const half = wrap.scrollHeight/2 || 0;
-    if(Math.abs(notifPos) >= half) notifPos = 0;
-    wrap.style.transform = `translateY(${notifPos}px)`;
-    notifRAF = requestAnimationFrame(step);
-  }
-  step();
-}
-function stopNotifScroll(){ if(notifRAF) cancelAnimationFrame(notifRAF); notifRAF = null; }
-
-/* HEADER horizontal scroll */
-let headerRAF = null;
-let headerPos = 0;
-function startHeaderScroll(){
-  const strip = document.getElementById('schoolStrip');
-  if(!strip) return;
-  cancelAnimationFrame(headerRAF);
-  function step(){
-    headerPos -= HEADER_SPEED;
-    const half = strip.scrollWidth/2 || 0;
-    if(Math.abs(headerPos) >= half) headerPos = 0;
-    strip.style.transform = `translateX(${headerPos}px)`;
-    headerRAF = requestAnimationFrame(step);
-  }
-  step();
-}
-function stopHeaderScroll(){ if(headerRAF) cancelAnimationFrame(headerRAF); headerRAF = null; }
-
-/* Build header strip from Notification sheet */
-async function buildStripFromNotifications(){
   try{
-    const data = await loadSheetGviz("Notification");
-    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
-    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-    const strip = document.getElementById('schoolStrip');
-    strip.innerHTML = "";
-    const items = [];
-    rows.forEach(cells=>{
-      const obj = {};
-      for(let i=0;i<cols.length;i++){
-        const cell = cells[i];
-        let v = "";
-        if(cell){
-          if(cell.v !== undefined) v = cell.v;
-          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-        }
-        obj[cols[i]] = v;
-      }
-      const t = obj[textKey] || '';
-      const d = obj[dateKey] || '';
-      if(t || d) items.push({date: d, text: t});
-    });
-    if(items.length === 0){
-      const span = document.createElement('div'); span.className='school-chip'; span.innerText = 'No notifications to show.'; strip.appendChild(span); return;
-    }
-    function makeChip(it){
-      const txt = (it.date ? (it.date + ' - ') : '') + it.text;
-      const short = txt.length > 120 ? txt.slice(0,117)+'...' : txt;
-      const span=document.createElement('div');
-      span.className='school-chip';
-      span.title = txt;
-      span.innerText = short;
-      return span;
-    }
-    items.forEach(it=> strip.appendChild(makeChip(it)));
-    items.forEach(it=> strip.appendChild(makeChip(it)));
-    startHeaderScroll();
-    const outer = document.getElementById('schoolStripOuter');
-    outer.addEventListener('mouseenter', stopHeaderScroll);
-    outer.addEventListener('mouseleave', startHeaderScroll);
-  }catch(e){
-    console.error('Strip build error', e);
-    const strip = document.getElementById('schoolStrip');
-    strip.innerHTML = '<div class="school-chip">Unable to load header notifications — check sheet name and sharing.</div>';
-  }
+    const marksJson = await loadSheetGviz('Marksheet Details');
+    tableState.marks.cols = (marksJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    tableState.marks.rows = (marksJson.table.rows||[]).map(r=> r.c || []);
+    tableState.marks.pageSize = Number($('marksPageSize')?.value || 10);
+    renderPaginatedTable('marks','marksContainer','marksPagination');
+  }catch(e){ console.error(e); $('marksContainer').innerHTML='<div style="padding:12px;color:var(--muted)">Marksheet लोड नहीं हुए</div>' }
 }
 
-/* load notifications vertical */
+/* notifications vertical scroll */
+let notifRAF=null, notifPos=0;
+function startNotifScroll(){ const wrap=$('notifs'); if(!wrap) return; cancelAnimationFrame(notifRAF); const speed = Number(getComputedStyle(document.documentElement).getPropertyValue('--notif-speed'))||0.35; function step(){ notifPos -= speed; const half = wrap.scrollHeight/2||0; if(Math.abs(notifPos)>=half) notifPos=0; wrap.style.transform = `translateY(${notifPos}px)`; notifRAF = requestAnimationFrame(step) } step() }
+function stopNotifScroll(){ if(notifRAF) cancelAnimationFrame(notifRAF); notifRAF=null }
+
 async function loadNotifications(){
   try{
-    const data = await loadSheetGviz("Notification");
+    const data = await loadSheetGviz('Notification');
     const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
     const rows = (data.table.rows||[]).map(r=> r.c || []);
-    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
-    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-    const wrap = document.getElementById('notifs');
-    wrap.innerHTML = "";
-    rows.forEach(cells=>{
-      const obj = {};
-      for(let i=0;i<cols.length;i++){
-        const cell = cells[i];
-        let v = "";
-        if(cell){
-          if(cell.v !== undefined) v = cell.v;
-          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-        }
-        obj[cols[i]] = v;
-      }
-      const d = obj[dateKey] || '';
-      const t = obj[textKey] || '';
-      const node = document.createElement('div');
-      node.className = 'notify-item';
-      node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`;
-      wrap.appendChild(node);
-    });
-    const orig = wrap.children.length;
-    for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); }
+    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k))||cols[1]||cols[0]||'Notification';
+    const dateKey = cols.find(k=>/date|day|time/i.test(k))||cols[0]||'Date';
+    const wrap = $('notifs'); wrap.innerHTML = '';
+    rows.forEach(cells=>{ const obj={}; for(let i=0;i<cols.length;i++){ const cell=cells[i]; let v=''; if(cell){ if(cell.v!==undefined) v=cell.v; else if(cell.f!==undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim() } obj[cols[i]] = v } const d = obj[dateKey]||''; const t = obj[textKey]||''; const node = document.createElement('div'); node.className='notify-item'; node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`; wrap.appendChild(node) });
+    const orig = wrap.children.length; for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)) }
     startNotifScroll();
-    const outer = document.getElementById('notifyOuter');
-    outer.addEventListener('mouseenter', stopNotifScroll);
-    outer.addEventListener('mouseleave', startNotifScroll);
-  }catch(e){
-    console.error('Notification load error', e);
-    document.getElementById('notifs').innerHTML = '<div style="padding:12px;color:#c33">Notification लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>';
-  }
+    const outer = $('notifyOuter'); outer.addEventListener('mouseenter', stopNotifScroll); outer.addEventListener('mouseleave', startNotifScroll);
+  }catch(e){ console.error(e); $('notifs').innerHTML='<div style="padding:12px;color:var(--muted)">Notification लोड नहीं हुए</div>' }
 }
 
-/* load fee and marks */
-async function loadFeeAndMarks(){
+/* header strip from notifications */
+let headerRAF=null, headerPos=0;
+function startHeaderScroll(){ const strip=$('schoolStrip'); if(!strip) return; cancelAnimationFrame(headerRAF); const speed = Number(getComputedStyle(document.documentElement).getPropertyValue('--header-speed'))||0.45; function step(){ headerPos -= speed; const half = strip.scrollWidth/2||0; if(Math.abs(headerPos)>=half) headerPos=0; strip.style.transform = `translateX(${headerPos}px)`; headerRAF = requestAnimationFrame(step) } step() }
+function stopHeaderScroll(){ if(headerRAF) cancelAnimationFrame(headerRAF); headerRAF=null }
+
+async function buildStripFromNotifications(){
   try{
-    const feeJson = await loadSheetGviz("Fee Student Details");
-    renderTableTo("feeContainer", feeJson);
-  }catch(e){
-    console.error(e);
-    document.getElementById("feeContainer").innerHTML = "<div style='padding:12px;color:#c33'>Fee Student Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
-  }
-  try{
-    const marksJson = await loadSheetGviz("Marksheet Details");
-    renderTableTo("marksContainer", marksJson);
-  }catch(e){
-    console.error(e);
-    document.getElementById("marksContainer").innerHTML = "<div style='padding:12px;color:#c33'>Marksheet Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
-  }
+    const data = await loadSheetGviz('Notification');
+    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (data.table.rows||[]).map(r=> r.c || []);
+    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k))||cols[1]||cols[0]||'Notification';
+    const dateKey = cols.find(k=>/date|day|time/i.test(k))||cols[0]||'Date';
+    const strip = $('schoolStrip'); strip.innerHTML = ''; const items = [];
+    rows.forEach(cells=>{ const obj={}; for(let i=0;i<cols.length;i++){ const cell=cells[i]; let v=''; if(cell){ if(cell.v!==undefined) v=cell.v; else if(cell.f!==undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim() } obj[cols[i]] = v } const t = obj[textKey]||''; const d = obj[dateKey]||''; if(t||d) items.push({date:d,text:t}) });
+    if(items.length===0){ const sp=document.createElement('div'); sp.className='school-chip'; sp.innerText='No notifications'; strip.appendChild(sp); return }
+    function chip(it){ const txt=(it.date?it.date+' - ':'')+it.text; const short = txt.length>100?txt.slice(0,97)+'...':txt; const d=document.createElement('div'); d.className='school-chip'; d.title=txt; d.innerText=short; return d }
+    items.forEach(it=> strip.appendChild(chip(it))); items.forEach(it=> strip.appendChild(chip(it))); startHeaderScroll(); const outer = document.querySelector('.strip-wrap'); outer.addEventListener('mouseenter', stopHeaderScroll); outer.addEventListener('mouseleave', startHeaderScroll);
+  }catch(e){ console.error(e); $('schoolStrip').innerHTML='<div class="school-chip">Unable to load</div>' }
 }
 
-/* INIT */
-document.getElementById("year").innerText = new Date().getFullYear();
-showTab('fee');
-buildStripFromNotifications();
-loadNotifications();
-loadFeeAndMarks();
+/* init */
+$('year')?.parentNode && ($('year').innerText = new Date().getFullYear());
+showTab = name => { $('feeContainer').style.display = name==='fee' ? 'block':'none'; $('marksContainer').parentNode.style.display = name==='marks' ? 'block':'none'; $('tabFee').classList.toggle('active', name==='fee'); $('tabMarks').classList.toggle('active', name==='marks') };
+
+async function init(){
+  // sync css vars to controls
+  document.documentElement.style.setProperty('--notif-speed', $('notifSpeed').value);
+  document.documentElement.style.setProperty('--header-speed', $('hdrSpeed').value);
+  document.documentElement.style.setProperty('--accent1', $('accent1').value);
+  document.documentElement.style.setProperty('--accent2', $('accent2').value);
+
+  $('accent1').addEventListener('input', e=> document.documentElement.style.setProperty('--accent1', e.target.value));
+  $('accent2').addEventListener('input', e=> document.documentElement.style.setProperty('--accent2', e.target.value));
+  $('notifSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--notif-speed', e.target.value));
+  $('hdrSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--header-speed', e.target.value));
+
+  await buildStripFromNotifications();
+  await loadNotifications();
+  await loadAndRenderTables();
+}
+
+init();
 </script>
 </body>
 </html>
