@@ -3,50 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>S.B. Public School — Light, Eye-friendly Theme</title>
+<title>S.B. Public School — Final Theme</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Light, eye-friendly palette */
   --bg: #fbfdff;
   --surface: #ffffff;
   --text: #0f1724;
-  --muted: #5b6b75;
+  --muted: #556070;
   --accent1: #0ea5a4; /* teal */
-  --accent2: #6b8cff; /* soft blue */
+  --accent2: #4f7cff; /* soft blue */
   --glass: rgba(15,23,36,0.03);
-  --glass-2: rgba(15,23,36,0.02);
-  --glass-border: rgba(15,23,36,0.06);
+  --card-shadow: rgba(16,24,40,0.06);
   --notif-speed: 0.35;
   --header-speed: 0.45;
-  --card-shadow: rgba(16,24,40,0.06);
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 .container{max-width:1100px;margin:14px auto;padding:16px}
 
-/* header (light, soft) */
+/* header */
 .header{
-  padding:18px;border-radius:12px;position:relative;background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  padding:20px;border-radius:12px;position:relative;background:linear-gradient(90deg,var(--accent1),var(--accent2));
   color: #fff; overflow:hidden;
   box-shadow: 0 8px 20px var(--card-shadow);
 }
 .header-inner{text-align:center}
-.header h1{margin:0;font-size:clamp(20px,4.5vw,32px);font-weight:800;color:white}
+.header h1{margin:0;font-size:clamp(20px,4.2vw,30px);font-weight:800;color:white}
 .header p{margin:6px 0;color:rgba(255,255,255,0.95)}
-.controls{display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.control{background:rgba(255,255,255,0.12);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);display:flex;gap:8px;align-items:center}
-.control label{font-size:13px;color:rgba(255,255,255,0.95)}
-.color-input{width:42px;height:28px;border:0;padding:0;background:transparent;cursor:pointer}
-.range{width:140px}
-.small{color:var(--muted);font-size:13px}
-
-/* strip */
-.strip-wrap{margin-top:14px;overflow:hidden;border-radius:10px;padding:8px;background:rgba(255,255,255,0.08)}
+.strip-wrap{margin-top:12px;overflow:hidden;border-radius:10px;padding:8px;background:rgba(255,255,255,0.08)}
 .strip{display:flex;gap:12px;white-space:nowrap;will-change:transform;align-items:center}
 .school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.92);color:var(--text);padding:6px 12px;border-radius:8px;box-shadow:0 2px 6px rgba(16,24,40,0.04)}
 
-/* grid & cards */
+/* layout */
 .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .card{background:var(--surface);border:1px solid rgba(15,23,36,0.04);padding:14px;border-radius:12px;box-shadow:0 6px 18px var(--card-shadow)}
@@ -77,12 +66,6 @@ tbody tr:hover{background:rgba(11,84,120,0.03);transform:translateY(-1px)}
 
 /* footer */
 .footer{ text-align:center;margin-top:12px;color:var(--muted);font-size:13px}
-
-/* responsive tweaks */
-@media(max-width:640px){
-  .controls{flex-direction:column;align-items:center}
-  thead th, td{padding:8px}
-}
 </style>
 </head>
 <body>
@@ -93,42 +76,22 @@ tbody tr:hover{background:rgba(11,84,120,0.03);transform:translateY(-1px)}
     <div class="header-inner">
       <h1>S.B. PUBLIC SCHOOL</h1>
       <p>Village Chhitauna · Post Meghauli Kala · Pin Code 273304</p>
-      <p class="small">Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</p>
+      <p style="margin-top:6px;font-size:13px">Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</p>
+    </div>
 
-      <!-- Controls (kept for customization) -->
-      <div class="controls" aria-hidden="false">
-        <div class="control">
-          <label>Accent 1</label>
-          <input id="accent1" class="color-input" type="color" value="#0ea5a4">
-        </div>
-        <div class="control">
-          <label>Accent 2</label>
-          <input id="accent2" class="color-input" type="color" value="#6b8cff">
-        </div>
-        <div class="control">
-          <label>Notif speed</label>
-          <input id="notifSpeed" class="range" type="range" min="0.1" max="1.2" step="0.05" value="0.35">
-        </div>
-        <div class="control">
-          <label>Header speed</label>
-          <input id="hdrSpeed" class="range" type="range" min="0.1" max="1.2" step="0.05" value="0.45">
-        </div>
-      </div>
-
-      <div class="strip-wrap" style="margin-top:12px">
-        <div id="schoolStrip" class="strip" aria-live="polite"></div>
-      </div>
+    <div class="strip-wrap" style="margin-top:12px">
+      <div id="schoolStrip" class="strip" aria-live="polite"></div>
     </div>
   </header>
 
   <main class="grid" style="margin-top:18px">
     <div>
-      <!-- Quick Portals moved ABOVE Student Records as requested -->
+      <!-- Quick Portals placed above Student Records -->
       <section class="card">
         <h3 style="margin-top:0">Quick Portals</h3>
         <div style="display:flex;flex-direction:row;gap:10px;margin-top:8px;flex-wrap:wrap">
-          <a class="btn" href="#" target="_blank">Fee Portal</a>
-          <a class="btn" href="#" target="_blank">Marksheet Portal</a>
+          <a class="btn" id="feePortal" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener">Fee Portal</a>
+          <a class="btn" id="marksPortal" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" rel="noopener">Marksheet Portal</a>
         </div>
       </section>
 
@@ -184,8 +147,6 @@ tbody tr:hover{background:rgba(11,84,120,0.03);transform:translateY(-1px)}
         </div>
       </section>
 
-      <!-- removed Quick Portals from aside as requested -->
-
     </aside>
   </main>
 
@@ -194,25 +155,26 @@ tbody tr:hover{background:rgba(11,84,120,0.03);transform:translateY(-1px)}
 
 <script>
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+const NOTIF_SPEED = 0.35;
+const HEADER_SPEED = 0.45;
 
-/* simple helpers */
 function $(id){ return document.getElementById(id) }
 function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
-async function loadSheetGviz(sheetName){ const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`; const res = await fetch(url); if(!res.ok) throw new Error('Network response not ok: ' + res.status); const text = await res.text(); const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,''); return JSON.parse(jsonText); }
+async function loadSheetGviz(sheetName){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
+  const text = await res.text();
+  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+  return JSON.parse(jsonText);
+}
 function maskLast4(v){ if(v==null) return ''; const s=String(v).replace(/\D/g,''); if(s.length<=4) return '****'+s; return '****'+s.slice(-4) }
 function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h) }
 function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h) }
 
-/* pagination state */
+/* render table (simple paginated renderer reused from earlier) */
 const tableState = { fee:{rows:[],cols:[],sortCol:null,sortDir:1,page:1,pageSize:10}, marks:{rows:[],cols:[],sortCol:null,sortDir:1,page:1,pageSize:10} };
 
-/* color & speed controls */
-$('accent1').addEventListener('input', e=> document.documentElement.style.setProperty('--accent1', e.target.value));
-$('accent2').addEventListener('input', e=> document.documentElement.style.setProperty('--accent2', e.target.value));
-$('notifSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--notif-speed', e.target.value));
-$('hdrSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--header-speed', e.target.value));
-
-/* render table with pagination & sorting */
 function renderPaginatedTable(key, containerId, paginationId){
   const state = tableState[key];
   const cols = state.cols;
@@ -285,7 +247,7 @@ function renderPaginatedTable(key, containerId, paginationId){
   pagWrap.appendChild(next);
 }
 
-/* load fee & marks */
+/* load data */
 async function loadAndRenderTables(){
   try{
     const feeJson = await loadSheetGviz('Fee Student Details');
@@ -317,11 +279,10 @@ async function loadNotifications(){
     const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k))||cols[1]||cols[0]||'Notification';
     const dateKey = cols.find(k=>/date|day|time/i.test(k))||cols[0]||'Date';
     const wrap = $('notifs'); wrap.innerHTML = '';
-    rows.forEach(cells=>{ const obj={}; for(let i=0;i<cols.length;i++){ const cell=cells[i]; let v=''; if(cell){ if(cell.v!==undefined) v=cell.v; else if(cell.f!==undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim() } obj[cols[i]] = v } const d = obj[dateKey]||''; const t = obj[textKey]||''; const node = document.createElement('div'); node.className='notify-item'; node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`; wrap.appendChild(node) });
+    rows.forEach(cells=>{ const obj={}; for(let i=0;i<cols.length;i++){ const cell=cells[i]; let v=''; if(cell){ if(cell.v!==undefined) v=cell.v; else if(cell.f!==undefined) v=String(cell.f).replace(/<[^>]*>/g,'').trim() } obj[cols[i]] = v } const d = obj[dateKey]||''; const t = obj[textKey]||''; const node = document.createElement('div'); node.className = 'notify-item'; node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`; wrap.appendChild(node) });
     const orig = wrap.children.length; for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)) }
-    startNotifScroll();
-    const outer = $('notifyOuter'); outer.addEventListener('mouseenter', stopNotifScroll); outer.addEventListener('mouseleave', startNotifScroll);
-  }catch(e){ console.error(e); $('notifs').innerHTML='<div style="padding:12px;color:var(--muted)">Notification लोड नहीं हुए</div>' }
+    startNotifScroll(); const outer = $('notifyOuter'); outer.addEventListener('mouseenter', stopNotifScroll); outer.addEventListener('mouseleave', startNotifScroll);
+  }catch(e){ console.error(e); $('notifs').innerHTML = '<div style="padding:12px;color:var(--muted)">Notification लोड नहीं हुए</div>' }
 }
 
 /* header strip from notifications */
@@ -341,30 +302,14 @@ async function buildStripFromNotifications(){
     if(items.length===0){ const sp=document.createElement('div'); sp.className='school-chip'; sp.innerText='No notifications'; strip.appendChild(sp); return }
     function chip(it){ const txt=(it.date?it.date+' - ':'')+it.text; const short = txt.length>100?txt.slice(0,97)+'...':txt; const d=document.createElement('div'); d.className='school-chip'; d.title=txt; d.innerText=short; return d }
     items.forEach(it=> strip.appendChild(chip(it))); items.forEach(it=> strip.appendChild(chip(it))); startHeaderScroll(); const outer = document.querySelector('.strip-wrap'); outer.addEventListener('mouseenter', stopHeaderScroll); outer.addEventListener('mouseleave', startHeaderScroll);
-  }catch(e){ console.error(e); $('schoolStrip').innerHTML='<div class="school-chip">Unable to load</div>' }
+  }catch(e){ console.error(e); $('schoolStrip').innerHTML = '<div class="school-chip">Unable to load</div>' }
 }
 
 /* init */
 $('year')?.parentNode && ($('year').innerText = new Date().getFullYear());
 showTab = name => { $('feeContainer').style.display = name==='fee' ? 'block':'none'; $('marksContainer').parentNode.style.display = name==='marks' ? 'block':'none'; $('tabFee').classList.toggle('active', name==='fee'); $('tabMarks').classList.toggle('active', name==='marks') };
 
-async function init(){
-  // sync css vars to controls
-  document.documentElement.style.setProperty('--notif-speed', $('notifSpeed').value);
-  document.documentElement.style.setProperty('--header-speed', $('hdrSpeed').value);
-  document.documentElement.style.setProperty('--accent1', $('accent1').value);
-  document.documentElement.style.setProperty('--accent2', $('accent2').value);
-
-  $('accent1').addEventListener('input', e=> document.documentElement.style.setProperty('--accent1', e.target.value));
-  $('accent2').addEventListener('input', e=> document.documentElement.style.setProperty('--accent2', e.target.value));
-  $('notifSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--notif-speed', e.target.value));
-  $('hdrSpeed').addEventListener('input', e=> document.documentElement.style.setProperty('--header-speed', e.target.value));
-
-  await buildStripFromNotifications();
-  await loadNotifications();
-  await loadAndRenderTables();
-}
-
+async function init(){ await buildStripFromNotifications(); await loadNotifications(); await loadAndRenderTables(); }
 init();
 </script>
 </body>
