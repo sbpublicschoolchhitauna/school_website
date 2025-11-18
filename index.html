@@ -55,26 +55,6 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 /* footer */
 .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
 </style>
-
-/* === ASSISTANT INJECTED: Ensure Quick Portals and Search buttons are visible/clickable === */
-<style id="assistant-zindex-fix">
-/* Place interactive controls above slider */
-.slider-wrap, .slider { z-index: 5; position: relative; }
-/* Make all main cards and header above slider */
-.header, header, .container, .card, .hero, .hero-right, main, .main, .grid, .aside, aside { position: relative; z-index: 20; }
-/* Ensure buttons and form controls are on top and clickable */
-.btn, a.btn, button, input[type="button"], input[type="submit"], .play-toggle, .controls, .tab, .search-row button {
-  position: relative !important;
-  z-index: 30 !important;
-  pointer-events: auto !important;
-}
-/* If slider overlay blocks clicks, make the slide images pointer-events none so underlying controls work */
-.slider .slide, .slider > div { pointer-events: none; }
-/* But keep slider controls clickable */
-.controls, .controls *, .play-toggle, .dot, .dots { pointer-events: auto; }
-/* Small safety: ensure Quick Portals area is above */
-section.card.quick-portals, .quick-portals, #quickPortals { z-index: 40; position: relative; }
-</style>
 </head>
 <body>
 
