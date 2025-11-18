@@ -141,18 +141,51 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </div>
 
 <script>
-const IMAGES = [
-  'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
-  'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
-  'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
-  'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
-  'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
-  'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
-  'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
-  'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
-  'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
-  
-];
+// IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
+async function loadImagesDynamic(){
+  // 1) try server API
+  try{
+    const res = await fetch('/api/images');
+    if(res.ok){
+      const j = await res.json();
+      if(Array.isArray(j.images) && j.images.length) return j.images;
+    }
+  }catch(e){ /* ignore */ }
+
+  // 2) try images.json (static list in same folder)
+  try{
+    const res2 = await fetch('images.json');
+    if(res2.ok){
+      const j2 = await res2.json();
+      if(Array.isArray(j2.images) && j2.images.length) return j2.images;
+    }
+  }catch(e){ /* ignore */ }
+
+  // 3) fallback: embedded list (if any)
+  return [
+    'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
+    'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
+    'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
+    'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
+    'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
+    'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
+    'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
+    'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
+    'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg'
+  ];
+}
+
+let IMAGES = []; // will be populated shortly
+
+// initialize IMAGES and then run createSlides/start logic
+(async function(){
+  IMAGES = await loadImagesDynamic();
+  // If the original script defines createSlides/start functions later, we rely on them.
+  // If not, we will call createSlides() and start() if present.
+  if(typeof createSlides === 'function') createSlides();
+  if(typeof start === 'function') start();
+})();
+
 
 const slider = document.getElementById('slider');
 const sliderWrap = document.getElementById('sliderWrap');
