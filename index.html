@@ -55,6 +55,19 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 /* footer */
 .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
 </style>
+
+<style id="assistant-button-fix">
+/* Make Quick Portals and Search buttons clearly visible */
+a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: none !important;
+}
+/* Ensure slider controls remain light */
+.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+</style>
+
 </head>
 <body>
 
@@ -93,23 +106,36 @@ body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);
 
 /* controls */
 .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
-.btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
+.slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
 .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
 .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
 .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
-.play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+.slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
 
 /* responsive */
 @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
 </style>
+
+<style id="assistant-button-fix">
+/* Make Quick Portals and Search buttons clearly visible */
+a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: none !important;
+}
+/* Ensure slider controls remain light */
+.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+</style>
+
 </head>
 <body>
 <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
   <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
   <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
   <div class="controls">
-    <button class="btn" id="prev" aria-label="Previous">‹</button>
-    <button class="btn" id="next" aria-label="Next">›</button>
+    <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
+    <button class="btn slider-control" id="next" aria-label="Next">›</button>
   </div>
   <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
 </div>
@@ -236,8 +262,8 @@ start();
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-            <a class="btn" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-            <a class="btn" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
           </div>
         </div>
 
@@ -247,7 +273,7 @@ start();
           <div class="small">Admission Number डालकर Search करें</div>
           <div style="margin-top:8px" class="search-row">
             <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
-            <button class="btn" onclick="searchStudent()">Search</button>
+            <button class="btn search-btn" data-portal="true" onclick="searchStudent()">Search</button>
           </div>
           <div id="result"></div>
         </div>
