@@ -75,15 +75,6 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 /* Small safety: ensure Quick Portals area is above */
 section.card.quick-portals, .quick-portals, #quickPortals { z-index: 40; position: relative; }
 </style>
-
-/* === Assistant Injected Black Buttons === */
-<style id="assistant-black-buttons">
-.btn.black-btn, a.black-btn, button.black-btn {
-  background:#000 !important;
-  color:#fff !important;
-  border:1px solid #000 !important;
-}
-</style>
 </head>
 <body>
 
@@ -265,8 +256,8 @@ start();
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-            <a class="btn" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank"><a class="btn black-btn" 
-            <a class="btn" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px"><a class="btn black-btn" 
+            <a class="btn" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
+            <a class="btn" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
           </div>
         </div>
 
@@ -276,7 +267,7 @@ start();
           <div class="small">Admission Number डालकर Search करें</div>
           <div style="margin-top:8px" class="search-row">
             <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
-            <button class="btn black-btn" Search</button>
+            <button class="btn" onclick="searchStudent()">Search</button>
           </div>
           <div id="result"></div>
         </div>
