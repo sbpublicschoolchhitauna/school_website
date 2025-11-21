@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="hi">
+<head><meta charset="utf-8"><title>Generate images.json (No-server)</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;padding:18px;background:#f7fbff;color:#0f1724}
+.container{max-width:900px;margin:0 auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,0.06)}
+h1{margin-top:0}
+.instructions{background:#f1f9ff;padding:10px;border-radius:8px;margin-bottom:12px}
+.file-list{margin-top:12px}
+.btn{background:#0b63a8;color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer}
+.small{color:#556070;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>images.json बनाने के लिए सरल उपकरण</h1>
+  <div class="instructions">
+    <strong>निर्देश:</strong>
+    <ol>
+      <li>नीचे "Choose images" से अपनी सभी slider images चुनें (आप slider_images फ़ोल्डर की फाइलें चुनें)।</li>
+      <li>फाइल चुनने के बाद "Generate images.json" पर क्लिक करें — एक JSON फ़ाइल डाउनलोड होगी।</li>
+      <li>डाउनलोड की हुई images.json को अपने website فول्डर में रख दें (index.html के साथ)।</li>
+      <li>अब आप index.html को ब्राउज़र में खोल कर slider देख सकते हैं (कोई server नहीं चाहिए)।</li>
+    </ol>
+  </div>
+
+  <input id="fileInput" type="file" multiple accept="image/*"><br>
+  <button class="btn" id="genBtn">Generate images.json</button>
+  <div class="small">Tip: आप उसी नाम वाली images को slider_images/ में रखकर index.html के साथ खोलें।</div>
+
+  <div class="file-list" id="fileList"></div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+const genBtn = document.getElementById('genBtn');
+let lastFiles = [];
+
+fileInput.addEventListener('change', ()=>{
+  const files = Array.from(fileInput.files);
+  lastFiles = files;
+  fileList.innerHTML = '<h3>Selected files (' + files.length + ')</h3><ul>' + files.map(f=>' <li>'+f.name+'</li>').join('') + '</ul>';
+});
+
+genBtn.addEventListener('click', ()=>{
+  if(lastFiles.length === 0) return alert('कृपया सबसे पहले images चुनें।');
+  // Build JSON array with paths as slider_images/<filename>
+  const arr = lastFiles.map(f => 'slider_images/' + f.name);
+  const obj = { images: arr };
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'images.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  alert('images.json डाउनलोड हो गया — इसे अपने वेबसाइट फोल्डर में रख दें।');
+});
+</script>
+</body>
+</html>

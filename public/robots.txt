@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sbpublicschoolchhitauna.github.io/school_website/sitemap.xml

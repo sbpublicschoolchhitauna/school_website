@@ -1,0 +1,1 @@
+Place your slider_images/ and other assets here (e.g., public/slider_images/...).
