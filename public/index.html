@@ -1,431 +1,340 @@
 <!doctype html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>स्कूल वेबसाइट — डाइनैमिक पोर्टल</title>
-  <meta name="description" content="स्कूल पोर्टल - फीस, मार्कशीट और छात्र खोज (डायनामिक)" />
-  <style>
-    :root{
-      --accent:#0f766e;
-      --muted:#6b7280;
-      --card:#ffffff;
-      --bg:#f8fafc;
-      --danger:#b91c1c;
-      --ok:#16a34a;
-    }
-    *{box-sizing:border-box}
-    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:#0f172a; line-height:1.5;}
-    header{background:linear-gradient(90deg,var(--accent),#0ea5a3); color:white; padding:18px;}
-    .container{max-width:980px;margin:18px auto;padding:16px;}
-    h1{margin:0 0 8px 0;font-size:20px}
-    .top-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .card{background:var(--card);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);}
-    .search-area{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    #searchInput{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #e6edf0;font-size:15px;min-width:200px}
-    .btn{background:var(--accent);color:white;padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
-    .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(15,118,110,0.12)}
-    .search-list { list-style:none; padding:0; margin:8px 0 0 0; }
-    .search-row { padding:10px; border-bottom:1px solid #f2f6f8; cursor:pointer; outline:none; display:block; }
-    .search-row:focus { background:#f0f8ff; box-shadow: inset 0 0 0 2px rgba(15,118,110,0.06); }
-    .search-hit { background:transparent; font-weight:700; }
-    .muted { color:var(--muted); padding:8px; }
-    .error { color:var(--danger); padding:8px; }
-    .row-top { display:flex; gap:12px; font-size:13px; color:#374151; }
-    .row-main { display:flex; justify-content:space-between; margin-top:6px; font-size:15px; }
-    .markstable { border-collapse:collapse; width:100%; margin-top:8px;}
-    .markstable td, .markstable th { border:1px solid #e6eef0; padding:8px; text-align:left; }
-    .fee-status { padding:6px 8px; border-radius:6px; color:white; display:inline-block; font-weight:600; }
-    .fee-ok { background:var(--ok); }
-    .fee-due { background:var(--danger); }
-
-    .watermark {
-      position:fixed;
-      top:40%;
-      left:50%;
-      transform:translate(-50%,-50%) rotate(-25deg);
-      font-size:80px;
-      color:rgba(0,0,0,0.06);
-      pointer-events:none;
-      z-index:1000;
-      display:none;
-    }
-
-    @media (min-width:1000px){
-      .watermark{display:block}
-    }
-
-    @media print {
-      body{background:white}
-      header, .btn, .search-area { display:none !important; }
-      .watermark { display:block; position:fixed; opacity:0.08; font-size:140px; }
-    }
-
-    @media (max-width:680px){
-      .row-top{flex-direction:column;align-items:flex-start;gap:6px}
-      .row-main{flex-direction:column;gap:8px}
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.B. Public School — Student Portal</title>
+<meta name="description" content="S.B. Public School — Fees, Marksheet, Student Search (Dynamic)" />
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<style>
+  :root{
+    --bg:#f6fbfc;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --muted-2:#94a3b8;
+    --accent:#0ea5a3;
+    --accent-2:#036d6b;
+    --accent-3:#7dd3fc;
+    --danger:#ef4444;
+    --ok:#16a34a;
+    --glass: rgba(255,255,255,0.6);
+    --radius:14px;
+    --shadow: 0 10px 30px rgba(2,6,23,0.08);
+    --fw-medium:600;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:linear-gradient(180deg,var(--bg),#eef9fa); color:#073642; -webkit-font-smoothing:antialiased;}
+  header{background:linear-gradient(90deg,var(--accent-2),var(--accent)); color:white; padding:22px 0; position:sticky; top:0; z-index:50; box-shadow:0 6px 20px rgba(3,77,73,0.08);}
+  .container{max-width:1100px;margin:0 auto;padding:20px;}
+  .brand {display:flex; gap:14px; align-items:center;}
+  .logo {width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent-3),var(--accent)); display:inline-flex; align-items:center; justify-content:center; color:#034047; font-weight:800; box-shadow: 0 6px 18px rgba(14,165,163,0.12);}
+  h1{font-size:20px;margin:0}
+  .nav {margin-left:auto; display:flex; gap:10px; align-items:center;}
+  .btn {background:rgba(255,255,255,0.12); color:white; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); cursor:pointer; font-weight:600;}
+  .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,0.12);}
+  main{padding:36px 0}
+  .grid{display:grid; grid-template-columns: 380px 1fr; gap:20px; align-items:start;}
+  .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);}
+  .searchBox input{width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6eef0; font-size:15px;}
+  .row{display:flex; gap:12px; align-items:center;}
+  .controls{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
+  .muted{color:var(--muted); font-size:13px;}
+  .search-list{list-style:none; margin:12px 0 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .search-row{padding:12px; border-radius:10px; border:1px solid #f1f5f9; background:linear-gradient(180deg,#fff, #fcfeff); cursor:pointer; display:flex; justify-content:space-between; align-items:center;}
+  .search-row:hover{transform:translateY(-2px); box-shadow:0 10px 25px rgba(2,6,23,0.06);}
+  .small{font-size:13px; color:var(--muted-2);}
+  .pill{padding:6px 10px; border-radius:999px; background:linear-gradient(90deg,#ecfeff,#e6fffa); color:var(--accent-2); font-weight:700;}
+  .marksArea h3{margin-top:0}
+  .markstable{width:100%; border-collapse:collapse; margin-top:12px; }
+  .markstable th, .markstable td{padding:10px; border-bottom:1px solid #f1f5f9; text-align:left;}
+  .fee-status{padding:6px 10px; border-radius:8px; color:white; font-weight:700;}
+  .fee-ok{background:var(--ok)} .fee-due{background:var(--danger)}
+  .watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);font-size:96px;color:rgba(3,77,73,0.04);font-weight:900;pointer-events:none;display:none;}
+  @media(min-width:900px){ .watermark{display:block} }
+  .top-actions{display:flex; gap:8px; align-items:center;}
+  footer{padding:24px 0; color:var(--muted); font-size:13px; text-align:center;}
+  @media(max-width:880px){
+    .grid{grid-template-columns:1fr; }
+    .nav{display:none}
+    .logo{width:48px;height:48px}
+  }
+  .fadeIn{animation:fadeIn .35s ease both}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+</style>
 </head>
 <body>
-  <div class="watermark">S.B. PUBLIC SCHOOL</div>
-  <header role="banner">
-    <div class="container top-row">
+<div class="watermark">S.B. PUBLIC SCHOOL</div>
+<header>
+  <div class="container row">
+    <div class="brand">
+      <div class="logo">SB</div>
       <div>
-        <h1>स्कूल पोर्टल — डायनामिक</h1>
-        <div style="opacity:0.9;font-size:13px">Admission, Fees, Marksheet — लाइव डेटा</div>
-      </div>
-      <div style="margin-left:auto">
-        <a class="btn" href="#" onclick="alert('Fee Portal — configure real link');return false;" target="_blank" rel="noopener noreferrer">Fee Portal</a>
+        <h1>S.B. Public School</h1>
+        <div class="small">छात्र पोर्टल — फीस · मार्कशीट · सूचनाएँ</div>
       </div>
     </div>
-  </header>
+    <nav class="nav">
+      <div class="small">Logged in as <strong>Admin</strong></div>
+      <button class="btn">Settings</button>
+      <button class="btn ghost">Help</button>
+    </nav>
+  </div>
+</header>
 
-  <main role="main" class="container">
-    <section class="card" style="margin-bottom:14px">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <div style="flex:1">
-          <h2 style="margin:0 0 8px 0">छात्र खोज</h2>
-          <div class="muted" style="margin-bottom:8px">Admission नम्बर, नाम, फ़ोन या रोल डालें — परिणाम रीयल-टाइम Google Sheet से।</div>
-
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-            <input id="searchInput" placeholder="Admission / नाम / फ़ोन खोजें" aria-label="Student search input" />
-            <button class="btn" id="searchBtn">Search</button>
-            <button class="btn secondary" id="clearBtn">Clear</button>
-            <button class="btn secondary" id="printBtn" title="Export to PDF / Print">Export to PDF</button>
-          </div>
-
-          <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
-            <label style="font-size:13px;color:var(--muted)">Data source:</label>
-            <select id="dataSourceSelect" aria-label="Data source">
-              <option value="proxy">Server proxy (/api/sheet)</option>
-              <option value="gviz">Direct Google GViz (public sheet)</option>
-            </select>
-            <input id="sheetIdInput" placeholder="Sheet ID (पीछे के हिस्से में d/.../)" style="min-width:240px;padding:8px;border-radius:8px;border:1px solid #e6edf0" />
-            <input id="gidInput" placeholder="GID (tab) (default 0)" style="width:90px;padding:8px;border-radius:8px;border:1px solid #e6edf0" />
-            <button class="btn secondary" id="saveConfigBtn">Save</button>
-          </div>
-
-        </div>
-      </div>
-
-      <div id="searchResults" style="margin-top:12px"></div>
-    </section>
-
-    <section id="marksheetArea" class="card" style="margin-bottom:18px; display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h3 style="margin:0">Marksheet / Student Details</h3>
+<main class="container">
+  <div class="grid">
+    <aside class="card fadeIn">
+      <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
-          <button class="btn" id="downloadPdfBtn">Print / Save as PDF</button>
-          <button class="btn secondary" id="closeMarksheetBtn">Close</button>
+          <div class="small">डेटा स्रोत</div>
+          <div style="font-weight:700; margin-top:6px">Google Sheets (Live)</div>
+        </div>
+        <div class="pill">Live</div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="small">Sheet ID</div>
+        <input id="sheetIdInput" style="width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #e6eef0" placeholder="Sheet ID डालें (e.g., 1BtoD...)" />
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="small">Tab GID</div>
+        <input id="gidInput" style="width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #e6eef0" placeholder="0" />
+      </div>
+
+      <div class="controls" style="margin-top:14px">
+        <button id="saveConfigBtn" class="btn">Save</button>
+        <button id="clearBtn" class="btn ghost">Clear</button>
+        <button id="printBtn" class="btn">Print</button>
+      </div>
+
+      <div style="margin-top:16px">
+        <div class="small">Quick actions</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button id="refreshBtn" class="btn ghost">Refresh Data</button>
+          <button id="exportJsonBtn" class="btn ghost">Export JSON</button>
         </div>
       </div>
-      <div id="marksheetContent" style="margin-top:12px"></div>
+
+      <div style="margin-top:14px" class="small muted">
+        Tip: Sheet should be shared as "Anyone with link can view" for direct fetch. Use server proxy for private sheets.
+      </div>
+    </aside>
+
+    <section>
+      <div class="card fadeIn searchBox">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <input id="searchInput" placeholder="Admission / नाम / फ़ोन खोजें (उदा. A001 या राजीव)" />
+          <div class="top-actions">
+            <button id="searchBtn" class="btn">Search</button>
+            <button id="downloadPdfBtn" class="btn ghost">Export PDF</button>
+          </div>
+        </div>
+        <div id="searchResults" style="margin-top:12px">
+          <div class="muted">कृपया खोज शुरू करें...</div>
+        </div>
+      </div>
+
+      <div id="marksheetArea" class="card fadeIn marksArea" style="margin-top:18px; display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="margin:0">Student Details</h3>
+          <div style="display:flex;gap:8px">
+            <button id="closeMarksheetBtn" class="btn ghost">Close</button>
+            <button id="printMarksheetBtn" class="btn">Print / PDF</button>
+          </div>
+        </div>
+        <div id="marksheetContent" style="margin-top:12px"></div>
+      </div>
+
+      <div class="card fadeIn" style="margin-top:18px;">
+        <h3 style="margin:0 0 8px 0">Notifications</h3>
+        <div class="small muted">No new notifications. Use the sheet to push announcements.</div>
+      </div>
     </section>
+  </div>
+</main>
 
-    <section class="card">
-      <h3>सूचनाएँ</h3>
-      <p class="muted">यह वेबसाइट डायनामिक है — Sheet ID डालें (उदा: <code>1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8</code>) और Save पर क्लिक करें।</p>
-    </section>
-  </main>
+<footer>
+  <div class="container">
+    © <span id="year"></span> S.B. Public School · Designed with ♥
+  </div>
+</footer>
 
-  <footer class="container muted" style="font-size:13px;padding:12px 16px">
-    © <span id="year"></span> S.B. PUBLIC SCHOOL
-  </footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const DEFAULT_SHEET = '1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8';
+  const sheetInput = document.getElementById('sheetIdInput');
+  const gidInput = document.getElementById('gidInput');
+  sheetInput.value = localStorage.getItem('sheetId') || DEFAULT_SHEET;
+  gidInput.value = localStorage.getItem('gid') || '0';
 
-  <script>
-    // Configuration defaults
-    const DEFAULT_SHEET_ID = '1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8';
-    const DEFAULT_GID = '0';
+  document.getElementById('saveConfigBtn').addEventListener('click', ()=>{
+    localStorage.setItem('sheetId', sheetInput.value.trim());
+    localStorage.setItem('gid', gidInput.value.trim());
+    alert('Configuration saved.');
+  });
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    document.getElementById('searchInput').value='';
+    document.getElementById('searchResults').innerHTML='<div class="muted">Search cleared.</div>';
+  });
+  document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+  document.getElementById('refreshBtn').addEventListener('click', ()=> fetchAndCache());
 
-    // State
-    let sheetId = localStorage.getItem('sheetId') || DEFAULT_SHEET_ID;
-    let gid = localStorage.getItem('gid') || DEFAULT_GID;
-    let useProxy = (localStorage.getItem('useProxy') || 'proxy') === 'proxy';
+  let _cache = {data:null, fetchedAt:0, ttl:5*60*1000};
+  function now(){return Date.now();}
+  function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function highlight(text, term){ if(!term) return escapeHtml(text); try{ const t=term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); return escapeHtml(text).replace(new RegExp(t,'ig'), m=>'<strong style=\"background:linear-gradient(90deg,#fff7ed,#fffbeb);padding:2px 4px;border-radius:4px\">'+m+'</strong>'); }catch(e){return escapeHtml(text);} }
 
-    // DOM
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const input = document.getElementById('searchInput');
-    const resultsContainer = document.getElementById('searchResults');
-    const sheetIdInput = document.getElementById('sheetIdInput');
-    const gidInput = document.getElementById('gidInput');
-    const dataSourceSelect = document.getElementById('dataSourceSelect');
-
-    sheetIdInput.value = sheetId;
-    gidInput.value = gid;
-    dataSourceSelect.value = useProxy ? 'proxy' : 'gviz';
-
-    document.getElementById('saveConfigBtn').addEventListener('click', () => {
-      sheetId = sheetIdInput.value.trim() || DEFAULT_SHEET_ID;
-      gid = gidInput.value.trim() || DEFAULT_GID;
-      useProxy = dataSourceSelect.value === 'proxy';
-      localStorage.setItem('sheetId', sheetId);
-      localStorage.setItem('gid', gid);
-      localStorage.setItem('useProxy', useProxy ? 'proxy' : 'gviz');
-      alert('Configuration saved.');
+  function parseGvizText(text){
+    const s=text.indexOf('{'); const e=text.lastIndexOf('}'); return JSON.parse(text.slice(s,e+1));
+  }
+  function gvizToObjects(g){
+    const cols = (g.table.cols||[]).map(c=> (c.label||'').trim().toLowerCase());
+    const rows = g.table.rows||[];
+    return rows.map(r=>{
+      const o={};
+      cols.forEach((c,i)=> o[c]= r.c[i] && r.c[i].v !== null ? String(r.c[i].v) : '');
+      return o;
     });
+  }
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      input.value = '';
-      resultsContainer.innerHTML = '<div class="muted">Type to search...</div>';
-    });
+  async function fetchSheetData(){
+    const sheetId = localStorage.getItem('sheetId') || DEFAULT_SHEET;
+    const gid = localStorage.getItem('gid') || '0';
+    if(_cache.data && (now()-_cache.fetchedAt) < _cache.ttl) return _cache.data;
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('Failed to fetch sheet ' + res.status);
+    const txt = await res.text();
+    const g = parseGvizText(txt);
+    const arr = gvizToObjects(g);
+    _cache = {data:arr, fetchedAt:now(), ttl:_cache.ttl};
+    return arr;
+  }
 
-    document.getElementById('printBtn').addEventListener('click', () => {
-      window.print();
-    });
+  function matchRecord(record, tokens){
+    const vals = Object.values(record).map(v=>String(v||'').toLowerCase());
+    return tokens.every(t => vals.some(f => f.includes(t)));
+  }
 
-    document.getElementById('closeMarksheetBtn').addEventListener('click', () => {
-      document.getElementById('marksheetArea').style.display = 'none';
-    });
-
-    // Cache
-    let _cache = { data: null, fetchedAt: 0, ttl: 5 * 60 * 1000 };
-
-    function now(){ return Date.now(); }
-
-    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
-    function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
-    function highlight(text, term){ if(!term) return escapeHtml(text); const t=escapeRegExp(term.trim()); return escapeHtml(text).replace(new RegExp(t,'ig'), m=>`<strong class="search-hit">${m}</strong>`); }
-
-    // Parse GViz wrapper
-    function parseGviz(text){
-      const s = text.indexOf('{'), e = text.lastIndexOf('}');
-      if(s === -1) throw new Error('Invalid gviz');
-      return JSON.parse(text.slice(s,e+1));
+  async function searchStudents(q){
+    const raw = String(q||'').trim().toLowerCase();
+    if(!raw) return [];
+    const tokens = raw.split(/\s+/).filter(Boolean);
+    const data = await fetchSheetData();
+    const out = [];
+    for(const r of data){
+      if(matchRecord(r,tokens)) out.push(r);
     }
-    function gvizToObjects(gviz){
-      const cols = (gviz.table.cols||[]).map(c=> (c.label||'').trim());
-      const rows = (gviz.table.rows||[]);
-      return rows.map(r=>{
-        const obj = {};
-        cols.forEach((col,i)=> obj[col.toLowerCase()] = r.c[i] && r.c[i].v !== null ? String(r.c[i].v) : '');
-        return obj;
-      });
-    }
+    return out.slice(0,80);
+  }
 
-    async function fetchSheetData(){
-      if(_cache.data && (now() - _cache.fetchedAt) < _cache.ttl) return _cache.data;
-      if(useProxy){
-        // call server proxy
-        const res = await fetch(`/api/sheet?sheetId=${encodeURIComponent(sheetId)}&gid=${encodeURIComponent(gid)}`);
-        if(!res.ok) throw new Error('Proxy fetch failed ' + res.status);
-        const json = await res.json(); // server returns gviz JSON object
-        // if server returned raw gviz text, handle accordingly. We expect JSON.
-        if(json.table) {
-          const arr = gvizToObjects(json);
-          _cache = { data: arr, fetchedAt: now(), ttl: _cache.ttl };
-          return arr;
-        } else {
-          // maybe server returned the body text; try parsing
-          const parsed = typeof json === 'string' ? parseGviz(json) : json;
-          const arr = gvizToObjects(parsed);
-          _cache = { data: arr, fetchedAt: now(), ttl: _cache.ttl };
-          return arr;
-        }
-      } else {
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
-        const res = await fetch(url);
-        if(!res.ok) throw new Error('GViz fetch failed ' + res.status);
-        const text = await res.text();
-        const parsed = parseGviz(text);
-        const arr = gvizToObjects(parsed);
-        _cache = { data: arr, fetchedAt: now(), ttl: _cache.ttl };
-        return arr;
+  function renderList(results, q){
+    const box = document.getElementById('searchResults');
+    box.innerHTML = '';
+    if(!q){ box.innerHTML = '<div class="muted">Type to search...</div>'; return; }
+    if(results.length===0){ box.innerHTML = '<div class="muted">No results</div>'; return; }
+    const ul = document.createElement('ul'); ul.className='search-list';
+    results.forEach(r=>{
+      const adm = r.admission || r['admission no'] || r['adm'] || '';
+      const name = r.name || r['student name'] || r['naam'] || '';
+      const cls = r['class'] || r['class/section'] || '';
+      const phone = r.phone || r.mobile || '';
+      const li = document.createElement('li'); li.className='search-row';
+      li.innerHTML = `<div>
+        <div style="font-weight:700">${highlight(name,q)}</div>
+        <div class="small" style="margin-top:6px">Adm: ${highlight(adm,q)} · Class: ${escapeHtml(cls)}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">${escapeHtml(phone)}</div>
+        <div style="margin-top:8px"><button class="btn ghost">View</button></div>
+      </div>`;
+      li.addEventListener('click', ()=> showMarksheet(r));
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+  }
+
+  function debounce(fn, ms=300){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }; }
+  const deb = debounce(async (e)=> {
+    const q = e.target.value;
+    if(!q) { document.getElementById('searchResults').innerHTML='<div class=\"muted\">Type to search...</div>'; return; }
+    try{
+      const res = await searchStudents(q);
+      renderList(res, q);
+    }catch(err){
+      console.error(err);
+      document.getElementById('searchResults').innerHTML='<div class=\"muted\">Error fetching data</div>';
+    }
+  }, 300);
+  document.getElementById('searchInput').addEventListener('input', deb);
+  document.getElementById('searchBtn').addEventListener('click', async ()=> {
+    const q = document.getElementById('searchInput').value;
+    const res = await searchStudents(q);
+    renderList(res, q);
+  });
+
+  async function showMarksheet(record){
+    const area = document.getElementById('marksheetArea');
+    const content = document.getElementById('marksheetContent');
+    const name = record.name || record['student name'] || record['naam'] || '-';
+    const adm = record.admission || record['admission no'] || '-';
+    const cls = record['class'] || record['class/section'] || '-';
+    const keys = Object.keys(record);
+    const subjects = [];
+    keys.forEach(k=>{
+      if(/english|hindi|math|science|social|sanskrit|computer|physics|chemistry|biology|evs/i.test(k)){
+        subjects.push({name:k, marks: record[k]});
+      } else if(/marks|mark|obtained|score/i.test(k) && !/total|percent|grade/i.test(k)){
+        subjects.push({name:k, marks: record[k]});
       }
+    });
+    let html = `<div style="display:flex;gap:18px;flex-wrap:wrap">
+      <div style="min-width:240px">
+        <h4 style="margin:0">${escapeHtml(name)}</h4>
+        <div style="margin-top:6px"><strong>Admission:</strong> ${escapeHtml(adm)}</div>
+        <div><strong>Class:</strong> ${escapeHtml(cls)}</div>
+      </div>
+      <div style="flex:1">`;
+    if(subjects.length){
+      html += `<table class="markstable"><thead><tr><th>Subject</th><th>Marks</th></tr></thead><tbody>`;
+      subjects.forEach(s=> html += `<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.marks)}</td></tr>`);
+      html += `</tbody></table>`;
+    } else {
+      html += Object.keys(record).map(k=> `<div style="margin-bottom:6px"><strong>${escapeHtml(k)}:</strong> ${escapeHtml(record[k])}</div>`).join('');
     }
+    html += `</div></div>`;
+    content.innerHTML = html;
+    area.style.display = 'block';
+    area.scrollIntoView({behavior:'smooth'});
+  }
 
-    function matchRecord(record, tokens){
-      const vals = Object.values(record).map(v=>String(v||'').toLowerCase());
-      return tokens.every(t => vals.some(f => f.includes(t)));
-    }
-
-    async function searchRaw(query){
-      const q = String(query||'').trim().toLowerCase();
-      if(!q) return [];
-      const tokens = q.split(/\s+/).filter(Boolean);
+  document.getElementById('closeMarksheetBtn').addEventListener('click', ()=> document.getElementById('marksheetArea').style.display='none');
+  document.getElementById('printMarksheetBtn').addEventListener('click', ()=> window.print());
+  document.getElementById('downloadPdfBtn').addEventListener('click', ()=> window.print());
+  document.getElementById('exportJsonBtn').addEventListener('click', async ()=>{
+    try{
       const data = await fetchSheetData();
-      const out = [];
-      for(const r of data){
-        if(matchRecord(r,tokens)) out.push(r);
-      }
-      return out.slice(0,100);
-    }
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='students.json'; a.click();
+      URL.revokeObjectURL(url);
+    }catch(e){ alert('Export failed'); console.error(e); }
+  });
 
-    // Debounce
-    function debounce(fn, ms=300){
-      let t;
-      return function(...args){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), ms); };
-    }
-
-    async function renderResults(results, rawQuery){
-      const box = resultsContainer;
-      box.innerHTML = '';
-      if(!rawQuery){ box.innerHTML = '<div class="muted">Type to search...</div>'; return; }
-      if(!results || results.length===0){ box.innerHTML = '<div class="muted">कोई रिकॉर्ड नहीं मिला।</div>'; return; }
-      const ul = document.createElement('ul');
-      ul.className = 'search-list';
-      results.forEach((r, idx) => {
-        const admission = r.admission || r['admission no'] || r['adm'] || '';
-        const name = r.name || r['student name'] || r['naam'] || '';
-        const phone = r.phone || r.mobile || r['mobile no'] || '';
-        const cls = r['class'] || r['class/section'] || '';
-        const li = document.createElement('li');
-        li.className = 'search-row';
-        li.tabIndex = 0;
-        li.innerHTML = `<div class="row-top"><span>Adm: ${highlight(admission, rawQuery)}</span><span>Class: ${escapeHtml(cls)}</span></div>
-                        <div class="row-main"><span>${highlight(name, rawQuery)}</span><span>📞 ${highlight(phone, rawQuery)}</span></div>`;
-        li.addEventListener('click', () => showMarksheet(r));
-        ul.appendChild(li);
-      });
-      box.appendChild(ul);
-    }
-
-    async function doSearch(q){
-      try{
-        resultsContainer.innerHTML = '<div class="muted">Loading...</div>';
-        const res = await searchRaw(q);
-        renderResults(res, q);
-      }catch(err){
-        console.error(err);
-        resultsContainer.innerHTML = '<div class="muted error">डेटा लाने में समस्या — कंसोल देखें।</div>';
-      }
-    }
-
-    const deb = debounce((e)=> doSearch(e.target.value), 300);
-    input.addEventListener('input', deb);
-    document.getElementById('searchBtn').addEventListener('click', ()=> doSearch(input.value));
-    document.getElementById('downloadPdfBtn').addEventListener('click', ()=> window.print());
-
-    // Marksheet rendering: detect subject columns (starts with subject/sub/marks) and fee columns
-    function numeric(v){ const n = parseFloat(String(v||'').replace(/[^0-9.\-]/g,'')); return isNaN(n) ? null : n; }
-
-    function computeGrade(percent){
-      if(percent>=90) return 'A+';
-      if(percent>=80) return 'A';
-      if(percent>=70) return 'B+';
-      if(percent>=60) return 'B';
-      if(percent>=50) return 'C';
-      return 'D';
-    }
-
-    function showMarksheet(record){
-      const area = document.getElementById('marksheetArea');
-      const content = document.getElementById('marksheetContent');
-      // Find subject-like keys
-      const keys = Object.keys(record);
-      const subjectKeys = keys.filter(k=>/subject|sub|subject_name|s\d+/i.test(k) || /marks|mark|obtained/i.test(k));
-      // Attempt to pair subject name -> marks if possible
-      // Heuristic: columns like subject1, marks1 or English, English_marks etc.
-      const subjects = [];
-      const used = new Set();
-      // Find pairs: for any key containing 'mark' or 'marks' associate nearest key that's not mark as subject
-      keys.forEach(k=>{
-        const lower = k.toLowerCase();
-        if(/marks?|mark|obtained|score|m\d+/i.test(lower)) {
-          // try to find subject counterpart
-          const base = k.replace(/marks?|mark|obtained|score/ig,'').replace(/[_\s\-]/g,'').toLowerCase();
-          const subjKey = keys.find(kk=> kk.toLowerCase().replace(/[_\s\-]/g,'').toLowerCase().includes(base) && !/marks?|mark|obtained|score|total|grade|fee/i.test(kk));
-          const value = numeric(record[k]);
-          if(subjKey){
-            subjects.push({name: record[subjKey], marks: value});
-            used.add(k); used.add(subjKey);
-          } else {
-            subjects.push({name: k, marks: value});
-            used.add(k);
-          }
-        }
-      });
-      // fallback: look for columns explicitly named like 'english','hindi','math'
-      if(subjects.length===0){
-        const likely = keys.filter(k=>/english|hindi|math|science|social|sst|sanskrit|computer|evs|physics|chemistry|biology/i.test(k));
-        likely.forEach(k=> subjects.push({name:k, marks:numeric(record[k])}));
-        likely.forEach(k=>used.add(k));
-      }
-      // If still empty, try columns like 'sub1','subject1' names
-      if(subjects.length===0){
-        const subNames = keys.filter(k=>/subject\d*|sub\d*/i.test(k));
-        subNames.forEach(k=>{
-          const mKey = keys.find(kk=> new RegExp(k.replace(/subject/i,'').replace(/sub/i,''),'i').test(kk) && /mark|marks|score|obtained/i.test(kk));
-          const marks = mKey ? numeric(record[mKey]) : null;
-          subjects.push({name: record[k] || k, marks});
-          used.add(k); if(mKey) used.add(mKey);
-        });
-      }
-
-      // Compute totals if marks present
-      const marksList = subjects.map(s=> s.marks ).filter(v=> v!==null && v!==undefined);
-      const totalObtained = marksList.length ? marksList.reduce((a,b)=>a+b,0) : null;
-      const maxPerSubject = 100; // assumption if not provided
-      const totalMax = marksList.length ? marksList.length * maxPerSubject : null;
-      const percent = totalObtained !== null ? (totalObtained / totalMax * 100) : null;
-      const grade = percent !== null ? computeGrade(percent) : null;
-
-      // Fee detection: look for fee related fields
-      const feeFieldKey = keys.find(k=> /fee|amount|paid|balance|due/i.test(k));
-      const feeAmountKey = keys.find(k=> /fee amount|total fee|amount_due|total/i.test(k));
-      const feePaidKey = keys.find(k=> /paid|amount paid|amount_paid|received/i.test(k));
-      const feeStatusKey = keys.find(k=> /status/i.test(k));
-      const feeValue = feeFieldKey ? record[feeFieldKey] : (feeAmountKey ? record[feeAmountKey] : null);
-      const feePaid = feePaidKey ? record[feePaidKey] : null;
-
-      // Determine payment status
-      let feeOk = false;
-      const feeNum = numeric(feeValue);
-      const paidNum = numeric(feePaid);
-      if(feeNum !== null && paidNum !== null){
-        feeOk = paidNum >= feeNum;
-      } else if(feeStatusKey){
-        feeOk = /paid|complete|done|yes/i.test(String(record[feeStatusKey]));
-      } else {
-        feeOk = false; // unknown
-      }
-
-      // Build HTML
-      let html = '<div style="display:flex;gap:18px;flex-wrap:wrap">';
-      html += `<div style="min-width:240px"><h4 style="margin:0 0 6px">${escapeHtml(record.name||record['student name']||'-')}</h4>`;
-      html += `<div><strong>Admission:</strong> ${escapeHtml(record.admission||record['admission no']||'-')}</div>`;
-      html += `<div><strong>Class:</strong> ${escapeHtml(record['class']||record['class/section']||'-')}</div>`;
-      if(feeValue || feePaid){
-        html += `<div style="margin-top:8px"><strong>Fee:</strong> ${escapeHtml(feeValue||'-')} &nbsp; <span class="fee-status ${feeOk? 'fee-ok':'fee-due'}">${feeOk? 'PAID':'DUE'}</span></div>`;
-        if(feePaid) html += `<div><strong>Paid:</strong> ${escapeHtml(feePaid)}</div>`;
-      }
-      html += `</div>`; // left column
-
-      // subjects table
-      html += `<div style="flex:1">`;
-      if(subjects.length){
-        html += `<table class="markstable"><thead><tr><th>Subject</th><th>Marks</th></tr></thead><tbody>`;
-        subjects.forEach(s=>{
-          html += `<tr><td>${escapeHtml(s.name||'-')}</td><td>${s.marks!==null? escapeHtml(String(s.marks)) : '-'}</td></tr>`;
-        });
-        if(totalObtained !== null){
-          html += `<tr><td><strong>Total</strong></td><td><strong>${totalObtained}/${totalMax}</strong></td></tr>`;
-          html += `<tr><td><strong>Percent</strong></td><td><strong>${percent.toFixed(2)}%</strong></td></tr>`;
-          html += `<tr><td><strong>Grade</strong></td><td><strong>${grade}</strong></td></tr>`;
-        }
-        html += `</tbody></table>`;
-      } else {
-        // fallback: show all fields in key-value pairs
-        html += `<div>`;
-        html += Object.keys(record).map(k=> `<div><strong>${escapeHtml(k)}:</strong> ${escapeHtml(record[k])}</div>`).join('');
-        html += `</div>`;
-      }
-      html += `</div>`; // right column
-      html += `</div>`; // wrapper
-
-      content.innerHTML = html;
-      area.style.display = 'block';
-      area.scrollIntoView({behavior:'smooth'});
-    }
-
-    // Simple keyboard nav and clear
-    document.getElementById('sheetIdInput').addEventListener('change', ()=> {
-      sheetId = sheetIdInput.value.trim() || DEFAULT_SHEET_ID;
-    });
-
-    // Initial search helper
-    resultsContainer.innerHTML = '<div class="muted">Type to search...</div>';
-
-  </script>
+  async function fetchSheetData(){
+    const sheetId = localStorage.getItem('sheetId') || DEFAULT_SHEET;
+    const gid = localStorage.getItem('gid') || '0';
+    if(_cache.data && (now()-_cache.fetchedAt) < _cache.ttl) return _cache.data;
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('Failed to fetch sheet ' + res.status);
+    const txt = await res.text();
+    const g = parseGvizText(txt);
+    const arr = gvizToObjects(g);
+    _cache = {data:arr, fetchedAt:now(), ttl:_cache.ttl};
+    return arr;
+  }
+</script>
 </body>
 </html>
