@@ -3,217 +3,233 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>S.B. Public School — Student Portal</title>
-<meta name="description" content="S.B. Public School — Fees, Marksheet, Student Search (Dynamic)" />
-<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<title>S.B. Public School — Responsive Portal</title>
+<meta name="description" content="Responsive student portal — Quick Portals, Student Records, Notifications (Mobile / Tablet / Desktop)" />
 <style>
   :root{
     --bg:#f6fbfc;
     --card:#ffffff;
     --muted:#6b7280;
-    --muted-2:#94a3b8;
     --accent:#0ea5a3;
     --accent-2:#036d6b;
-    --accent-3:#7dd3fc;
     --danger:#ef4444;
     --ok:#16a34a;
-    --glass: rgba(255,255,255,0.6);
-    --radius:14px;
-    --shadow: 0 10px 30px rgba(2,6,23,0.08);
-    --fw-medium:600;
+    --radius:12px;
+    --shadow: 0 10px 30px rgba(2,6,23,0.07);
   }
   *{box-sizing:border-box}
-  body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:linear-gradient(180deg,var(--bg),#eef9fa); color:#073642; -webkit-font-smoothing:antialiased;}
-  header{background:linear-gradient(90deg,var(--accent-2),var(--accent)); color:white; padding:22px 0; position:sticky; top:0; z-index:50; box-shadow:0 6px 20px rgba(3,77,73,0.08);}
-  .container{max-width:1100px;margin:0 auto;padding:20px;}
-  .brand {display:flex; gap:14px; align-items:center;}
-  .logo {width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent-3),var(--accent)); display:inline-flex; align-items:center; justify-content:center; color:#034047; font-weight:800; box-shadow: 0 6px 18px rgba(14,165,163,0.12);}
-  h1{font-size:20px;margin:0}
-  .nav {margin-left:auto; display:flex; gap:10px; align-items:center;}
-  .btn {background:rgba(255,255,255,0.12); color:white; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); cursor:pointer; font-weight:600;}
-  .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,0.12);}
-  main{padding:36px 0}
-  .grid{display:grid; grid-template-columns: 380px 1fr; gap:20px; align-items:start;}
-  .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);}
-  .searchBox input{width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6eef0; font-size:15px;}
-  .row{display:flex; gap:12px; align-items:center;}
-  .controls{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
-  .muted{color:var(--muted); font-size:13px;}
-  .search-list{list-style:none; margin:12px 0 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
-  .search-row{padding:12px; border-radius:10px; border:1px solid #f1f5f9; background:linear-gradient(180deg,#fff, #fcfeff); cursor:pointer; display:flex; justify-content:space-between; align-items:center;}
-  .search-row:hover{transform:translateY(-2px); box-shadow:0 10px 25px rgba(2,6,23,0.06);}
-  .small{font-size:13px; color:var(--muted-2);}
-  .pill{padding:6px 10px; border-radius:999px; background:linear-gradient(90deg,#ecfeff,#e6fffa); color:var(--accent-2); font-weight:700;}
-  .marksArea h3{margin-top:0}
-  .markstable{width:100%; border-collapse:collapse; margin-top:12px; }
-  .markstable th, .markstable td{padding:10px; border-bottom:1px solid #f1f5f9; text-align:left;}
-  .fee-status{padding:6px 10px; border-radius:8px; color:white; font-weight:700;}
-  .fee-ok{background:var(--ok)} .fee-due{background:var(--danger)}
-  .watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);font-size:96px;color:rgba(3,77,73,0.04);font-weight:900;pointer-events:none;display:none;}
-  @media(min-width:900px){ .watermark{display:block} }
-  .top-actions{display:flex; gap:8px; align-items:center;}
-  footer{padding:24px 0; color:var(--muted); font-size:13px; text-align:center;}
+  body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin:0; background:var(--bg); color:#073642; -webkit-font-smoothing:antialiased;}
+  header{background:linear-gradient(90deg,var(--accent-2),var(--accent)); color:white; padding:14px 0; position:sticky; top:0; z-index:60;}
+  .container{max-width:1100px;margin:0 auto;padding:16px;}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:44px;height:44px;border-radius:10px;background:#ffffff22;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .top-row{display:flex;align-items:center;gap:12px}
+  .quick-portals{display:flex;gap:10px;flex-wrap:wrap}
+  .portal-card{background:var(--card);padding:12px;border-radius:10px;min-width:120px;flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-shadow:var(--shadow);cursor:pointer;border:1px solid #f0f6f6}
+  .portal-icon{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#e6fffa,#ecfeff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent-2)}
+  .grid{display:grid;grid-template-columns: 1fr 360px; gap:18px;align-items:start}
+  .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+  .search-row{padding:10px;border-radius:8px;border:1px solid #f1f5f9;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+  .muted{color:var(--muted);font-size:13px}
+  .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+  .btn.ghost{background:transparent;border:1px solid #e6eef0;color:var(--accent-2)}
+  .notifications{position:relative}
+  .notif-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+  .notif-item{padding:10px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbffff);border:1px solid #eef7f6}
+  /* Drawer (mobile) */
+  .drawer{position:fixed;right:-100%;top:0;height:100%;width:320px;background:var(--card);box-shadow:-10px 0 30px rgba(2,6,23,0.2);transition:right .28s ease;z-index:120;padding:16px}
+  .drawer.open{right:0}
+  .drawer .close{position:absolute;left:12px;top:12px}
+  /* responsive */
   @media(max-width:880px){
-    .grid{grid-template-columns:1fr; }
-    .nav{display:none}
-    .logo{width:48px;height:48px}
+    .grid{grid-template-columns:1fr}
+    .drawer{width:100%;max-width:420px}
+    .portal-card{min-width:140px}
   }
-  .fadeIn{animation:fadeIn .35s ease both}
-  @keyframes fadeIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  /* student record responsive card */
+  .record{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+  .record .avatar{width:86px;height:86px;border-radius:12px;background:linear-gradient(135deg,#ecfeff,#e6fffa);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--accent-2)}
+  .record .meta{flex:1}
+  .record .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .badge{padding:6px 8px;border-radius:8px;font-weight:700}
+  .fee-ok{background:var(--ok);color:white}
+  .fee-due{background:var(--danger);color:white}
 </style>
 </head>
 <body>
-<div class="watermark">S.B. PUBLIC SCHOOL</div>
 <header>
-  <div class="container row">
+  <div class="container top-row">
     <div class="brand">
       <div class="logo">SB</div>
       <div>
-        <h1>S.B. Public School</h1>
-        <div class="small">छात्र पोर्टल — फीस · मार्कशीट · सूचनाएँ</div>
+        <div style="font-weight:800">S.B. Public School</div>
+        <div class="muted">छात्र पोर्टल — Responsive</div>
       </div>
     </div>
-    <nav class="nav">
-      <div class="small">Logged in as <strong>Admin</strong></div>
-      <button class="btn">Settings</button>
-      <button class="btn ghost">Help</button>
-    </nav>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <button id="notifBtn" class="btn ghost">Notifications</button>
+      <button class="btn">Admin</button>
+    </div>
   </div>
 </header>
 
-<main class="container">
+<main class="container" id="mainContent">
+  <div style="margin-bottom:14px" class="quick-portals">
+    <div class="portal-card" onclick="openPortal('fees')">
+      <div class="portal-icon">F</div>
+      <div style="font-weight:700">Fee Portal</div>
+      <div class="muted">Payments, receipts</div>
+    </div>
+    <div class="portal-card" onclick="openPortal('attendance')">
+      <div class="portal-icon">A</div>
+      <div style="font-weight:700">Attendance</div>
+      <div class="muted">Daily attendance</div>
+    </div>
+    <div class="portal-card" onclick="openPortal('reports')">
+      <div class="portal-icon">R</div>
+      <div style="font-weight:700">Reports</div>
+      <div class="muted">Progress reports</div>
+    </div>
+    <div class="portal-card" onclick="openPortal('teachers')">
+      <div class="portal-icon">T</div>
+      <div style="font-weight:700">Teachers</div>
+      <div class="muted">Staff directory</div>
+    </div>
+  </div>
+
   <div class="grid">
-    <aside class="card fadeIn">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="small">डेटा स्रोत</div>
-          <div style="font-weight:700; margin-top:6px">Google Sheets (Live)</div>
-        </div>
-        <div class="pill">Live</div>
-      </div>
-
-      <div style="margin-top:14px">
-        <div class="small">Sheet ID</div>
-        <input id="sheetIdInput" style="width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #e6eef0" placeholder="Sheet ID डालें (e.g., 1BtoD...)" />
-      </div>
-
-      <div style="margin-top:12px">
-        <div class="small">Tab GID</div>
-        <input id="gidInput" style="width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #e6eef0" placeholder="0" />
-      </div>
-
-      <div class="controls" style="margin-top:14px">
-        <button id="saveConfigBtn" class="btn">Save</button>
-        <button id="clearBtn" class="btn ghost">Clear</button>
-        <button id="printBtn" class="btn">Print</button>
-      </div>
-
-      <div style="margin-top:16px">
-        <div class="small">Quick actions</div>
-        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <button id="refreshBtn" class="btn ghost">Refresh Data</button>
-          <button id="exportJsonBtn" class="btn ghost">Export JSON</button>
-        </div>
-      </div>
-
-      <div style="margin-top:14px" class="small muted">
-        Tip: Sheet should be shared as "Anyone with link can view" for direct fetch. Use server proxy for private sheets.
-      </div>
-    </aside>
-
     <section>
-      <div class="card fadeIn searchBox">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <input id="searchInput" placeholder="Admission / नाम / फ़ोन खोजें (उदा. A001 या राजीव)" />
-          <div class="top-actions">
-            <button id="searchBtn" class="btn">Search</button>
-            <button id="downloadPdfBtn" class="btn ghost">Export PDF</button>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:800">Student Records</div>
+            <div class="muted">Search and open student details</div>
+          </div>
+          <div>
+            <input id="searchInput" placeholder="Admission / नाम / फ़ोन खोजें" style="padding:8px;border-radius:8px;border:1px solid #eef7f6" />
+            <button id="searchBtn" class="btn" style="margin-left:8px">Search</button>
           </div>
         </div>
+
         <div id="searchResults" style="margin-top:12px">
           <div class="muted">कृपया खोज शुरू करें...</div>
         </div>
       </div>
 
-      <div id="marksheetArea" class="card fadeIn marksArea" style="margin-top:18px; display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3 style="margin:0">Student Details</h3>
-          <div style="display:flex;gap:8px">
-            <button id="closeMarksheetBtn" class="btn ghost">Close</button>
-            <button id="printMarksheetBtn" class="btn">Print / PDF</button>
-          </div>
-        </div>
-        <div id="marksheetContent" style="margin-top:12px"></div>
-      </div>
-
-      <div class="card fadeIn" style="margin-top:18px;">
-        <h3 style="margin:0 0 8px 0">Notifications</h3>
-        <div class="small muted">No new notifications. Use the sheet to push announcements.</div>
-      </div>
+      <div id="detailArea" class="card" style="margin-top:14px; display:none"></div>
     </section>
+
+    <aside class="card notifications" id="desktopNotifs">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700">Notifications</div>
+        <div class="muted small">Live</div>
+      </div>
+      <ul class="notif-list" id="notifList">
+        <li class="notif-item">No notifications yet.</li>
+      </ul>
+      <div style="margin-top:10px">
+        <button id="markReadBtn" class="btn ghost">Mark all read</button>
+      </div>
+    </aside>
   </div>
 </main>
 
-<footer>
-  <div class="container">
-    © <span id="year"></span> S.B. Public School · Designed with ♥
-  </div>
-</footer>
+<!-- mobile drawer -->
+<div id="notifDrawer" class="drawer" aria-hidden="true">
+  <button class="btn close" onclick="closeDrawer()">Close</button>
+  <h3>Notifications</h3>
+  <ul class="notif-list" id="drawerList"></ul>
+</div>
+
+<footer style="padding:18px;text-align:center" class="muted">© S.B. Public School</footer>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  const DEFAULT_SHEET = '1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8';
-  const sheetInput = document.getElementById('sheetIdInput');
-  const gidInput = document.getElementById('gidInput');
-  sheetInput.value = localStorage.getItem('sheetId') || DEFAULT_SHEET;
-  gidInput.value = localStorage.getItem('gid') || '0';
-
-  document.getElementById('saveConfigBtn').addEventListener('click', ()=>{
-    localStorage.setItem('sheetId', sheetInput.value.trim());
-    localStorage.setItem('gid', gidInput.value.trim());
-    alert('Configuration saved.');
-  });
-  document.getElementById('clearBtn').addEventListener('click', ()=>{
-    document.getElementById('searchInput').value='';
-    document.getElementById('searchResults').innerHTML='<div class="muted">Search cleared.</div>';
-  });
-  document.getElementById('printBtn').addEventListener('click', ()=> window.print());
-  document.getElementById('refreshBtn').addEventListener('click', ()=> fetchAndCache());
-
-  let _cache = {data:null, fetchedAt:0, ttl:5*60*1000};
-  function now(){return Date.now();}
-  function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function highlight(text, term){ if(!term) return escapeHtml(text); try{ const t=term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); return escapeHtml(text).replace(new RegExp(t,'ig'), m=>'<strong style=\"background:linear-gradient(90deg,#fff7ed,#fffbeb);padding:2px 4px;border-radius:4px\">'+m+'</strong>'); }catch(e){return escapeHtml(text);} }
-
-  function parseGvizText(text){
-    const s=text.indexOf('{'); const e=text.lastIndexOf('}'); return JSON.parse(text.slice(s,e+1));
+  // Device-aware behavior
+  function isMobile() {
+    return window.innerWidth <= 880;
   }
-  function gvizToObjects(g){
-    const cols = (g.table.cols||[]).map(c=> (c.label||'').trim().toLowerCase());
-    const rows = g.table.rows||[];
-    return rows.map(r=>{
-      const o={};
-      cols.forEach((c,i)=> o[c]= r.c[i] && r.c[i].v !== null ? String(r.c[i].v) : '');
-      return o;
+
+  // Notifications sample data & management
+  let notifications = [
+    {id:1, text:'School reopens on 1 Dec 2025', time:'2025-11-20', read:false},
+    {id:2, text:'Fee due reminder for class 5', time:'2025-11-18', read:false}
+  ];
+
+  function renderNotifications(){
+    const list = document.getElementById('notifList');
+    const drawer = document.getElementById('drawerList');
+    list.innerHTML = '';
+    drawer.innerHTML = '';
+    if(notifications.length===0){
+      const li = document.createElement('li'); li.className='notif-item'; li.textContent='No notifications.';
+      list.appendChild(li); drawer.appendChild(li.cloneNode(true));
+      return;
+    }
+    notifications.forEach(n=>{
+      const li = document.createElement('li');
+      li.className = 'notif-item';
+      li.innerHTML = `<div style="display:flex;justify-content:space-between"><div>${n.text}</div><div class="muted small">${n.time}</div></div>`;
+      list.appendChild(li);
+      drawer.appendChild(li.cloneNode(true));
     });
   }
 
-  async function fetchSheetData(){
-    const sheetId = localStorage.getItem('sheetId') || DEFAULT_SHEET;
-    const gid = localStorage.getItem('gid') || '0';
-    if(_cache.data && (now()-_cache.fetchedAt) < _cache.ttl) return _cache.data;
+  document.getElementById('notifBtn').addEventListener('click', ()=>{
+    if(isMobile()){
+      openDrawer();
+    } else {
+      // scroll to desktop notifications
+      document.getElementById('desktopNotifs').scrollIntoView({behavior:'smooth'});
+    }
+  });
+
+  function openDrawer(){
+    document.getElementById('notifDrawer').classList.add('open');
+    document.getElementById('notifDrawer').setAttribute('aria-hidden','false');
+  }
+  function closeDrawer(){
+    document.getElementById('notifDrawer').classList.remove('open');
+    document.getElementById('notifDrawer').setAttribute('aria-hidden','true');
+  }
+
+  document.getElementById('markReadBtn').addEventListener('click', ()=>{
+    notifications = notifications.map(n=> ({...n, read:true}));
+    alert('All marked read');
+    renderNotifications();
+  });
+
+  // Quick portals open
+  function openPortal(name){
+    if(name==='fees'){ alert('Open Fee portal (configure link)'); }
+    else if(name==='attendance'){ alert('Open Attendance module'); }
+    else if(name==='reports'){ alert('Open Reports'); }
+    else if(name==='teachers'){ alert('Open Teachers directory'); }
+  }
+
+  // Search & student record (using existing GViz fetch logic)
+  const DEFAULT_SHEET = localStorage.getItem('sheetId') || '1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8';
+  const DEFAULT_GID = localStorage.getItem('gid') || '0';
+  let _cache = {data:null, fetchedAt:0, ttl:5*60*1000};
+
+  function now(){ return Date.now(); }
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function parseGviz(text){ const s=text.indexOf('{'); const e=text.lastIndexOf('}'); return JSON.parse(text.slice(s,e+1)); }
+  function gvizToObjects(g){ const cols=(g.table.cols||[]).map(c=> (c.label||'').trim().toLowerCase()); const rows=g.table.rows||[]; return rows.map(r=>{ const o={}; cols.forEach((c,i)=> o[c]= r.c[i] && r.c[i].v !== null ? String(r.c[i].v) : ''); return o; }); }
+
+  async function fetchSheetData(sheetId=DEFAULT_SHEET, gid=DEFAULT_GID){
+    if(_cache.data && (now() - _cache.fetchedAt) < _cache.ttl) return _cache.data;
     const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
     const res = await fetch(url);
-    if(!res.ok) throw new Error('Failed to fetch sheet ' + res.status);
+    if(!res.ok) throw new Error('fetch failed ' + res.status);
     const txt = await res.text();
-    const g = parseGvizText(txt);
-    const arr = gvizToObjects(g);
+    const parsed = parseGviz(txt);
+    const arr = gvizToObjects(parsed);
     _cache = {data:arr, fetchedAt:now(), ttl:_cache.ttl};
     return arr;
   }
 
-  function matchRecord(record, tokens){
-    const vals = Object.values(record).map(v=>String(v||'').toLowerCase());
+  function matchRecord(r, tokens){
+    const vals = Object.values(r).map(v=> String(v||'').toLowerCase());
     return tokens.every(t => vals.some(f => f.includes(t)));
   }
 
@@ -229,112 +245,117 @@
     return out.slice(0,80);
   }
 
-  function renderList(results, q){
-    const box = document.getElementById('searchResults');
-    box.innerHTML = '';
-    if(!q){ box.innerHTML = '<div class="muted">Type to search...</div>'; return; }
-    if(results.length===0){ box.innerHTML = '<div class="muted">No results</div>'; return; }
-    const ul = document.createElement('ul'); ul.className='search-list';
-    results.forEach(r=>{
-      const adm = r.admission || r['admission no'] || r['adm'] || '';
-      const name = r.name || r['student name'] || r['naam'] || '';
-      const cls = r['class'] || r['class/section'] || '';
-      const phone = r.phone || r.mobile || '';
-      const li = document.createElement('li'); li.className='search-row';
-      li.innerHTML = `<div>
-        <div style="font-weight:700">${highlight(name,q)}</div>
-        <div class="small" style="margin-top:6px">Adm: ${highlight(adm,q)} · Class: ${escapeHtml(cls)}</div>
-      </div>
-      <div style="text-align:right">
-        <div class="small">${escapeHtml(phone)}</div>
-        <div style="margin-top:8px"><button class="btn ghost">View</button></div>
-      </div>`;
-      li.addEventListener('click', ()=> showMarksheet(r));
-      ul.appendChild(li);
-    });
-    box.appendChild(ul);
-  }
+  // Debounce helper
+  function debounce(fn, ms=300){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms);} }
 
-  function debounce(fn, ms=300){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }; }
-  const deb = debounce(async (e)=> {
-    const q = e.target.value;
-    if(!q) { document.getElementById('searchResults').innerHTML='<div class=\"muted\">Type to search...</div>'; return; }
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  const searchResults = document.getElementById('searchResults');
+  const detailArea = document.getElementById('detailArea');
+
+  const doSearch = debounce(async (ev)=>{
+    const q = ev.target ? ev.target.value : ev;
+    if(!q){ searchResults.innerHTML = '<div class="muted">Type to search...</div>'; return; }
+    searchResults.innerHTML = '<div class="muted">Loading...</div>';
     try{
       const res = await searchStudents(q);
-      renderList(res, q);
+      renderSearchResults(res, q);
     }catch(err){
       console.error(err);
-      document.getElementById('searchResults').innerHTML='<div class=\"muted\">Error fetching data</div>';
+      searchResults.innerHTML = '<div class="muted">Error fetching data</div>';
     }
   }, 300);
-  document.getElementById('searchInput').addEventListener('input', deb);
-  document.getElementById('searchBtn').addEventListener('click', async ()=> {
-    const q = document.getElementById('searchInput').value;
-    const res = await searchStudents(q);
-    renderList(res, q);
-  });
 
-  async function showMarksheet(record){
-    const area = document.getElementById('marksheetArea');
-    const content = document.getElementById('marksheetContent');
-    const name = record.name || record['student name'] || record['naam'] || '-';
-    const adm = record.admission || record['admission no'] || '-';
-    const cls = record['class'] || record['class/section'] || '-';
-    const keys = Object.keys(record);
-    const subjects = [];
-    keys.forEach(k=>{
-      if(/english|hindi|math|science|social|sanskrit|computer|physics|chemistry|biology|evs/i.test(k)){
-        subjects.push({name:k, marks: record[k]});
-      } else if(/marks|mark|obtained|score/i.test(k) && !/total|percent|grade/i.test(k)){
-        subjects.push({name:k, marks: record[k]});
-      }
+  searchInput.addEventListener('input', doSearch);
+  searchBtn.addEventListener('click', ()=> doSearch(searchInput.value));
+
+  function renderSearchResults(results, q){
+    searchResults.innerHTML = '';
+    if(!q){ searchResults.innerHTML = '<div class="muted">Type to search...</div>'; return; }
+    if(results.length===0){ searchResults.innerHTML = '<div class="muted">No records found</div>'; return; }
+    results.slice(0,40).forEach(r=>{
+      const name = r.name || r['student name'] || r['naam'] || '-';
+      const adm = r.admission || r['admission no'] || r['adm'] || '-';
+      const cls = r['class'] || r['class/section'] || '-';
+      const row = document.createElement('div');
+      row.className = 'search-row';
+      row.innerHTML = `<div><div style="font-weight:700">${escapeHtml(name)}</div><div class="muted" style="margin-top:6px">Adm: ${escapeHtml(adm)} · Class: ${escapeHtml(cls)}</div></div><div><button class="btn ghost">View</button></div>`;
+      row.addEventListener('click', ()=> openRecord(r));
+      searchResults.appendChild(row);
     });
-    let html = `<div style="display:flex;gap:18px;flex-wrap:wrap">
-      <div style="min-width:240px">
-        <h4 style="margin:0">${escapeHtml(name)}</h4>
-        <div style="margin-top:6px"><strong>Admission:</strong> ${escapeHtml(adm)}</div>
-        <div><strong>Class:</strong> ${escapeHtml(cls)}</div>
-      </div>
-      <div style="flex:1">`;
-    if(subjects.length){
-      html += `<table class="markstable"><thead><tr><th>Subject</th><th>Marks</th></tr></thead><tbody>`;
-      subjects.forEach(s=> html += `<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.marks)}</td></tr>`);
-      html += `</tbody></table>`;
-    } else {
-      html += Object.keys(record).map(k=> `<div style="margin-bottom:6px"><strong>${escapeHtml(k)}:</strong> ${escapeHtml(record[k])}</div>`).join('');
-    }
-    html += `</div></div>`;
-    content.innerHTML = html;
-    area.style.display = 'block';
-    area.scrollIntoView({behavior:'smooth'});
   }
 
-  document.getElementById('closeMarksheetBtn').addEventListener('click', ()=> document.getElementById('marksheetArea').style.display='none');
-  document.getElementById('printMarksheetBtn').addEventListener('click', ()=> window.print());
-  document.getElementById('downloadPdfBtn').addEventListener('click', ()=> window.print());
-  document.getElementById('exportJsonBtn').addEventListener('click', async ()=>{
-    try{
-      const data = await fetchSheetData();
-      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href=url; a.download='students.json'; a.click();
-      URL.revokeObjectURL(url);
-    }catch(e){ alert('Export failed'); console.error(e); }
+  function openRecord(rec){
+    detailArea.style.display = 'block';
+    // build record card responsive
+    const name = rec.name || rec['student name'] || rec['naam'] || '-';
+    const adm = rec.admission || rec['admission no'] || rec['adm'] || '-';
+    const cls = rec['class'] || rec['class/section'] || '-';
+    const phone = rec.phone || rec.mobile || '';
+    // fee detection
+    const feeKey = Object.keys(rec).find(k=> /fee|amount|total/i.test(k));
+    const paidKey = Object.keys(rec).find(k=> /paid|received/i.test(k));
+    const fee = feeKey ? rec[feeKey] : '';
+    const paid = paidKey ? rec[paidKey] : '';
+    const feeNum = parseFloat(String(fee||'').replace(/[^0-9.]/g,'')) || null;
+    const paidNum = parseFloat(String(paid||'').replace(/[^0-9.]/g,'')) || null;
+    const feeOk = feeNum !== null && paidNum !== null ? (paidNum >= feeNum) : /paid|yes|done/i.test(String(rec.status||''));
+    // subjects simple list
+    const subjKeys = Object.keys(rec).filter(k=> /english|hindi|math|science|physics|chemistry|biology|social|marks|score|obtained/i.test(k) && !/total|percent|grade/i.test(k));
+    let subjHtml = '';
+    if(subjKeys.length){
+      subjHtml = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid #eef6f5">Subject</th><th style="text-align:left;padding:8px;border-bottom:1px solid #eef6f5">Marks</th></tr></thead><tbody>';
+      subjKeys.forEach(k=> subjHtml += `<tr><td style="padding:8px;border-bottom:1px solid #f7fbfb">${escapeHtml(k)}</td><td style="padding:8px;border-bottom:1px solid #f7fbfb">${escapeHtml(rec[k]||'-')}</td></tr>`);
+      subjHtml += '</tbody></table>';
+    } else {
+      subjHtml = Object.keys(rec).map(k=> `<div style="padding:6px 0"><strong>${escapeHtml(k)}:</strong> ${escapeHtml(rec[k])}</div>`).join('');
+    }
+
+    detailArea.innerHTML = `<div class="record">
+      <div class="avatar">${(name[0]||'U').toUpperCase()}</div>
+      <div class="meta">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:800">${escapeHtml(name)}</div>
+            <div class="muted">Admission: ${escapeHtml(adm)} · Class: ${escapeHtml(cls)}</div>
+          </div>
+          <div class="badges">
+            <div class="badge ${feeOk? 'fee-ok':'fee-due'}">${feeOk? 'PAID':'DUE'}</div>
+          </div>
+        </div>
+        <div style="margin-top:12px">${subjHtml}</div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" onclick="printRecord()">Print</button>
+          <button class="btn ghost" onclick="exportRecordJson()">Export</button>
+        </div>
+      </div>
+    </div>`;
+    detailArea.scrollIntoView({behavior:'smooth'});
+  }
+
+  function printRecord(){ window.print(); }
+  function exportRecordJson(){
+    // export currently shown record
+    const html = detailArea.innerText || detailArea.innerHTML;
+    const blob = new Blob([html], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'record.txt'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // initialize
+  renderNotifications();
+
+  // Accessibility: close drawer on outside click for mobile
+  document.addEventListener('click', function(e){
+    const drawer = document.getElementById('notifDrawer');
+    if(drawer.classList.contains('open') && !drawer.contains(e.target) && e.target.id !== 'notifBtn'){
+      closeDrawer();
+    }
   });
 
-  async function fetchSheetData(){
-    const sheetId = localStorage.getItem('sheetId') || DEFAULT_SHEET;
-    const gid = localStorage.getItem('gid') || '0';
-    if(_cache.data && (now()-_cache.fetchedAt) < _cache.ttl) return _cache.data;
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('Failed to fetch sheet ' + res.status);
-    const txt = await res.text();
-    const g = parseGvizText(txt);
-    const arr = gvizToObjects(g);
-    _cache = {data:arr, fetchedAt:now(), ttl:_cache.ttl};
-    return arr;
-  }
+  // Expose openPortal for demo
+  window.openPortal = openPortal;
 </script>
 </body>
 </html>
