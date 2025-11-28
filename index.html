@@ -142,6 +142,41 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
+  <!-- ====== TOPPERS / CONGRATULATIONS POPUP (FINAL: using UNIT 1, UNIT 2, HALF YEARLY, UNIT 4, ANNUAL) ====== -->
+  <style>
+    /* Popup / toast style */
+    .topper-popup {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      width: 340px;
+      max-width: calc(100% - 40px);
+      background: linear-gradient(90deg,#fff7e6,#fff3f0);
+      border-radius: 12px;
+      box-shadow: 0 18px 40px rgba(11,28,50,0.18);
+      padding: 14px 16px;
+      display: none;
+      z-index: 12000;
+      font-family: Arial, sans-serif;
+      border-left: 6px solid #ffd36b;
+    }
+    .topper-popup h3{margin:0;font-size:16px;color:#18222a}
+    .topper-popup .name{font-weight:900;font-size:18px;margin-top:6px;color:#052b3a}
+    .topper-popup .meta{font-size:13px;color:#23424a;margin-top:6px}
+    .topper-popup .close-btn{position:absolute;left:10px;top:8px;background:transparent;border:0;font-weight:800;color:#333;cursor:pointer}
+    .topper-popup .congrats-badge{position:absolute;right:10px;top:8px;background:linear-gradient(90deg,#ffd36b,#ff9b6b);padding:6px 10px;border-radius:999px;font-weight:800;color:#2b1600}
+    @media(max-width:520px){ .topper-popup{right:10px;left:10px;width:auto} }
+  </style>
+
+  <div id="topperPopup" class="topper-popup" role="status" aria-live="polite">
+    <button class="close-btn" id="topperClose" aria-label="Close">✕</button>
+    <div class="congrats-badge">CONGRATULATIONS</div>
+    <h3 id="tpHeading">🎉 Topper — Class</h3>
+    <div class="name" id="tpName">Student Name</div>
+    <div class="meta" id="tpMeta">Admission No: — · Score: —</div>
+  </div>
+  <!-- ====== END POPUP UI ====== -->
+
   <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
   <!doctype html>
   <html lang="hi">
@@ -683,7 +718,7 @@ loadFeeAndMarks();
     let tx = 0;
     if(matrix && matrix !== 'none'){
       try{
-        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
+        const vals = matrix.match(/matrix\(([^)]+)\)/);
         if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
       }catch(e){}
     }
@@ -707,6 +742,205 @@ loadFeeAndMarks();
     pause(){ pauseTicker(); },
     resume(){ resumeTicker(); }
   };
+})();
+</script>
+
+<!-- ====== TOPPERS POPUP DETECTION (FINAL: checks UNIT 1/UNIT 2/HALF YEARLY/UNIT 4/ANNUAL, robust Admission matching) ====== -->
+<script>
+/*
+  Final topper popup script — uses exact sheet names provided by Upendra:
+  UNIT 1, UNIT 2, HALF YEARLY, UNIT 4, ANNUAL
+  Matches Admission No by normalizing digits (strip non-digits, remove leading zeros) for robust lookup.
+*/
+(async function(){
+  const SHEET_ID = '1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0';
+
+  // exact sheet names to check (as per your message)
+  const unitSheets = ['UNIT 1','UNIT 2','HALF YEARLY','UNIT 4','ANNUAL'];
+
+  // student lookup sheets to find names by admission no
+  const studentLookupCandidates = [
+    "Student's Details","Students","Student Details","Students Database","Marksheet Details","Marksheet"
+  ];
+
+  // regex heuristics
+  const admRegex = /^(admission|adm|admn|admission no|admission number|adm no|roll|roll no)/i;
+  const classRegex = /^(class|std|standard|section|class\s*\/\s*section)/i;
+  const scoreRegex = /^(score|marks|total|percentage|percent|obtained|result|aggregate)/i;
+  const nameRegex = /(name|student name|candidate)/i;
+
+  // helper to fetch gviz JSON
+  async function fetchGvizByName(sheetName){
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+    try{
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('not ok ' + res.status);
+      const txt = await res.text();
+      const jsonText = txt.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+      return JSON.parse(jsonText);
+    }catch(e){
+      return null;
+    }
+  }
+
+  // normalize admission string -> digits without leading zeros (for compare)
+  function normAdm(s){
+    if(s === null || s === undefined) return '';
+    const digits = String(s).toString().replace(/\D/g,'');
+    if(digits === '') return '';
+    // remove leading zeros
+    return digits.replace(/^0+/, '') || '0';
+  }
+
+  // fetch unit sheets and compile toppers per class (from all specified unit sheets)
+  const combinedByClass = {}; // class -> array of {adm, score, sheet, rawRow}
+  for(const sheet of unitSheets){
+    const g = await fetchGvizByName(sheet);
+    if(!g || !g.table || !g.table.rows || !g.table.rows.length) continue;
+    const cols = (g.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (g.table.rows||[]).map(r=> r.c || []);
+    // find likely keys
+    const admKey = cols.find(h=> admRegex.test(h)) || cols[0];
+    const classKey = cols.find(h=> classRegex.test(h)) || cols.find((_,i)=> i<3 && /class|std|grade/i.test(cols[i])) || cols[1] || cols[0];
+    const scoreKey = cols.find(h=> scoreRegex.test(h)) || cols[cols.length-1];
+
+    rows.forEach(cells=>{
+      const obj = {};
+      for(let i=0;i<cols.length;i++){
+        const cell = cells[i];
+        let v = '';
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i] || ('col'+i)] = v;
+      }
+      const cls = String(obj[classKey] || 'Unknown').trim() || 'Unknown';
+      const admRaw = String(obj[admKey] || '').trim();
+      const adm = normAdm(admRaw);
+      const scoreRaw = String(obj[scoreKey] || '').replace(/[^0-9.\-]/g,'').trim();
+      const score = parseFloat(scoreRaw);
+      if(!combinedByClass[cls]) combinedByClass[cls] = [];
+      combinedByClass[cls].push({admRaw: admRaw, adm: adm, score: isNaN(score) ? -Infinity : score, sheet: sheet, row: obj});
+    });
+  }
+
+  // determine topper per class across the combined data
+  const topperCandidates = {}; // class -> {adm, score, sheet, row}
+  Object.keys(combinedByClass).forEach(cls=>{
+    const arr = combinedByClass[cls].filter(x=> x.adm && x.adm.length>0);
+    if(arr.length===0) return;
+    const numeric = arr.filter(x=> x.score !== -Infinity);
+    let top;
+    if(numeric.length) {
+      numeric.sort((a,b)=> b.score - a.score);
+      top = numeric[0];
+    } else {
+      // no numeric scores -> pick first available
+      top = arr[0];
+    }
+    topperCandidates[cls] = top;
+  });
+
+  // build admission->name map by scanning student lookup sheets
+  const admissionNameMap = {}; // normalized adm -> {name, raw}
+  for(const s of studentLookupCandidates){
+    const g = await fetchGvizByName(s);
+    if(!g || !g.table) continue;
+    const cols = (g.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (g.table.rows||[]).map(r=> r.c || []);
+    const admKey = cols.find(h=> admRegex.test(h)) || cols[0];
+    const nameKey = cols.find(h=> nameRegex.test(h)) || cols.find(h=> /full\s*name|student|candidate/i.test(h)) || cols[1] || cols[0];
+    rows.forEach(cells=>{
+      const obj = {};
+      for(let i=0;i<cols.length;i++){
+        const cell = cells[i];
+        let v = '';
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i]] = v;
+      }
+      const admRaw = String(obj[admKey] || '').trim();
+      const adm = normAdm(admRaw);
+      if(!adm) return;
+      const nm = String(obj[nameKey] || '').trim();
+      if(!admissionNameMap[adm]) admissionNameMap[adm] = {name: nm || '', raw: obj};
+      // if name missing earlier and found now, overwrite
+      else if(!admissionNameMap[adm].name && nm) admissionNameMap[adm].name = nm;
+    });
+  }
+
+  // prepare popup list (one entry per class)
+  const popupList = [];
+  Object.keys(topperCandidates).forEach(cls=>{
+    const t = topperCandidates[cls];
+    if(!t || !t.adm) return;
+    const adm = t.adm;
+    const admRaw = t.admRaw || adm;
+    const mapped = admissionNameMap[adm] || null;
+    const name = mapped && mapped.name ? mapped.name : (t.row && (t.row['Student Name']||t.row['Name']||t.row['student name']||t.row['Full Name']) ? (t.row['Student Name']||t.row['Name']||t.row['student name']||t.row['Full Name']) : '—');
+    const score = (t.score === -Infinity) ? 'N/A' : t.score;
+    popupList.push({class: cls, adm: admRaw || adm, name: String(name), score: score, sheet: t.sheet});
+  });
+
+  if(popupList.length === 0){
+    console.warn('Koi topper nahi mila — check UNIT sheets and admission mapping.');
+    return;
+  }
+
+  // popup UI logic
+  const popupEl = document.getElementById('topperPopup');
+  const heading = document.getElementById('tpHeading');
+  const nameEl = document.getElementById('tpName');
+  const metaEl = document.getElementById('tpMeta');
+  const closeBtn = document.getElementById('topperClose');
+
+  let idx = 0;
+  let rotTimer = null;
+  const SHOW_MS = 4200;
+
+  function showPopup(item){
+    heading.innerHTML = `🎉 Topper — Class ${escapeHtml(item.class)}`;
+    nameEl.textContent = String(item.name) || '—';
+    metaEl.textContent = `Admission No: ${item.adm || '—'} · Score: ${isFinite(item.score) ? item.score : item.score}`;
+    popupEl.style.display = 'block';
+    popupEl.style.opacity = '0';
+    popupEl.style.transform = 'translateY(8px)';
+    requestAnimationFrame(()=>{ popupEl.style.transition = 'all 380ms ease'; popupEl.style.opacity = '1'; popupEl.style.transform = 'translateY(0)'; });
+  }
+
+  function hidePopup(cb){
+    popupEl.style.opacity = '0';
+    popupEl.style.transform = 'translateY(10px)';
+    setTimeout(()=>{ popupEl.style.display = 'none'; if(cb) cb(); }, 320);
+  }
+
+  function startRotation(){
+    if(rotTimer) clearTimeout(rotTimer);
+    showPopup(popupList[idx]);
+    rotTimer = setTimeout(()=>{
+      idx = (idx + 1) % popupList.length;
+      startRotation();
+    }, SHOW_MS);
+  }
+
+  function stopRotation(){
+    if(rotTimer) clearTimeout(rotTimer);
+    rotTimer = null;
+  }
+
+  popupEl.addEventListener('mouseenter', ()=> stopRotation());
+  popupEl.addEventListener('mouseleave', ()=> { startRotation(); });
+  closeBtn.addEventListener('click', ()=> { stopRotation(); hidePopup(); });
+
+  // start
+  startRotation();
+
+  // helper
+  function escapeHtml(s){ if(s===null||s===undefined) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 })();
 </script>
 </body>
