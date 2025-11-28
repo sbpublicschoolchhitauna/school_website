@@ -85,210 +85,226 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  
+  <!-- ====== ADMISSION TICKER (premium, eye-friendly gradient, multiple rotating messages) ====== -->
+  <style>
+  /* Eye-friendly soft blue-cyan gradient, subtle 3D */
+  .admission-news-bar{
+    width:100%;
+    background:linear-gradient(90deg,#9be7ff,#c7f9ff);
+    color:#03314b;
+    padding:12px 0;
+    font-weight:800;
+    font-size:16px;
+    overflow:hidden;
+    position:relative;
+    border-radius:10px;
+    margin:14px auto;
+    max-width:1100px;
+    box-shadow:0 10px 26px rgba(3,19,43,0.10), inset 0 -4px 14px rgba(0,0,0,0.03);
+    transform:translateZ(0);
+    perspective:800px;
+  }
+  .admission-news-inner{
+    position:relative;
+    transform-origin:center;
+    transform: translateZ(0) rotateX(0.3deg);
+    max-width:calc(100% - 28px);
+    margin:0 14px;
+  }
+  .admission-news-text{
+    display:inline-block;
+    white-space:nowrap;
+    padding-left:1rem;
+    will-change:transform,opacity;
+    color:#012032;
+    font-weight:800;
+  }
+  .admission-news-ghost{
+    position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:0.06;
+    background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.6) 50%,transparent 100%);
+  }
+  .admission-news-meta{
+    display:flex;align-items:center;gap:12px;overflow:hidden;padding:0 4px;
+  }
+  .admission-tag{
+    background:rgba(1,48,62,0.06);padding:6px 10px;border-radius:999px;font-weight:900;font-size:13px;border:1px solid rgba(1,48,62,0.04);color:#012032;
+  }
+  @media(max-width:640px){ .admission-news-bar{font-size:14px;padding:10px 0} .admission-tag{display:none} }
+  </style>
 
-<!-- START: Inserted Photo Slider -->
-<!doctype html>
-<html lang="hi">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SB Public School — Photo Slider (Fade, Auto-height)</title>
-<style>
-:root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-.slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
-.slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
-.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
-.slide.active{opacity:1;pointer-events:auto}
-.slide img{width:100%;height:auto;display:block;object-fit:cover}
-
-/* controls */
-.controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
-.slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
-.dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
-.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
-.dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
-.slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
-
-/* responsive */
-@media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
-</style>
-
-<style id="assistant-button-fix">
-/* Make Quick Portals and Search buttons clearly visible */
-a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-  background: #000 !important;
-  color: #fff !important;
-  border: 1px solid #000 !important;
-  box-shadow: none !important;
-}
-/* Ensure slider controls remain light */
-.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-</style>
-
-</head>
-<body>
-<div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
-  <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
-  <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
-  <div class="controls">
-    <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
-    <button class="btn slider-control" id="next" aria-label="Next">›</button>
+  <div class="admission-news-bar" role="region" aria-label="Admission news ticker" tabindex="0" id="admissionTickerWrap">
+    <div class="admission-news-inner">
+      <div class="admission-news-meta">
+        <div class="admission-tag">📢 ADMISSION</div>
+        <div class="admission-news-text" id="admissionNewsText" aria-live="polite"></div>
+      </div>
+      <div class="admission-news-ghost" aria-hidden="true"></div>
+    </div>
   </div>
-  <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
-</div>
 
-<script>
-// IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
-async function loadImagesDynamic(){
-  // 1) try server API
-  try{
-    const res = await fetch('/api/images');
-    if(res.ok){
-      const j = await res.json();
-      if(Array.isArray(j.images) && j.images.length) return j.images;
-    }
-  }catch(e){ /* ignore */ }
+  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
+  <!doctype html>
+  <html lang="hi">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
+  <style>
+  :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
+  .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
+  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
+  .slide.active{opacity:1;pointer-events:auto}
+  .slide img{width:100%;height:auto;display:block;object-fit:cover}
+  /* controls */
+  .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
+  .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
+  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
+  .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
+  .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+  @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
+  </style>
+  <style id="assistant-button-fix">
+  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+  </style>
+  </head>
+  <body>
+  <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
+    <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
+    <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
+    <div class="controls">
+      <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
+      <button class="btn slider-control" id="next" aria-label="Next">›</button>
+    </div>
+    <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
+  </div>
 
-  // 2) try images.json (static list in same folder)
-  try{
-    const res2 = await fetch('images.json');
-    if(res2.ok){
-      const j2 = await res2.json();
-      if(Array.isArray(j2.images) && j2.images.length) return j2.images;
-    }
-  }catch(e){ /* ignore */ }
+  <script>
+  // IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
+  async function loadImagesDynamic(){
+    try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
+    try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
+    return [
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
+      'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
+      'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
+      'slider_images/logo.jpg',
+    ];
+  }
 
-  // 3) fallback: embedded list (if any)
-  return [
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
-    'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
-    'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
-    'slider_images/logo.jpg',
-  ];
-}
+  let IMAGES = []; // will be populated shortly
 
-let IMAGES = []; // will be populated shortly
+  (async function(){
+    IMAGES = await loadImagesDynamic();
+    if(typeof createSlides === 'function') createSlides();
+    if(typeof start === 'function') start();
+  })();
 
-// initialize IMAGES and then run createSlides/start logic
-(async function(){
-  IMAGES = await loadImagesDynamic();
-  // If the original script defines createSlides/start functions later, we rely on them.
-  // If not, we will call createSlides() and start() if present.
-  if(typeof createSlides === 'function') createSlides();
-  if(typeof start === 'function') start();
-})();
+  const slider = document.getElementById('slider');
+  const sliderWrap = document.getElementById('sliderWrap');
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const playToggle = document.getElementById('playToggle');
 
+  let slides = [];
+  let index = 0;
+  let timer = null;
+  let interval = 4000; // autoplay interval
 
-const slider = document.getElementById('slider');
-const sliderWrap = document.getElementById('sliderWrap');
-const dotsWrap = document.getElementById('dots');
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-const playToggle = document.getElementById('playToggle');
+  function createSlides(){
+    IMAGES.forEach((src,i)=>{
+      const s = document.createElement('div');
+      s.className = 'slide';
+      s.setAttribute('role','group');
+      s.setAttribute('aria-roledescription','slide');
+      s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `School photo ${i+1}`;
+      img.addEventListener('load', ()=>{
+        if(i===index) adjustHeightTo(img);
+      });
+      s.appendChild(img);
+      slider.appendChild(s);
+      slides.push(s);
 
-let slides = [];
-let index = 0;
-let timer = null;
-let interval = 4000; // autoplay interval
-
-function createSlides(){
-  IMAGES.forEach((src,i)=>{
-    const s = document.createElement('div');
-    s.className = 'slide';
-    s.setAttribute('role','group');
-    s.setAttribute('aria-roledescription','slide');
-    s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = `School photo ${i+1}`;
-    // when image loads, if it's the first and active adjust container height
-    img.addEventListener('load', ()=>{
-      if(i===index) adjustHeightTo(img);
+      const d = document.createElement('button');
+      d.className = 'dot';
+      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+      d.addEventListener('click', ()=>{ pause(); goTo(i); });
+      dotsWrap.appendChild(d);
     });
-    s.appendChild(img);
-    slider.appendChild(s);
-    slides.push(s);
+    if(slides[0]) slides[0].classList.add('active');
+    updateDots();
+    setTimeout(()=>{ const img = slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
+  }
 
-    const d = document.createElement('button');
-    d.className = 'dot';
-    d.setAttribute('aria-label', 'Go to slide ' + (i+1));
-    d.addEventListener('click', ()=>{ pause(); goTo(i); });
-    dotsWrap.appendChild(d);
-  });
-  // mark first active
-  if(slides[0]) slides[0].classList.add('active');
-  updateDots();
-  // set initial height after short delay to allow image to load
-  setTimeout(()=>{ const img = slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
-}
+  function adjustHeightTo(img){
+    const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
+    if(!img.naturalWidth) return;
+    const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
+    const maxH = Math.round(window.innerHeight * 0.65);
+    const finalH = Math.min(h, maxH);
+    slider.style.height = finalH + 'px';
+  }
 
-function adjustHeightTo(img){
-  // compute natural height based on current slider width to preserve aspect ratio
-  const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
-  if(!img.naturalWidth) return;
-  const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
-  // limit max height for better UX
-  const maxH = Math.round(window.innerHeight * 0.65);
-  const finalH = Math.min(h, maxH);
-  slider.style.height = finalH + 'px';
-}
+  function goTo(i){
+    index = (i + slides.length) % slides.length;
+    slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
+    updateDots();
+    const img = slides[index].querySelector('img');
+    if(img && img.complete) adjustHeightTo(img);
+    else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
+  }
 
-function goTo(i){
-  index = (i + slides.length) % slides.length;
-  slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
-  updateDots();
-  // adjust height to current image
-  const img = slides[index].querySelector('img');
-  if(img && img.complete) adjustHeightTo(img);
-  else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
-}
+  function nextSlide(){ goTo(index+1); }
+  function prevSlide(){ goTo(index-1); }
 
-function nextSlide(){ goTo(index+1); }
-function prevSlide(){ goTo(index-1); }
+  function updateDots(){
+    const dots = dotsWrap.children;
+    for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
+  }
 
-function updateDots(){
-  const dots = dotsWrap.children;
-  for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
-}
+  function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent = 'Pause'; playToggle.setAttribute('aria-pressed','false'); }
+  function pause(){ if(timer) clearInterval(timer); timer = null; playToggle.textContent = 'Play'; playToggle.setAttribute('aria-pressed','true'); }
 
-function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent = 'Pause'; playToggle.setAttribute('aria-pressed','false'); }
-function pause(){ if(timer) clearInterval(timer); timer = null; playToggle.textContent = 'Play'; playToggle.setAttribute('aria-pressed','true'); }
+  nextBtn.addEventListener('click', ()=>{ pause(); nextSlide(); });
+  prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
+  playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
 
-nextBtn.addEventListener('click', ()=>{ pause(); nextSlide(); });
-prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
-playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
 
-// keyboard
-document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
+  let startX=0;
+  slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
+  slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
 
-// swipe support
-let startX=0;
-slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
-slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
+  let resizeDeb;
+  window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
 
-// responsive: adjust height on resize
-let resizeDeb;
-window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
-
-// init
-createSlides();
-start();
-</script>
-</body>
-</html>
-
-<!-- END: Inserted Photo Slider -->
+  createSlides();
+  start();
+  </script>
+  </body>
+  </html>
+  <!-- END: Inserted Photo Slider -->
 
 <div class="container">
     <div class="grid">
@@ -617,6 +633,81 @@ showTab('fee');
 buildStripFromNotifications();
 loadNotifications();
 loadFeeAndMarks();
+</script>
+
+<!-- ====== Admission ticker JS (placed at end to ensure DOM exists) ====== -->
+<script>
+(function(){
+  const NEWS = [
+    'ADMISSION OPEN – APRIL 2025 · Nursery to Class 8 · Limited Seats — Apply Now',
+    'Registration: Mon–Sat 9:00 AM – 2:00 PM · Documents: Birth Certificate, Aadhar (if any)',
+    'Special Scholarship for Meritorious Students — Contact Principal Office',
+    'School Timings: 9:00 AM to 3:00 PM · Transport Available · Call +91 6389259200'
+  ];
+  const el = document.getElementById('admissionNewsText');
+  if(!el) return;
+  let idx = 0;
+
+  function startMessage(i){
+    const msg = NEWS[i];
+    el.textContent = msg + ' \u00A0 \u00A0 \u00A0 ' + msg; // repeat for smooth scroll
+    void el.offsetWidth;
+    const containerWidth = el.parentElement.clientWidth || 600;
+    const textWidth = Math.max(el.scrollWidth / 2, 200);
+    const baseMs = 14000;
+    const pxFactor = 9;
+    const duration = Math.max(9000, Math.round(baseMs + (textWidth * pxFactor)));
+
+    el.style.transition = 'none';
+    el.style.transform = `translateX(${containerWidth}px)`;
+
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        el.style.transition = `transform ${duration}ms linear`;
+        el.style.transform = `translateX(-${textWidth}px)`;
+      });
+    });
+
+    clearTimeout(el._nextTimeout);
+    el._nextTimeout = setTimeout(()=>{
+      idx = (i + 1) % NEWS.length;
+      setTimeout(()=> startMessage(idx), 700);
+    }, duration + 200);
+  }
+
+  // pause/resume on hover or focus
+  const wrap = document.getElementById('admissionTickerWrap');
+  function pauseTicker(){
+    const style = window.getComputedStyle(el);
+    const matrix = style.transform || style.webkitTransform || '';
+    let tx = 0;
+    if(matrix && matrix !== 'none'){
+      try{
+        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
+        if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
+      }catch(e){}
+    }
+    el.style.transition = 'none';
+    el.style.transform = `translateX(${tx}px)`;
+    clearTimeout(el._nextTimeout);
+  }
+  function resumeTicker(){ startMessage(idx); }
+
+  wrap.addEventListener('mouseenter', pauseTicker);
+  wrap.addEventListener('focusin', pauseTicker);
+  wrap.addEventListener('mouseleave', resumeTicker);
+  wrap.addEventListener('focusout', resumeTicker);
+
+  // start
+  startMessage(0);
+
+  // expose API if needed
+  window.AdmissionTicker = {
+    setNews(array){ if(Array.isArray(array) && array.length){ NEWS.length=0; NEWS.push(...array); idx=0; startMessage(0); } },
+    pause(){ pauseTicker(); },
+    resume(){ resumeTicker(); }
+  };
+})();
 </script>
 </body>
 </html>
