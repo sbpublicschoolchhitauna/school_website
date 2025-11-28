@@ -1,117 +1,77 @@
 <!doctype html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>S.B. Public School Chhitauna — Student Portal</title>
-  <meta name="description" content="S.B. Public School Chhitauna — Admission, Student Lookup, Notifications & Portals" />
-  <style>
-    :root{
-      --accent:#0b5fa8;
-      --accent2:#1167b1;
-      --card:#fff;
-      --muted:#54607a;
-      --bg-gradient: linear-gradient(180deg,#eaf4ff,#f7fbff);
-      --max-width:1100px;
-      --text-dark:#0f172a;
-    }
-    /* Reset + base */
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter, system-ui, Arial, Roboto, sans-serif;color:var(--text-dark);background:var(--bg-gradient);-webkit-font-smoothing:antialiased;line-height:1.35}
-    a{color:inherit;text-decoration:none}
-    /* Header */
-    .header{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#fff;text-align:center;padding:16px 12px;border-radius:0 0 12px 12px;
-      box-shadow:0 6px 18px rgba(2,6,23,0.12); position:sticky; top:0; z-index:9999;
-    }
-    .header h1{margin:0;font-size:clamp(18px,3.8vw,28px);font-weight:800;letter-spacing:0.4px}
-    .header .meta{margin-top:6px;font-size:13px;opacity:0.95}
-    .header .meta small{display:block;font-size:12px;opacity:0.9;margin-top:4px}
-    /* Narrow notification strip under header (horizontal chips) */
-    .school-strip-outer{overflow:hidden;width:100%;margin-top:12px;padding-bottom:8px}
-    .school-strip{white-space:nowrap;display:flex;gap:12px;align-items:center;will-change:transform;transform:translateX(0)}
-    .school-chip{display:inline-block;font-weight:700;font-size:13px;background:rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px}
-    /* container */
-    .container{max-width:var(--max-width);margin:14px auto;padding:12px}
-    /* Admission ticker container sits centered w/ same max width */
-    .ticker-wrap{max-width:var(--max-width);margin:12px auto;padding:0 12px}
-    /* Admission Ticker (eye-friendly gradient + 3D feel) */
-    .admission-news-bar{
-      width:100%;
-      background:linear-gradient(90deg,#9be7ff,#c7f9ff);
-      color:#03314b;
-      padding:clamp(8px,1.6vw,12px) 0;
-      font-weight:800;
-      font-size:clamp(13px,2.6vw,16px);
-      overflow:hidden;
-      position:relative;
-      border-radius:10px;
-      box-shadow:0 10px 26px rgba(3,19,43,0.10), inset 0 -4px 14px rgba(0,0,0,0.03);
-      transform:translateZ(0);
-      perspective:800px;
-    }
-    .admission-news-inner{position:relative;transform-origin:center;transform: translateZ(0) rotateX(0.3deg);max-width:calc(100% - 28px);margin:0 14px;overflow:hidden}
-    .admission-news-meta{display:flex;align-items:center;gap:12px;overflow:hidden;padding:0 4px}
-    .admission-tag{background:rgba(1,48,62,0.06);padding:6px 10px;border-radius:999px;font-weight:900;font-size:13px;border:1px solid rgba(1,48,62,0.04);color:#012032}
-    .admission-news-text{display:inline-block;white-space:nowrap;padding-left:0.5rem;will-change:transform,opacity;color:#012032;font-weight:800;backface-visibility:hidden}
-    .admission-news-ghost{position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:0.06;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.6) 50%,transparent 100%)}
-    @media(max-width:480px){ .admission-tag{display:none} .admission-news-bar{border-radius:8px} }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.B. Public School Chhitauna — Student Portal</title>
+<style>
+:root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Arial,Segoe UI,Roboto,sans-serif;color:#0f172a;background:linear-gradient(180deg,#eaf4ff,#f7fbff)}
+/* Centered header */
+.header{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;text-align:center;padding:18px 12px;border-radius:0 0 14px 14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12); position:sticky; top:0; z-index:9999;
+}
+.header h1{margin:0;font-size:clamp(20px,4.5vw,30px);font-weight:800;letter-spacing:0.4px}
+.header .meta{margin-top:6px;font-size:14px;opacity:0.95}
+.header .meta small{display:block;font-size:13px;opacity:0.9;margin-top:4px}
 
-    /* Layout grid - responsive */
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
-    @media(max-width:980px){ .grid{grid-template-columns:1fr 320px} }
-    @media(max-width:820px){ .grid{grid-template-columns:1fr} }
+/* horizontal strip under header */
+.school-strip-outer{overflow:hidden;width:100%;margin-top:12px;padding-bottom:8px}
+.school-strip{white-space:nowrap;display:flex;gap:18px;align-items:center;will-change:transform;transform:translateX(0)}
+.school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.06);padding:6px 12px;border-radius:8px}
 
-    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);margin-bottom:12px}
-    h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
-    .small{color:var(--muted);font-size:13px}
-    .tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-    .tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
-    .tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
-    .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
-    .search-row{display:flex;gap:8px;margin-bottom:8px}
-    @media(max-width:640px){.search-row{flex-direction:column} .tabbar{gap:6px}}
+/* main layout */
+.container{max-width:1100px;margin:14px auto;padding:12px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06);margin-bottom:12px}
+h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
+.small{color:var(--muted);font-size:13px}
+.tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
+.tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
+.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
+.search-row{display:flex;gap:8px;margin-bottom:8px}
+@media(max-width:640px){.search-row{flex-direction:column} .tabbar{gap:6px}}
 
-    /* Tables responsive */
-    .table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:420px}
-    @media(max-width:900px){.table-wrap{max-height:320px}}
-    table{width:100%;border-collapse:collapse;font-size:13px;min-width:0}
-    th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
-    thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
+/* tables */
+.table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:360px}
+@media(max-width:900px){.table-wrap{max-height:300px}}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
+thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 
-    /* Notifications vertical */
-    .notify-wrap{height:220px;overflow:hidden;position:relative;border-radius:8px}
-    .notify-list{position:absolute;left:0;right:0;top:0;will-change:transform}
-    .notify-item{padding:10px 12px;border-bottom:1px solid #eef4ff;background:#fff}
-    .notify-item .date{font-size:12px;color:var(--accent);font-weight:700}
-    .notify-item .text{font-size:14px;margin-top:4px}
+/* notifications */
+.notify-wrap{height:220px;overflow:hidden;position:relative;border-radius:8px}
+.notify-list{position:absolute;left:0;right:0;top:0;will-change:transform}
+.notify-item{padding:10px 12px;border-bottom:1px solid #eef4ff;background:#fff}
+.notify-item .date{font-size:12px;color:var(--accent);font-weight:700}
+.notify-item .text{font-size:14px;margin-top:4px}
 
-    /* Slider */
-    .slider-wrap{max-width:var(--max-width);margin:18px auto;position:relative;border-radius:12px;overflow:visible}
-    .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
-    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
-    .slide.active{opacity:1;pointer-events:auto}
-    .slide img{width:100%;height:auto;display:block;object-fit:cover}
-    .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
-    .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
-    .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
-    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
-    .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
-    .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
-    @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
+/* footer */
+.footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
+</style>
 
-    /* Footer */
-    .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px;padding-bottom:30px}
+<style id="assistant-button-fix">
+/* Make Quick Portals and Search buttons clearly visible */
+a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: none !important;
+}
+/* Ensure slider controls remain light */
+.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+</style>
 
-    /* Small accessibility focus */
-    [tabindex]:focus{outline:3px solid rgba(17,82,140,0.18);outline-offset:3px}
-  </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- CENTERED HEADER -->
   <div class="header" role="banner" aria-label="School header">
     <h1>S.B. PUBLIC SCHOOL</h1>
     <div class="meta">
@@ -119,25 +79,105 @@
       <small>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</small>
     </div>
 
+    <!-- horizontal strip populated from Notification sheet -->
     <div class="school-strip-outer" id="schoolStripOuter" aria-live="polite">
       <div id="schoolStrip" class="school-strip"></div>
     </div>
   </div>
 
-  <!-- Admission ticker (centered to match container width) -->
-  <div class="ticker-wrap">
-    <div class="admission-news-bar" role="region" aria-label="Admission news ticker" tabindex="0" id="admissionTickerWrap">
-      <div class="admission-news-inner">
-        <div class="admission-news-meta">
-          <div class="admission-tag">📢 ADMISSION</div>
-          <div class="admission-news-text" id="admissionNewsText" aria-live="polite"></div>
-        </div>
-        <div class="admission-news-ghost" aria-hidden="true"></div>
+  <!-- ====== ADMISSION TICKER (premium, eye-friendly gradient, multiple rotating messages) ====== -->
+  <style>
+  /* Eye-friendly soft blue-cyan gradient, subtle 3D */
+  .admission-news-bar{
+    width:100%;
+    background:linear-gradient(90deg,#9be7ff,#c7f9ff);
+    color:#03314b;
+    padding:12px 0;
+    font-weight:800;
+    font-size:16px;
+    overflow:hidden;
+    position:relative;
+    border-radius:10px;
+    margin:14px auto;
+    max-width:1100px;
+    box-shadow:0 10px 26px rgba(3,19,43,0.10), inset 0 -4px 14px rgba(0,0,0,0.03);
+    transform:translateZ(0);
+    perspective:800px;
+  }
+  .admission-news-inner{
+    position:relative;
+    transform-origin:center;
+    transform: translateZ(0) rotateX(0.3deg);
+    max-width:calc(100% - 28px);
+    margin:0 14px;
+  }
+  .admission-news-text{
+    display:inline-block;
+    white-space:nowrap;
+    padding-left:1rem;
+    will-change:transform,opacity;
+    color:#012032;
+    font-weight:800;
+  }
+  .admission-news-ghost{
+    position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:0.06;
+    background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.6) 50%,transparent 100%);
+  }
+  .admission-news-meta{
+    display:flex;align-items:center;gap:12px;overflow:hidden;padding:0 4px;
+  }
+  .admission-tag{
+    background:rgba(1,48,62,0.06);padding:6px 10px;border-radius:999px;font-weight:900;font-size:13px;border:1px solid rgba(1,48,62,0.04);color:#012032;
+  }
+  @media(max-width:640px){ .admission-news-bar{font-size:14px;padding:10px 0} .admission-tag{display:none} }
+  </style>
+
+  <div class="admission-news-bar" role="region" aria-label="Admission news ticker" tabindex="0" id="admissionTickerWrap">
+    <div class="admission-news-inner">
+      <div class="admission-news-meta">
+        <div class="admission-tag">📢 ADMISSION</div>
+        <div class="admission-news-text" id="admissionNewsText" aria-live="polite"></div>
       </div>
+      <div class="admission-news-ghost" aria-hidden="true"></div>
     </div>
   </div>
 
-  <!-- Photo slider -->
+  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
+  <!doctype html>
+  <html lang="hi">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
+  <style>
+  :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
+  .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
+  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
+  .slide.active{opacity:1;pointer-events:auto}
+  .slide img{width:100%;height:auto;display:block;object-fit:cover}
+  /* controls */
+  .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
+  .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
+  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
+  .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
+  .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+  @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
+  </style>
+  <style id="assistant-button-fix">
+  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+  </style>
+  </head>
+  <body>
   <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
     <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
     <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
@@ -148,23 +188,143 @@
     <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
   </div>
 
-  <!-- Main content container -->
-  <div class="container">
+  <script>
+  // IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
+  async function loadImagesDynamic(){
+    try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
+    try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
+    return [
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
+      'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
+      'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
+      'slider_images/logo.jpg',
+    ];
+  }
+
+  let IMAGES = []; // will be populated shortly
+
+  (async function(){
+    IMAGES = await loadImagesDynamic();
+    if(typeof createSlides === 'function') createSlides();
+    if(typeof start === 'function') start();
+  })();
+
+  const slider = document.getElementById('slider');
+  const sliderWrap = document.getElementById('sliderWrap');
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const playToggle = document.getElementById('playToggle');
+
+  let slides = [];
+  let index = 0;
+  let timer = null;
+  let interval = 4000; // autoplay interval
+
+  function createSlides(){
+    IMAGES.forEach((src,i)=>{
+      const s = document.createElement('div');
+      s.className = 'slide';
+      s.setAttribute('role','group');
+      s.setAttribute('aria-roledescription','slide');
+      s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `School photo ${i+1}`;
+      img.addEventListener('load', ()=>{
+        if(i===index) adjustHeightTo(img);
+      });
+      s.appendChild(img);
+      slider.appendChild(s);
+      slides.push(s);
+
+      const d = document.createElement('button');
+      d.className = 'dot';
+      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+      d.addEventListener('click', ()=>{ pause(); goTo(i); });
+      dotsWrap.appendChild(d);
+    });
+    if(slides[0]) slides[0].classList.add('active');
+    updateDots();
+    setTimeout(()=>{ const img = slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
+  }
+
+  function adjustHeightTo(img){
+    const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
+    if(!img.naturalWidth) return;
+    const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
+    const maxH = Math.round(window.innerHeight * 0.65);
+    const finalH = Math.min(h, maxH);
+    slider.style.height = finalH + 'px';
+  }
+
+  function goTo(i){
+    index = (i + slides.length) % slides.length;
+    slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
+    updateDots();
+    const img = slides[index].querySelector('img');
+    if(img && img.complete) adjustHeightTo(img);
+    else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
+  }
+
+  function nextSlide(){ goTo(index+1); }
+  function prevSlide(){ goTo(index-1); }
+
+  function updateDots(){
+    const dots = dotsWrap.children;
+    for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
+  }
+
+  function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent = 'Pause'; playToggle.setAttribute('aria-pressed','false'); }
+  function pause(){ if(timer) clearInterval(timer); timer = null; playToggle.textContent = 'Play'; playToggle.setAttribute('aria-pressed','true'); }
+
+  nextBtn.addEventListener('click', ()=>{ pause(); nextSlide(); });
+  prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
+  playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
+
+  document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
+
+  let startX=0;
+  slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
+  slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
+
+  let resizeDeb;
+  window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
+
+  createSlides();
+  start();
+  </script>
+  </body>
+  </html>
+  <!-- END: Inserted Photo Slider -->
+
+<div class="container">
     <div class="grid">
       <div>
+
+        <!-- QUICK PORTALS moved to TOP -->
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener">Fee Portal</a>
-            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" rel="noopener" style="margin-left:8px">Marksheet</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
           </div>
         </div>
 
+      <div>
         <div class="card">
           <h2>Student Details Lookup</h2>
           <div class="small">Admission Number डालकर Search करें</div>
           <div style="margin-top:8px" class="search-row">
-            <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:10px;border-radius:8px;border:1px solid #dce6f7">
+            <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
             <button class="btn search-btn" data-portal="true" onclick="searchStudent()">Search</button>
           </div>
           <div id="result"></div>
@@ -173,7 +333,7 @@
         <div class="card">
           <h2>Student Records</h2>
           <div class="small">टैब बदल कर Fee या Marksheet देखें — Mobile/Aadhar masked (last 4)।</div>
-          <div class="tabbar" role="tablist" aria-label="Student record tabs">
+          <div class="tabbar" role="tablist">
             <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
             <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
           </div>
@@ -190,10 +350,7 @@
           </div>
         </div>
 
-        <div class="card">
-          <h2>Contact</h2>
-          <div class="small">Principal — Mr. Gajendra Yadav Sir · Call: <a href="tel:+916389259200">+91 6389259200</a></div>
-          <div style="margin-top:10px;font-size:13px;color:var(--muted)">S.B. Public School, Village Chhitauna · Post Meghauli Kala · Pin Code 273304</div>
+        
         </div>
       </div>
     </div>
@@ -201,322 +358,356 @@
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
 
-  <!-- Scripts: slider, sheet loaders, notifications, ticker -->
-  <script>
-  /* -------------------- Slider + images loader -------------------- */
-  async function loadImagesDynamic(){
-    // try server API, static images.json, then embedded fallback
-    try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
-    try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
-    return [
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
-      'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
-      'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
-      'slider_images/logo.jpg'
-    ];
+<script>
+/* CONFIG */
+const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+const NOTIF_SPEED = 0.45;
+const HEADER_SPEED = 0.6;
+
+/* HELPERS */
+function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+async function loadSheetGviz(sheetName){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
+  const text = await res.text();
+  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+  return JSON.parse(jsonText);
+}
+function maskLast4(val){
+  if(val===null||val===undefined) return "";
+  const s = String(val).trim();
+  const digits = s.replace(/\D/g,'');
+  if(digits.length === 0) return '';
+  const last4 = digits.slice(-4);
+  return '****' + last4;
+}
+function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h); }
+function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h); }
+
+/* TABLE RENDER */
+function renderTableTo(containerId, gvizJson){
+  const cols = (gvizJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+  const rows = (gvizJson.table.rows||[]).map(r=> r.c || []);
+  const wrap = document.getElementById(containerId);
+  if(rows.length === 0){
+    wrap.innerHTML = "<div style='padding:12px;color:#666'>कोई रिकॉर्ड नहीं मिला।</div>";
+    return;
   }
-
-  (function(){
-    const slider = document.getElementById('slider');
-    const dotsWrap = document.getElementById('dots');
-    const prevBtn = document.getElementById('prev');
-    const nextBtn = document.getElementById('next');
-    const playToggle = document.getElementById('playToggle');
-    let IMAGES = [], slides = [], index = 0, timer = null, interval = 4500;
-
-    function adjustHeightTo(img){
-      const wrapWidth = slider.clientWidth;
-      if(!img.naturalWidth) return;
-      const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
-      const maxH = Math.round(window.innerHeight * 0.6);
-      slider.style.height = Math.min(h, maxH) + 'px';
-    }
-
-    function createSlides(){
-      IMAGES.forEach((src,i)=>{
-        const s = document.createElement('div'); s.className='slide'; s.setAttribute('role','group'); s.setAttribute('aria-roledescription','slide'); s.setAttribute('aria-label',`Slide ${i+1} of ${IMAGES.length}`);
-        const img = document.createElement('img'); img.src=src; img.alt=`School photo ${i+1}`;
-        img.addEventListener('load', ()=> { if(i===index) adjustHeightTo(img); });
-        s.appendChild(img); slider.appendChild(s); slides.push(s);
-
-        const d = document.createElement('button'); d.className='dot'; d.setAttribute('aria-label','Go to slide '+(i+1));
-        d.addEventListener('click', ()=>{ pause(); goTo(i); });
-        dotsWrap.appendChild(d);
-      });
-      if(slides[0]) slides[0].classList.add('active');
-      updateDots();
-      setTimeout(()=>{ const img = slides[0] && slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
-    }
-
-    function goTo(i){
-      index = (i + slides.length) % slides.length;
-      slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
-      updateDots();
-      const img = slides[index].querySelector('img');
-      if(img && img.complete) adjustHeightTo(img);
-      else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
-    }
-    function nextSlide(){ goTo(index+1); }
-    function prevSlide(){ goTo(index-1); }
-    function updateDots(){ const dots = dotsWrap.children; for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); } }
-    function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent='Pause'; playToggle.setAttribute('aria-pressed','false'); }
-    function pause(){ if(timer) clearInterval(timer); timer=null; playToggle.textContent='Play'; playToggle.setAttribute('aria-pressed','true'); }
-
-    nextBtn.addEventListener('click', ()=>{ pause(); nextSlide(); });
-    prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
-    playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
-
-    document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
-    slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
-    slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
-
-    let startX=0, resizeDeb;
-    window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
-
-    // init images and slides
-    loadImagesDynamic().then(list=>{ IMAGES = list || []; createSlides(); start(); }).catch(()=>{ IMAGES=[]; createSlides(); start(); });
-    // expose for debugging
-    window.SchoolSlider = { next: nextSlide, prev: prevSlide, pause: pause, start: start };
-  })();
-  </script>
-
-  <script>
-  /* -------------------- Google Sheet loader + render + notifications -------------------- */
-  const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
-  async function loadSheetGviz(sheetName){
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('Network response not ok: ' + res.status);
-    const text = await res.text();
-    const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-    return JSON.parse(jsonText);
-  }
-  function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function maskLast4(val){ if(val===null||val===undefined) return ""; const s=String(val).trim(); const digits=s.replace(/\D/g,''); if(digits.length===0) return ''; return '****'+digits.slice(-4); }
-  function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h); }
-  function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h); }
-
-  function renderTableTo(containerId, gvizJson){
-    const cols = (gvizJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-    const rows = (gvizJson.table.rows||[]).map(r=> r.c || []);
-    const wrap = document.getElementById(containerId);
-    if(rows.length === 0){ wrap.innerHTML = "<div style='padding:12px;color:#666'>कोई रिकॉर्ड नहीं मिला।</div>"; return; }
-    const table = document.createElement('table');
-    const thead = document.createElement('thead'); const trh = document.createElement('tr');
-    cols.forEach(h=>{ const th=document.createElement('th'); th.innerText=h||''; trh.appendChild(th); });
-    thead.appendChild(trh); table.appendChild(thead);
-    const tbody = document.createElement('tbody');
-    rows.forEach(r=>{
-      const tr=document.createElement('tr');
-      for(let i=0;i<cols.length;i++){
-        const cell = r[i]; let v="";
-        if(cell){ if(cell.f !== undefined && String(cell.f).trim()!=='') v = String(cell.f).replace(/<[^>]*>/g,'').trim(); else if(cell.v !== undefined) v = cell.v; }
-        const header = cols[i]||'';
-        if(isMobileHeader(header)) v = maskLast4(v);
-        if(isAadharHeader(header)) v = maskLast4(v);
-        const td=document.createElement('td'); td.innerText = v; tr.appendChild(td);
-      }
-      tbody.appendChild(tr);
-    });
-    table.appendChild(tbody); wrap.innerHTML=''; wrap.appendChild(table);
-  }
-
-  async function buildStripFromNotifications(){
-    try{
-      const data = await loadSheetGviz("Notification");
-      const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-      const rows = (data.table.rows||[]).map(r=> r.c || []);
-      const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
-      const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-      const strip = document.getElementById('schoolStrip'); strip.innerHTML = "";
-      const items=[];
-      rows.forEach(cells=>{
-        const obj={};
-        for(let i=0;i<cols.length;i++){
-          const cell=cells[i]; let v="";
-          if(cell){ if(cell.v !== undefined) v = cell.v; else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim(); }
-          obj[cols[i]] = v;
-        }
-        const t = obj[textKey] || ''; const d = obj[dateKey] || '';
-        if(t || d) items.push({date:d,text:t});
-      });
-      if(items.length===0){ const span=document.createElement('div'); span.className='school-chip'; span.innerText='No notifications to show.'; strip.appendChild(span); return; }
-      function makeChip(it){ const txt=(it.date ? (it.date + ' - ') : '')+it.text; const short= txt.length>120 ? txt.slice(0,117)+'...' : txt; const span=document.createElement('div'); span.className='school-chip'; span.title=txt; span.innerText=short; return span; }
-      items.forEach(it=> strip.appendChild(makeChip(it))); items.forEach(it=> strip.appendChild(makeChip(it)));
-      // start header scroll
-      startHeaderScroll();
-      const outer = document.getElementById('schoolStripOuter'); outer.addEventListener('mouseenter', stopHeaderScroll); outer.addEventListener('mouseleave', startHeaderScroll);
-    }catch(e){
-      console.error('Strip build error', e);
-      document.getElementById('schoolStrip').innerHTML = '<div class="school-chip">Unable to load header notifications — check sheet name and sharing.</div>';
-    }
-  }
-
-  let headerRAF=null, headerPos=0;
-  const HEADER_SPEED = 0.6;
-  function startHeaderScroll(){
-    const strip = document.getElementById('schoolStrip'); if(!strip) return;
-    cancelAnimationFrame(headerRAF);
-    function step(){ headerPos -= HEADER_SPEED; const half = strip.scrollWidth/2 || 0; if(Math.abs(headerPos) >= half) headerPos = 0; strip.style.transform = `translateX(${headerPos}px)`; headerRAF = requestAnimationFrame(step); }
-    step();
-  }
-  function stopHeaderScroll(){ if(headerRAF) cancelAnimationFrame(headerRAF); headerRAF = null; }
-
-  async function loadNotifications(){
-    try{
-      const data = await loadSheetGviz("Notification");
-      const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-      const rows = (data.table.rows||[]).map(r=> r.c || []);
-      const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
-      const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
-      const wrap = document.getElementById('notifs'); wrap.innerHTML = "";
-      rows.forEach(cells=>{
-        const obj={};
-        for(let i=0;i<cols.length;i++){
-          const cell=cells[i]; let v="";
-          if(cell){ if(cell.v !== undefined) v = cell.v; else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim(); }
-          obj[cols[i]]=v;
-        }
-        const d = obj[dateKey] || ''; const t = obj[textKey] || '';
-        const node = document.createElement('div'); node.className='notify-item'; node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`;
-        wrap.appendChild(node);
-      });
-      const orig = wrap.children.length;
-      for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); }
-      startNotifScroll();
-      const outer = document.getElementById('notifyOuter'); outer.addEventListener('mouseenter', stopNotifScroll); outer.addEventListener('mouseleave', startNotifScroll);
-    }catch(e){
-      console.error('Notification load error', e);
-      document.getElementById('notifs').innerHTML = '<div style="padding:12px;color:#c33">Notification लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>';
-    }
-  }
-
-  let notifRAF=null, notifPos=0;
-  const NOTIF_SPEED = 0.45;
-  function startNotifScroll(){
-    const wrap = document.getElementById('notifs'); if(!wrap) return;
-    cancelAnimationFrame(notifRAF);
-    function step(){ notifPos -= NOTIF_SPEED; const half = wrap.scrollHeight/2 || 0; if(Math.abs(notifPos) >= half) notifPos = 0; wrap.style.transform = `translateY(${notifPos}px)`; notifRAF = requestAnimationFrame(step); }
-    step();
-  }
-  function stopNotifScroll(){ if(notifRAF) cancelAnimationFrame(notifRAF); notifRAF = null; }
-
-  async function loadFeeAndMarks(){
-    try{ const feeJson = await loadSheetGviz("Fee Student Details"); renderTableTo("feeContainer", feeJson); }catch(e){ console.error(e); document.getElementById("feeContainer").innerHTML = "<div style='padding:12px;color:#c33'>Fee Student Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>"; }
-    try{ const marksJson = await loadSheetGviz("Marksheet Details"); renderTableTo("marksContainer", marksJson); }catch(e){ console.error(e); document.getElementById("marksContainer").innerHTML = "<div style='padding:12px;color:#c33'>Marksheet Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>"; }
-  }
-
-  // Student search
-  async function searchStudent(){
-    const adm = document.getElementById("admission").value.trim();
-    if(!adm) return alert("Admission Number डालें");
-    try{
-      const data = await loadSheetGviz("Student's Details");
-      const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-      const rows = (data.table.rows||[]).map(r=> r.c || []);
-      const records = rows.map(cells=>{
-        const obj={};
-        for(let i=0;i<cols.length;i++){
-          const cell=cells[i]; let v="";
-          if(cell){ if(cell.v !== undefined) v = cell.v; else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim(); }
-          obj[cols[i]||('col'+i)] = v;
-        }
-        return obj;
-      });
-      const admKeys = ["Admission No.","Adm. No.","Admission Number","Adm No","Admission No"];
-      const rec = records.find(r => admKeys.some(k=> String((r[k]||'')).trim() === adm || String((r[k]||'')).trim() === ("0"+adm)));
-      const out = document.getElementById("result"); out.style.display='block';
-      if(!rec){ out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>"; return; }
-      const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
-      let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
-      fields.forEach(f=>{ html += `<div style="margin-bottom:8px"><strong>${f}:</strong> ${escapeHtml(rec[f]||'')}</div>`; });
-      html += '</div>';
-      out.innerHTML = html;
-    }catch(e){ console.error("Search error", e); alert("Search में समस्या — console देखें।"); }
-  }
-
-  // INIT calls after DOM ready
-  document.addEventListener('DOMContentLoaded', function(){
-    document.getElementById("year").innerText = new Date().getFullYear();
-    buildStripFromNotifications();
-    loadNotifications();
-    loadFeeAndMarks();
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  cols.forEach(h=>{
+    const th = document.createElement('th');
+    th.innerText = h || '';
+    trh.appendChild(th);
   });
-  </script>
+  thead.appendChild(trh);
+  table.appendChild(thead);
 
-  <!-- Admission ticker JS (responsive, gapless, mobile-safe) -->
-  <script>
-  (function(){
-    const NEWS = [
-      'ADMISSION OPEN – APRIL 2025 · Nursery to Class 8 · Limited Seats — Apply Now',
-      'Registration: Mon–Sat 9:00 AM – 2:00 PM · Documents: Birth Certificate, Aadhar (if any)',
-      'Special Scholarship for Meritorious Students — Contact Principal Office',
-      'School Timings: 9:00 AM to 3:00 PM · Transport Available · Call +91 6389259200'
-    ];
-    const el = document.getElementById('admissionNewsText'); if(!el) return;
-    let idx = 0;
-    const gap = ' \u00A0 \u00A0 ';
+  const tbody = document.createElement('tbody');
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    for(let i=0;i<cols.length;i++){
+      const cell = r[i];
+      let v = "";
+      if(cell){
+        if(cell.f !== undefined && String(cell.f).trim()!=='') v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        else if(cell.v !== undefined) v = cell.v;
+      }
+      const header = cols[i]||'';
+      if(isMobileHeader(header)) v = maskLast4(v);
+      if(isAadharHeader(header)) v = maskLast4(v);
+      const td = document.createElement('td');
+      td.innerText = v;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.innerHTML = "";
+  wrap.appendChild(table);
+}
 
-    function measureSingleWidth(text){
-      const span = document.createElement('span');
-      span.style.position='absolute'; span.style.visibility='hidden'; span.style.whiteSpace='nowrap';
-      span.style.fontWeight = getComputedStyle(el).fontWeight;
-      span.style.fontSize = getComputedStyle(el).fontSize;
-      span.textContent = text;
-      el.parentElement.appendChild(span);
-      const w = span.offsetWidth; span.remove(); return w || 200;
+/* TABS */
+function showTab(name){
+  document.getElementById('feeContainer').style.display = name==='fee' ? 'block' : 'none';
+  document.getElementById('marksContainer').style.display = name==='marks' ? 'block' : 'none';
+  document.getElementById('tabFee').classList.toggle('active', name==='fee');
+  document.getElementById('tabMarks').classList.toggle('active', name==='marks');
+}
+
+/* SEARCH */
+async function searchStudent(){
+  const adm = document.getElementById("admission").value.trim();
+  if(!adm) return alert("Admission Number डालें");
+  try{
+    const data = await loadSheetGviz("Student's Details");
+    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (data.table.rows||[]).map(r=> r.c || []);
+    const records = rows.map(cells=>{
+      const obj = {};
+      for(let i=0;i<cols.length;i++){
+        const cell = cells[i];
+        let v = "";
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i]||('col'+i)] = v;
+      }
+      return obj;
+    });
+
+    const admKeys = ["Admission No.","Adm. No.","Admission Number","Adm No","Admission No"];
+    const rec = records.find(r => admKeys.some(k=> String((r[k]||'')).trim() === adm || String((r[k]||'')).trim() === ("0"+adm)));
+    const out = document.getElementById("result");
+    out.style.display = 'block';
+    if(!rec){
+      out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
+      return;
     }
 
-    function startMessage(i){
-      const msg = NEWS[i];
-      const singleWidth = measureSingleWidth(msg);
-      const containerWidth = el.parentElement.clientWidth || window.innerWidth || 360;
-      const repeats = Math.max(2, Math.ceil((containerWidth + singleWidth) / singleWidth) + 1);
-      el.textContent = new Array(repeats).fill(msg).join(gap);
-      void el.offsetWidth;
-      const distance = singleWidth;
-      const baseMs = 11000;
-      const pxFactor = 9;
-      const duration = Math.max(7000, Math.round(baseMs + (distance * pxFactor)));
-      el.style.transition='none'; el.style.transform = `translateX(${containerWidth}px)`;
-      requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ el.style.transition = `transform ${duration}ms linear`; el.style.transform = `translateX(-${distance}px)`; }); });
-      clearTimeout(el._nextTimeout);
-      el._nextTimeout = setTimeout(()=>{ idx = (i + 1) % NEWS.length; setTimeout(()=> startMessage(idx), 700); }, duration + 200);
+    const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
+    let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
+    fields.forEach(f=>{
+      html += `<div style="margin-bottom:8px"><strong>${f}:</strong> ${escapeHtml(rec[f]||'')}</div>`;
+    });
+    html += '</div>';
+    out.innerHTML = html;
+
+  }catch(e){
+    console.error("Search error", e);
+    alert("Search में समस्या — console देखें।");
+  }
+}
+
+/* NOTIFICATIONS vertical scroll */
+let notifRAF = null;
+let notifPos = 0;
+function startNotifScroll(){
+  const wrap = document.getElementById('notifs');
+  if(!wrap) return;
+  cancelAnimationFrame(notifRAF);
+  function step(){
+    notifPos -= NOTIF_SPEED;
+    const half = wrap.scrollHeight/2 || 0;
+    if(Math.abs(notifPos) >= half) notifPos = 0;
+    wrap.style.transform = `translateY(${notifPos}px)`;
+    notifRAF = requestAnimationFrame(step);
+  }
+  step();
+}
+function stopNotifScroll(){ if(notifRAF) cancelAnimationFrame(notifRAF); notifRAF = null; }
+
+/* HEADER horizontal scroll */
+let headerRAF = null;
+let headerPos = 0;
+function startHeaderScroll(){
+  const strip = document.getElementById('schoolStrip');
+  if(!strip) return;
+  cancelAnimationFrame(headerRAF);
+  function step(){
+    headerPos -= HEADER_SPEED;
+    const half = strip.scrollWidth/2 || 0;
+    if(Math.abs(headerPos) >= half) headerPos = 0;
+    strip.style.transform = `translateX(${headerPos}px)`;
+    headerRAF = requestAnimationFrame(step);
+  }
+  step();
+}
+function stopHeaderScroll(){ if(headerRAF) cancelAnimationFrame(headerRAF); headerRAF = null; }
+
+/* Build header strip from Notification sheet */
+async function buildStripFromNotifications(){
+  try{
+    const data = await loadSheetGviz("Notification");
+    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (data.table.rows||[]).map(r=> r.c || []);
+    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
+    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
+    const strip = document.getElementById('schoolStrip');
+    strip.innerHTML = "";
+    const items = [];
+    rows.forEach(cells=>{
+      const obj = {};
+      for(let i=0;i<cols.length;i++){
+        const cell = cells[i];
+        let v = "";
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i]] = v;
+      }
+      const t = obj[textKey] || '';
+      const d = obj[dateKey] || '';
+      if(t || d) items.push({date: d, text: t});
+    });
+    if(items.length === 0){
+      const span = document.createElement('div'); span.className='school-chip'; span.innerText = 'No notifications to show.'; strip.appendChild(span); return;
     }
-
-    function pauseTicker(){
-      const style = window.getComputedStyle(el); const matrix = style.transform || style.webkitTransform || ''; let tx = 0;
-      if(matrix && matrix !== 'none'){ const vals = matrix.match(/matrix\\(([^)]+)\\)/); if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]) || 0; } }
-      el.style.transition='none'; el.style.transform = `translateX(${tx}px)`; clearTimeout(el._nextTimeout);
+    function makeChip(it){
+      const txt = (it.date ? (it.date + ' - ') : '') + it.text;
+      const short = txt.length > 120 ? txt.slice(0,117)+'...' : txt;
+      const span=document.createElement('div');
+      span.className='school-chip';
+      span.title = txt;
+      span.innerText = short;
+      return span;
     }
-    function resumeTicker(){ startMessage(idx); }
+    items.forEach(it=> strip.appendChild(makeChip(it)));
+    items.forEach(it=> strip.appendChild(makeChip(it)));
+    startHeaderScroll();
+    const outer = document.getElementById('schoolStripOuter');
+    outer.addEventListener('mouseenter', stopHeaderScroll);
+    outer.addEventListener('mouseleave', startHeaderScroll);
+  }catch(e){
+    console.error('Strip build error', e);
+    const strip = document.getElementById('schoolStrip');
+    strip.innerHTML = '<div class="school-chip">Unable to load header notifications — check sheet name and sharing.</div>';
+  }
+}
 
-    const wrap = document.getElementById('admissionTickerWrap');
-    wrap.addEventListener('mouseenter', pauseTicker); wrap.addEventListener('focusin', pauseTicker);
-    wrap.addEventListener('mouseleave', resumeTicker); wrap.addEventListener('focusout', resumeTicker);
+/* load notifications vertical */
+async function loadNotifications(){
+  try{
+    const data = await loadSheetGviz("Notification");
+    const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+    const rows = (data.table.rows||[]).map(r=> r.c || []);
+    const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || 'Notification';
+    const dateKey = cols.find(k=>/date|day|time/i.test(k)) || cols[0] || 'Date';
+    const wrap = document.getElementById('notifs');
+    wrap.innerHTML = "";
+    rows.forEach(cells=>{
+      const obj = {};
+      for(let i=0;i<cols.length;i++){
+        const cell = cells[i];
+        let v = "";
+        if(cell){
+          if(cell.v !== undefined) v = cell.v;
+          else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+        }
+        obj[cols[i]] = v;
+      }
+      const d = obj[dateKey] || '';
+      const t = obj[textKey] || '';
+      const node = document.createElement('div');
+      node.className = 'notify-item';
+      node.innerHTML = `<div class="date">${escapeHtml(d)}</div><div class="text">${escapeHtml(t)}</div>`;
+      wrap.appendChild(node);
+    });
+    const orig = wrap.children.length;
+    for(let i=0;i<orig;i++){ wrap.appendChild(wrap.children[i].cloneNode(true)); }
+    startNotifScroll();
+    const outer = document.getElementById('notifyOuter');
+    outer.addEventListener('mouseenter', stopNotifScroll);
+    outer.addEventListener('mouseleave', startNotifScroll);
+  }catch(e){
+    console.error('Notification load error', e);
+    document.getElementById('notifs').innerHTML = '<div style="padding:12px;color:#c33">Notification लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>';
+  }
+}
 
-    let resizeDeb=null; window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb=setTimeout(()=> startMessage(idx), 250); });
-    window.addEventListener('orientationchange', ()=>{ setTimeout(()=> startMessage(idx), 300); });
+/* load fee and marks */
+async function loadFeeAndMarks(){
+  try{
+    const feeJson = await loadSheetGviz("Fee Student Details");
+    renderTableTo("feeContainer", feeJson);
+  }catch(e){
+    console.error(e);
+    document.getElementById("feeContainer").innerHTML = "<div style='padding:12px;color:#c33'>Fee Student Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
+  }
+  try{
+    const marksJson = await loadSheetGviz("Marksheet Details");
+    renderTableTo("marksContainer", marksJson);
+  }catch(e){
+    console.error(e);
+    document.getElementById("marksContainer").innerHTML = "<div style='padding:12px;color:#c33'>Marksheet Details लोड नहीं हुए — sheet नाम और sharing चेक करें।</div>";
+  }
+}
 
-    // start
-    startMessage(0);
+/* INIT */
+document.getElementById("year").innerText = new Date().getFullYear();
+showTab('fee');
+buildStripFromNotifications();
+loadNotifications();
+loadFeeAndMarks();
+</script>
 
-    // API
-    window.AdmissionTicker = {
-      setNews(array){ if(Array.isArray(array) && array.length){ NEWS.length=0; NEWS.push(...array); idx=0; startMessage(0); } },
-      pause(){ pauseTicker(); },
-      resume(){ resumeTicker(); }
-    };
-  })();
-  </script>
+<!-- ====== Admission ticker JS (placed at end to ensure DOM exists) ====== -->
+<script>
+(function(){
+  const NEWS = [
+    'ADMISSION OPEN – APRIL 2025 · Nursery to Class 10 · Limited Seats — Apply Now',
+    'Registration: Mon–Sat 8:30 AM – 3:00 PM · Documents: Birth Certificate, Aadhar (if any)',
+    'Special Scholarship for Meritorious Students — Contact Principal Office',
+    'School Timings: 8:30 AM to 3:00 PM · Transport Available · Call +91 6389259200'
+  ];
+  const el = document.getElementById('admissionNewsText');
+  if(!el) return;
+  let idx = 0;
 
+  function startMessage(i){
+    const msg = NEWS[i];
+    el.textContent = msg + ' \u00A0 \u00A0 \u00A0 ' + msg; // repeat for smooth scroll
+    void el.offsetWidth;
+    const containerWidth = el.parentElement.clientWidth || 600;
+    const textWidth = Math.max(el.scrollWidth / 2, 200);
+    const baseMs = 14000;
+    const pxFactor = 9;
+    const duration = Math.max(9000, Math.round(baseMs + (textWidth * pxFactor)));
+
+    el.style.transition = 'none';
+    el.style.transform = `translateX(${containerWidth}px)`;
+
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        el.style.transition = `transform ${duration}ms linear`;
+        el.style.transform = `translateX(-${textWidth}px)`;
+      });
+    });
+
+    clearTimeout(el._nextTimeout);
+    el._nextTimeout = setTimeout(()=>{
+      idx = (i + 1) % NEWS.length;
+      setTimeout(()=> startMessage(idx), 700);
+    }, duration + 200);
+  }
+
+  // pause/resume on hover or focus
+  const wrap = document.getElementById('admissionTickerWrap');
+  function pauseTicker(){
+    const style = window.getComputedStyle(el);
+    const matrix = style.transform || style.webkitTransform || '';
+    let tx = 0;
+    if(matrix && matrix !== 'none'){
+      try{
+        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
+        if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
+      }catch(e){}
+    }
+    el.style.transition = 'none';
+    el.style.transform = `translateX(${tx}px)`;
+    clearTimeout(el._nextTimeout);
+  }
+  function resumeTicker(){ startMessage(idx); }
+
+  wrap.addEventListener('mouseenter', pauseTicker);
+  wrap.addEventListener('focusin', pauseTicker);
+  wrap.addEventListener('mouseleave', resumeTicker);
+  wrap.addEventListener('focusout', resumeTicker);
+
+  // start
+  startMessage(0);
+
+  // expose API if needed
+  window.AdmissionTicker = {
+    setNews(array){ if(Array.isArray(array) && array.length){ NEWS.length=0; NEWS.push(...array); idx=0; startMessage(0); } },
+    pause(){ pauseTicker(); },
+    resume(){ resumeTicker(); }
+  };
+})();
+</script>
 </body>
 </html>
