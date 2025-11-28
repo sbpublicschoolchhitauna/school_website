@@ -142,27 +142,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  <!-- ====== TOPPERS / CONGRATULATIONS SECTION (ADDED) ====== -->
-  <style>
-    .topper-card{max-width:1100px;margin:14px auto;padding:14px;border-radius:12px;background:linear-gradient(90deg,#e8f8ff,#dff6ff);box-shadow:0 10px 24px rgba(3,19,43,0.06);display:flex;gap:12px;align-items:center;justify-content:space-between}
-    .topper-left{flex:1}
-    .topper-title{font-size:18px;font-weight:800;color:#02324a;margin:0 0 6px}
-    .topper-list{display:flex;gap:10px;flex-wrap:wrap}
-    .topper-item{background:#fff;padding:10px 12px;border-radius:10px;box-shadow:0 6px 18px rgba(1,25,40,0.04);min-width:220px}
-    .topper-name{font-weight:800;color:#024;}
-    .congrats-badge{background:linear-gradient(90deg,#ffd36b,#ff9b6b);padding:8px 12px;border-radius:999px;font-weight:900;color:#2b1600}
-    @media(max-width:900px){ .topper-card{flex-direction:column;align-items:stretch} .topper-item{min-width:unset;width:100%} }
-  </style>
-
-  <div id="topperSection" class="topper-card" aria-live="polite" style="display:none">
-    <div class="topper-left">
-      <div class="topper-title">🎉 Congratulations — Toppers</div>
-      <div id="topperList" class="topper-list"></div>
-    </div>
-    <div><div class="congrats-badge">CONGRATULATIONS!</div></div>
-  </div>
-  <!-- ====== END TOPPERS ====== -->
-
   <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
   <!doctype html>
   <html lang="hi">
@@ -704,7 +683,7 @@ loadFeeAndMarks();
     let tx = 0;
     if(matrix && matrix !== 'none'){
       try{
-        const vals = matrix.match(/matrix\(([^)]+)\)/);
+        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
         if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
       }catch(e){}
     }
@@ -728,138 +707,6 @@ loadFeeAndMarks();
     pause(){ pauseTicker(); },
     resume(){ resumeTicker(); }
   };
-})();
-</script>
-
-<!-- ====== TOPPERS DETECTION SCRIPT (uses your provided public Sheet) ====== -->
-<script>
-/*
-  This script will fetch your Google Sheet (public/viewable) and auto-detect toppers per class.
-  It tries multiple likely sheet names and flexible column matching.
-*/
-(async function(){
-  // USE the sheet you provided earlier (public)
-  const SHEET_ID = '1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0';
-
-  // candidate sheet names to try (you can add the exact sheet name if you know)
-  const candidateSheets = [
-    'Marksheet Details','Marksheet','Marksheet_Database','Marksheet_Published','Marksheet Database','Marksheet_Database(1)','Marks','Marksheet Published'
-  ];
-
-  function matchGvizFetch(sheet){
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheet)}&tqx=out:json`;
-    return fetch(url).then(r=>{
-      if(!r.ok) throw new Error('not ok ' + r.status);
-      return r.text();
-    }).then(txt=>{
-      const jsonText = txt.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-      return JSON.parse(jsonText);
-    }).catch(()=> null);
-  }
-
-  // column match regexes
-  const classRegex = /^(class|std|stand|standard|cls|class\s*\/\s*section|class name)/i;
-  const totalRegex = /^(total|marks|grand total|aggregate|percentage|percent|percent\.)/i;
-  const nameRegex = /(student|name|student name|candidate)/i;
-
-  let g = null;
-  let usedSheet = null;
-  for(const s of candidateSheets){
-    g = await matchGvizFetch(s);
-    if(g && g.table && g.table.cols && g.table.rows && g.table.rows.length) { usedSheet = s; break; }
-  }
-  // as fallback, try first sheet index by accessing without sheet param (works rarely)
-  if(!g){
-    try{
-      const url0 = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-      const t0 = await fetch(url0).then(r=> r.text());
-      const jsonText0 = t0.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-      g = JSON.parse(jsonText0);
-      usedSheet = '(first sheet)';
-    }catch(e){}
-  }
-
-  if(!g){
-    console.warn('Unable to fetch Marksheet from provided sheet ID. Ensure sheet is shared as "Anyone with link — Viewer" and sheet contains data.');
-    return;
-  }
-
-  const cols = (g.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-  const rows = (g.table.rows||[]).map(r=> r.c || []);
-  const records = rows.map(cells=>{
-    const obj = {};
-    for(let i=0;i<cols.length;i++){
-      const cell = cells[i];
-      let v = '';
-      if(cell){
-        if(cell.v !== undefined) v = cell.v;
-        else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-      }
-      obj[cols[i]||('col'+i)] = v;
-    }
-    return obj;
-  });
-
-  // find keys
-  let classKey = cols.find(h=> classRegex.test(h));
-  let totalKey = cols.find(h=> totalRegex.test(h));
-  let nameKey = cols.find(h=> nameRegex.test(h));
-
-  // fallback heuristics
-  if(!classKey) classKey = cols.find(h=> /class\s*no|section|std/i.test(h)) || cols[0];
-  if(!totalKey) totalKey = cols[cols.length-1] || cols.find((_,i)=> i>=cols.length-2 && i<cols.length);
-  if(!nameKey) nameKey = cols.find(h=> /name/i.test(h)) || cols[1] || cols[0];
-
-  // group by class and determine topper (by numeric total/percentage)
-  const byClass = {};
-  records.forEach(r=>{
-    const cls = String(r[classKey]||'').trim() || 'Unknown';
-    const tRaw = String(r[totalKey]||'').replace(/[^0-9.\-]/g,'').trim();
-    const t = parseFloat(tRaw);
-    if(!byClass[cls]) byClass[cls] = [];
-    byClass[cls].push({record: r, score: isNaN(t)? -Infinity : t});
-  });
-
-  const toppers = [];
-  Object.keys(byClass).forEach(cls=>{
-    const arr = byClass[cls].filter(x=> x.score !== -Infinity);
-    if(arr.length === 0){
-      // if no numeric scores, pick first non-empty name
-      const any = byClass[cls][0];
-      if(any){
-        const nm = any.record[nameKey] || '—';
-        toppers.push({class: cls, name: nm, score: 'N/A'});
-      }
-      return;
-    }
-    arr.sort((a,b)=> b.score - a.score);
-    const top = arr[0];
-    const nm = top.record[nameKey] || '—';
-    toppers.push({class: cls, name: nm, score: top.score});
-  });
-
-  // sort classes naturally
-  toppers.sort((a,b)=> a.class.localeCompare(b.class, undefined, {numeric:true}));
-
-  // render into DOM
-  if(toppers.length){
-    const sec = document.getElementById('topperSection');
-    const list = document.getElementById('topperList');
-    list.innerHTML = '';
-    toppers.forEach(t=>{
-      const el = document.createElement('div');
-      el.className = 'topper-item';
-      el.innerHTML = `<div style="font-size:13px;color:#0b3142"><strong>Class</strong> — ${escapeHtml(t.class)}</div>
-                      <div style="margin-top:6px"><div class="topper-name">${escapeHtml(String(t.name))}</div>
-                      <div style="font-size:13px;color:#014b5a">Score: ${isFinite(t.score)?t.score:'N/A'}</div></div>`;
-      list.appendChild(el);
-    });
-    sec.style.display = 'flex';
-  }
-
-  // helper
-  function escapeHtml(s){ if(s===null||s===undefined) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
 })();
 </script>
 </body>
