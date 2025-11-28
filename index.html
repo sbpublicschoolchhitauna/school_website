@@ -142,11 +142,175 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  <!-- ====== QUICK PORTALS / SEARCH / RECORDS / NOTIFICATIONS ====== -->
-  <div class="container">
+  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
+  <!doctype html>
+  <html lang="hi">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
+  <style>
+  :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
+  .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
+  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
+  .slide.active{opacity:1;pointer-events:auto}
+  .slide img{width:100%;height:auto;display:block;object-fit:cover}
+  /* controls */
+  .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
+  .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
+  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
+  .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
+  .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+  @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
+  </style>
+  <style id="assistant-button-fix">
+  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+  </style>
+  </head>
+  <body>
+  <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
+    <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
+    <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
+    <div class="controls">
+      <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
+      <button class="btn slider-control" id="next" aria-label="Next">›</button>
+    </div>
+    <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
+  </div>
+
+  <script>
+  // IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
+  async function loadImagesDynamic(){
+    try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
+    try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
+    return [
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
+      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
+      'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
+      'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
+      'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
+      'slider_images/logo.jpg',
+    ];
+  }
+
+  let IMAGES = []; // will be populated shortly
+
+  (async function(){
+    IMAGES = await loadImagesDynamic();
+    if(typeof createSlides === 'function') createSlides();
+    if(typeof start === 'function') start();
+  })();
+
+  const slider = document.getElementById('slider');
+  const sliderWrap = document.getElementById('sliderWrap');
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const playToggle = document.getElementById('playToggle');
+
+  let slides = [];
+  let index = 0;
+  let timer = null;
+  let interval = 4000; // autoplay interval
+
+  function createSlides(){
+    IMAGES.forEach((src,i)=>{
+      const s = document.createElement('div');
+      s.className = 'slide';
+      s.setAttribute('role','group');
+      s.setAttribute('aria-roledescription','slide');
+      s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `School photo ${i+1}`;
+      img.addEventListener('load', ()=>{
+        if(i===index) adjustHeightTo(img);
+      });
+      s.appendChild(img);
+      slider.appendChild(s);
+      slides.push(s);
+
+      const d = document.createElement('button');
+      d.className = 'dot';
+      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+      d.addEventListener('click', ()=>{ pause(); goTo(i); });
+      dotsWrap.appendChild(d);
+    });
+    if(slides[0]) slides[0].classList.add('active');
+    updateDots();
+    setTimeout(()=>{ const img = slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
+  }
+
+  function adjustHeightTo(img){
+    const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
+    if(!img.naturalWidth) return;
+    const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
+    const maxH = Math.round(window.innerHeight * 0.65);
+    const finalH = Math.min(h, maxH);
+    slider.style.height = finalH + 'px';
+  }
+
+  function goTo(i){
+    index = (i + slides.length) % slides.length;
+    slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
+    updateDots();
+    const img = slides[index].querySelector('img');
+    if(img && img.complete) adjustHeightTo(img);
+    else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
+  }
+
+  function nextSlide(){ goTo(index+1); }
+  function prevSlide(){ goTo(index-1); }
+
+  function updateDots(){
+    const dots = dotsWrap.children;
+    for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
+  }
+
+  function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent = 'Pause'; playToggle.setAttribute('aria-pressed','false'); }
+  function pause(){ if(timer) clearInterval(timer); timer = null; playToggle.textContent = 'Play'; playToggle.setAttribute('aria-pressed','true'); }
+
+  nextBtn.addEventListener('click', ()=>{ pause(); nextSlide(); });
+  prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
+  playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
+
+  document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
+
+  let startX=0;
+  slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
+  slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
+
+  let resizeDeb;
+  window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
+
+  createSlides();
+  start();
+  </script>
+  </body>
+  </html>
+  <!-- END: Inserted Photo Slider -->
+
+<div class="container">
     <div class="grid">
       <div>
 
+        <!-- QUICK PORTALS moved to TOP -->
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
@@ -155,6 +319,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
           </div>
         </div>
 
+      <div>
         <div class="card">
           <h2>Student Details Lookup</h2>
           <div class="small">Admission Number डालकर Search करें</div>
@@ -175,7 +340,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
           <div id="feeContainer" class="table-wrap" style="display:block">लोड हो रहा है...</div>
           <div id="marksContainer" class="table-wrap" style="display:none;margin-top:10px">लोड हो रहा है...</div>
         </div>
-
       </div>
 
       <div>
@@ -185,222 +349,23 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
             <div id="notifs" class="notify-list"></div>
           </div>
         </div>
-      </div>
 
+        
+        </div>
+      </div>
     </div>
 
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
 
-  <!-- ====== SLIDER (kept as before) ====== -->
-  <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
-    <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
-    <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
-    <div class="controls">
-      <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
-      <button class="btn slider-control" id="next" aria-label="Next">›</button>
-    </div>
-    <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
-  </div>
-
-<!-- ====== BIGGER TOPPERS 3D AUTO-UPDATE POPUP (FINAL) ====== -->
-<style>
-/* Larger 3D card popup */
-.topper-3d-wrap{
-  position:fixed;
-  right:28px;
-  bottom:28px;
-  width:460px;
-  max-width:calc(100% - 32px);
-  z-index:14000;
-  perspective:1400px;
-  pointer-events:auto;
-}
-.topper-3d {
-  transform-style:preserve-3d;
-  background:linear-gradient(180deg, rgba(255,255,255,0.99), rgba(246,249,255,0.99));
-  border-radius:14px;
-  padding:16px 18px;
-  box-shadow: 0 36px 80px rgba(6,20,40,0.22);
-  border:1px solid rgba(2,18,40,0.06);
-  will-change: transform, box-shadow;
-  transition: transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms;
-  transform-origin:center;
-  display:flex;
-  gap:14px;
-  align-items:flex-start;
-}
-.topper-3d .left{
-  width:96px;
-  flex:0 0 96px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.topper-3d .photo{
-  width:88px;height:88px;border-radius:12px;background:linear-gradient(180deg,#eef6ff,#ffffff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b5fa8;border:1px solid rgba(11,95,168,0.06);overflow:hidden;
-  box-shadow: 0 12px 30px rgba(6,20,40,0.08);
-}
-.topper-3d .photo img{width:100%;height:100%;object-fit:cover;display:block}
-
-/* right content bigger */
-.topper-3d .right{flex:1;min-width:0}
-.topper-3d .head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.topper-3d .title{font-weight:900;color:#032a3a;font-size:18px;line-height:1.05}
-.topper-3d .badge{background:linear-gradient(90deg,#ffd36b,#ff9b6b);padding:8px 12px;border-radius:999px;font-weight:900;color:#2b1600;font-size:13px}
-.topper-3d .body{margin-top:10px}
-.topper-3d .row{display:flex;justify-content:space-between;gap:8px;margin-top:8px;align-items:center}
-.topper-3d .label{color:#556b73;font-size:13px;min-width:110px}
-.topper-3d .value{font-weight:800;color:#042e38;font-size:15px;text-align:right;word-break:break-word}
-.topper-3d .meta{margin-top:10px;font-size:13px;color:#586f78;display:flex;justify-content:space-between;gap:8px;align-items:center}
-.topper-3d .meta .small{font-size:12px;color:#6b7a83}
-
-/* floating depth animation stronger */
-.topper-3d:hover{ transform: translateY(-10px) rotateX(6deg) rotateY(3deg); box-shadow: 0 42px 90px rgba(6,20,40,0.28); }
-
-/* close button (bigger) */
-.topper-close{position:absolute;left:12px;top:12px;border:0;background:transparent;font-weight:800;color:#444;cursor:pointer;font-size:16px}
-
-/* responsive */
-@media(max-width:600px){
-  .topper-3d-wrap{left:12px; right:12px; bottom:18px; width:auto}
-  .topper-3d{flex-direction:row; padding:12px}
-  .topper-3d .label{min-width:90px;font-size:12px}
-  .topper-3d .value{font-size:14px}
-  .topper-3d .photo{width:72px;height:72px}
-}
-</style>
-
-<div id="topper3dWrap" class="topper-3d-wrap" style="display:none" aria-live="polite" role="status">
-  <div class="topper-3d" id="topper3dCard" tabindex="0">
-    <button id="topper3dClose" class="topper-close" aria-label="Close">✕</button>
-
-    <div class="left">
-      <div class="photo" id="t3_photo">Photo</div>
-    </div>
-
-    <div class="right">
-      <div class="head">
-        <div class="title" id="t3_title">🎉 Topper — Class</div>
-        <div class="badge" id="t3_badge">CONGRATS</div>
-      </div>
-
-      <div class="body" id="t3_body">
-        <div class="row"><div class="label">Name</div><div class="value" id="t3_name">—</div></div>
-        <div class="row"><div class="label">Class</div><div class="value" id="t3_class">—</div></div>
-        <div class="row"><div class="label">Father</div><div class="value" id="t3_father">—</div></div>
-        <div class="row"><div class="label">Mother</div><div class="value" id="t3_mother">—</div></div>
-        <div class="row"><div class="label">DOB</div><div class="value" id="t3_dob">—</div></div>
-        <div class="row"><div class="label">Admission No</div><div class="value" id="t3_adm">—</div></div>
-        <div class="row"><div class="label">Score</div><div class="value" id="t3_score">—</div></div>
-
-        <div class="meta">
-          <div class="small">From: <strong id="t3_sheet">—</strong></div>
-          <div class="small">Auto-refresh: <strong id="t3_interval">30s</strong></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ====== END TOPPERS 3D ====== -->
-
 <script>
-/* ========== Generic helpers and core page scripts ========== */
-
-/* small helper */
-function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-/* Slider images (same fallback list) */
-async function loadImagesDynamic(){
-  try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
-  try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
-  return [
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
-    'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
-    'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
-    'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
-    'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
-    'slider_images/logo.jpg',
-  ];
-}
-
-let IMAGES = [];
-let slides = [];
-let index = 0;
-let sliderTimer = null;
-let sliderInterval = 4000;
-
-async function initSlider(){
-  IMAGES = await loadImagesDynamic();
-  const slider = document.getElementById('slider');
-  const dotsWrap = document.getElementById('dots');
-  IMAGES.forEach((src,i)=>{
-    const s = document.createElement('div');
-    s.className = 'slide';
-    s.style.position = 'absolute';
-    s.style.inset = '0';
-    s.style.opacity = '0';
-    s.style.transition = 'opacity .8s ease';
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = `School photo ${i+1}`;
-    img.style.width = '100%';
-    img.style.height = 'auto';
-    img.style.objectFit = 'cover';
-    s.appendChild(img);
-    slider.appendChild(s);
-    slides.push(s);
-    const d = document.createElement('button');
-    d.className = 'dot';
-    d.setAttribute('aria-label', 'Go to slide ' + (i+1));
-    d.addEventListener('click', ()=>{ pauseSlider(); goToSlide(i); });
-    dotsWrap.appendChild(d);
-  });
-  if(slides[0]) slides[0].style.opacity = '1';
-  updateDots();
-  startSlider();
-}
-function adjustHeightTo(img){
-  const slider = document.getElementById('slider');
-  const sliderWrap = document.getElementById('sliderWrap');
-  const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
-  if(!img.naturalWidth) return;
-  const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
-  const maxH = Math.round(window.innerHeight * 0.65);
-  const finalH = Math.min(h, maxH);
-  slider.style.height = finalH + 'px';
-}
-function goToSlide(i){
-  index = (i + slides.length) % slides.length;
-  slides.forEach((s, idx)=> s.style.opacity = (idx===index)? '1' : '0');
-  updateDots();
-}
-function nextSlide(){ goToSlide(index+1); }
-function prevSlide(){ goToSlide(index-1); }
-function updateDots(){
-  const dots = document.getElementById('dots').children;
-  for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
-}
-function startSlider(){ if(sliderTimer) clearInterval(sliderTimer); sliderTimer = setInterval(nextSlide, sliderInterval); document.getElementById('playToggle').textContent='Pause'; }
-function pauseSlider(){ if(sliderTimer) clearInterval(sliderTimer); sliderTimer=null; document.getElementById('playToggle').textContent='Play'; }
-document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pauseSlider(); nextSlide(); } else if(e.key==='ArrowLeft'){ pauseSlider(); prevSlide(); } });
-document.getElementById('prev').addEventListener('click', ()=>{ pauseSlider(); prevSlide(); });
-document.getElementById('next').addEventListener('click', ()=>{ pauseSlider(); nextSlide(); });
-document.getElementById('playToggle').addEventListener('click', ()=>{ if(sliderTimer) pauseSlider(); else startSlider(); });
-window.addEventListener('resize', ()=>{ setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 140); });
-
-initSlider();
-
-/* ====== Google Sheet helpers used by many features ====== */
-// NOTE: the main "table data" features (Fee/Marksheet/Notifications/Search) use THIS SHEET_ID:
+/* CONFIG */
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+const NOTIF_SPEED = 0.45;
+const HEADER_SPEED = 0.6;
 
+/* HELPERS */
+function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 async function loadSheetGviz(sheetName){
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
   const res = await fetch(url);
@@ -409,7 +374,6 @@ async function loadSheetGviz(sheetName){
   const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
   return JSON.parse(jsonText);
 }
-
 function maskLast4(val){
   if(val===null||val===undefined) return "";
   const s = String(val).trim();
@@ -421,7 +385,7 @@ function maskLast4(val){
 function isMobileHeader(h){ return /mobile|phone|contact|mob/i.test(h); }
 function isAadharHeader(h){ return /aadhar|aadhaar|uid/i.test(h); }
 
-/* Render table */
+/* TABLE RENDER */
 function renderTableTo(containerId, gvizJson){
   const cols = (gvizJson.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
   const rows = (gvizJson.table.rows||[]).map(r=> r.c || []);
@@ -465,7 +429,7 @@ function renderTableTo(containerId, gvizJson){
   wrap.appendChild(table);
 }
 
-/* Tabs */
+/* TABS */
 function showTab(name){
   document.getElementById('feeContainer').style.display = name==='fee' ? 'block' : 'none';
   document.getElementById('marksContainer').style.display = name==='marks' ? 'block' : 'none';
@@ -473,7 +437,7 @@ function showTab(name){
   document.getElementById('tabMarks').classList.toggle('active', name==='marks');
 }
 
-/* Search student */
+/* SEARCH */
 async function searchStudent(){
   const adm = document.getElementById("admission").value.trim();
   if(!adm) return alert("Admission Number डालें");
@@ -518,7 +482,7 @@ async function searchStudent(){
   }
 }
 
-/* Notifications vertical scroll */
+/* NOTIFICATIONS vertical scroll */
 let notifRAF = null;
 let notifPos = 0;
 function startNotifScroll(){
@@ -526,7 +490,7 @@ function startNotifScroll(){
   if(!wrap) return;
   cancelAnimationFrame(notifRAF);
   function step(){
-    notifPos -= 0.45;
+    notifPos -= NOTIF_SPEED;
     const half = wrap.scrollHeight/2 || 0;
     if(Math.abs(notifPos) >= half) notifPos = 0;
     wrap.style.transform = `translateY(${notifPos}px)`;
@@ -536,7 +500,7 @@ function startNotifScroll(){
 }
 function stopNotifScroll(){ if(notifRAF) cancelAnimationFrame(notifRAF); notifRAF = null; }
 
-/* Header horizontal scroll */
+/* HEADER horizontal scroll */
 let headerRAF = null;
 let headerPos = 0;
 function startHeaderScroll(){
@@ -544,7 +508,7 @@ function startHeaderScroll(){
   if(!strip) return;
   cancelAnimationFrame(headerRAF);
   function step(){
-    headerPos -= 0.6;
+    headerPos -= HEADER_SPEED;
     const half = strip.scrollWidth/2 || 0;
     if(Math.abs(headerPos) >= half) headerPos = 0;
     strip.style.transform = `translateX(${headerPos}px)`;
@@ -669,8 +633,10 @@ showTab('fee');
 buildStripFromNotifications();
 loadNotifications();
 loadFeeAndMarks();
+</script>
 
-/* Admission ticker (keeps same messages, can be changed) */
+<!-- ====== Admission ticker JS (placed at end to ensure DOM exists) ====== -->
+<script>
 (function(){
   const NEWS = [
     'ADMISSION OPEN – APRIL 2025 · Nursery to Class 10 · Limited Seats — Apply Now',
@@ -684,7 +650,7 @@ loadFeeAndMarks();
 
   function startMessage(i){
     const msg = NEWS[i];
-    el.textContent = msg + ' \u00A0 \u00A0 \u00A0 ' + msg;
+    el.textContent = msg + ' \u00A0 \u00A0 \u00A0 ' + msg; // repeat for smooth scroll
     void el.offsetWidth;
     const containerWidth = el.parentElement.clientWidth || 600;
     const textWidth = Math.max(el.scrollWidth / 2, 200);
@@ -709,6 +675,7 @@ loadFeeAndMarks();
     }, duration + 200);
   }
 
+  // pause/resume on hover or focus
   const wrap = document.getElementById('admissionTickerWrap');
   function pauseTicker(){
     const style = window.getComputedStyle(el);
@@ -716,7 +683,7 @@ loadFeeAndMarks();
     let tx = 0;
     if(matrix && matrix !== 'none'){
       try{
-        const vals = matrix.match(/matrix\(([^)]+)\)/);
+        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
         if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
       }catch(e){}
     }
@@ -731,242 +698,16 @@ loadFeeAndMarks();
   wrap.addEventListener('mouseleave', resumeTicker);
   wrap.addEventListener('focusout', resumeTicker);
 
+  // start
   startMessage(0);
+
+  // expose API if needed
+  window.AdmissionTicker = {
+    setNews(array){ if(Array.isArray(array) && array.length){ NEWS.length=0; NEWS.push(...array); idx=0; startMessage(0); } },
+    pause(){ pauseTicker(); },
+    resume(){ resumeTicker(); }
+  };
 })();
 </script>
-
-<!-- ====== BIGGER TOPPERS 3D AUTO-UPDATE SCRIPT (FINAL) ====== -->
-<script>
-/*
-  Uses the UNIT sheets you provided (UNIT 1, UNIT 2, HALF YEARLY, UNIT 4, ANNUAL).
-  Matches Admission No robustly and looks up Student Details from public sheets.
-  THIS SCRIPT uses the SHEET_ID you gave earlier for toppers data:
-*/
-(async function(){
-  // this is the sheet id you provided for student/unit data (Upendra's sheet)
-  const SHEET_ID_TOPPERS = '1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0';
-
-  const unitSheets = ['UNIT 1','UNIT 2','HALF YEARLY','UNIT 4','ANNUAL'];
-  const studentLookupCandidates = [
-    "Student's Details","Students","Student Details","Students Database","Marksheet Details","Marksheet"
-  ];
-
-  const REFRESH_MS = 30000;
-  const SHOW_MS = 4200;
-
-  const admRegex = /^(admission|adm|admn|admission no|admission number|adm no|roll|roll no)/i;
-  const classRegex = /^(class|std|standard|section)/i;
-  const scoreRegex = /^(score|marks|total|percentage|percent|obtained|result|aggregate)/i;
-  const nameRegex = /(name|student name|candidate)/i;
-
-  async function fetchGviz(sheetId, sheetName){
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
-    try{
-      const r = await fetch(url);
-      if(!r.ok) throw new Error('not ok ' + r.status);
-      const txt = await r.text();
-      const jsonText = txt.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
-      return JSON.parse(jsonText);
-    }catch(e){
-      return null;
-    }
-  }
-
-  function normAdm(s){
-    if(s===null||s===undefined) return '';
-    const d = String(s).replace(/\D/g,'');
-    if(d==='') return '';
-    return d.replace(/^0+/, '') || '0';
-  }
-
-  function escapeHtml(s){ if(s===null||s===undefined) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-  async function buildStudentLookup(){
-    const map = {};
-    for(const sheet of studentLookupCandidates){
-      const g = await fetchGviz(SHEET_ID_TOPPERS, sheet);
-      if(!g || !g.table || !g.table.rows) continue;
-      const cols = (g.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-      const rows = (g.table.rows||[]).map(r=> r.c || []);
-      const admKey = cols.find(h=> admRegex.test(h)) || cols[0];
-      const nameKey = cols.find(h=> nameRegex.test(h)) || cols.find(h=> /full\s*name|student|candidate/i.test(h)) || cols[1] || cols[0];
-      const fatherKey = cols.find(h=> /father/i.test(h)) || null;
-      const motherKey = cols.find(h=> /mother/i.test(h)) || null;
-      const dobKey = cols.find(h=> /dob|date\s*of\s*birth|birth/i.test(h)) || null;
-      const photoKey = cols.find(h=> /photo|image|pic|picture|photo url|image url/i.test(h)) || null;
-      const classKey = cols.find(h=> classRegex.test(h)) || null;
-
-      rows.forEach(cells=>{
-        const obj = {};
-        for(let i=0;i<cols.length;i++){
-          const cell = cells[i];
-          let v = '';
-          if(cell){
-            if(cell.v !== undefined) v = cell.v;
-            else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-          }
-          obj[cols[i]] = v;
-        }
-        const admRaw = String(obj[admKey]||'').trim();
-        const adm = normAdm(admRaw);
-        if(!adm) return;
-        if(!map[adm]) map[adm] = {};
-        map[adm].name = map[adm].name || (obj[nameKey] || '');
-        map[adm].father = map[adm].father || (fatherKey ? (obj[fatherKey]||'') : '');
-        map[adm].mother = map[adm].mother || (motherKey ? (obj[motherKey]||'') : '');
-        map[adm].dob = map[adm].dob || (dobKey ? (obj[dobKey]||'') : '');
-        map[adm].photo = map[adm].photo || (photoKey ? (obj[photoKey]||'') : '');
-        map[adm].class = map[adm].class || (classKey ? (obj[classKey]||'') : '');
-      });
-    }
-    return map;
-  }
-
-  async function collectToppersFromUnits(){
-    const combinedByClass = {};
-    for(const sheet of unitSheets){
-      const g = await fetchGviz(SHEET_ID_TOPPERS, sheet);
-      if(!g || !g.table || !g.table.rows || !g.table.rows.length) continue;
-      const cols = (g.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
-      const rows = (g.table.rows||[]).map(r=> r.c || []);
-      const admKey = cols.find(h=> admRegex.test(h)) || cols[0];
-      const classKey = cols.find(h=> classRegex.test(h)) || cols.find((_,i)=> i<3 && /class|std|grade/i.test(cols[i])) || cols[1] || cols[0];
-      const scoreKey = cols.find(h=> scoreRegex.test(h)) || cols[cols.length-1];
-      rows.forEach(cells=>{
-        const obj = {};
-        for(let i=0;i<cols.length;i++){
-          const cell = cells[i];
-          let v = '';
-          if(cell){
-            if(cell.v !== undefined) v = cell.v;
-            else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
-          }
-          obj[cols[i]] = v;
-        }
-        const cls = String(obj[classKey] || 'Unknown').trim() || 'Unknown';
-        const admRaw = String(obj[admKey] || '').trim();
-        const adm = normAdm(admRaw);
-        const scoreRaw = String(obj[scoreKey] || '').replace(/[^0-9.\-]/g,'').trim();
-        const score = parseFloat(scoreRaw);
-        if(!combinedByClass[cls]) combinedByClass[cls] = [];
-        combinedByClass[cls].push({admRaw: admRaw, adm: adm, score: isNaN(score)? -Infinity : score, sheet: sheet, row: obj});
-      });
-    }
-    const toppers = {};
-    Object.keys(combinedByClass).forEach(cls=>{
-      const arr = combinedByClass[cls].filter(x=> x.adm && x.adm.length>0);
-      if(arr.length===0) return;
-      const numeric = arr.filter(x=> x.score !== -Infinity);
-      let top;
-      if(numeric.length){
-        numeric.sort((a,b)=> b.score - a.score);
-        top = numeric[0];
-      } else {
-        top = arr[0];
-      }
-      toppers[cls] = top;
-    });
-    return toppers;
-  }
-
-  // UI refs
-  const wrap = document.getElementById('topper3dWrap');
-  const card = document.getElementById('topper3dCard');
-  const closeBtn = document.getElementById('topper3dClose');
-  const photoEl = document.getElementById('t3_photo');
-  const titleEl = document.getElementById('t3_title');
-  const nameEl = document.getElementById('t3_name');
-  const classEl = document.getElementById('t3_class');
-  const fatherEl = document.getElementById('t3_father');
-  const motherEl = document.getElementById('t3_mother');
-  const dobEl = document.getElementById('t3_dob');
-  const admEl = document.getElementById('t3_adm');
-  const scoreEl = document.getElementById('t3_score');
-  const sheetEl = document.getElementById('t3_sheet');
-  const intervalEl = document.getElementById('t3_interval');
-  intervalEl.textContent = Math.round(REFRESH_MS/1000) + 's';
-
-  let popupList = [];
-  let idx = 0;
-  let rotateTimer = null;
-  let refreshTimer = null;
-
-  function showItem(item){
-    titleEl.innerHTML = `🎉 Topper — Class ${escapeHtml(item.class)}`;
-    nameEl.textContent = item.name || '—';
-    classEl.textContent = item.class || '—';
-    fatherEl.textContent = item.father || '—';
-    motherEl.textContent = item.mother || '—';
-    dobEl.textContent = item.dob || '—';
-    admEl.textContent = item.adm || '—';
-    scoreEl.textContent = (isFinite(item.score) ? item.score : item.score) || 'N/A';
-    sheetEl.textContent = item.sheet || '—';
-    if(item.photo && String(item.photo).trim().match(/^https?:\/\//i)){
-      photoEl.innerHTML = `<img src="${escapeHtml(item.photo)}" alt="photo">`;
-    } else {
-      const initials = (item.name || '—').split(' ').filter(Boolean).slice(0,2).map(s=>s[0]||'').join('').toUpperCase() || '—';
-      photoEl.innerHTML = `<div style="font-size:22px;color:#0b5fa8">${escapeHtml(initials)}</div>`;
-    }
-    wrap.style.display = 'block';
-    const rx = (idx % 5) - 2;
-    card.style.transform = `rotateX(${6+rx}deg) rotateY(${rx*1.6}deg) translateZ(10px)`;
-  }
-
-  function hideItem(){
-    wrap.style.display = 'none';
-  }
-
-  function startRotation(){
-    if(rotateTimer) clearTimeout(rotateTimer);
-    if(!popupList || popupList.length===0){ hideItem(); return; }
-    showItem(popupList[idx]);
-    rotateTimer = setTimeout(()=>{
-      idx = (idx + 1) % popupList.length;
-      startRotation();
-    }, SHOW_MS);
-  }
-  function stopRotation(){ if(rotateTimer) clearTimeout(rotateTimer); rotateTimer = null; }
-
-  closeBtn.addEventListener('click', ()=> { stopRotation(); hideItem(); });
-  card.addEventListener('mouseenter', ()=> stopRotation());
-  card.addEventListener('mouseleave', ()=> startRotation());
-
-  async function refreshAndStart(){
-    stopRotation();
-    const studentMap = await buildStudentLookup();
-    const toppers = await collectToppersFromUnits();
-    popupList = [];
-    Object.keys(toppers).forEach(cls=>{
-      const t = toppers[cls];
-      if(!t || !t.adm) return;
-      const admRaw = t.admRaw || t.adm;
-      const admNorm = t.adm;
-      const details = studentMap[admNorm] || {};
-      const item = {
-        class: cls,
-        adm: admRaw || admNorm,
-        name: details.name || (t.row && (t.row['Student Name']||t.row['Name']||t.row['student name']) ? (t.row['Student Name']||t.row['Name']||t.row['student name']) : '—'),
-        father: details.father || '',
-        mother: details.mother || '',
-        dob: details.dob || '',
-        photo: details.photo || '',
-        score: t.score === -Infinity ? 'N/A' : t.score,
-        sheet: t.sheet || ''
-      };
-      popupList.push(item);
-    });
-    popupList.sort((a,b)=> String(a.class).localeCompare(String(b.class), undefined, {numeric:true}));
-    if(popupList.length===0){ hideItem(); }
-    else { idx = 0; startRotation(); }
-    if(refreshTimer) clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(refreshAndStart, REFRESH_MS);
-  }
-
-  try{ await refreshAndStart(); }catch(e){ console.error('Topper BIG script error', e); }
-
-})();
-</script>
-<!-- ====== END TOPPERS 3D ====== -->
-
 </body>
 </html>
