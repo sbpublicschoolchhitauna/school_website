@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>S.B. Public School Chhitauna — Student Portal</title>
 <style>
 :root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
@@ -55,22 +54,8 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 
 /* footer */
 .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
-
-/* STAFF SLIDER + GRID STYLES (inserted) */
-.staff-slider-wrap{position:relative;border-radius:12px;overflow:hidden}
-.staff-slide{min-width:100%;display:flex;gap:12px;align-items:center;padding:12px}
-.staff-slide img{width:150px;height:150px;object-fit:cover;border-radius:10px}
-.staff-meta{flex:1}
-.staff-name{font-weight:800;color:var(--accent);font-size:18px}
-.staff-post{color:#444;font-size:14px}
-.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:10px}
-.staff-card{text-align:center;background:#fff;padding:10px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.06)}
-.staff-card img{width:100%;height:120px;object-fit:cover;border-radius:8px}
-.staff-card .name{font-weight:700;color:var(--accent);margin-top:8px}
-.staff-card .post{font-size:13px;color:#555}
-.controls{display:flex;gap:8px;justify-content:center;margin-top:8px}
-.btn.staff-btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
 </style>
+
 <style id="assistant-button-fix">
 /* Make Quick Portals and Search buttons clearly visible */
 a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
@@ -82,22 +67,26 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 /* Ensure slider controls remain light */
 .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
 </style>
+
 </head>
 <body>
-<!-- CENTERED HEADER -->
-<div aria-label="School header" class="header" role="banner">
-<h1>S.B. PUBLIC SCHOOL</h1>
-<div class="meta">
+
+  <!-- CENTERED HEADER -->
+  <div class="header" role="banner" aria-label="School header">
+    <h1>S.B. PUBLIC SCHOOL</h1>
+    <div class="meta">
       Village Chhitauna · Post Meghauli Kala · Pin Code 273304
       <small>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</small>
-</div>
-<!-- horizontal strip populated from Notification sheet -->
-<div aria-live="polite" class="school-strip-outer" id="schoolStripOuter">
-<div class="school-strip" id="schoolStrip"></div>
-</div>
-</div>
-<!-- ====== ADMISSION TICKER (premium, eye-friendly gradient, multiple rotating messages) ====== -->
-<style>
+    </div>
+
+    <!-- horizontal strip populated from Notification sheet -->
+    <div class="school-strip-outer" id="schoolStripOuter" aria-live="polite">
+      <div id="schoolStrip" class="school-strip"></div>
+    </div>
+  </div>
+
+  <!-- ====== ADMISSION TICKER (premium, eye-friendly gradient, multiple rotating messages) ====== -->
+  <style>
   /* Eye-friendly soft blue-cyan gradient, subtle 3D */
   .admission-news-bar{
     width:100%;
@@ -142,24 +131,25 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   }
   @media(max-width:640px){ .admission-news-bar{font-size:14px;padding:10px 0} .admission-tag{display:none} }
   </style>
-<div aria-label="Admission news ticker" class="admission-news-bar" id="admissionTickerWrap" role="region" tabindex="0">
-<div class="admission-news-inner">
-<div class="admission-news-meta">
-<div class="admission-tag">📢 ADMISSION</div>
-<div aria-live="polite" class="admission-news-text" id="admissionNewsText"></div>
-</div>
-<div aria-hidden="true" class="admission-news-ghost"></div>
-</div>
-</div>
-<!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
-<!DOCTYPE html>
 
-<html lang="hi">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>SB Public School — Photo Slider (Fade, Auto-height)</title>
-<style>
+  <div class="admission-news-bar" role="region" aria-label="Admission news ticker" tabindex="0" id="admissionTickerWrap">
+    <div class="admission-news-inner">
+      <div class="admission-news-meta">
+        <div class="admission-tag">📢 ADMISSION</div>
+        <div class="admission-news-text" id="admissionNewsText" aria-live="polite"></div>
+      </div>
+      <div class="admission-news-ghost" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
+  <!doctype html>
+  <html lang="hi">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
+  <style>
   :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
   *{box-sizing:border-box}
   body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
@@ -177,7 +167,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
   @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
   </style>
-<style id="assistant-button-fix">
+  <style id="assistant-button-fix">
   a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
     background: #000 !important;
     color: #fff !important;
@@ -186,18 +176,19 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   }
   .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
   </style>
-</head>
-<body>
-<div aria-label="School photo slider (fade)" class="slider-wrap" id="sliderWrap">
-<button aria-pressed="false" class="play-toggle" id="playToggle">Pause</button>
-<div aria-roledescription="carousel" class="slider" id="slider" role="region"></div>
-<div class="controls">
-<button aria-label="Previous" class="btn slider-control" id="prev">‹</button>
-<button aria-label="Next" class="btn slider-control" id="next">›</button>
-</div>
-<div aria-label="Slide dots" class="dots" id="dots" role="tablist"></div>
-</div>
-<script>
+  </head>
+  <body>
+  <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
+    <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
+    <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
+    <div class="controls">
+      <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
+      <button class="btn slider-control" id="next" aria-label="Next">›</button>
+    </div>
+    <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
+  </div>
+
+  <script>
   // IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
   async function loadImagesDynamic(){
     try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
@@ -311,66 +302,62 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   createSlides();
   start();
   </script>
-</body>
-</html>
-<!-- END: Inserted Photo Slider -->
-<div class="container">
-<div class="grid">
-<div>
-<!-- QUICK PORTALS moved to TOP -->
-<div class="card">
-<h2>Quick Portals</h2>
-<div style="margin-top:8px">
-<a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-<a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" style="margin-left:8px" target="_blank">Marksheet</a>
-</div>
-</div>
-<div>
-<div class="card">
-<h2>Student Details Lookup</h2>
-<div class="small">Admission Number डालकर Search करें</div>
-<div class="search-row" style="margin-top:8px">
-<input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7"/>
-<button class="btn search-btn" data-portal="true" onclick="searchStudent()">Search</button>
-</div>
-<div id="result"></div>
-</div>
-<div class="card">
-<h2>Student Records</h2>
-<div class="small">टैब बदल कर Fee या Marksheet देखें — Mobile/Aadhar masked (last 4)।</div>
-<div class="tabbar" role="tablist">
-<button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
-<button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
-</div>
-<div class="table-wrap" id="feeContainer" style="display:block">लोड हो रहा है...</div>
-<div class="table-wrap" id="marksContainer" style="display:none;margin-top:10px">लोड हो रहा है...</div>
-</div>
-</div>
-<div>
-<div class="card">
-<h2>Notifications</h2>
-<div aria-live="polite" class="notify-wrap" id="notifyOuter">
-<div class="notify-list" id="notifs"></div>
-</div>
-</div>
-<div class="card">
-<h2>Staff Showcase (Slider)</h2>
-<div class="staff-slider-wrap" id="staffSlider" style="height:180px">
-<div class="slider" id="staffSliderInner"></div>
-</div>
-<div class="controls">
-<button class="btn staff-btn" onclick="staffPrev()">Prev</button>
-<button class="btn staff-btn" onclick="staffNext()">Next</button>
-</div>
-<h2 style="margin-top:12px">All Staff</h2>
-<div class="staff-grid" id="staffGrid"></div>
-</div>
+  </body>
+  </html>
+  <!-- END: Inserted Photo Slider -->
 
-</div>
-</div>
-</div>
-<div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
-</div>
+<div class="container">
+    <div class="grid">
+      <div>
+
+        <!-- QUICK PORTALS moved to TOP -->
+        <div class="card">
+          <h2>Quick Portals</h2>
+          <div style="margin-top:8px">
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
+          </div>
+        </div>
+
+      <div>
+        <div class="card">
+          <h2>Student Details Lookup</h2>
+          <div class="small">Admission Number डालकर Search करें</div>
+          <div style="margin-top:8px" class="search-row">
+            <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
+            <button class="btn search-btn" data-portal="true" onclick="searchStudent()">Search</button>
+          </div>
+          <div id="result"></div>
+        </div>
+
+        <div class="card">
+          <h2>Student Records</h2>
+          <div class="small">टैब बदल कर Fee या Marksheet देखें — Mobile/Aadhar masked (last 4)।</div>
+          <div class="tabbar" role="tablist">
+            <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
+            <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
+          </div>
+          <div id="feeContainer" class="table-wrap" style="display:block">लोड हो रहा है...</div>
+          <div id="marksContainer" class="table-wrap" style="display:none;margin-top:10px">लोड हो रहा है...</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>Notifications</h2>
+          <div id="notifyOuter" class="notify-wrap" aria-live="polite">
+            <div id="notifs" class="notify-list"></div>
+          </div>
+        </div>
+
+        
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
+  </div>
+
 <script>
 /* CONFIG */
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
@@ -647,6 +634,7 @@ buildStripFromNotifications();
 loadNotifications();
 loadFeeAndMarks();
 </script>
+
 <!-- ====== Admission ticker JS (placed at end to ensure DOM exists) ====== -->
 <script>
 (function(){
@@ -720,62 +708,6 @@ loadFeeAndMarks();
     resume(){ resumeTicker(); }
   };
 })();
-</script>
-
-<script>
-async function loadStaff(){
-  try{
-    const res = await fetch('data/staff.json');
-    const staff = await res.json();
-    return staff;
-  }catch(e){
-    console.error('staff.json load error', e);
-    const arr = [];
-    for(let i=1;i<=17;i++) arr.push({id:i,name:'Staff '+i+' Name',post:'Post',photo:'staff'+i+'.jpg'});
-    return arr;
-  }
-}
-
-async function buildStaffUI(){
-  const staff = await loadStaff();
-  const sliderInner = document.getElementById('staffSliderInner');
-  const grid = document.getElementById('staffGrid');
-  if(!sliderInner||!grid) return;
-  sliderInner.innerHTML=''; grid.innerHTML='';
-  staff.forEach(s=>{
-    const slide = document.createElement('div');
-    slide.className='slide staff-slide';
-    const img = document.createElement('img');
-    img.src = 'staff/staffphotos/' + s.photo;
-    img.alt = s.name;
-    const meta = document.createElement('div');
-    meta.className='staff-meta';
-    meta.innerHTML = `<div class="staff-name">${s.name}</div><div class="staff-post">${s.post}</div>`;
-    slide.appendChild(img); slide.appendChild(meta);
-    sliderInner.appendChild(slide);
-    // grid
-    const card = document.createElement('div'); card.className='staff-card';
-    const cimg = document.createElement('img'); cimg.src = img.src; cimg.alt = s.name;
-    const cname = document.createElement('div'); cname.className='name'; cname.textContent = s.name;
-    const cpost = document.createElement('div'); cpost.className='post'; cpost.textContent = s.post;
-    card.appendChild(cimg); card.appendChild(cname); card.appendChild(cpost);
-    grid.appendChild(card);
-  });
-}
-
-let staffIndex = 0, staffSlides = null;
-function staffShow(i){
-  staffSlides = staffSlides || Array.from(document.querySelectorAll('#staffSliderInner .staff-slide'));
-  if(!staffSlides.length) return;
-  staffIndex = (i + staffSlides.length) % staffSlides.length;
-  const w = document.getElementById('staffSlider').clientWidth;
-  document.getElementById('staffSliderInner').style.transform = `translateX(-${staffIndex * w}px)`;
-}
-function staffNext(){ staffShow(staffIndex+1); }
-function staffPrev(){ staffShow(staffIndex-1); }
-
-// Initialize after other scripts
-document.addEventListener('DOMContentLoaded', function(){ buildStaffUI(); window.addEventListener('resize', ()=> staffShow(staffIndex)); });
 </script>
 </body>
 </html>
