@@ -1,0 +1,1 @@
+Add staff photos here (e.g., principal.jpg, teacher1.jpg)
