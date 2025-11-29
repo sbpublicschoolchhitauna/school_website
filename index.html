@@ -5,28 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>S.B. Public School Chhitauna — Student Portal</title>
 
-<!-- ====== ORIGINAL STYLES (kept) ====== -->
+<!-- ====== styles (kept + topper styles) ====== -->
 <style>
 :root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;font-family:Arial,Segoe UI,Roboto,sans-serif;color:#0f172a;background:linear-gradient(180deg,#eaf4ff,#f7fbff)}
-/* Centered header */
-.header{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  color:#fff;text-align:center;padding:18px 12px;border-radius:0 0 14px 14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.12); position:sticky; top:0; z-index:9999;
-}
-.header h1{margin:0;font-size:clamp(20px,4.5vw,30px);font-weight:800;letter-spacing:0.4px}
+.header{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;text-align:center;padding:18px 12px;border-radius:0 0 14px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.12); position:sticky; top:0; z-index:9999;}
+.header h1{margin:0;font-size:clamp(20px,4.5vw,30px);font-weight:800}
 .header .meta{margin-top:6px;font-size:14px;opacity:0.95}
-.header .meta small{display:block;font-size:13px;opacity:0.9;margin-top:4px}
-
-/* horizontal strip under header */
 .school-strip-outer{overflow:hidden;width:100%;margin-top:12px;padding-bottom:8px}
-.school-strip{white-space:nowrap;display:flex;gap:18px;align-items:center;will-change:transform;transform:translateX(0)}
+.school-strip{white-space:nowrap;display:flex;gap:18px;align-items:center}
 .school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.06);padding:6px 12px;border-radius:8px}
-
-/* main layout */
 .container{max-width:1100px;margin:14px auto;padding:12px}
 .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
@@ -37,192 +27,72 @@ h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
 .tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
 .tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
 .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
-.search-row{display:flex;gap:8px;margin-bottom:8px}
-@media(max-width:640px){.search-row{flex-direction:column} .tabbar{gap:6px}}
-
-/* tables */
 .table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:360px}
 @media(max-width:900px){.table-wrap{max-height:300px}}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
-th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
-thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
-
-/* notifications */
 .notify-wrap{height:220px;overflow:hidden;position:relative;border-radius:8px}
 .notify-list{position:absolute;left:0;right:0;top:0;will-change:transform}
-.notify-item{padding:10px 12px;border-bottom:1px solid #eef4ff;background:#fff}
-.notify-item .date{font-size:12px;color:var(--accent);font-weight:700}
-.notify-item .text{font-size:14px;margin-top:4px}
-
-/* footer */
 .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
-</style>
 
-<style id="assistant-button-fix">
-/* Make Quick Portals and Search buttons clearly visible */
-a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-  background: #000 !important;
-  color: #fff !important;
-  border: 1px solid #000 !important;
-  box-shadow: none !important;
-}
-/* Ensure slider controls remain light */
-.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-</style>
-
-<!-- ====== ADDITION: TOPPER POPUP STYLES ====== -->
-<style>
-/* Backdrop */
+/* ===== TOPPER POPUP STYLES ===== */
 .topper-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.55);
-  display:none; /* hidden by default */
-  align-items:center;
-  justify-content:center;
-  z-index:99999;
-  backdrop-filter:blur(4px);
+  position:fixed; inset:0; background:rgba(0,0,0,0.55);
+  display:none; align-items:center; justify-content:center; z-index:99999; backdrop-filter:blur(4px);
 }
-
-/* Popup */
 .topper-box{
-  background:#ffffff;
-  width:92%;
-  max-width:460px;
-  border-radius:18px;
-  padding:18px 18px 22px 18px;
-  text-align:center;
-  box-shadow:0 18px 50px rgba(2,6,23,0.28);
-  animation:popIn .42s cubic-bezier(.2,.9,.3,1);
-  position:relative;
-  overflow:hidden;
+  background:#ffffff; width:92%; max-width:480px; border-radius:18px; padding:18px 18px 22px 18px;
+  text-align:center; box-shadow:0 18px 50px rgba(2,6,23,0.28); animation:popIn .42s cubic-bezier(.2,.9,.3,1); position:relative; overflow:hidden;
 }
-
-/* Animation */
-@keyframes popIn{
-  from{transform:translateY(20px) scale(.95);opacity:0;}
-  to{transform:translateY(0) scale(1);opacity:1;}
-}
-
-/* Topper GIF */
-.topper-gif{
-  width:110px;
-  margin-top:-10px;
-  display:block;
-  margin-left:auto;
-  margin-right:auto;
-  animation:glow 2s infinite alternate;
-}
-
-@keyframes glow{
-  from{filter:drop-shadow(0 0 6px #00eaff);}
-  to{filter:drop-shadow(0 0 20px #00eaff);}
-}
-
-/* Topper list */
-.topper-list{
-  margin-top:12px;
-  text-align:left;
-  font-size:15px;
-  font-weight:700;
-  color:#083654;
-  line-height:1.45;
-  padding:6px 10px;
-  border-radius:10px;
-  background:linear-gradient(180deg,#fbfeff,#f3fbff);
-  border:1px solid #e6f4fb;
-}
-
-/* small meta */
+@keyframes popIn{ from{transform:translateY(20px) scale(.95);opacity:0;} to{transform:translateY(0) scale(1);opacity:1;} }
+.topper-gif{ width:110px; margin-top:-10px; display:block; margin-left:auto; margin-right:auto; animation:glow 2s infinite alternate; }
+@keyframes glow{ from{filter:drop-shadow(0 0 6px #00eaff);} to{filter:drop-shadow(0 0 20px #00eaff);} }
+.topper-list{ margin-top:12px; text-align:left; font-size:15px; font-weight:700; color:#083654; line-height:1.45; padding:6px 10px; border-radius:10px; background:linear-gradient(180deg,#fbfeff,#f3fbff); border:1px solid #e6f4fb; }
 .topper-meta{margin-top:10px;font-size:13px;color:#4b5563}
-
-/* Close button */
-.close-btn{
-  position:absolute;
-  top:10px;
-  right:12px;
-  background:#ff3b3b;
-  color:#fff;
-  border:0;
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  cursor:pointer;
-  font-weight:900;
-  font-size:16px;
-  line-height:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 6px 18px rgba(255,59,59,0.18);
-}
-
-/* small "don't show again" */
+.close-btn{ position:absolute; top:10px; right:12px; background:#ff3b3b; color:#fff; border:0; width:34px; height:34px; border-radius:50%; cursor:pointer; font-weight:900; font-size:16px; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(255,59,59,0.18); }
 .topper-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px}
 .toggler{font-size:13px;color:#556;display:flex;align-items:center;gap:8px}
 .toggler input{transform:scale(1.02)}
 @media(max-width:480px){ .topper-box{padding:14px 12px} .topper-gif{width:90px} .topper-list{font-size:14px} }
 </style>
-
 </head>
 <body>
 
-  <!-- ====== ORIGINAL CONTENT (kept intact) ====== -->
-
-  <!-- CENTERED HEADER -->
+  <!-- HEADER -->
   <div class="header" role="banner" aria-label="School header">
     <h1>S.B. PUBLIC SCHOOL</h1>
     <div class="meta">
       Village Chhitauna · Post Meghauli Kala · Pin Code 273304
       <small>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</small>
     </div>
-
-    <!-- horizontal strip populated from Notification sheet -->
     <div class="school-strip-outer" id="schoolStripOuter" aria-live="polite">
       <div id="schoolStrip" class="school-strip"></div>
     </div>
   </div>
 
-  <!-- ====== ADMISSION TICKER (premium, eye-friendly gradient, multiple rotating messages) ====== -->
-  <div class="admission-news-bar" role="region" aria-label="Admission news ticker" tabindex="0" id="admissionTickerWrap">
-    <div class="admission-news-inner">
-      <div class="admission-news-meta">
-        <div class="admission-tag">📢 ADMISSION</div>
-        <div class="admission-news-text" id="admissionNewsText" aria-live="polite"></div>
-      </div>
-      <div class="admission-news-ghost" aria-hidden="true"></div>
+  <!-- ADMISSION TICKER -->
+  <div style="max-width:1100px;margin:14px auto;">
+    <div style="background:linear-gradient(90deg,#9be7ff,#c7f9ff);color:#03314b;padding:12px;border-radius:10px;box-shadow:0 10px 26px rgba(3,19,43,0.10);font-weight:800">
+      <div style="display:flex;align-items:center;gap:12px"><div style="font-weight:900">📢 ADMISSION</div><div id="admissionNewsText">Loading…</div></div>
     </div>
   </div>
 
-  <!-- Photo Slider & rest (kept) -->
-  <!-- [The rest of your original index.html content remains unchanged here;
-       for brevity in this reply I keep all original scripts and markup as before.] -->
-
-  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
-  <!doctype html>
-  <!-- ... (slider HTML & scripts kept exactly as in your original file) ... -->
-  <!-- END: Inserted Photo Slider -->
-
+  <!-- MAIN (kept simplified for brevity) -->
   <div class="container">
     <div class="grid">
       <div>
-
-        <!-- QUICK PORTALS moved to TOP -->
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
+            <a class="btn" data-portal="true" href="#" target="_blank">Fee Portal</a>
+            <a class="btn" data-portal="true" href="#" target="_blank" style="margin-left:8px">Marksheet</a>
           </div>
         </div>
 
-      <div>
         <div class="card">
           <h2>Student Details Lookup</h2>
           <div class="small">Admission Number डालकर Search करें</div>
           <div style="margin-top:8px" class="search-row">
             <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
-            <button class="btn search-btn" data-portal="true" onclick="searchStudent()">Search</button>
+            <button class="btn search-btn" onclick="searchStudent()">Search</button>
           </div>
           <div id="result"></div>
         </div>
@@ -246,32 +116,27 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
             <div id="notifs" class="notify-list"></div>
           </div>
         </div>
-        </div>
       </div>
     </div>
 
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
 
-  <!-- ====== TOPPER POPUP HTML (ADDED) ====== -->
+  <!-- ===== TOPPER POPUP HTML ===== -->
   <div class="topper-overlay" id="topperPopup" role="dialog" aria-modal="true" aria-label="Topper List">
-    <div class="topper-box" role="document">
-
+    <div class="topper-box">
       <button class="close-btn" id="topperCloseBtn" aria-label="Close topper popup">×</button>
 
-      <!-- GIF: you can replace this URL with your school's GIF -->
+      <!-- Replace this GIF if you want -->
       <img src="https://media.tenor.com/OpU8OkaI0s0AAAAi/trophy.gif" alt="Trophy" class="topper-gif" id="topperGif">
 
       <h2 style="margin:10px 0;color:#0b5ed7">🏆 स्कूल के टॉपर — 2025</h2>
 
-      <!-- Dynamic list will be injected here -->
       <div class="topper-list" id="topperList">
-        <!-- default placeholders; script replaces these -->
         1️⃣ <strong>Loading...</strong><br>
       </div>
 
       <div class="topper-meta">Congratulations to all students — Proud of your hard work!</div>
-
       <div class="topper-footer">
         <label class="toggler"><input type="checkbox" id="dontShowAgain"> फिर से मत दिखाओ</label>
         <div style="font-size:13px;color:#6b7280">Tap × to close</div>
@@ -279,101 +144,196 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  <!-- ====== ORIGINAL SCRIPTS (kept) ====== -->
-  <!-- (All your original scripts for slider, notifications, sheet loading, etc. remain unchanged.)
-       For brevity they're not fully duplicated here in this reply, but when you paste this file,
-       keep the original scripts exactly as they were. The topper script below is safe to add. -->
-
-  <!-- Example: keep your loadSheetGviz, buildStripFromNotifications, loadNotifications, loadFeeAndMarks, slider scripts, etc. -->
-  <!-- ... (original scripts from your index.html) ... -->
-
 <script>
-/* ========= TOPPER POPUP SCRIPT (ADDED) =========
-   Usage:
-    - Edit the array `TOPPERS` below to change names/scores.
-    - Or, if you want to populate from Google Sheet, replace the static array with a call to your sheet (I can add that).
-*/
-(function(){
-  // Edit this list to change toppers quickly
-  const TOPPERS = [
-    {rank:1, name:"Riya Sharma", score:"98%"},
-    {rank:2, name:"Aman Gupta", score:"97%"},
-    {rank:3, name:"Priya Singh", score:"96%"},
-    {rank:4, name:"Arjun Yadav", score:"95%"}
-  ];
+/* ========== CONFIG ========== */
+const SHEET_ID = "1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0"; // from your link
+// candidate sheet names to try (the sheet you used shows these tabs). We'll try in order.
+const SHEET_CANDIDATES = [
+  "Marksheet Published",
+  "Marksheet_Database",
+  "Marksheet Published ", // tolerance for slight name variants
+  "Marksheet Published 2025",
+  "Marksheet Published  2025",
+  "Marksheet_Published",
+  "MarksheetPublished",
+  "Marksheet"
+];
+const TOP_COUNT = 5; // how many toppers to show
 
+/* helper to fetch sheet via gviz */
+async function fetchSheetJson(sheetName){
+  const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?`;
+  const q = `sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+  const url = base + q;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
+  const txt = await res.text();
+  // the response is like: "/*O_o*/\ngoogle.visualization.Query.setResponse({...});"
+  const jsonText = txt.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+  return JSON.parse(jsonText);
+}
+
+/* find best header for percent/total */
+function findScoreHeader(headers){
+  const normals = headers.map(h => (h||'').toString().trim().toLowerCase());
+  // common candidates
+  const candidates = ['percentage','percent','total %','percent %','percentile','overall %','percentage (%)','percentage%','total percentage','total%','percent'];
+  for(const c of candidates){
+    const idx = normals.findIndex(h => h===c || h.includes(c));
+    if(idx !== -1) return headers[idx];
+  }
+  // fallback: header that contains 'total' or 'obt' or 'marks'
+  for(let i=0;i<normals.length;i++){
+    if(/total|marks|obtained|obtain|obt/i.test(headers[i])) return headers[i];
+  }
+  return null;
+}
+
+/* convert gviz table to array of objects */
+function gvizToRecords(gviz){
+  const cols = (gviz.table.cols||[]).map(c => (c.label||c.id||'').toString().trim());
+  const rows = (gviz.table.rows||[]).map(r => r.c || []);
+  return rows.map(cells => {
+    const obj = {};
+    for(let i=0;i<cols.length;i++){
+      const cell = cells[i];
+      let v = "";
+      if(cell){
+        if(cell.v !== undefined) v = cell.v;
+        else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+      }
+      obj[cols[i] || ('col'+i)] = v;
+    }
+    return obj;
+  });
+}
+
+/* try candidate sheets and pick toppers */
+async function loadToppersFromSheet(){
+  for(const sheetName of SHEET_CANDIDATES){
+    try{
+      const g = await fetchSheetJson(sheetName);
+      if(!g || !g.table) continue;
+      const headers = (g.table.cols||[]).map(c => (c.label||c.id||'').toString().trim());
+      const records = gvizToRecords(g);
+      if(records.length === 0) continue;
+
+      // determine score column
+      const scoreHeader = findScoreHeader(headers);
+      // If score header not found, try common explicit names
+      const possibleNames = ['Percentage','Percent','Percent %','Total Percentage','Total%','totalObt','Total','Marks','Total Marks'];
+      const scoreCol = scoreHeader || headers.find(h => possibleNames.some(p => (h||'').toLowerCase().includes(p.toLowerCase())));
+      // Build array with numeric score where possible
+      const arr = records.map(r => {
+        const nameKeys = Object.keys(r).filter(k => /name|student|student name|student_name|sname/i.test(k));
+        const name = (nameKeys.length ? (r[nameKeys[0]] || '') : (r['Student']||r['Name']||r['Student Name']||'')).toString();
+        let scoreRaw = scoreCol ? (r[scoreCol] || '') : (r['Percentage'] || r['percent'] || r['Total'] || r['Total Marks'] || '');
+        let scoreNum = null;
+        if(scoreRaw !== null && scoreRaw !== undefined && String(scoreRaw).trim() !== ""){
+          const s = String(scoreRaw).replace(/[^0-9.\-]/g,'');
+          scoreNum = s ? Number(s) : null;
+        }
+        return { name: name, scoreRaw: scoreRaw, score: scoreNum, row: r };
+      });
+
+      // filter those with number scores; if none have numeric scores, fallback to string sorting
+      const withNum = arr.filter(x => typeof x.score === 'number' && !isNaN(x.score));
+      let sorted;
+      if(withNum.length > 0){
+        sorted = arr.sort((a,b) => (b.score || 0) - (a.score || 0));
+      } else {
+        // sort by scoreRaw as string (desc) and use name as tiebreak
+        sorted = arr.sort((a,b) => String(b.scoreRaw||'').localeCompare(String(a.scoreRaw||'')));
+      }
+      // take top TOP_COUNT where name exists
+      const toppers = sorted.filter(x => (x.name && String(x.name).trim() !== "")).slice(0, TOP_COUNT).map((t, idx) => {
+        const displayScore = (t.scoreRaw!==undefined && t.scoreRaw!==null && String(t.scoreRaw).trim()!=='') ? String(t.scoreRaw) : (t.score!==null ? String(t.score) : '');
+        return { rank: idx+1, name: (t.name||'-'), score: displayScore };
+      });
+
+      if(toppers.length > 0){
+        return { sheet: sheetName, toppers };
+      } else {
+        // continue to next sheet candidate
+      }
+    }catch(err){
+      // ignore and try next candidate
+      // console.warn("Sheet fetch failed for", sheetName, err);
+      continue;
+    }
+  }
+  // nothing found
+  return null;
+}
+
+/* ====== Popup render + behavior ====== */
+(function(){
   const overlay = document.getElementById('topperPopup');
   const listEl = document.getElementById('topperList');
   const closeBtn = document.getElementById('topperCloseBtn');
   const dontShowChk = document.getElementById('dontShowAgain');
 
-  // build list HTML
-  function renderTopperList(arr){
-    const html = arr.map(t => {
-      const r = t.rank || '';
-      const score = t.score ? ' — ' + t.score : '';
-      return `${r}️⃣ <strong>${escapeHtml(t.name||'-')}</strong>${score}`;
-    }).join('<br>');
+  function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function renderStaticFallback(){
+    const staticList = [
+      {rank:1, name:"Riya Sharma", score:"98%"},
+      {rank:2, name:"Aman Gupta", score:"97%"},
+      {rank:3, name:"Priya Singh", score:"96%"},
+      {rank:4, name:"Arjun Yadav", score:"95%"}
+    ];
+    const html = staticList.map(t => `${t.rank}️⃣ <strong>${escapeHtml(t.name)}</strong> — ${escapeHtml(t.score)}`).join('<br>');
     listEl.innerHTML = html;
   }
 
-  // simple escape
-  function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  // read don't-show flag from localStorage
-  function canShow(){
-    try{
-      return localStorage.getItem('topper_popup_hide') !== '1';
-    }catch(e){ return true; }
-  }
-  function setHide(val){
-    try{ localStorage.setItem('topper_popup_hide', val ? '1' : '0'); }catch(e){}
+  function renderToppers(toppers){
+    if(!Array.isArray(toppers) || toppers.length===0){ renderStaticFallback(); return; }
+    const html = toppers.map(t => `${t.rank}️⃣ <strong>${escapeHtml(t.name)}</strong>${t.score? ' — ' + escapeHtml(t.score) : ''}`).join('<br>');
+    listEl.innerHTML = html;
   }
 
-  // show popup with slight delay so it doesn't clash with other loads
-  function showPopup(){
-    if(!canShow()) return;
-    // small delay to allow page layout/JS to settle
-    setTimeout(()=> {
-      overlay.style.display = 'flex';
-      // focus close button for accessibility
-      try{ closeBtn.focus(); }catch(e){}
-    }, 700);
-  }
+  function canShow(){ try{ return localStorage.getItem('topper_popup_hide') !== '1'; }catch(e){ return true; } }
+  function setHide(val){ try{ localStorage.setItem('topper_popup_hide', val ? '1' : '0'); }catch(e){} }
 
   closeBtn.addEventListener('click', function(){
     overlay.style.display = 'none';
     if(dontShowChk.checked) setHide(true);
   });
-
-  // click outside to close
   overlay.addEventListener('click', function(ev){
     if(ev.target === overlay){ overlay.style.display = 'none'; if(dontShowChk.checked) setHide(true); }
   });
 
-  // render and show
-  renderTopperList(TOPPERS);
-  // attempt to show only after DOM content loaded
-  if(document.readyState === 'complete' || document.readyState === 'interactive'){
-    showPopup();
-  } else {
-    document.addEventListener('DOMContentLoaded', showPopup);
+  async function init(){
+    renderStaticFallback(); // show something while loading
+    try{
+      const result = await loadToppersFromSheet();
+      if(result && result.toppers && result.toppers.length){
+        renderToppers(result.toppers);
+        console.info("Loaded toppers from sheet:", result.sheet);
+      } else {
+        console.info("No toppers found in sheet; using fallback.");
+        renderStaticFallback();
+      }
+    }catch(e){
+      console.warn("Error loading toppers:", e);
+      renderStaticFallback();
+    }
+
+    // show popup after small delay if allowed
+    if(!canShow()) return;
+    setTimeout(()=>{ overlay.style.display = 'flex'; try{ closeBtn.focus(); }catch(e){} }, 700);
   }
 
-  // Expose a simple API to update toppers from console or other scripts:
-  window.TopperPopup = {
-    set(list){ if(Array.isArray(list)){ renderTopperList(list); } },
-    show(){ overlay.style.display = 'flex'; },
-    hide(){ overlay.style.display = 'none'; }
-  };
+  // expose API
+  window.TopperPopup = { show(){ overlay.style.display = 'flex'; }, hide(){ overlay.style.display = 'none'; }, setDontShow(flag){ setHide(flag); } };
 
+  // kick off
+  if(document.readyState === 'complete' || document.readyState === 'interactive') init();
+  else document.addEventListener('DOMContentLoaded', init);
 })();
 </script>
 
-<!-- Keep this at end so year is set (from original file) -->
-<script>
-document.getElementById("year").innerText = new Date().getFullYear();
-</script>
-
+<!-- small script to set year -->
+<script>document.getElementById("year").innerText = new Date().getFullYear();</script>
 </body>
 </html>
