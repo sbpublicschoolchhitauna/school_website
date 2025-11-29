@@ -342,6 +342,147 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   <div class="confetti" id="confettiArea"></div>
   <div class="balloon-wrap" id="balloonArea"></div>
   <div class="small-note">सुनिश्चित करें कि Google Sheet "Student's Details" public (Anyone with the link can view) है ताकि वेबसाइट सीधे डेटा पढ़ सके।</div>
+
+<!-- START: Additional Birthday Features -->
+<style>
+/* Small UI for upcoming list and class calendar */
+.bday-features { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+.feature-card { background:#fff; border-radius:10px; padding:10px; box-shadow:0 6px 18px rgba(10,20,40,0.06); flex:1; min-width:260px; }
+.feature-card h3 { margin:0 0 8px 0; font-size:15px; color:#0b5fa8; }
+.upcoming-list li { margin-bottom:6px; }
+.class-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:8px; margin-top:8px; }
+.class-box { background:linear-gradient(90deg,#fff,#f7fbff); padding:8px; border-radius:8px; border:1px solid #eef7ff; min-height:60px; }
+.print-btn { padding:8px 10px; border-radius:8px; border:0; background:linear-gradient(90deg,#0b5fa8,#1167b1); color:#fff; cursor:pointer; font-weight:700; }
+.name-link { color:#0b5fa8; font-weight:700; cursor:pointer; text-decoration:underline; }
+.modal-backdrop { position:fixed; inset:0; background:rgba(5,10,20,0.45); display:none; align-items:center; justify-content:center; z-index:9999; }
+.modal { background:#fff; border-radius:12px; padding:18px; max-width:520px; width:94%; box-shadow:0 20px 60px rgba(2,6,23,0.3); }
+.certificate { width:700px; max-width:92vw; padding:28px; border-radius:12px; text-align:center; background:linear-gradient(180deg,#fff,#fffaf6); border:6px solid #ffd86b; }
+.certificate h1 { margin:6px 0 12px 0; font-size:28px; color:#6b2140; }
+.certificate p { margin:6px 0; color:#24304a; font-size:16px; }
+@media(max-width:640px){ .bday-features{ flex-direction:column } .class-grid{ grid-template-columns:1fr } }
+</style>
+
+<div class="bday-features" id="bdayFeaturesArea" aria-live="polite" style="display:none;">
+  <div class="feature-card" id="upcomingCard">
+    <h3>📅 Upcoming Birthdays (7 days)</h3>
+    <ul class="upcoming-list" id="upcomingList"><li>Loading...</li></ul>
+    <div style="margin-top:8px"><button class="print-btn" id="printUpcoming">Print Upcoming</button></div>
+  </div>
+
+  <div class="feature-card" id="classCalendarCard">
+    <h3>🌟 Class-wise Birthday Calendar</h3>
+    <div class="class-grid" id="classGrid">Loading...</div>
+  </div>
+</div>
+
+<!-- Modal for Birthday Popup Card -->
+<div class="modal-backdrop" id="bdayModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" role="document" id="bdayModalContent">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <strong id="modalTitle">Happy Birthday</strong>
+      <button id="modalClose" title="Close" style="background:#fff;border:1px solid #e6eefc;padding:6px;border-radius:8px;cursor:pointer">✕</button>
+    </div>
+    <div id="modalBody" style="margin-top:12px;">
+      <!-- filled dynamically -->
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+      <button class="print-btn" id="modalPrint">🖨️ Print Certificate</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Utility: open modal with student details
+function openBirthdayModal(student){
+  const modal = document.getElementById('bdayModal');
+  const body = document.getElementById('modalBody');
+  const title = document.getElementById('modalTitle');
+  title.innerText = student.name + " — जन्मदिन की बधाई!";
+  body.innerHTML = `
+    <div style="display:flex;gap:12px;align-items:center;">
+      <div style="width:96px;height:96px;border-radius:12px;background:linear-gradient(180deg,#fff,#ffe9c4);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:34px;color:#6b2140">${(student.name||'')[0]||''}</div>
+      <div style="flex:1">
+        <div style="font-size:18px;font-weight:800;color:#0b5fa8">${student.name||'—'}</div>
+        <div style="color:#475569;margin-top:6px">Class: ${student.class||'—'} · Adm: ${student.adm||'—'}</div>
+        <div style="color:#475569;margin-top:6px">Parents: ${student.father||''}${student.mother?(' / ' + student.mother):''}</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;color:#24304a">Address: ${student.address||'—'}</div>
+  `;
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden','false');
+
+  // attach print handler for this student
+  const printBtn = document.getElementById('modalPrint');
+  printBtn.onclick = function(){ generateCertificate(student); };
+}
+
+// close modal
+document.getElementById('modalClose').addEventListener('click', ()=>{
+  const modal = document.getElementById('bdayModal');
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden','true');
+});
+
+// Print/generate certificate (opens new window and calls print)
+function generateCertificate(student){
+  const win = window.open('', '_blank', 'width=800,height=800');
+  const html = `
+  <html><head><title>Certificate - ${student.name||''}</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f3f6ff;padding:20px}
+    .cert{max-width:720px;margin:30px auto;background:#fff;padding:28px;border-radius:12px;border:6px solid #ffd86b;text-align:center}
+    h1{color:#6b2140;margin-bottom:6px}
+    p{color:#24304a}
+    .small{font-size:13px;color:#475569;margin-top:12px}
+  </style>
+  </head><body>
+    <div class="cert">
+      <h1>Certificate of Wishes</h1>
+      <p>यह प्रमाणित किया जाता है कि</p>
+      <h2 style="margin:6px 0;color:#0b5fa8">${student.name||'—'}</h2>
+      <p>कक्षा ${student.class||'—'} · एडमिशन नं. ${student.adm||'—'}</p>
+      <p class="small">हम स्कूल परिवार की ओर से आपको जन्मदिन की हार्दिक शुभकामनाएँ देते हैं।</p>
+      <div style="margin-top:28px;font-weight:800;color:#6b2140">S.B. PUBLIC SCHOOL</div>
+    </div>
+    <script>setTimeout(()=>{ window.print(); setTimeout(()=>window.close(),500); },300);</script>
+  </body></html>
+  `;
+  win.document.write(html);
+  win.document.close();
+}
+
+// Print upcoming list (simple printable window)
+document.getElementById('printUpcoming').addEventListener('click', function(){
+  const html = '<html><head><title>Upcoming Birthdays</title><style>body{font-family:Arial;padding:20px}h1{color:#0b5fa8}li{margin-bottom:8px}</style></head><body><h1>Upcoming Birthdays (7 days)</h1>' + document.getElementById('upcomingList').innerHTML + '</body></html>';
+  const w = window.open('', '_blank', 'width=700,height=800');
+  w.document.write(html);
+  w.document.close();
+  setTimeout(()=>{ w.print(); }, 300);
+});
+
+// Helper: create clickable name element
+function makeNameLink(student){
+  const a = document.createElement('span');
+  a.className = 'name-link';
+  a.innerText = student.name || (student.adm || '—');
+  a.onclick = ()=> openBirthdayModal(student);
+  return a;
+}
+
+// Expose functions to main script by assigning to window (will be used later)
+window._birthdayFeatures = {
+  renderUpcoming: function(listHtml){ 
+    document.getElementById('upcomingList').innerHTML = listHtml; 
+    document.getElementById('bdayFeaturesArea').style.display = 'flex';
+  },
+  renderClassGrid: function(html){ 
+    document.getElementById('classGrid').innerHTML = html; 
+    document.getElementById('bdayFeaturesArea').style.display = 'flex';
+  }
+};
+</script>
+<!-- END: Additional Birthday Features -->
 </div>
 
 <script>
@@ -453,6 +594,69 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
         });
         html += '</ul>';
         outContainer.innerHTML = html;
+      // --- Additional features: Upcoming 7 days and Class-wise calendar ---
+      try{
+        // compute upcoming 7 days (including today)
+        const upcoming = [];
+        const todayDate = new Date();
+        function dmToDate(dm, year){
+          return new Date(year, dm.month-1, dm.day);
+        }
+        // build a lookup of birthdays by month-day
+        const bdMap = {};
+        students.forEach(s => {
+          const dm = parseDobToDM(s.dob);
+          if(!dm) return;
+          const key = String(dm.day).padStart(2,'0') + '-' + String(dm.month).padStart(2,'0');
+          if(!bdMap[key]) bdMap[key]=[];
+          bdMap[key].push(s);
+        });
+        for(let i=0;i<7;i++){
+          const d = new Date();
+          d.setDate(todayDate.getDate() + i);
+          const key = String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0');
+          if(bdMap[key]){
+            bdMap[key].forEach(s => {
+              upcoming.push({date: d.toDateString(), student: s});
+            });
+          }
+        }
+        // render upcoming list HTML
+        if(upcoming.length===0){
+          window._birthdayFeatures.renderUpcoming('<li>अगले 7 दिनों में किसी का जन्मदिन नहीं है।</li>');
+        } else {
+          let listHtml = '';
+          upcoming.forEach(item=>{
+            const s = item.student;
+            const display = '<strong>'+ (s.name||s.adm||'—') +'</strong> — ' + (s.class||'—') + ' — ' + item.date;
+            listHtml += '<li>' + display + ' &nbsp; <button class="print-btn" style="margin-left:8px" onclick="(function(){ generateCertificate('+ 'JSON.parse(' + JSON.stringify(JSON.stringify(s)) + '); })()">Print</button> &nbsp; <span class="name-link" style="margin-left:8px" onclick="(function(){ openBirthdayModal('+ 'JSON.parse(' + JSON.stringify(JSON.stringify(s)) + ') })()">View</span></li>';
+          });
+          window._birthdayFeatures.renderUpcoming(listHtml);
+        }
+
+        // class-wise calendar: group by class and render small boxes
+        const classMap = {};
+        students.forEach(s => {
+          const cls = s.class || 'Others';
+          if(!classMap[cls]) classMap[cls]=[];
+          const dm = parseDobToDM(s.dob);
+          const dmStr = dm ? (String(dm.day).padStart(2,'0') + '-' + String(dm.month).padStart(2,'0')) : '';
+          classMap[cls].push({name: s.name, adm: s.adm, dob: dmStr});
+        });
+        let classHtml = '';
+        Object.keys(classMap).sort().forEach(cls=>{
+          let members = '';
+          classMap[cls].forEach(m=>{
+            members += '<div style="margin-bottom:6px"><span class="name-link" onclick="(function(){ openBirthdayModal('+ 'JSON.parse(' + JSON.stringify(JSON.stringify({name: m.name, adm: m.adm, class: cls, father:'', mother:'', address:''})) + ') })()">' + (m.name||'—') + '</span> <small style="color:#475569">('+ (m.dob||'—') +')</small></div>';
+          });
+          classHtml += '<div class="class-box"><strong style="display:block;margin-bottom:6px">'+cls+'</strong>' + members + '</div>';
+        });
+        window._birthdayFeatures.renderClassGrid(classHtml);
+      }catch(e){
+        console.error('Feature render error', e);
+      }
+      // --- end additional features ---
+
         triggerConfetti(36);
         spawnBalloons(Math.min(12, Math.max(6, matches.length*3)));
       }
