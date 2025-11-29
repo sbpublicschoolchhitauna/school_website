@@ -520,7 +520,15 @@ async function loadSheetGviz(sheetName){
   const res = await fetch(url);
   if(!res.ok) throw new Error('Network response not ok: ' + res.status);
   const text = await res.text();
-  const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+  
+// robust extraction: find first '{' and last '}' to extract the JSON object even if GViz wrapper varies
+let startIdx = text.indexOf('{');
+let endIdx = text.lastIndexOf('}');
+if (startIdx === -1 || endIdx === -1 || endIdx < startIdx) {
+  throw new Error('Unable to parse GViz response: JSON braces not found.');
+}
+const jsonText = text.substring(startIdx, endIdx + 1);
+
   return JSON.parse(jsonText);
 }
 function maskLast4(val){
