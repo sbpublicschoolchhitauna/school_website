@@ -320,233 +320,152 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
         </div>
 
 
-<!-- START: Topper + Birthday Auto-Wisher (Cartoon + Balloons + Confetti) -->
+
+<!-- START: Birthday Auto-Wisher (from Student's Details sheet only) -->
 <style>
-/* Card base (kept similar to previous style) */
-.topper-card {
-  position: relative;
-  overflow: visible;
-  background: linear-gradient(180deg,#fff7f2,#fff1fb);
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 10px 30px rgba(20,30,60,0.08);
-  display:flex;
-  gap:12px;
-  align-items:center;
-  min-height:160px;
-}
-/* Mascot bounce */
-.topper-mascot { width:96px; height:96px; flex:0 0 96px; display:flex; align-items:center; justify-content:center; animation:mascot-bounce 2000ms ease-in-out infinite; }
-@keyframes mascot-bounce { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } }
-/* Body */
-.topper-body { flex:1; min-width:0; }
-.topper-title { font-weight:900; color:#b33a9b; font-size:15px; margin:0 0 6px 0; display:flex; align-items:center; gap:8px; }
-.topper-name { font-size:20px; font-weight:900; color:#0b5fa8; margin:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.topper-sub { color:#475569; font-size:13px; margin-top:6px; line-height:1.4; }
-.topper-badge { display:inline-block; background:linear-gradient(180deg,#ffd86b,#ffb347); padding:6px 10px; border-radius:999px; font-weight:800; box-shadow:0 6px 18px rgba(255,160,40,0.16); }
-/* Birthday badge on topper */
-.bday-badge { display:inline-block; background:linear-gradient(90deg,#ff8fb1,#f6d9ff); color:#3b0b3b; padding:6px 8px; border-radius:999px; font-weight:800; margin-left:8px; box-shadow:0 6px 18px rgba(255,120,160,0.12); }
-/* Confetti */
+.bday-card { background: linear-gradient(180deg,#fffdf6,#fff8ff); border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(10,20,40,0.06); margin-bottom:12px; position:relative; overflow:visible; }
+.bday-banner { display:flex; gap:12px; align-items:center; padding:10px 12px; border-radius:10px; background:linear-gradient(90deg,#fff3f8,#f7fffb); box-shadow:0 8px 18px rgba(30,40,80,0.06); font-weight:800; color:#6b2140; }
+.bday-list { margin-top:8px; font-size:14px; color:#0b2140; }
 .confetti { pointer-events:none; position:absolute; inset:0; overflow:hidden; z-index:6; }
 .confetti .piece{ position:absolute; width:10px;height:14px;opacity:0.95;border-radius:2px; transform-origin:center; animation: fall linear forwards; }
 @keyframes fall { from { transform: translateY(-10vh) rotate(0deg); opacity:1; } to { transform: translateY(110vh) rotate(720deg); opacity:0.95; } }
-/* Balloon animation (rising) */
 .balloon-wrap { position:absolute; inset:0; pointer-events:none; z-index:5; overflow:visible; }
 .balloon { position:absolute; bottom:-30px; width:36px; height:48px; border-radius:18px 18px 16px 16px / 22px 22px 18px 18px; opacity:0.97; transform-origin:center; animation: rise linear forwards; }
 .balloon:after{ content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:-10px; width:2px; height:22px; background:rgba(0,0,0,0.08); border-radius:2px; }
-@keyframes rise { from { transform: translateY(0) scale(0.98) rotate(0deg); opacity:1; } to   { transform: translateY(-120vh) scale(1) rotate(20deg); opacity:0.98; } }
-/* Birthday banner */
-.bday-banner { position:relative; margin-bottom:10px; display:flex; gap:12px; align-items:center; background: linear-gradient(90deg,#fff3f8,#f7fffb); border-radius:10px; padding:8px 12px; box-shadow:0 8px 18px rgba(30,40,80,0.06); font-weight:800; color:#6b2140; }
-/* Edit area */
-.topper-edit { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; align-items:center; }
-.topper-edit input, .topper-edit textarea { padding:6px 8px; border-radius:8px; border:1px solid #e7ecf8; font-size:13px; background:#fff; }
-.topper-edit input { width:30%; }
-.topper-edit textarea{ width:100%; min-height:84px; font-family:monospace; }
-.controls { display:flex; flex-direction:column; gap:8px; align-items:center; flex:0 0 56px; }
-.controls button { padding:8px;border-radius:10px;border:1px solid #e6eefc;background:#fff; cursor:pointer; }
-@media(max-width:900px){ .topper-card{ flex-direction:row } .topper-edit input{ width:48% } .topper-edit textarea{ width:100% } }
+@keyframes rise { from { transform: translateY(0) scale(0.98) rotate(0deg); opacity:1; } to { transform: translateY(-120vh) scale(1) rotate(20deg); opacity:0.98; } }
+.small-note { font-size:12px; color:#475569; margin-top:8px; }
 </style>
 
-<div class="card" id="topperBlock">
-  <!-- Birthday banner appears when any DOB matches today -->
-  <div id="birthdayBannerContainer" style="display:none; margin-bottom:8px;"></div>
-
-  <div class="topper-card" id="topperCard">
-    <div class="topper-mascot" aria-hidden="true">
-      <svg width="88" height="88" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="60" cy="60" r="46" fill="#fff" stroke="#ffd86b" stroke-width="3"/>
-        <ellipse cx="60" cy="68" rx="28" ry="18" fill="#ffe9c4"/>
-        <circle cx="48" cy="52" r="6" fill="#283044"/>
-        <circle cx="72" cy="52" r="6" fill="#283044"/>
-        <path d="M45 78 Q60 90 75 78" stroke="#b33a9b" stroke-width="3" fill="none" stroke-linecap="round"/>
-      </svg>
-    </div>
-
-    <div class="topper-body">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div class="topper-title">🎉 <span>Class Topper — बधाई!</span></div>
-        <div class="topper-badge" id="topperPercent">—</div>
-        <div id="topperBdayBadge" style="display:none;" class="bday-badge">🎂 Happy Birthday</div>
-      </div>
-
-      <div class="topper-name" id="topperName">Loading...</div>
-
-      <div class="topper-sub">
-        Class — <span id="topperClass">—</span> · Adm No — <span id="topperAdm">—</span><br>
-        माता-पिता — <span id="topperParents">—</span><br>
-        जन्म-तिथि — <span id="topperDob">—</span>
-      </div>
-
-      <div style="margin-top:10px;">
-        <div style="font-size:13px;color:#334155;margin-bottom:6px;font-weight:700">Students DB (JSON):</div>
-        <textarea id="studentsJson" placeholder='Example:
-[{"name":"Ram","class":"10-A","adm":"001","parents":"Shri X & Smt Y","dob":"29-11-2008"},
- {"name":"Sita","class":"9-B","adm":"002","parents":"...","dob":"05-05-2009"}]'></textarea>
-        <div style="margin-top:8px; display:flex; gap:8px;">
-          <button id="loadStudentsBtn">Load & Save Students</button>
-          <button id="exportBtn">Export JSON</button>
-          <button id="resetBtn">Reset DB</button>
-        </div>
-        <div style="font-size:12px;color:#475569;margin-top:6px;">
-          *DOB formats accepted: DD-MM-YYYY, DD/MM/YYYY, YYYY-MM-DD. Only day+month are used for birthday matching.
-        </div>
-      </div>
-    </div>
-
-    <div class="controls" aria-hidden="true">
-      <button id="editToggle" title="Edit topper">✎</button>
-      <div id="trophy" style="font-size:28px;">🏆</div>
-    </div>
-
-    <div class="confetti" id="confettiArea"></div>
-    <div class="balloon-wrap" id="balloonArea"></div>
-  </div>
+<div class="card bday-card" id="birthdayCard">
+  <div id="birthdayBannerContainer" style="display:none;"></div>
+  <div id="birthdayListContainer" class="bday-list">लेटेस्ट चेक कर रहा है...</div>
+  <div class="confetti" id="confettiArea"></div>
+  <div class="balloon-wrap" id="balloonArea"></div>
+  <div class="small-note">सुनिश्चित करें कि Google Sheet "Student's Details" public (Anyone with the link can view) है ताकि वेबसाइट सीधे डेटा पढ़ सके।</div>
 </div>
 
 <script>
-window.TOPPER = {
-  name: "Student Name Here",
-  class: "10-A",
-  percent: "95.6%",
-  adm: "0001",
-  parents: "Father & Mother",
-  dob: "01-01-2008"
-};
-window.STUDENTS = [ { name: TOPPER.name, class: TOPPER.class, adm: TOPPER.adm, parents: TOPPER.parents, dob: TOPPER.dob } ];
+(function(){
+  const SHEET_ID = "1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0";
+  const SHEET_NAME = "Student's Details";
+  const outContainer = document.getElementById('birthdayListContainer');
+  const bannerContainer = document.getElementById('birthdayBannerContainer');
+  const confettiArea = document.getElementById('confettiArea');
+  const balloonArea = document.getElementById('balloonArea');
 
-function parseDobToDM(dob){
-  if(!dob) return null;
-  dob = dob.trim();
-  let d,m;
-  if(/\d{4}-\d{2}-\d{2}/.test(dob)){ const parts = dob.split('-'); d = parseInt(parts[2]); m = parseInt(parts[1]); }
-  else if(/\d{2}[\/\-]\d{2}[\/\-]\d{4}/.test(dob)){ const parts = dob.includes('/') ? dob.split('/') : dob.split('-'); d = parseInt(parts[0]); m = parseInt(parts[1]); }
-  else { const dt = new Date(dob); if(!isNaN(dt)) { d = dt.getDate(); m = dt.getMonth()+1; } else return null; }
-  if(!d || !m) return null; return { day: d, month: m };
-}
-function todayDM(){ const now = new Date(); return { day: now.getDate(), month: now.getMonth()+1 }; }
-function birthdayMatches(students){ const t = todayDM(); const matches = []; students.forEach(s => { const dm = parseDobToDM(s.dob || ''); if(dm && dm.day === t.day && dm.month === t.month) matches.push(s); }); return matches; }
-
-const topperName = document.getElementById('topperName');
-const topperClass = document.getElementById('topperClass');
-const topperPercent = document.getElementById('topperPercent');
-const topperAdm = document.getElementById('topperAdm');
-const topperParents = document.getElementById('topperParents');
-const topperDob = document.getElementById('topperDob');
-const topperBdayBadge = document.getElementById('topperBdayBadge');
-const confettiArea = document.getElementById('confettiArea');
-const balloonArea = document.getElementById('balloonArea');
-const birthdayBannerContainer = document.getElementById('birthdayBannerContainer');
-const studentsJson = document.getElementById('studentsJson');
-const loadStudentsBtn = document.getElementById('loadStudentsBtn');
-const exportBtn = document.getElementById('exportBtn');
-const resetBtn = document.getElementById('resetBtn');
-const editToggle = document.getElementById('editToggle');
-
-function renderTopperFromTopper(){
-  topperName.innerText = TOPPER.name || '—';
-  topperClass.innerText = TOPPER.class || '—';
-  topperPercent.innerText = TOPPER.percent || '—';
-  topperAdm.innerText = TOPPER.adm || '—';
-  topperParents.innerText = TOPPER.parents || '—';
-  topperDob.innerText = TOPPER.dob || '—';
-}
-
-function triggerConfetti(count=28){
-  confettiArea.innerHTML = '';
-  const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#B388EB','#FF8FB1'];
-  for(let i=0;i<count;i++){
-    const el = document.createElement('div');
-    el.className = 'piece';
-    el.style.background = colors[i % colors.length];
-    el.style.left = (Math.random()*100) + '%';
-    const size = 6 + Math.random()*14;
-    el.style.width = size + 'px';
-    el.style.height = Math.round(size*1.2) + 'px';
-    el.style.top = (-10 - Math.random()*20) + 'vh';
-    el.style.animationDuration = (2.2 + Math.random()*1.6) + 's';
-    confettiArea.appendChild(el);
-    setTimeout(()=> el.remove(), 3800);
+  function parseDobToDM(dob){
+    if(!dob) return null;
+    dob = String(dob).trim();
+    let d,m;
+    if(/\d{4}-\d{2}-\d{2}/.test(dob)){ const parts = dob.split('-'); d = parseInt(parts[2]); m = parseInt(parts[1]); }
+    else if(/\d{2}[\/\-]\d{2}[\/\-]\d{4}/.test(dob)){ const parts = dob.includes('/') ? dob.split('/') : dob.split('-'); d = parseInt(parts[0]); m = parseInt(parts[1]); }
+    else { const dt = new Date(dob); if(!isNaN(dt)) { d = dt.getDate(); m = dt.getMonth()+1; } else return null; }
+    if(!d || !m) return null; return { day: d, month: m };
   }
-}
-function spawnBalloons(count=6){
-  balloonArea.innerHTML = '';
-  const colors = ['#FF8FB1','#FFD93D','#6BCB77','#4D96FF','#B388EB','#FF6B6B'];
-  for(let i=0;i<count;i++){
-    const b = document.createElement('div');
-    b.className = 'balloon';
-    b.style.background = colors[i % colors.length];
-    b.style.left = (6 + Math.random()*88) + '%';
-    b.style.width = (28 + Math.random()*30) + 'px';
-    b.style.height = (36 + Math.random()*40) + 'px';
-    b.style.animationDuration = (4 + Math.random()*4) + 's';
-    b.style.animationDelay = (Math.random()*0.6) + 's';
-    balloonArea.appendChild(b);
-    setTimeout(()=> b.remove(), 9000);
+
+  function todayDM(){ const now = new Date(); return { day: now.getDate(), month: now.getMonth()+1 }; }
+
+  function triggerConfetti(count=28){
+    confettiArea.innerHTML = '';
+    const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#B388EB','#FF8FB1'];
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className = 'piece';
+      el.style.background = colors[i % colors.length];
+      el.style.left = (Math.random()*100) + '%';
+      const size = 6 + Math.random()*14;
+      el.style.width = size + 'px';
+      el.style.height = Math.round(size*1.2) + 'px';
+      el.style.top = (-10 - Math.random()*20) + 'vh';
+      el.style.animationDuration = (2.2 + Math.random()*1.6) + 's';
+      confettiArea.appendChild(el);
+      setTimeout(()=> el.remove(), 3800);
+    }
   }
-}
-function showBirthdayBanner(matches){
-  if(!matches || matches.length===0){ birthdayBannerContainer.style.display = 'none'; return; }
-  const names = matches.map(m => m.name).join(', ');
-  birthdayBannerContainer.innerHTML = `
-    <div class="bday-banner" role="status" aria-live="polite">
-      🎂 <div style="font-weight:900">${names} — जन्मदिन की हार्दिक शुभकामनाएँ!</div>
-      <div style="margin-left:auto;font-size:13px;color:#475569">Today</div>
-    </div>
-  `;
-  birthdayBannerContainer.style.display = 'block';
-  triggerConfetti(36);
-  spawnBalloons(Math.min(12, Math.max(6, matches.length*3)));
-}
 
-function syncTopperIntoStudents(){
-  const idx = STUDENTS.findIndex(s => s.adm && TOPPER.adm && s.adm === TOPPER.adm);
-  if(idx >= 0){ STUDENTS[idx] = { name: TOPPER.name, class: TOPPER.class, adm: TOPPER.adm, parents: TOPPER.parents, dob: TOPPER.dob }; }
-  else { STUDENTS = [{ name: TOPPER.name, class: TOPPER.class, adm: TOPPER.adm, parents: TOPPER.parents, dob: TOPPER.dob }, ...STUDENTS]; }
-}
-function saveToLocal(){ try{ localStorage.setItem('sb_students_db', JSON.stringify(STUDENTS)); localStorage.setItem('sb_topper', JSON.stringify(TOPPER)); }catch(e){} }
-function loadFromLocal(){ try{ const s = JSON.parse(localStorage.getItem('sb_students_db') || 'null'); const t = JSON.parse(localStorage.getItem('sb_topper') || 'null'); if(Array.isArray(s)) STUDENTS = s; if(t && t.name) TOPPER = t; }catch(e){} }
-function renderAll(){ syncTopperIntoStudents(); renderTopperFromTopper(); studentsJson.value = JSON.stringify(STUDENTS, null, 2); const matches = birthdayMatches(STUDENTS); const topperIsBday = matches.some(m => m.adm && TOPPER.adm && m.adm === TOPPER.adm); topperBdayBadge.style.display = topperIsBday ? 'inline-block' : 'none'; showBirthdayBanner(matches); saveToLocal(); }
-
-loadFromLocal();
-try {
-  const savedStudents = JSON.parse(localStorage.getItem('sb_students_db') || 'null');
-  if(Array.isArray(savedStudents)) STUDENTS = savedStudents;
-  const savedTopper = JSON.parse(localStorage.getItem('sb_topper') || 'null');
-  if(savedTopper && savedTopper.name) TOPPER = savedTopper;
-} catch(e){}
-renderAll();
-
-/* schedule midnight check */
-(function scheduleMidnightCheck(){
-  const now = new Date();
-  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 5, 0);
-  const ms = next - now;
-  if(ms > 0 && ms < 1000*60*60*24*2){
-    setTimeout(()=> { renderAll(); setInterval(renderAll, 1000*60*60*24); }, ms);
+  function spawnBalloons(count=6){
+    balloonArea.innerHTML = '';
+    const colors = ['#FF8FB1','#FFD93D','#6BCB77','#4D96FF','#B388EB','#FF6B6B'];
+    for(let i=0;i<count;i++){
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      b.style.background = colors[i % colors.length];
+      b.style.left = (6 + Math.random()*88) + '%';
+      b.style.width = (28 + Math.random()*30) + 'px';
+      b.style.height = (36 + Math.random()*40) + 'px';
+      b.style.animationDuration = (4 + Math.random()*4) + 's';
+      b.style.animationDelay = (Math.random()*0.6) + 's';
+      balloonArea.appendChild(b);
+      setTimeout(()=> b.remove(), 9000);
+    }
   }
+
+  (async function(){
+    try{
+      const url = `https://docs.google.com/spreadsheets/d/1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0/gviz/tq?sheet=${encodeURIComponent(SHEET_NAME)}&tqx=out:json`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('Sheet fetch failed: ' + res.status);
+      const text = await res.text();
+      const jsonText = text.replace(/^[^{]*/,'').replace(/\);\\s*$/,'');
+      const j = JSON.parse(jsonText);
+      const cols = (j.table.cols || []).map(c => (c.label || c.id || '').toString().trim());
+      const rows = (j.table.rows || []).map(r => r.c || []);
+      const colMap = {};
+      cols.forEach((h, i) => { colMap[h.toLowerCase()] = i; });
+      function findColIndex(names){
+        for(const n of names){ const k = Object.keys(colMap).find(x => x === n.toLowerCase()); if(k) return colMap[k]; }
+        for(const n of names){ const k = Object.keys(colMap).find(x => x.includes(n.toLowerCase())); if(k) return colMap[k]; }
+        return -1;
+      }
+      const idxAdm = findColIndex(['Admission No.','Admission No','Adm No','Admission Number','admission no']);
+      const idxName = findColIndex(['Student Name','Name','student name']);
+      const idxFather = findColIndex(['Father Name','Father','father name']);
+      const idxMother = findColIndex(['Mother Name','Mother','mother name']);
+      const idxDob = findColIndex(['Date of Birth','DOB','Birth Date','Date of Birth']);
+      const idxClass = findColIndex(['Class']);
+      const idxAddress = findColIndex(['Address']);
+      const students = rows.map(r => {
+        return {
+          adm: (r[idxAdm] && r[idxAdm].v) ? r[idxAdm].v : '',
+          name: (r[idxName] && r[idxName].v) ? r[idxName].v : '',
+          father: (r[idxFather] && r[idxFather].v) ? r[idxFather].v : '',
+          mother: (r[idxMother] && r[idxMother].v) ? r[idxMother].v : '',
+          dob: (r[idxDob] && r[idxDob].v) ? r[idxDob].v : '',
+          class: (r[idxClass] && r[idxClass].v) ? r[idxClass].v : '',
+          address: (r[idxAddress] && r[idxAddress].v) ? r[idxAddress].v : ''
+        };
+      });
+      const today = todayDM();
+      const matches = students.filter(s => {
+        const dm = parseDobToDM(s.dob);
+        return dm && dm.day === today.day && dm.month === today.month;
+      });
+      if(matches.length === 0){
+        outContainer.innerHTML = 'आज किसी का जन्मदिन नहीं है।';
+        bannerContainer.style.display = 'none';
+      } else {
+        const names = matches.map(m => m.name || m.adm || '—').join(', ');
+        bannerContainer.innerHTML = `<div class="bday-banner" role="status" aria-live="polite">🎂 <div style="font-weight:900">${names} — जन्मदिन की हार्दिक शुभकामनाएँ!</div><div style="margin-left:auto;font-size:13px;color:#475569">Today</div></div>`;
+        bannerContainer.style.display = 'block';
+        let html = '<ul style="margin:8px 0 0 18px;">';
+        matches.forEach(m => {
+          html += `<li><strong>${m.name || '—'}</strong> — Class: ${m.class||'—'} — Adm: ${m.adm||'—'} — माता-पिता: ${m.father||''}${m.mother?(' / ' + m.mother):''}</li>`;
+        });
+        html += '</ul>';
+        outContainer.innerHTML = html;
+        triggerConfetti(36);
+        spawnBalloons(Math.min(12, Math.max(6, matches.length*3)));
+      }
+    }catch(err){
+      console.error('Birthday fetch error', err);
+      outContainer.innerHTML = 'डेटा लोड करने में समस्या: ' + (err.message || err);
+      bannerContainer.style.display = 'none';
+    }
+  })();
 })();
 </script>
-<!-- END: Topper + Birthday Auto-Wisher -->
+<!-- END: Birthday Auto-Wisher -->
+
 
 
       <div>
