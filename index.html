@@ -454,14 +454,16 @@ function generateCertificate(student){
 
 // Print upcoming list (simple printable window)
 document.getElementById('printUpcoming').addEventListener('click', function(){
-  const html = '<html><head><title>Upcoming Birthdays</title><style>body{font-family:Arial;padding:20px}h1{color:#0b5fa8}li{margin-bottom:8px}</style></head><body><h1>Upcoming Birthdays (7 days)</h1>' + document.getElementById('upcomingList').innerHTML + '</body></html>';
+  const upcomingHtml = document.getElementById('upcomingList').innerHTML;
+  const fullHtml = '<html><head><title>Upcoming Birthdays</title><style>body{font-family:Arial;padding:20px}h1{color:#0b5fa8}li{margin-bottom:8px}</style></head><body><h1>Upcoming Birthdays (7 days)</h1><ul>' + upcomingHtml + '</ul></body></html>';
   const w = window.open('', '_blank', 'width=700,height=800');
-  w.document.write(html);
+  w.document.write(fullHtml);
   w.document.close();
   setTimeout(()=>{ w.print(); }, 300);
 });
 
 // Helper: create clickable name element
+
 function makeNameLink(student){
   const a = document.createElement('span');
   a.className = 'name-link';
