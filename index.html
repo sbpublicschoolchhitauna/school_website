@@ -347,6 +347,33 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </script>
 <!-- END CHATGPT OFFLINE MASCOT -->
 
+
+<!-- CHATGPT OFFLINE MASCOT - FIXED BOTTOM-RIGHT (INSERTED) -->
+<style>
+.chatgpt-mascot-fixed{position:fixed;right:14px;bottom:14px;width:96px;height:96px;z-index:2147483647;display:flex;align-items:center;justify-content:center;pointer-events:auto}
+.chatgpt-mascot-fixed .bubble{position:absolute;right:110%;bottom:8px;max-width:220px;padding:8px 12px;border-radius:12px;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,0.12);font-size:13px;color:#0b2540;opacity:0;transform:translateX(6px);transition:opacity .28s,transform .28s}
+.chatgpt-mascot-fixed .bubble.show{opacity:1;transform:translateX(0)}
+.chatgpt-mascot-fixed svg{width:86px;height:86px;display:block}
+@media (max-width:720px){.chatgpt-mascot-fixed{right:10px;bottom:10px;width:72px;height:72px}.chatgpt-mascot-fixed .bubble{display:none}}
+</style>
+<div class="chatgpt-mascot-fixed" id="chatgptMascot" tabindex="0" role="button" aria-label="Mascot">
+  <div class="bubble" id="chatgptBubble">नमस्ते! Admission open — क्लिक करें</div>
+  <svg viewBox="0 0 200 200" aria-hidden="true"><g><ellipse cx="100" cy="140" rx="36" ry="7" fill="#000" opacity="0.06"/><ellipse cx="100" cy="110" rx="44" ry="28" fill="#9fe1ff"/><circle cx="100" cy="68" r="34" fill="#ffdca3"/></g></svg>
+</div>
+<script>
+(function(){
+  const bubble=document.getElementById('chatgptBubble'),wrap=document.getElementById('chatgptMascot');
+  let msgs=["नमस्ते! Admission अभी open हैं","Result आ चुका है — portal देखें","Contact: +91 6389259200"];
+  let i=0, t=setInterval(()=>{ bubble.textContent = msgs[i]; bubble.classList.add('show'); setTimeout(()=>bubble.classList.remove('show'),3800); i=(i+1)%msgs.length }, 5200);
+  wrap.addEventListener('mouseenter',()=>{ bubble.classList.add('show'); });
+  wrap.addEventListener('mouseleave',()=>{ bubble.classList.remove('show'); });
+  wrap.addEventListener('click',()=>{ bubble.classList.add('show'); });
+  // keyboard activation
+  wrap.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); bubble.classList.add('show'); }});
+})();
+</script>
+<!-- END CHATGPT OFFLINE MASCOT - FIXED -->
+
 </body>
   </html>
   <!-- END: Inserted Photo Slider -->
