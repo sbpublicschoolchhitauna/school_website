@@ -71,112 +71,126 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </head>
 <body>
 
-
-<!-- ====== WELCOME OVERLAY (enhanced by ChatGPT: cartoon + motivational Hindi) ====== -->
+<!-- ====== WELCOME OVERLAY (inserted by ChatGPT) ====== -->
 <style>
-/* Enhanced welcome overlay styles with cartoon */
-#welcomeOverlayCartoon{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(180deg, rgba(2,12,30,0.45), rgba(3,19,43,0.55));z-index:1000000;opacity:0;pointer-events:none;transition:opacity .45s ease;}
-#welcomeOverlayCartoon.visible{opacity:1;pointer-events:auto}
-#welcomeCardCartoon{width:min(860px,94%);border-radius:18px;background:linear-gradient(180deg,#fff,#f3fbff);box-shadow:0 30px 80px rgba(2,6,23,0.32);overflow:hidden;transform:translateY(18px) scale(.98);transition:transform .45s cubic-bezier(.2,.9,.28,1),opacity .4s;opacity:0;padding:0;}
-#welcomeOverlayCartoon.visible #welcomeCardCartoon{transform:translateY(0) scale(1);opacity:1}
-#welcomeTopCartoon{display:flex;gap:12px;align-items:center;padding:16px 18px;background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
-#welcomeLogoCartoon{width:72px;height:72px;border-radius:12px;background:transparent;display:grid;place-items:center;}
-#welcomeTextWrap{flex:1;color:#fff}
-#welcomeTitleCartoon{font-size:20px;font-weight:800;margin:0}
-#welcomeSubCartoon{font-size:13px;opacity:0.95;margin-top:4px}
-#welcomeBodyCartoon{padding:18px 20px 22px;color:#042233;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-#welcomeMsgCartoon{flex:1;min-width:220px;font-weight:800;font-size:18px;line-height:1.3;color:#053046;min-height:64px}
-#welcomeActionsCartoon{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.wc-btn{padding:10px 14px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
-.wc-primary{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
-.wc-ghost{background:transparent;border:1px solid #d6ecff;color:#0b5fa8}
-#welcomeOptsCartoon{display:flex;gap:12px;align-items:center;margin-left:auto;font-size:13px;color:#064a6a}
-#welcomeCloseCartoon{position:absolute;right:14px;top:12px;background:transparent;border:0;color:#fff;font-weight:800;cursor:pointer;font-size:18px}
+/* Welcome overlay styles */
+#welcomeOverlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(3,19,43,0.45);
+  z-index: 1000000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .45s ease;
+  -webkit-font-smoothing:antialiased;
+}
+#welcomeOverlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-/* Cartoon area */
-#welcomeCartoonArea{width:160px;height:160px;display:grid;place-items:center;background:linear-gradient(180deg,#fff,#eaf8ff);border-radius:14px;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.03);overflow:hidden}
+#welcomeCard {
+  width: min(850px, 92%);
+  max-width: 920px;
+  border-radius: 16px;
+  background: linear-gradient(180deg,#ffffff,#f2fbff 60%);
+  box-shadow: 0 30px 80px rgba(2,6,23,0.32);
+  overflow: hidden;
+  transform: translateY(18px) scale(.98);
+  transition: transform .5s cubic-bezier(.2,.9,.28,1), opacity .4s;
+  opacity: 0;
+}
+#welcomeOverlay.visible #welcomeCard {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
 
-/* simple bob / bounce animation */
-.cartoon-wrap{transform-origin:center;animation:bob 2200ms ease-in-out infinite}
-@keyframes bob{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+/* Card inner layout */
+#welcomeTop{
+  padding:18px 20px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  background:linear-gradient(90deg,#0b5fa8,#1167b1);
+  color:#fff;
+}
+#welcomeLogo{
+  width:56px;height:56px;border-radius:10px;background:rgba(255,255,255,0.12);display:grid;place-items:center;font-weight:900;
+  font-size:22px;
+  box-shadow: inset 0 -4px 8px rgba(255,255,255,0.03);
+}
+#welcomeBody{padding:18px 20px 22px;color:#042233}
+#welcomeTitle{font-size:20px;font-weight:800;margin:0 0 6px}
+#welcomeSub{font-size:14px;color:#0f3b57;margin:0 0 12px}
 
-/* face blink */
-.cartoon-eye{transition:all .12s ease}
-.cartoon-mouth{transition:all .12s ease}
+/* Animated headline (typewriter-like) */
+#welcomeMsg{
+  font-size:16px;
+  font-weight:700;
+  line-height:1.4;
+  min-height:44px;
+  white-space:nowrap;
+  overflow:hidden;
+  border-right: 3px solid rgba(10,50,80,0.12);
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-mask-image: linear-gradient(#000, #000 95%, transparent);
+}
+
+/* actions */
+#welcomeActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.welcome-btn{padding:10px 14px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+.welcome-primary{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
+.welcome-ghost{background:transparent;border:1px solid #d6ecff;color:#0b5fa8}
+
+/* small options row */
+#welcomeOpts{display:flex;gap:12px;align-items:center;margin-left:auto;font-size:13px;color:#064a6a}
+#welcomeOverlay .close-x{position:absolute;right:14px;top:12px;background:transparent;border:0;color:#fff;font-weight:800;cursor:pointer;font-size:18px}
+
+/* confetti canvas fits card top */
+#welcomeConfetti { display:block; width:100%; height:140px; pointer-events:none; }
 
 /* responsive */
 @media (max-width:560px){
-  #welcomeBodyCartoon{flex-direction:column;align-items:flex-start}
-  #welcomeCartoonArea{width:130px;height:130px}
-  #welcomeMsgCartoon{font-size:16px}
+  #welcomeTop{padding:12px}
+  #welcomeCard{border-radius:12px}
+  #welcomeTitle{font-size:18px}
+  #welcomeMsg{font-size:15px}
+  #welcomeConfetti{height:110px}
 }
 </style>
 
-<div id="welcomeOverlayCartoon" role="dialog" aria-modal="true" aria-label="Welcome" tabindex="-1">
-  <div id="welcomeCardCartoon" role="document">
-    <div id="welcomeTopCartoon">
-      <div id="welcomeLogoCartoon" aria-hidden="true">
-        <!-- Animated Cartoon SVG (simple friendly mascot) -->
-        <svg class="cartoon-wrap" id="cartoonSVG" width="72" height="72" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#ffd166"/><stop offset="1" stop-color="#ff8ac4"/></linearGradient>
-          </defs>
-          <g transform="translate(10,10)">
-            <ellipse cx="50" cy="46" rx="44" ry="36" fill="url(#g1)"/>
-            <!-- eyes -->
-            <g id="eyes">
-              <ellipse class="cartoon-eye" id="eyeL" cx="36" cy="40" rx="6" ry="8" fill="#111"/>
-              <ellipse class="cartoon-eye" id="eyeR" cx="64" cy="40" rx="6" ry="8" fill="#111"/>
-            </g>
-            <!-- mouth -->
-            <path class="cartoon-mouth" id="mouth" d="M34,58 q16,16 32,0" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- blush -->
-            <ellipse cx="24" cy="50" rx="6" ry="4" fill="#ffb3d9" opacity="0.8"/>
-            <ellipse cx="76" cy="50" rx="6" ry="4" fill="#ffb3d9" opacity="0.8"/>
-          </g>
-        </svg>
-      </div>
-
-      <div id="welcomeTextWrap">
+<div id="welcomeOverlay" role="dialog" aria-modal="true" aria-label="Welcome to S.B. Public School" tabindex="-1">
+  <div id="welcomeCard" role="document">
+    <div id="welcomeTop">
+      <div id="welcomeLogo" aria-hidden="true">SB</div>
+      <div style="flex:1">
         <div style="display:flex;align-items:center;gap:8px">
-          <div id="welcomeTitleCartoon">S.B. PUBLIC SCHOOL</div>
+          <div style="font-weight:900;font-size:15px">S.B. PUBLIC SCHOOL</div>
           <div style="background:rgba(255,255,255,0.12);padding:4px 8px;border-radius:999px;font-weight:800;font-size:12px">Welcome</div>
         </div>
-        <div id="welcomeSubCartoon">Village Chhitauna · Principal: Mr. Gajendra Yadav</div>
+        <div style="font-size:12px;opacity:0.95;margin-top:4px">Village Chhitauna · Principal: Mr. Gajendra Yadav</div>
       </div>
-
-      <button id="welcomeCloseCartoon" aria-label="Close">✕</button>
+      <button class="close-x" id="welcomeClose" aria-label="Close welcome">✕</button>
     </div>
 
-    <div id="welcomeBodyCartoon">
-      <div id="welcomeCartoonArea" aria-hidden="true">
-        <!-- Larger cartoon animation (SVG) -->
-        <svg id="bigCartoon" width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#60a5fa"/></linearGradient>
-          </defs>
-          <g transform="translate(10,10)">
-            <circle cx="90" cy="70" r="56" fill="url(#g2)"/>
-            <ellipse cx="62" cy="68" rx="8" ry="10" fill="#111" class="eyeL"/>
-            <ellipse cx="118" cy="68" rx="8" ry="10" fill="#111" class="eyeR"/>
-            <path d="M62,100 q28,22 56,0" stroke="#111" stroke-width="5" fill="none" stroke-linecap="round" class="mouthBig"/>
-            <g id="hand" transform="translate(36,108)">
-              <path d="M0,0 q18,10 36,0" stroke="#111" stroke-width="6" fill="none" stroke-linecap="round"/>
-            </g>
-          </g>
-        </svg>
-      </div>
+    <!-- confetti canvas / decorative -->
+    <canvas id="welcomeConfetti" aria-hidden="true"></canvas>
 
-      <div>
-        <div id="welcomeMsgCartoon" aria-live="polite">
-          <!-- motivational phrases will be typed here -->
-        </div>
+    <div id="welcomeBody">
+      <div id="welcomeTitle">आपका स्वागत है! 👋</div>
+      <div id="welcomeSub">आज का दिन अच्छा बने — अपनी कक्षाएँ और नोटिफिकेशन देखें।</div>
 
-        <div id="welcomeActionsCartoon">
-          <button class="wc-btn wc-primary" id="startBtn">चलो शुरू करें</button>
-          <button class="wc-btn wc-ghost" id="exploreBtn">नोटिफिकेशन देखें</button>
-          <label style="display:flex;align-items:center;gap:8px;margin-left:6px">
-            <input type="checkbox" id="dontShowCartoon" /> <span style="font-weight:700;color:#064a6a">आज फिर न दिखाएँ</span>
+      <div id="welcomeMsg" aria-live="polite"></div>
+
+      <div id="welcomeActions">
+        <button class="welcome-btn welcome-primary" id="goToNotifs">Notifications</button>
+        <button class="welcome-btn welcome-ghost" id="gotoPortal">Quick Portals</button>
+        <div id="welcomeOpts">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="dontShowToday" /> <span>आज फिर न दिखाएँ</span>
           </label>
         </div>
       </div>
@@ -185,111 +199,192 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </div>
 
 <script>
-/* ===== Behavior for enhanced cartoon welcome ===== */
+/* ===== Welcome overlay behavior and lightweight confetti ===== */
 (function(){
-  const overlay = document.getElementById('welcomeOverlayCartoon');
-  const closeBtn = document.getElementById('welcomeCloseCartoon');
-  const msgEl = document.getElementById('welcomeMsgCartoon');
-  const startBtn = document.getElementById('startBtn');
-  const exploreBtn = document.getElementById('exploreBtn');
-  const dont = document.getElementById('dontShowCartoon');
+  const overlay = document.getElementById('welcomeOverlay');
+  const card = document.getElementById('welcomeCard');
+  const closeBtn = document.getElementById('welcomeClose');
+  const msgEl = document.getElementById('welcomeMsg');
+  const confettiCanvas = document.getElementById('welcomeConfetti');
+  const goToNotifs = document.getElementById('goToNotifs');
+  const gotoPortal = document.getElementById('gotoPortal');
+  const dontShow = document.getElementById('dontShowToday');
 
-  // Motivational Hindi lines (friendly, short)
+  // Text lines to animate (will loop through)
   const LINES = [
-    "हर दिन सीखने का एक नया अवसर है। ✨",
-    "मेहनत छोटी हो, लक्ष्य बड़ा रखें। 💪",
-    "गलतियाँ सीखने की सीढ़ियाँ हैं — आगे बढ़ो। 🪜",
-    "छोटी सफलता, बड़ा जश्न — तुम कर सकते हो! 🎉",
-    "आगे बढ़ो — ज्ञान तुम्हारा सबसे बड़ा मित्र है। 📚"
+    "अध्ययन पर ध्यान दें — आज की कक्षाएँ खोजें।",
+    "नवीनतम नोटिफिकेशन और सूचनाएँ देखें।",
+    "यदि कोई समस्या हो तो प्रधानाचार्य कार्यालय से संपर्क करें।",
+    "शुभकामनाएँ — आपका दिन मंगलमय रहे!"
   ];
 
-  // show once per browser per day (robust)
+  // show overlay once per browser per day
   try {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const key = 'welcomeCartoonShownOn';
-    const saved = localStorage.getItem(key) || '';
-    if(saved !== String(today.getTime())){
-      localStorage.setItem(key, String(today.getTime()));
-      show();
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const savedDate = localStorage.getItem('welcomeShownOn') || '';
+
+    if (savedDate !== String(today.getTime())) {
+        // आज अभी तक शो नहीं हुआ → दिखाओ और आज की तारीख सेव करो
+        localStorage.setItem('welcomeShownOn', String(today.getTime()));
+        show();
     }
-  } catch(e){ show(); }
+  } catch(e){
+    show();
+  }
 
   function show(){
     overlay.classList.add('visible');
     overlay.focus && overlay.focus();
-    startTyping();
-    startCartoonBlinks();
+    startTypeLoop();
+    startConfetti();
   }
-  function hide(){ overlay.classList.remove('visible'); stopCartoonBlinks(); }
 
-  closeBtn.addEventListener('click', ()=> { if(dont.checked) setBlockToday(); hide(); });
-  overlay.addEventListener('click', (e)=> { if(e.target === overlay){ if(dont.checked) setBlockToday(); hide(); } });
-  document.addEventListener('keydown', (e)=> { if(e.key==='Escape'){ if(dont.checked) setBlockToday(); hide(); } });
+  function hide(){
+    overlay.classList.remove('visible');
+    stopConfetti();
+  }
 
-  startBtn.addEventListener('click', ()=> { hide(); window.scrollTo({top:0,behavior:'smooth'}); });
-  exploreBtn.addEventListener('click', ()=> { hide(); const el = document.getElementById('notifyOuter') || document.getElementById('notifs'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); });
+  // close handlers
+  closeBtn.addEventListener('click', ()=> { if(dontShow.checked) setBlockForToday(); hide(); });
+  overlay.addEventListener('click', (e)=> { if(e.target === overlay){ if(dontShow.checked) setBlockForToday(); hide(); }});
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') { if(dontShow.checked) setBlockForToday(); hide(); }});
 
-  function setBlockToday(){
+  goToNotifs.addEventListener('click', ()=> {
+    hide();
+    const el = document.getElementById('notifyOuter') || document.getElementById('notifs');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  gotoPortal.addEventListener('click', ()=>{
+    hide();
+    // open quick portals section: scroll to quick portals card
+    const qp = Array.from(document.querySelectorAll('.card h2')).find(h=>/Quick Portals/i.test(h.innerText));
+    if(qp) qp.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  function setBlockForToday(){
     try{
-      const today = new Date(); today.setHours(23,59,59,999);
-      localStorage.setItem('welcomeCartoonBlock', String(today.getTime()));
+      const tomorrow = new Date();
+      tomorrow.setHours(23,59,59,999);
+      localStorage.setItem('welcomeBlockUntil', String(tomorrow.getTime()));
     }catch(e){}
   }
 
-  /* typing */
-  let li=0, ci=0, tmr=null;
-  function startTyping(){ li=0; ci=0; typeChar(); }
+  /* ===== Typewriter loop for welcome message ===== */
+  let lineIdx = 0;
+  let charIdx = 0;
+  let typingTimer = null;
+  function startTypeLoop(){
+    clearTimeout(typingTimer);
+    charIdx = 0;
+    typeChar();
+  }
   function typeChar(){
-    const line = LINES[li] || '';
-    ci++;
-    msgEl.textContent = line.slice(0,ci);
-    if(ci < line.length){
-      tmr = setTimeout(typeChar, 40 + Math.random()*30);
+    const current = LINES[lineIdx];
+    if(!current) return;
+    charIdx++;
+    msgEl.textContent = current.slice(0, charIdx);
+    if(charIdx < current.length){
+      typingTimer = setTimeout(typeChar, 40 + Math.random()*30);
     } else {
-      tmr = setTimeout(()=> backspace(line.length-1), 1200);
+      // pause then backspace
+      typingTimer = setTimeout(()=> backspaceChar(current.length-1), 1100);
     }
   }
-  function backspace(pos){
-    if(pos<0){ li = (li+1)%LINES.length; ci=0; tmr = setTimeout(typeChar, 200); return; }
-    msgEl.textContent = msgEl.textContent.slice(0,pos);
-    tmr = setTimeout(()=> backspace(pos-1), 24 + Math.random()*20);
+  function backspaceChar(pos){
+    if(pos < 0){
+      lineIdx = (lineIdx + 1) % LINES.length;
+      charIdx = 0;
+      typingTimer = setTimeout(typeChar, 200);
+      return;
+    }
+    msgEl.textContent = msgEl.textContent.slice(0, pos);
+    typingTimer = setTimeout(()=> backspaceChar(pos-1), 24 + Math.random()*20);
   }
 
-  /* Cartoon simple blink animation */
-  let blinkInterval = null;
-  function startCartoonBlinks(){
-    const eyeL = document.querySelector('#cartoonSVG #eyeL');
-    const eyeR = document.querySelector('#cartoonSVG #eyeR');
-    const mouth = document.querySelector('#cartoonSVG #mouth');
-    blinkInterval = setInterval(()=>{
-      // quick blink: scale Y of eyes
-      if(eyeL && eyeR){
-        eyeL.setAttribute('ry','2');
-        eyeR.setAttribute('ry','2');
-        setTimeout(()=>{ eyeL.setAttribute('ry','8'); eyeR.setAttribute('ry','8'); }, 160);
+  /* ===== Lightweight confetti (no external libs) ===== */
+  let confettiCtx=null, confettiAnim=null;
+  function startConfetti(){
+    try{
+      const dpi = window.devicePixelRatio || 1;
+      const w = confettiCanvas.clientWidth;
+      const h = confettiCanvas.clientHeight;
+      confettiCanvas.width = Math.round(w * dpi);
+      confettiCanvas.height = Math.round(h * dpi);
+      confettiCanvas.style.width = w + 'px';
+      confettiCanvas.style.height = h + 'px';
+      confettiCtx = confettiCanvas.getContext('2d');
+      confettiCtx.scale(dpi, dpi);
+      const pieces = createPieces(Math.round(w/9));
+      let last = performance.now();
+      function frame(t){
+        const dt = Math.min(40, t - last);
+        last = t;
+        confettiCtx.clearRect(0,0,w,h);
+        for(let p of pieces){
+          p.x += p.vx * dt * 0.06;
+          p.y += p.vy * dt * 0.06;
+          p.rotation += p.vr * dt * 0.06;
+          // gravity
+          p.vy += 0.02 * (dt * 0.06);
+          // draw
+          confettiCtx.save();
+          confettiCtx.translate(p.x, p.y);
+          confettiCtx.rotate(p.rotation);
+          confettiCtx.fillStyle = p.color;
+          confettiCtx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          confettiCtx.restore();
+          // recycle
+          if(p.y > h + 20){ p.x = Math.random()*w; p.y = -20; p.vy = 0.6 + Math.random()*0.6; }
+        }
+        confettiAnim = requestAnimationFrame(frame);
       }
-      // smile animation pulse
-      if(mouth){
-        mouth.setAttribute('d','M34,58 q16,26 32,0');
-        setTimeout(()=>{ mouth.setAttribute('d','M34,58 q16,16 32,0'); }, 220);
-      }
-    }, 2500);
-    // big cartoon small wave
-    const big = document.getElementById('bigCartoon');
-    let dir = 1;
-    setInterval(()=>{
-      if(big){
-        big.style.transform = 'translateY(' + (dir*6) + 'px)';
-        dir = -dir;
-      }
-    }, 900);
+      confettiAnim = requestAnimationFrame(frame);
+      window.addEventListener('resize', debounceResize);
+    } catch(e){ /* ignore */ }
   }
-  function stopCartoonBlinks(){ clearInterval(blinkInterval); blinkInterval = null; }
+  function stopConfetti(){
+    if(confettiAnim) cancelAnimationFrame(confettiAnim);
+    confettiAnim = null;
+    if(confettiCtx) confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+    window.removeEventListener('resize', debounceResize);
+  }
+
+  function createPieces(n){
+    const colors = ['#FF6B6B','#FFD166','#06D6A0','#4D96FF','#A78BFA','#FF8ACD'];
+    const pieces = [];
+    const w = confettiCanvas.clientWidth, h = confettiCanvas.clientHeight;
+    for(let i=0;i<n;i++){
+      pieces.push({
+        x: Math.random()*w,
+        y: Math.random()*h*0.25,
+        vx: (Math.random()-0.5)*1.8,
+        vy: 0.6 + Math.random()*0.8,
+        vr: (Math.random()-0.5)*0.04,
+        rotation: Math.random()*6.28,
+        w: 6 + Math.random()*10,
+        h: 8 + Math.random()*6,
+        color: colors[Math.floor(Math.random()*colors.length)]
+      });
+    }
+    return pieces;
+  }
+
+  function debounceResize(){ clearTimeout(debounceResize._t); debounceResize._t = setTimeout(()=> {
+    if(confettiCanvas){
+      const dpi = window.devicePixelRatio || 1;
+      const w = confettiCanvas.clientWidth;
+      const h = confettiCanvas.clientHeight;
+      confettiCanvas.width = Math.round(w * dpi);
+      confettiCanvas.height = Math.round(h * dpi);
+      confettiCtx && confettiCtx.scale(dpi, dpi);
+    }
+  }, 120); }
 
 })();
 </script>
 <!-- ====== END WELCOME OVERLAY ====== -->
-
 
 
   <!-- CENTERED HEADER -->
