@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S.B. Public School — Student Portal (Helpers Integrated)</title>
+<style>
+:root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Arial,Segoe UI,Roboto,sans-serif;color:#0f172a;background:linear-gradient(180deg,#eaf4ff,#f7fbff)}
+.header{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;text-align:center;padding:18px 12px;border-radius:0 0 14px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.12);position:sticky;top:0;z-index:999}
+.header h1{margin:0;font-size:clamp(20px,4.5vw,30px);font-weight:800}
+.container{max-width:1100px;margin:14px auto;padding:12px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:14px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06);margin-bottom:12px}
+h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
+.small{color:var(--muted);font-size:13px}
+.tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
+.tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
+.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
+.table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:360px}
+.table-wrap table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px;border-bottom:1px solid #f1f7ff;text-align:left}
+.helper-fab{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent),#2aa0df);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 18px 40px rgba(2,6,23,0.18);z-index:99999;cursor:pointer;display:flex;align-items:center;gap:10px}
+.helper-fab .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.12));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--accent);box-shadow:0 6px 18px rgba(2,6,23,0.12);transform-origin:center}
+.helper-panel{position:fixed;right:18px;bottom:78px;width:360px;max-width:calc(100% - 36px);background:#fff;border-radius:12px;box-shadow:0 18px 40px rgba(2,6,23,0.18);z-index:99999;padding:10px;display:none;overflow:hidden}
+.helper-panel .header{background:none;padding:0;margin-bottom:6px}
+.helper-panel .tabs{display:flex;gap:6px;margin-bottom:8px;overflow:auto;padding-bottom:6px}
+.helper-panel .tab-small{padding:6px 8px;border-radius:8px;background:#f7fbff;border:1px solid #eef6ff;color:var(--accent);cursor:pointer;font-weight:600;white-space:nowrap}
+.helper-content{max-height:400px;overflow:auto;padding:6px}
+.helper-response{margin-top:10px;max-height:220px;overflow:auto;border-radius:8px;padding:8px;background:#f8fbff;border:1px solid #eef6ff}
+.footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
+.small-muted{color:#6b7280;font-size:13px}
+.topper-card{padding:10px;border-radius:10px;background:linear-gradient(180deg,#ffffff,#f7fbff);border:1px solid #eef6ff;margin-bottom:8px}
+.list-item{padding:8px;border-radius:8px;margin-bottom:8px;background:#fff;border:1px solid #f1f7ff}
+
+/* Assistant animation: subtle breathing + dialog bubble pop */
+@keyframes breathe { 0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)} }
+.helper-fab .avatar{animation:breathe 3s ease-in-out infinite}
+
+/* panel open animation */
+.helper-panel.open{animation:panelIn 320ms cubic-bezier(.2,.9,.2,1) forwards}
+@keyframes panelIn{ from{transform:translateY(12px) scale(.98);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
+
+/* small assistant chat bubble */
+.assistant-bubble{position:absolute;right:24px;bottom:132px;background:linear-gradient(90deg,#fff,#f0fbff);border-radius:12px;padding:10px 12px;box-shadow:0 8px 28px rgba(2,6,23,0.12);transform-origin:right bottom;font-size:13px;display:none;z-index:99998}
+.assistant-bubble.show{display:block;animation:popIn 260ms ease-out}
+@keyframes popIn{ from{transform:scale(.85) translateY(6px);opacity:0}to{transform:scale(1) translateY(0);opacity:1} }
+
+/* responsive tweaks */
+@media(max-width:420px){ .helper-panel{width:94vw;right:3%;bottom:72px} .helper-fab{right:12px;bottom:12px} }
+</style>
+</head>
+<body>
+  <div class="header" role="banner">
+    <h1>S.B. PUBLIC SCHOOL — Student Portal</h1>
+    <div class="small-muted">Village Chhitauna · Principal: Mr. Gajendra Yadav · Call: +91 6389259200</div>
+    <div style="margin-top:8px" id="schoolStripOuter"><div id="schoolStrip" style="display:flex;gap:8px;flex-wrap:nowrap;overflow:hidden"></div></div>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Student Details Lookup</h2>
+          <div class="small">Admission Number डालकर Search करें</div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <input id="admission" placeholder="Enter Admission Number" style="flex:1;padding:8px;border-radius:8px;border:1px solid #dce6f7">
+            <button class="btn" onclick="searchStudent()">Search</button>
+          </div>
+          <div id="result" style="margin-top:10px"></div>
+          <div style="margin-top:10px">
+            <button class="btn" onclick="exportStudentsCSV()">Export updated students CSV</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Marksheet — Topper Summary</h2>
+          <div class="small">Sheet: <code>Marksheet Details</code> → class-wise totals, MM, Percentage, Rank</div>
+          <div id="topperSummary" style="margin-top:10px">लोड हो रहा है...</div>
+          <div style="margin-top:12px" id="marksheetTable" class="table-wrap"></div>
+        </div>
+
+        <div class="card">
+          <h2>Study Helpers</h2>
+          <div class="small">Study Materials / Homework / Timetable / Doubts / Career — Google Sheets से auto-load</div>
+          <div style="margin-top:8px" id="helpersContent">लोड हो रहा है...</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>Notifications</h2>
+          <div id="notifyOuter" class="table-wrap" style="max-height:240px;padding:8px">लोड हो रहा है...</div>
+        </div>
+
+        <div class="card">
+          <h2>Topper Quick View</h2>
+          <div id="topperCards">लोड हो रहा है...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
+  </div>
+
+  <!-- floating helper button with avatar -->
+  <div class="helper-fab" id="helperFab" role="button" aria-haspopup="true" aria-expanded="false" title="Ask the helper">
+    <div class="avatar">AI</div>
+    <div style="font-weight:700">Ask Helper</div>
+  </div>
+
+  <!-- small assistant bubble -->
+  <div class="assistant-bubble" id="assistantBubble">नमस्ते! पूछिए — मैं मदद करूँगा।</div>
+
+  <!-- merged helper panel: contains tabs for all helper features -->
+  <div class="helper-panel" id="helperPanel" aria-hidden="true" role="dialog" aria-label="Student helpers panel">
+    <div class="header"><strong>Student Helper</strong></div>
+    <div class="tabs" id="helperTabs">
+      <button class="tab-small active" data-tab="ask">Ask (AI)</button>
+      <button class="tab-small" data-tab="materials">Materials</button>
+      <button class="tab-small" data-tab="homework">Homework</button>
+      <button class="tab-small" data-tab="timetable">Timetable</button>
+      <button class="tab-small" data-tab="doubts">Doubts</button>
+      <button class="tab-small" data-tab="career">Career</button>
+      <button class="tab-small" data-tab="markstoppers">Topper</button>
+      <button class="tab-small" data-tab="students">Students</button>
+    </div>
+    <div class="helper-content" id="helperContent">
+      <!-- ASK UI -->
+      <div data-panel="ask" class="panel" style="display:block">
+        <div style="display:flex;gap:8px">
+          <input id="panelQuery" placeholder="Type question e.g. area of circle" style="flex:1;padding:8px;border-radius:8px;border:1px solid #eef6ff">
+          <button class="btn" onclick="panelAsk()">Ask</button>
+        </div>
+        <div class="helper-response" id="panelResp" style="margin-top:8px">Ask small subject questions or search FAQs. (This is client-side helper.)</div>
+      </div>
+
+      <!-- Materials -->
+      <div data-panel="materials" class="panel" style="display:none">
+        <div id="panelMaterials">लोड हो रहा है...</div>
+      </div>
+
+      <!-- Homework -->
+      <div data-panel="homework" class="panel" style="display:none">
+        <div id="panelHomework">लोड हो रहा है...</div>
+      </div>
+
+      <!-- Timetable -->
+      <div data-panel="timetable" class="panel" style="display:none">
+        <div id="panelTimetable">लोड हो रहा है...</div>
+      </div>
+
+      <!-- Doubts -->
+      <div data-panel="doubts" class="panel" style="display:none">
+        <div id="panelDoubts">लोड हो रहा है...</div>
+      </div>
+
+      <!-- Career -->
+      <div data-panel="career" class="panel" style="display:none">
+        <div id="panelCareer">लोड हो रहा है...</div>
+      </div>
+
+      <!-- Markstoppers -->
+      <div data-panel="markstoppers" class="panel" style="display:none">
+        <div id="panelToppers">लोड हो रहा है...</div>
+      </div>
+
+      <!-- Students list (small search) -->
+      <div data-panel="students" class="panel" style="display:none">
+        <div style="margin-bottom:8px"><input id="panelStudentSearch" placeholder="Admission No. या नाम से खोजें" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef6ff"></div>
+        <div id="panelStudentResult">लोड हो रहा है...</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const SHEET_ID = "1nlnyj4NhLD3KGKiuc9qERSoaBl8ml_TC_B8Z2V3V7OY";
+
+/* utility fetch */
+async function loadSheetGviz(sheetName){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+  const controller = new AbortController();
+  const id = setTimeout(()=>controller.abort(), 9000);
+  try{
+    const res = await fetch(url, {signal: controller.signal, cache: "no-store"});
+    clearTimeout(id);
+    if(!res.ok) throw new Error('Sheet fetch failed: ' + res.status);
+    const text = await res.text();
+    const jsonText = text.replace(/^[^{]*/,'').replace(/\);\s*$/,'');
+    return JSON.parse(jsonText);
+  }catch(e){
+    clearTimeout(id);
+    console.warn('loadSheetGviz error', sheetName, e);
+    throw e;
+  }
+}
+
+function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* Panel show/hide */
+const helperFab = document.getElementById('helperFab');
+const helperPanel = document.getElementById('helperPanel');
+const assistantBubble = document.getElementById('assistantBubble');
+helperFab.addEventListener('click', ()=>{
+  const open = helperPanel.style.display === 'block';
+  if(open){
+    helperPanel.style.display = 'none';
+    helperPanel.classList.remove('open');
+    assistantBubble.classList.remove('show');
+  } else {
+    helperPanel.style.display = 'block';
+    helperPanel.classList.add('open');
+    assistantBubble.classList.add('show');
+    setTimeout(()=> assistantBubble.classList.remove('show'), 4200);
+    // ensure helper content loaded
+    ensureAllLoaded();
+  }
+  helperFab.setAttribute('aria-expanded', String(!open));
+  helperPanel.setAttribute('aria-hidden', String(open));
+});
+
+/* tab switching inside panel */
+document.getElementById('helperTabs').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  const all = document.querySelectorAll('#helperTabs .tab-small');
+  all.forEach(b=>b.classList.toggle('active', b===btn));
+  const tab = btn.dataset.tab;
+  document.querySelectorAll('#helperPanel [data-panel]').forEach(p=> p.style.display = 'none');
+  document.querySelectorAll('.panel').forEach(p=> p.style.display = 'none');
+  const panel = document.querySelector('[data-panel="'+tab+'"]');
+  if(panel) panel.style.display = 'block';
+  // focus for ask input
+  setTimeout(()=>{
+    if(tab === 'ask') document.getElementById('panelQuery').focus();
+    if(tab === 'students') document.getElementById('panelStudentSearch').focus();
+  },120);
+});
+
+/* helper small functions to populate panels */
+let LOADED = false;
+async function ensureAllLoaded(){
+  if(LOADED) return;
+  LOADED = true;
+  // load materials, homework, timetable, doubts, career, marksheet, students, notifications
+  try{
+    // materials
+    try{
+      const sm = await loadSheetGviz('Study Materials');
+      const rows = (sm.table.rows||[]).map(r=> r.c || []);
+      const el = document.getElementById('panelMaterials');
+      el.innerHTML = rows.map(r=> {
+        const title = (r[0]&&r[0].v)||''; const cls = (r[1]&&r[1].v)||''; const link = (r[2]&&r[2].v)||'';
+        return `<div class="list-item"><strong>${escapeHtml(title)}</strong><div class="small">Class: ${escapeHtml(cls)}</div>${link?`<div style="margin-top:6px"><a class="btn" href="${escapeHtml(link)}" target="_blank">Open</a></div>`:''}</div>`;
+      }).join('') || '<div class="small">No materials</div>';
+    }catch(e){ document.getElementById('panelMaterials').innerHTML = '<div class="small">Study Materials load failed</div>'; }
+    // homework
+    try{
+      const hw = await loadSheetGviz('Homework');
+      const rows = (hw.table.rows||[]).map(r=> r.c || []);
+      document.getElementById('panelHomework').innerHTML = rows.map(r=> `<div class="list-item"><strong>${escapeHtml((r[0]&&r[0].v)||'')}</strong> — ${escapeHtml((r[2]&&r[2].v)||'')}<div class="small">Class: ${escapeHtml((r[1]&&r[1].v)||'')}</div></div>`).join('') || '<div class="small">No homework</div>';
+    }catch(e){ document.getElementById('panelHomework').innerHTML = '<div class="small">Homework load failed</div>'; }
+    // timetable
+    try{
+      const tt = await loadSheetGviz('Timetable');
+      const cols = (tt.table.cols||[]).map(c=>c.label||c.id||'');
+      const rows = (tt.table.rows||[]).map(r=> r.c || []);
+      let html = '<div style="overflow:auto"><table><thead><tr>'+cols.map(c=>`<th>${escapeHtml(c)}</th>`).join('')+'</tr></thead><tbody>';
+      rows.forEach(r=>{ html += '<tr>'; for(let i=0;i<cols.length;i++){ html += `<td>${escapeHtml((r[i]&&r[i].v)||'')}</td>`; } html += '</tr>'; });
+      html += '</tbody></table></div>';
+      document.getElementById('panelTimetable').innerHTML = html;
+    }catch(e){ document.getElementById('panelTimetable').innerHTML = '<div class="small">Timetable load failed</div>'; }
+    // doubts
+    try{
+      const db = await loadSheetGviz('Doubts');
+      const rows = (db.table.rows||[]).map(r=> r.c || []);
+      document.getElementById('panelDoubts').innerHTML = rows.map(r=> `<div class="list-item"><strong>Q: ${escapeHtml((r[0]&&r[0].v)||'')}</strong><div>A: ${escapeHtml((r[1]&&r[1].v)||'')}</div></div>`).join('') || '<div class="small">No doubts</div>';
+    }catch(e){ document.getElementById('panelDoubts').innerHTML = '<div class="small">Doubts load failed</div>'; }
+    // career
+    try{
+      const cg = await loadSheetGviz('Career Guidance');
+      const rows = (cg.table.rows||[]).map(r=> r.c || []);
+      document.getElementById('panelCareer').innerHTML = rows.map(r=> `<div class="list-item"><strong>${escapeHtml((r[0]&&r[0].v)||'')}</strong><div>${escapeHtml((r[1]&&r[1].v)||'')}</div></div>`).join('') || '<div class="small">No career tips</div>';
+    }catch(e){ document.getElementById('panelCareer').innerHTML = '<div class="small">Career guidance load failed</div>'; }
+    // marksheet toppers (use same logic as main page)
+    try{
+      const md = await loadSheetGviz('Marksheet Details');
+      const cols = (md.table.cols||[]).map(c=>c.label||c.id||'');
+      const rows = (md.table.rows||[]).map(r=> r.c || []);
+      // Aggregate
+      const map = {};
+      rows.forEach(r=>{
+        const adm = (r[0]&&r[0].v)||''; const name = (r[1]&&r[1].v)||''; const cls = (r[2]&&r[2].v)||''; const marks = Number((r[3]&&r[3].v)||0);
+        const key = adm+'||'+name+'||'+cls;
+        if(!map[key]) map[key] = {admission:adm, name:name, cls:cls, total:0};
+        map[key].total += marks;
+      });
+      const list = Object.values(map);
+      const byClass = {};
+      list.forEach(it=>{ const c = it.cls||'Unspecified'; if(!byClass[c]) byClass[c]=[]; byClass[c].push(it); });
+      const cards = [];
+      Object.keys(byClass).forEach(cls=>{
+        const arr = byClass[cls].slice().sort((a,b)=> b.total - a.total);
+        const top = arr[0];
+        if(top) cards.push(`<div class="topper-card"><strong>Class ${escapeHtml(cls)}</strong><div>${escapeHtml(top.name)} — ${escapeHtml(String(top.total))} marks</div></div>`);
+      });
+      document.getElementById('panelToppers').innerHTML = cards.join('') || '<div class="small">No toppers</div>';
+    }catch(e){ document.getElementById('panelToppers').innerHTML = '<div class="small">Toppers load failed</div>'; }
+    // students simple list for search
+    try{
+      const sd = await loadSheetGviz(\"Student's Details\");
+      const cols = (sd.table.cols||[]).map(c=>c.label||c.id||'');
+      const rows = (sd.table.rows||[]).map(r=> r.c || []);
+      const arr = rows.map(r=>{
+        return {admission:(r[0]&&r[0].v)||'', name:(r[1]&&r[1].v)||'', cls:(r[5]&&r[5].v)||'', dob:(r[4]&&r[4].v)||''};
+      });
+      window._PANEL_STUDENTS = arr;
+      document.getElementById('panelStudentResult').innerHTML = '<div class=\"small\">Students loaded. Search by admission no. or name.</div>';
+    }catch(e){ document.getElementById('panelStudentResult').innerHTML = '<div class=\"small\">Students load failed</div>'; }
+  }catch(e){
+    console.warn('ensureAllLoaded error', e);
+  }
+}
+
+/* panel ask function (search doubts then canned answers) */
+async function panelAsk(){
+  const q = document.getElementById('panelQuery').value.trim();
+  const resp = document.getElementById('panelResp');
+  if(!q){ resp.innerHTML = 'कृपया सवाल टाइप करें।'; return; }
+  resp.innerHTML = 'Searching...';
+  try{
+    const db = await loadSheetGviz('Doubts');
+    const rows = (db.table.rows||[]).map(r=> r.c || []);
+    const found = [];
+    rows.forEach(r=>{ const ques = (r[0]&&r[0].v)||''; const ans = (r[1]&&r[1].v)||''; if(String(ques).toLowerCase().includes(q.toLowerCase()) || String(ans).toLowerCase().includes(q.toLowerCase())) found.push({q:ques,a:ans}); });
+    if(found.length){ resp.innerHTML = found.slice(0,5).map(f=>`<div style=\"margin-bottom:8px\"><strong>Q: ${escapeHtml(f.q)}</strong><div>A: ${escapeHtml(f.a)}</div></div>`).join(''); return; }
+  }catch(e){ console.warn('panelAsk db search failed', e); }
+  const canned = {'area of circle':'Area = π × r × r (π ≈ 3.14).', 'past simple':'Regular verbs add -ed (e.g., walked). Irregular verbs change (e.g., went).'};
+  for(const k in canned) if(q.toLowerCase().includes(k)){ document.getElementById('panelResp').innerHTML = canned[k]; return; }
+  document.getElementById('panelResp').innerHTML = 'माफ़ करें — FAQ में नहीं मिला। Teacher से पूछें या Doubts sheet में नया प्रश्न डालें।';
+}
+
+/* student search in panel */
+document.getElementById('panelStudentSearch').addEventListener('input', debounce(function(e){
+  const v = e.target.value.trim().toLowerCase();
+  const out = document.getElementById('panelStudentResult');
+  if(!window._PANEL_STUDENTS || window._PANEL_STUDENTS.length===0){ out.innerHTML = '<div class=\"small\">Students not loaded yet.</div>'; return; }
+  if(!v){ out.innerHTML = '<div class=\"small\">Type admission no. or name to search.</div>'; return; }
+  const list = window._PANEL_STUDENTS.filter(s=> (s.admission||'').toLowerCase().includes(v) || (s.name||'').toLowerCase().includes(v));
+  out.innerHTML = list.slice(0,12).map(s=>`<div class=\"list-item\"><strong>${escapeHtml(s.name)}</strong><div class=\"small\">Adm: ${escapeHtml(s.admission)} • Class: ${escapeHtml(s.cls)} • DOB: ${escapeHtml(s.dob)}</div></div>`).join('') || '<div class=\"small\">No matches</div>';
+}, 220));
+
+/* reuse main search and export functions (assume loaded STUDENTS_ROWS elsewhere) */
+/* For simplicity, also allow exported CSV same as before -- user can download from main page */
+
+// ensure main page initial loaders are called as before (loadStudents, loadMarksheetAndCompute, loadHelpersAll)
+// We'll call the same functions if present in the page global; if not, load minimal items for header chips.
+async function initMain(){
+  // populate header notification chips quickly
+  try{
+    const nf = await loadSheetGviz('Notification');
+    const rows = (nf.table.rows||[]).map(r=> r.c || []);
+    const chipWrap = document.getElementById('schoolStrip');
+    chipWrap.innerHTML = '';
+    rows.slice(0,8).forEach(r=>{ const d=(r[0]&&r[0].v)||''; const t=(r[1]&&r[1].v)||''; const span = document.createElement('div'); span.className='school-chip'; span.title = `${d} - ${t}`; span.innerText = `${d} - ${t}`; chipWrap.appendChild(span); });
+  }catch(e){ console.warn('initMain notif failed', e); }
+  // call global loaders if they exist
+  try{ if(typeof loadStudents === 'function') await loadStudents(); }catch(e){}
+  try{ if(typeof loadMarksheetAndCompute === 'function') await loadMarksheetAndCompute(); }catch(e){}
+  try{ if(typeof loadHelpersAll === 'function') await loadHelpersAll(); }catch(e){}
+}
+
+document.getElementById('year').innerText = new Date().getFullYear();
+initMain();
+
+</script>
+</body>
+</html>
