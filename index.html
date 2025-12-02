@@ -374,6 +374,107 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </script>
 <!-- END CHATGPT OFFLINE MASCOT - FIXED -->
 
+
+<!-- CHATGPT OFFLINE MASCOT - HORIZONTAL BIG BUBBLE (INSERTED) -->
+<style>
+.cg-mascot-fixed{position:fixed;right:18px;bottom:18px;width:120px;height:120px;z-index:2147483647;display:flex;align-items:center;justify-content:center;pointer-events:auto;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1}
+.cg-mascot-fixed .bubble{position:absolute;right:130px;bottom:6px;max-width:360px;min-width:220px;padding:12px 16px;border-radius:18px;background:linear-gradient(90deg,#fff,#f7fbff);box-shadow:0 14px 40px rgba(10,30,60,0.12);font-size:16px;color:#082033;opacity:0;transform:translateX(8px) scale(.98);transition:opacity .32s cubic-bezier(.2,.9,.3,1),transform .32s}
+.cg-mascot-fixed .bubble.show{opacity:1;transform:translateX(0) scale(1)}
+.cg-mascot-fixed .line{display:block;overflow:visible;white-space:nowrap}
+.cg-mascot-fixed .char{display:inline-block;opacity:0;transform:translateY(10px) scale(.88);font-weight:700}
+@keyframes charPop{0%{opacity:0;transform:translateY(10px) scale(.88)}60%{opacity:1;transform:translateY(-6px) scale(1.06)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.cg-mascot-fixed svg{width:100px;height:100px;display:block;border-radius:8px}
+@media (max-width:720px){.cg-mascot-fixed{right:10px;bottom:10px;width:84px;height:84px}.cg-mascot-fixed .bubble{display:none}}
+</style>
+
+<div class="cg-mascot-fixed" id="cgMascot" tabindex="0" role="button" aria-label="Mascot with messages">
+  <div class="bubble" id="cgBubble" aria-hidden="true"></div>
+  <svg viewBox="0 0 200 200" aria-hidden="true">
+    <g>
+      <ellipse cx="100" cy="148" rx="36" ry="7" fill="#000" opacity="0.06"/>
+      <ellipse cx="100" cy="110" rx="44" ry="28" fill="#9fe1ff"/>
+      <circle cx="100" cy="68" r="34" fill="#ffdca3"/>
+      <circle cx="86" cy="66" r="5" fill="#262626"/>
+      <circle cx="114" cy="66" r="5" fill="#262626"/>
+      <path d="M82 84 Q100 96 118 84" stroke="#6b4" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+  </svg>
+</div>
+
+<script>
+(function(){
+  // Hindi messages with a happy emoji at start — full unicode supported
+  const messages = [
+    "😄 नमस्ते! Admission अभी open हैं — अभी रजिस्टर करें",
+    "😄 रिजल्ट आ चुका है — अपने पोर्टल पर चेक करें",
+    "😄 वार्षिक उत्सव: 25 Dec — तैयारी जल्द शुरू",
+    "😄 संपर्क: +91 6389259200 — सहायता के लिए कॉल करें",
+    "😄 Happy Learning! ✨"
+  ];
+
+  const bubble = document.getElementById('cgBubble');
+  const wrap = document.getElementById('cgMascot');
+  let idx = 0;
+  let rotTimer = null;
+
+  // Build per-character spans for better 'cartoon' effect
+  function buildChars(text){
+    const line = document.createElement('span');
+    line.className = 'line';
+    for(let i=0;i<text.length;i++){
+      const ch = document.createElement('span');
+      ch.className = 'char';
+      ch.textContent = text[i];
+      // staggered animation delay per character
+      const delay = i * 36; // ms
+      ch.style.animation = 'charPop 520ms cubic-bezier(.2,.9,.3,1) both';
+      ch.style.animationDelay = delay + 'ms';
+      line.appendChild(ch);
+    }
+    return line;
+  }
+
+  function showMessage(n){
+    if(!bubble) return;
+    const text = messages[n] || '';
+    bubble.innerHTML = '';
+    // create content (single-line horizontal)
+    const built = buildChars(text);
+    bubble.appendChild(built);
+    // show bubble with slide-in
+    bubble.classList.add('show');
+    // remove after duration (based on length)
+    const visible = Math.max(3600, text.length * 70 + 800);
+    setTimeout(()=>{ bubble.classList.remove('show'); }, visible);
+  }
+
+  // start rotating messages
+  showMessage(idx);
+  rotTimer = setInterval(()=>{ idx = (idx + 1) % messages.length; showMessage(idx); }, 5600);
+
+  // interactions: hover/focus/click to show immediately
+  wrap.addEventListener('mouseenter', ()=> showMessage(idx));
+  wrap.addEventListener('focus', ()=> showMessage(idx));
+  wrap.addEventListener('click', ()=> { showMessage(idx); // small pulse feedback
+      wrap.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 280, easing: 'ease-out' });
+  });
+  wrap.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); wrap.click(); } });
+
+  // respect reduced motion preference
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){
+    clearInterval(rotTimer);
+    if(bubble) bubble.style.display = 'none';
+    const g = document.querySelector('.cg-mascot-fixed .mascot-group');
+    if(g) g.style.animation = 'none';
+  }
+
+  // small API
+  window._cgMascot = { show: (n)=> { idx = n % messages.length; showMessage(idx); }, stop: ()=> { clearInterval(rotTimer); } };
+})();
+</script>
+<!-- END CHATGPT OFFLINE MASCOT - HORIZONTAL BIG BUBBLE -->
+
 </body>
   </html>
   <!-- END: Inserted Photo Slider -->
