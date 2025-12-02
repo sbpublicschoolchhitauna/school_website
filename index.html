@@ -302,7 +302,52 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   createSlides();
   start();
   </script>
-  </body>
+  
+<!-- CHATGPT OFFLINE MASCOT (INSERTED) -->
+<style>
+.offline-mascot-wrap{position:absolute;right:18px;top:12px;width:110px;height:110px;display:flex;align-items:center;justify-content:center;z-index:9999}
+.mascot-speech{position:absolute;right:calc(100% + 10px);top:6px;max-width:240px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,#fffdf9,#f2fbff);box-shadow:0 10px 30px rgba(20,40,80,0.12);font-size:14px;line-height:1.15;color:#123;transform-origin:right center;opacity:0;transform:translateX(6px) scale(.96) rotate(-1deg);transition:transform .36s,opacity .36s}
+.mascot-speech.show{opacity:1;transform:translateX(0) scale(1) rotate(0deg)}
+.mascot-speech .char{display:inline-block;transform:translateY(8px) scale(.92);opacity:0;font-weight:600;animation:charPop .56s both}
+@keyframes charPop{0%{transform:translateY(10px) scale(.86);opacity:0}60%{transform:translateY(-6px) scale(1.08);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+.mascot-svg{width:92px;height:92px;display:block}
+.mascot-group{animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+.confetti-canvas{position:absolute;inset:0;width:260px;height:260px;pointer-events:none}
+@media (max-width:720px){.offline-mascot-wrap{right:10px;top:8px;width:82px;height:82px}.mascot-speech{display:none}.mascot-svg{width:72px;height:72px}}
+</style>
+<div class="offline-mascot-wrap" id="offlineMascot" tabindex="0" role="img" aria-label="mascot">
+  <div class="mascot-speech" id="mascotSpeech" aria-hidden="true"></div>
+  <canvas class="confetti-canvas" id="mascotConfetti" width="260" height="260" aria-hidden="true"></canvas>
+  <svg class="mascot-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="mascot-group"><ellipse cx="100" cy="160" rx="34" ry="8" fill="#000" opacity="0.06"/><ellipse cx="100" cy="118" rx="44" ry="34" fill="#9fe1ff"/><circle cx="100" cy="74" r="36" fill="#ffdca3"/></g></svg>
+</div>
+<script>
+(function(){
+  const msgs=["नमस्ते! Admission अभी open हैं 😊","Result आ चुका है — portal देखें!","Annual Day: 25 Dec — तैयारी शुरू","Contact: +91 6389259200 — हम मदद के लिए हैं","Happy Learning! 🌟✨"];
+  const speech=document.getElementById('mascotSpeech'),wrap=document.getElementById('offlineMascot');
+  let idx=0,timer=null;
+  function buildChars(text){
+    const s=document.createElement('span');
+    for(let i=0;i<text.length;i++){const ch=document.createElement('span');ch.className='char';ch.textContent=text[i];ch.style.animationDelay=(i*45)+'ms';s.appendChild(ch);}
+    return s;
+  }
+  function show(i){if(!speech) return; speech.innerHTML=''; speech.appendChild(buildChars(msgs[i]||'')); speech.classList.add('show'); setTimeout(()=>speech.classList.remove('show'),Math.max(3500,msgs[i].length*70+1200));}
+  show(0); timer=setInterval(()=>{idx=(idx+1)%msgs.length; show(idx);},5800);
+  wrap.addEventListener('mouseenter',()=>show(idx)); wrap.addEventListener('focus',()=>show(idx));
+  // simple confetti on click
+  const canvas=document.getElementById('mascotConfetti'),ctx=canvas&&canvas.getContext?canvas.getContext('2d'):null;let parts=[];
+  function rand(a,b){return Math.random()*(b-a)+a;}
+  function spawn(){if(!ctx) return; for(let i=0;i<26;i++){parts.push({x:rand(40,200),y:rand(30,90),vx:rand(-2.6,2.6),vy:rand(-5.6,-1.2),rot:rand(0,360),vr:rand(-8,8),size:rand(6,12),life:rand(60,110),color:['#ff8a65','#ffd54f','#81c784','#4fc3f7','#b39ddb'][Math.floor(rand(0,5))]});} if(!anim) {anim=true;requestAnimationFrame(loop);} }
+  let anim=false;
+  function loop(){if(!ctx) return;ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.vy+=0.18;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life--;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);ctx.restore();if(p.y>220||p.life<=0)parts.splice(i,1);} if(parts.length>0)requestAnimationFrame(loop);else anim=false;}
+  wrap.addEventListener('click',()=>{spawn();show(idx);}); wrap.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();wrap.click();}});
+  // reduced motion respect
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){clearInterval(timer); if(canvas) canvas.style.display='none'; const g=document.querySelector('.mascot-group'); if(g) g.style.animation='none'}
+})();
+</script>
+<!-- END CHATGPT OFFLINE MASCOT -->
+
+</body>
   </html>
   <!-- END: Inserted Photo Slider -->
 
