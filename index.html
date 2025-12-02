@@ -711,10 +711,14 @@ loadFeeAndMarks();
 </script>
 </body>
 </html>
-
-
+<!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
 <style>
-.lookup-box {width:100%;max-width:600px;margin:auto;padding:0 10px;}
-.lookup-box input{width:100%!important;box-sizing:border-box;}
-.lookup-box button{width:100%!important;margin-top:10px;box-sizing:border-box;}
+/* allow tables to shrink on narrow screens (fix mobile zoom-out) */
+table { min-width: 0 !important; width: 100%; }
+
+/* make horizontal table container smoothly scrollable on touch */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* safeguard: prevent accidental page-wide overflow */
+html, body { max-width: 100%; overflow-x: hidden; }
 </style>
