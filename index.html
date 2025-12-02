@@ -142,62 +142,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  <!-- ===== STUDYGENIE: AI STUDENT ASSISTANT (ADDED) ===== -->
-  <style>
-  /* STUDYGENIE section styles (kept separate to avoid clashes) */
-  .sg-section {
-    max-width:1100px;margin:14px auto;padding:16px;border-radius:12px;background:linear-gradient(135deg,#021b24,#003348);color:#e8fbff;display:flex;gap:14px;align-items:center;box-shadow:0 12px 30px rgba(2,6,23,0.18);
-  }
-  .sg-left,.sg-right{flex:1 1 260px}
-  .sg-left{text-align:center}
-  .sg-avatar{width:110px;height:110px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:48px;background:radial-gradient(circle at 30% 20%, #c8f8ff, #00f5d4 40%, #003554 90%);box-shadow:0 0 26px rgba(0,245,212,0.28)}
-  .sg-title{font-size:22px;font-weight:800;margin-top:8px}
-  .sg-sub{opacity:0.95;font-size:13px}
-  .sg-suggests{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-  .sg-chip{background:rgba(255,255,255,0.06);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-weight:700}
-  .sg-chat{background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;margin-top:10px}
-  .sg-msgs{max-height:160px;overflow:auto;margin-bottom:8px}
-  .sg-msg{padding:8px;border-radius:8px;margin-bottom:6px;font-size:13px}
-  .sg-msg.user{background:#00b4d8;color:#012; text-align:right}
-  .sg-msg.bot{background:rgba(255,255,255,0.08);color:#012}
-  .sg-input-row{display:flex;gap:8px}
-  .sg-input-row input{flex:1;padding:8px;border-radius:8px;border:0;font-size:13px}
-  .sg-input-row button{padding:8px 12px;border-radius:8px;border:0;background:#00f5d4;font-weight:800;cursor:pointer}
-  @media(max-width:760px){ .sg-section{flex-direction:column;align-items:stretch} .sg-left,.sg-right{width:100%} }
-  </style>
-
-  <section class="sg-section" id="studentAiAssistant2" aria-label="StudyGenie Student Assistant">
-    <div class="sg-left">
-      <div class="sg-avatar">🤖</div>
-      <div class="sg-title">StudyGenie</div>
-      <div class="sg-sub">S.B. PUBLIC SCHOOL — Smart Support for Every Student</div>
-    </div>
-
-    <div class="sg-right">
-      <div style="font-weight:800;font-size:16px;margin-bottom:6px;color:#c8fbff">AI Student Assistant</div>
-      <div style="font-size:13px;opacity:0.95;margin-bottom:8px">फीस, एडमिशन, मार्कशीट या अन्य जानकारी पूछें — या नीचे दिए बटनों को टैप करें।</div>
-
-      <div class="sg-suggests">
-        <div class="sg-chip" data-sg-q="फीस कब भरनी है?">फीस जानकारी</div>
-        <div class="sg-chip" data-sg-q="Admission process बताओ">Admission Process</div>
-        <div class="sg-chip" data-sg-q="मेरी मार्कशीट कैसे देखें?">Marksheet Help</div>
-        <div class="sg-chip" data-sg-q="School timing क्या है?">School Timing</div>
-      </div>
-
-      <div class="sg-chat" aria-live="polite">
-        <div id="sg_msgs" class="sg-msgs">
-          <div class="sg-msg bot">👋 नमस्ते! अपना सवाल लिखिए — उदाहरण: "Show Student 3717158" या "Open Fee Portal".</div>
-        </div>
-        <div class="sg-input-row" style="margin-top:6px">
-          <input id="sg_input" type="text" placeholder="यहाँ अपना सवाल लिखें..." aria-label="StudyGenie input">
-          <button id="sg_send">पूछिए</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== END STUDYGENIE ===== -->
-
   <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
   <!doctype html>
   <html lang="hi">
@@ -691,92 +635,6 @@ loadNotifications();
 loadFeeAndMarks();
 </script>
 
-<!-- ===== StudyGenie client-side JS (handles chat UI + basic intents) ===== -->
-<script>
-(function(){
-  const input = document.getElementById('sg_input');
-  const send = document.getElementById('sg_send');
-  const msgs = document.getElementById('sg_msgs');
-  const chips = document.querySelectorAll('.sg-chip');
-
-  function addMsg(text, who){
-    const d = document.createElement('div');
-    d.className = 'sg-msg ' + (who==='user'?'user':'bot');
-    d.innerHTML = text;
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  async function handleQuery(q){
-    if(!q || !q.trim()) return;
-    const text = q.trim();
-    addMsg(escapeHtml(text),'user');
-    // temporary loading indicator
-    const loader = document.createElement('div'); loader.className='sg-msg bot'; loader.innerHTML='Processing…'; msgs.appendChild(loader);
-    msgs.scrollTop = msgs.scrollHeight;
-
-    const t = text.toLowerCase();
-
-    // fee portal open
-    if(/fee|fees|फीस|pay fee/i.test(t)){
-      msgs.removeChild(loader);
-      addMsg('फीस पोर्टल खोल रहा/रही हूँ — नया टैब खुलेगा।','bot');
-      window.open('https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec', '_blank');
-      return;
-    }
-
-    // marks / result
-    if(/mark|marksheet|result|रिजल्ट|मार्कशीट/i.test(t)){
-      msgs.removeChild(loader);
-      try{ showTab('marks'); addMsg('Marksheet सेक्शन खोल दिया गया — नीचे स्क्रॉल करें।','bot'); }catch(e){ addMsg('Marksheet खोलने में error: '+escapeHtml(String(e)),'bot'); }
-      return;
-    }
-
-    // admission number detected
-    const m = t.match(/(\b\d{4,8}\b)/);
-    if(/admission|admit|एडमिशन|adm/i.test(t) && m){
-      const adm = m[1];
-      msgs.removeChild(loader);
-      addMsg('Admission नंबर के अनुसार खोज रहा/रही हूँ — परिणाम नीचे दिखेंगे।','bot');
-      try{
-        document.getElementById('admission').value = adm;
-        await searchStudent();
-        addMsg('Search पूरा हुआ — यदि विवरण नहीं दिखे तो sheet sharing/number चेक करें।','bot');
-      }catch(e){ addMsg('Search में समस्या: '+escapeHtml(String(e)),'bot'); }
-      return;
-    }
-
-    // admission info
-    if(/how to apply|apply|admission process|documents|एडमिशन प्रोसेस/i.test(t)){
-      msgs.removeChild(loader);
-      addMsg(`<strong>Admission Info:</strong><br>• Timing: 8:30 AM – 3:00 PM.<br>• Documents: जन्म प्रमाण-पत्र, TC (यदि आवश्यक).<br>• Contact: Principal — Mr. Gajendra Yadav · +91 6389259200`,'bot');
-      return;
-    }
-
-    // contact info
-    if(/contact|call|phone|संपर्क|फोन/i.test(t)){
-      msgs.removeChild(loader);
-      addMsg('Principal — Mr. Gajendra Yadav · +91 6389259200','bot');
-      return;
-    }
-
-    // fallback: canned help
-    msgs.removeChild(loader);
-    addMsg('क्षमा करें, मैं अभी advanced AI server से जुड़ा नहीं हूं। आप इन में से पूछ सकते हैं: "Show Student 3717158", "Open Fee Portal", "Marksheet".','bot');
-  }
-
-  // send handlers
-  send.addEventListener('click', ()=>{ handleQuery(input.value); input.value=''; });
-  input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); handleQuery(input.value); input.value=''; } });
-  chips.forEach(c=> c.addEventListener('click', ()=>{ handleQuery(c.getAttribute('data-sg-q') || c.innerText); }));
-
-  // escape helper
-  function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  // OPTIONAL: If you deploy a server endpoint /api/ai you can replace or extend handleQuery to call it.
-})();
-</script>
-
 <!-- ====== Admission ticker JS (placed at end to ensure DOM exists) ====== -->
 <script>
 (function(){
@@ -817,6 +675,7 @@ loadFeeAndMarks();
     }, duration + 200);
   }
 
+  // pause/resume on hover or focus
   const wrap = document.getElementById('admissionTickerWrap');
   function pauseTicker(){
     const style = window.getComputedStyle(el);
@@ -824,7 +683,7 @@ loadFeeAndMarks();
     let tx = 0;
     if(matrix && matrix !== 'none'){
       try{
-        const vals = matrix.match(/matrix\(([^)]+)\)/);
+        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
         if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
       }catch(e){}
     }
@@ -839,8 +698,10 @@ loadFeeAndMarks();
   wrap.addEventListener('mouseleave', resumeTicker);
   wrap.addEventListener('focusout', resumeTicker);
 
+  // start
   startMessage(0);
 
+  // expose API if needed
   window.AdmissionTicker = {
     setNews(array){ if(Array.isArray(array) && array.length){ NEWS.length=0; NEWS.push(...array); idx=0; startMessage(0); } },
     pause(){ pauseTicker(); },
@@ -848,6 +709,230 @@ loadFeeAndMarks();
   };
 })();
 </script>
+
+<!-- ===== StudyGenie Floating Helper (inserted by assistant) ===== -->
+<style>
+.sg-floating {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00f5d4,#0b5fa8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 12px 30px rgba(2,6,23,0.28);
+  z-index:999999;
+  cursor:pointer;
+  transition:transform .12s ease;
+}
+.sg-floating:active{ transform:scale(.96); }
+.sg-floating .badge{
+  position:absolute; top:-6px; right:-6px; background:#ff3b30; color:#fff; font-weight:800;
+  font-size:12px; padding:3px 6px; border-radius:999px; box-shadow:0 6px 14px rgba(0,0,0,0.2);
+}
+.sg-popover {
+  position: fixed;
+  right: 82px;
+  bottom: 22px;
+  width:320px;
+  max-width:calc(100% - 48px);
+  background:#ffffff;
+  color:#042233;
+  border-radius:12px;
+  box-shadow:0 18px 60px rgba(2,6,23,0.28);
+  z-index:999998;
+  overflow:hidden;
+  transform-origin:100% 100%;
+  transition:transform .14s ease,opacity .14s ease;
+  font-family: Arial, Helvetica, sans-serif;
+  display:none;
+}
+.sg-popover.visible{ display:block; transform:translateY(0) scale(1); opacity:1; }
+.sg-popover header{background:linear-gradient(90deg,#0b5fa8,#1167b1); color:#fff; padding:10px 12px; font-weight:800; display:flex;justify-content:space-between;align-items:center}
+.sg-popover .list{padding:10px; max-height:240px; overflow:auto}
+.sg-popover .item{padding:8px;border-radius:8px;margin-bottom:8px;background:#f6fbff;border:1px solid #eef9ff;font-size:13px}
+.sg-popover .item .time{font-size:11px;color:#0b5fa8;font-weight:700}
+.sg-popover .actions{display:flex;gap:8px;padding:10px;border-top:1px solid #f1f7ff;background:#fff}
+.sg-popover .actions button{flex:1;padding:8px;border-radius:8px;border:0;cursor:pointer;font-weight:800}
+.sg-openbtn{background:#00f5d4}
+.sg-goto{background:#0b5fa8;color:#fff}
+@media(max-width:420px){
+  .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
+}
+</style>
+
+<div id="sgFloating" class="sg-floating" role="button" aria-label="StudyGenie help" tabindex="0" title="StudyGenie — Help">
+  <span style="font-size:22px">🤖</span>
+  <span id="sgBadge" class="badge" style="display:none">0</span>
+</div>
+
+<div id="sgPopover" class="sg-popover" role="dialog" aria-hidden="true" aria-label="StudyGenie notifications">
+  <header>
+    <div>StudyGenie</div>
+    <div style="font-size:12px;opacity:0.9">Latest Updates</div>
+  </header>
+  <div class="list" id="sgList">
+    <div style="padding:12px;color:#556">Loading notifications…</div>
+  </div>
+  <div class="actions">
+    <button id="sgOpenSection" class="sg-goto">Open Notifications</button>
+    <button id="sgRefresh" class="sg-openbtn">Refresh</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const floating = document.getElementById('sgFloating');
+  const pop = document.getElementById('sgPopover');
+  const list = document.getElementById('sgList');
+  const badge = document.getElementById('sgBadge');
+  const openSectionBtn = document.getElementById('sgOpenSection');
+  const refreshBtn = document.getElementById('sgRefresh');
+
+  let latestItems = [];
+  let pollInterval = 10000; // 10 seconds
+  let timer = null;
+
+  function togglePopover(show){
+    const now = !!show;
+    if(now){
+      pop.classList.add('visible');
+      pop.setAttribute('aria-hidden','false');
+    } else {
+      pop.classList.remove('visible');
+      pop.setAttribute('aria-hidden','true');
+    }
+  }
+
+  floating.addEventListener('click', ()=> togglePopover(!(pop.classList.contains('visible'))));
+  floating.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key===' ') { e.preventDefault(); togglePopover(!(pop.classList.contains('visible'))); } });
+
+  async function fetchNotifications(){
+    try{
+      if(typeof loadSheetGviz === 'function'){
+        const data = await loadSheetGviz("Notification");
+        const cols = (data.table.cols||[]).map(c=> (c.label||c.id||'').toString().trim());
+        const rows = (data.table.rows||[]).map(r=> r.c || []);
+        const textKey = cols.find(k=>/notif|notification|text|message|note|description/i.test(k)) || cols[1] || cols[0] || cols[1];
+        const dateKey = cols.find(k=>/date|time|day/i.test(k)) || cols[0] || '';
+        const items = [];
+        rows.forEach(cells=>{
+          const obj={};
+          for(let i=0;i<cols.length;i++){
+            const cell = cells[i];
+            let v = "";
+            if(cell){
+              if(cell.v !== undefined) v = cell.v;
+              else if(cell.f !== undefined) v = String(cell.f).replace(/<[^>]*>/g,'').trim();
+            }
+            obj[cols[i]] = v;
+          }
+          const t = obj[textKey] || '';
+          const d = obj[dateKey] || '';
+          if(t) items.push({text: String(t).trim(), date: String(d).trim()});
+        });
+        return items.slice(0,8);
+      }
+    }catch(e){
+      console.warn('StudyGenie fetch via loadSheetGviz failed', e);
+    }
+
+    try{
+      const domNotifs = [];
+      const els = document.querySelectorAll('#notifs .notify-item');
+      if(els && els.length){
+        els.forEach(el=>{
+          const d = el.querySelector('.date') ? el.querySelector('.date').innerText : '';
+          const t = el.querySelector('.text') ? el.querySelector('.text').innerText : el.innerText;
+          domNotifs.push({text: t.trim(), date: d.trim()});
+        });
+        if(domNotifs.length) return domNotifs.slice(0,8);
+      }
+    }catch(e){}
+
+    if(window.AdmissionTicker && AdmissionTicker._news && Array.isArray(AdmissionTicker._news)){
+      return AdmissionTicker._news.slice(0,5).map(s=>({text:s,date:''}));
+    }
+
+    return [{text:'No notifications available. Ensure "Notification" sheet is public (Anyone with the link can view).', date:''}];
+  }
+
+  function render(items){
+    latestItems = items || [];
+    list.innerHTML = '';
+    if(!items || items.length===0){
+      list.innerHTML = '<div style="padding:10px;color:#667">कोई नोटिफ़िकेशन नहीं है।</div>';
+      badge.style.display = 'none';
+      return;
+    }
+    items.forEach(it=>{
+      const el = document.createElement('div');
+      el.className = 'item';
+      el.innerHTML = `<div style="font-size:14px">${escapeHtml(it.text)}</div><div class="time">${escapeHtml(it.date||'')}</div>`;
+      list.appendChild(el);
+    });
+    const count = items.length;
+    badge.innerText = count>99? '99+' : String(count);
+    badge.style.display = count>0 ? 'inline-block' : 'none';
+  }
+
+  function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  openSectionBtn.addEventListener('click', ()=>{
+    togglePopover(false);
+    try{
+      const el = document.getElementById('notifyOuter') || document.getElementById('notifs');
+      if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus && el.focus(); return; }
+      window.open('/', '_self');
+    }catch(e){}
+  });
+
+  refreshBtn.addEventListener('click', async ()=>{
+    refreshBtn.disabled = true;
+    refreshBtn.innerText = 'Refreshing…';
+    try{ const items = await fetchNotifications(); render(items); }catch(e){ console.error(e); }
+    refreshBtn.disabled = false;
+    refreshBtn.innerText = 'Refresh';
+  });
+
+  async function pollOnce(){
+    try{
+      const items = await fetchNotifications();
+      render(items);
+    }catch(e){
+      console.error('StudyGenie poll error', e);
+    }
+  }
+
+  async function start(){
+    await pollOnce();
+    if(timer) clearInterval(timer);
+    timer = setInterval(pollOnce, pollInterval);
+  }
+
+  pop.addEventListener('mouseenter', ()=> { if(timer) clearInterval(timer); });
+  pop.addEventListener('mouseleave', ()=> { if(timer) clearInterval(timer); timer = setInterval(pollOnce, pollInterval); });
+
+  start();
+
+  window.StudyGenieFloating = { start, stop: ()=> { if(timer) clearInterval(timer); timer=null; }, render };
+
+})();
+</script>
+<!-- ===== END StudyGenie Floating Helper ===== -->
 </body>
 </html>
+<!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
+<style>
+/* allow tables to shrink on narrow screens (fix mobile zoom-out) */
+table { min-width: 0 !important; width: 100%; }
 
+/* make horizontal table container smoothly scrollable on touch */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* safeguard: prevent accidental page-wide overflow */
+html, body { max-width: 100%; overflow-x: hidden; }
+</style>
