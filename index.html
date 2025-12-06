@@ -54,6 +54,71 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 
 /* footer */
 .footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
+
+/* ===== ADDED: Admission CTA styles (assistant injected) ===== */
+.quick-apply-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  border-radius:12px;
+  font-weight:900;
+  text-decoration:none;
+  color:#042033;
+  background:linear-gradient(90deg,#fff8e6,#e7fbff);
+  border:1px solid rgba(1,48,62,0.08);
+  box-shadow:0 8px 30px rgba(3,19,43,0.08);
+  transform:translateZ(0);
+  transition:transform .18s ease, box-shadow .18s ease;
+  position:relative;
+  overflow:hidden;
+}
+.quick-apply-btn::before{
+  content:'';
+  position:absolute; inset:-30% -50%;
+  background: linear-gradient(60deg, rgba(0,197,255,0.12), rgba(0,150,255,0.18), rgba(255,200,0,0.12));
+  filter: blur(18px);
+  opacity:0;
+  transform: rotate(10deg) translateY(-6px);
+  transition: opacity .35s ease, transform .6s ease;
+}
+.quick-apply-btn::after{
+  content:'';
+  position:absolute;
+  left:50%; top:50%;
+  width:120%; height:120%;
+  transform:translate(-50%,-50%) scale(.9);
+  border-radius:14px;
+  box-shadow: 0 0 0 0 rgba(11,95,168,0.18);
+  opacity:0;
+}
+.quick-apply-btn .cta-left{ font-size:14px; opacity:0.95; }
+.quick-apply-btn .cta-main{ font-size:13px; color:#012032; }
+.quick-apply-btn:hover, .quick-apply-btn:focus{
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 18px 44px rgba(3,19,43,0.16);
+}
+.quick-apply-btn:hover::before, .quick-apply-btn:focus::before{
+  opacity:1;
+  transform: rotate(0deg) translateY(0);
+}
+.quick-apply-btn:active{ transform: translateY(-2px) scale(.995); }
+@keyframes ctaPulse {
+  0% { box-shadow: 0 0 0 0 rgba(11,95,168,0.08); }
+  50% { box-shadow: 0 0 36px 8px rgba(11,95,168,0.06); }
+  100% { box-shadow: 0 0 0 0 rgba(11,95,168,0.00); }
+}
+.quick-apply-btn.idle-animate::after{
+  animation: ctaPulse 2.8s ease-in-out infinite;
+  opacity:1;
+}
+.admission-mini{ background:transparent;border:1px solid rgba(1,48,62,0.08); color:#0b5fa8; padding:8px 10px; border-radius:8px; font-weight:700; }
+@media(max-width:640px){
+  .quick-apply-btn{ width:100%; justify-content:center; padding:12px; }
+  .quick-apply-btn .cta-main{ font-size:14px }
+}
+
+/* END ADMISSION CTA styles */
 </style>
 
 <style id="assistant-button-fix">
@@ -171,7 +236,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
     background: #000 !important;
     color: #fff !important;
-    border: 1px solid #000 !important;
+    border: 1px solid #black !important;
     box-shadow: none !important;
   }
   .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
@@ -316,6 +381,20 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
           <div style="margin-top:8px">
             <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
             <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
+
+            <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
+            <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+              <a class="btn quick-apply-btn" id="admissionApplyBtn"
+                 href="https://script.google.com/macros/s/AKfycby9g3PFa5A_SgDDT3yIMIEn8oZsyfEZxqCEblrEJmWtTy1OXzzS3Qbi6uQxqTN8GZB25A/exec"
+                 target="_blank" rel="noopener noreferrer" aria-label="Admission — Apply Now">
+                <span class="cta-left">📢 ADMISSION</span>
+                <span class="cta-main">ADMISSION OPEN — APPLY NOW</span>
+              </a>
+
+              <button class="btn admission-mini" id="admissionInfoBtn" aria-label="Admission info">Quick Info</button>
+            </div>
+            <!-- ===== end ADMISSION CTA ===== -->
+
           </div>
         </div>
 
@@ -683,7 +762,7 @@ loadFeeAndMarks();
     let tx = 0;
     if(matrix && matrix !== 'none'){
       try{
-        const vals = matrix.match(/matrix\\(([^)]+)\\)/);
+        const vals = matrix.match(/matrix\(([^)]+)\)/);
         if(vals){ const parts = vals[1].split(','); tx = parseFloat(parts[4]); }
       }catch(e){}
     }
@@ -709,6 +788,42 @@ loadFeeAndMarks();
   };
 })();
 </script>
+
+<!-- ===== ADDED: Admission CTA JS (assistant injected) ===== -->
+<script>
+(function(){
+  const cta = document.getElementById('admissionApplyBtn');
+  const infoBtn = document.getElementById('admissionInfoBtn');
+
+  // Add idle animation after short delay (draws attention without being aggressive)
+  setTimeout(()=> {
+    if(cta) cta.classList.add('idle-animate');
+  }, 900);
+
+  // When user clicks the CTA, open in new tab (anchor already has target=_blank),
+  // add a quick micro-interaction
+  if(cta){
+    cta.addEventListener('click', (e)=>{
+      // small tap feedback for a11y
+      cta.style.transform = 'translateY(-2px) scale(.998)';
+      setTimeout(()=> { cta.style.transform = ''; }, 160);
+    });
+  }
+
+  // Quick info popover (simple alert)
+  if(infoBtn){
+    infoBtn.addEventListener('click', ()=>{
+      const msg = 'Admission Open — Nursery to Class 10.\nDocuments: Birth Certificate, Aadhar (if available).\nCall: +91 6389259200';
+      if(window.navigator && navigator.share){
+        navigator.share({ title:'Admission — S.B. PUBLIC SCHOOL', text: msg }).catch(()=> alert(msg));
+      } else {
+        alert(msg);
+      }
+    });
+  }
+})();
+</script>
+<!-- ===== end ADMISSION CTA JS ===== -->
 
 <!-- ===== StudyGenie Floating Helper (inserted by assistant) ===== -->
 <style>
