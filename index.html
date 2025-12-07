@@ -121,7 +121,17 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 /* END ADMISSION CTA styles */
 </style>
 
-<!-- assistant-button-fix removed to allow 3D Quick Portals styling -->
+<style id="assistant-button-fix">
+/* Make Quick Portals and Search buttons clearly visible */
+a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: none !important;
+}
+/* Ensure slider controls remain light */
+.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+</style>
 
 </head>
 <body>
@@ -222,7 +232,15 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
   .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
   @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
   </style>
-  <!-- assistant-button-fix removed to allow 3D Quick Portals styling -->
+  <style id="assistant-button-fix">
+  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #black !important;
+    box-shadow: none !important;
+  }
+  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+  </style>
   </head>
   <body>
   <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
@@ -352,125 +370,6 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
   
 
 
-
-<!-- teacherAuthModal (assistant injected) -->
-<style>
-#teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
-#teacherAuthModal .modalCard{width:360px;max-width:94%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 60px rgba(2,6,23,0.36);font-family:Arial,Helvetica,sans-serif}
-#teacherAuthModal h3{margin:0 0 8px;color:#0b5fa8}
-#teacherAuthModal .hint{font-size:13px;color:#586574;margin-bottom:12px}
-#teacherAuthModal input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f0fb;font-size:15px}
-#teacherAuthModal .actions{display:flex;gap:8px;margin-top:12px}
-#teacherAuthModal button{flex:1;padding:8px 10px;border-radius:8px;border:0;cursor:pointer;font-weight:800}
-#teacherAuthModal .ok{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
-#teacherAuthModal .cancel{background:#f1f5f9;color:#042033}
-#teacherAuthModal .msg{margin-top:8px;font-size:13px}
-</style>
-
-<div id="teacherAuthModal" role="dialog" aria-hidden="true">
-  <div class="modalCard" role="document" aria-label="Teacher login">
-    <h3>Teacher Login</h3>
-    <div class="hint">Teacher Login खोलने के लिए पासवर्ड डालें</div>
-    <input id="teacherAuthPw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
-    <div class="actions">
-      <button class="ok" id="teacherAuthOk">Login</button>
-      <button class="cancel" id="teacherAuthCancel">Cancel</button>
-    </div>
-    <div id="teacherAuthMsg" class="msg" aria-live="polite"></div>
-  </div>
-</div>
-
-<script>
-// Modal logic (same as injected earlier)
-(function(){
-  const CONFIG_PASSWORD = "SBPSC@9044";
-  const SESSION_KEY = "sbps_teacher_authed";
-
-  function setMessage(text, isError){
-    const el = document.getElementById('teacherAuthMsg');
-    if(!el) return;
-    el.textContent = text;
-    el.style.color = isError ? '#c43' : '#1167b1';
-  }
-
-  function showModal(){
-    const modal = document.getElementById('teacherAuthModal');
-    const pw = document.getElementById('teacherAuthPw');
-    if(!modal || !pw) return;
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden','false');
-    pw.value = '';
-    setTimeout(()=> pw.focus(), 120);
-  }
-  function hideModal(){ const modal = document.getElementById('teacherAuthModal'); if(modal){ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); } }
-
-  // Find teacher link/button - look for .teacher-3d or text match
-  function findTeacherAnchor(){
-    let el = document.querySelector('.qp-3d.teacher-3d, .teacher-3d, .teacher-cta, #teacherQuickBtn');
-    if(el) return el;
-    const anchors = Array.from(document.querySelectorAll('a,button'));
-    for(const a of anchors){
-      try{
-        const txt = (a.innerText||'').trim().toLowerCase();
-        if(txt.includes('teacher login') || txt.includes('teacher')) return a;
-      }catch(e){}
-    }
-    return null;
-  }
-
-  function bind(){
-    const anchor = findTeacherAnchor();
-    if(!anchor) return;
-    if(anchor.getAttribute('data-auth-bound') === '1') return;
-    anchor.setAttribute('data-auth-bound','1');
-    // store original href/target
-    const origHref = anchor.getAttribute('href') || '#';
-    const origTarget = anchor.getAttribute('target') || '_blank';
-
-    anchor.addEventListener('click', function(e){
-      try{ if(sessionStorage.getItem(SESSION_KEY) === '1'){ return; } }catch(err){};
-      e.preventDefault(); e.stopPropagation();
-      showModal();
-      // handle login button
-      const ok = document.getElementById('teacherAuthOk');
-      const cancel = document.getElementById('teacherAuthCancel');
-      const pw = document.getElementById('teacherAuthPw');
-      if(!ok || !pw) return;
-      function attempt(){
-        const v = (pw.value||'').trim();
-        if(!v){ setMessage('Password डालें', true); pw.focus(); return; }
-        if(v === CONFIG_PASSWORD){
-          try{ sessionStorage.setItem(SESSION_KEY,'1'); }catch(e){}
-          setMessage('Login सफल — खोल रहा हूँ...', false);
-          hideModal();
-          setTimeout(()=>{
-            if(origHref && origHref !== '#'){
-              if(origTarget === '_self') window.location.href = origHref;
-              else window.open(origHref, origTarget);
-            }
-          }, 300);
-        } else {
-          setMessage('गलत पासवर्ड — पुन: प्रयास करें', true);
-          pw.value = ''; pw.focus();
-        }
-      }
-      ok.onclick = attempt;
-      cancel.onclick = function(){ hideModal(); };
-      pw.onkeydown = function(evt){ if(evt.key === 'Enter') attempt(); };
-    });
-  }
-
-  // bind after DOM ready
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
-  else bind();
-
-  // also attempt to bind if dynamic content loads later
-  setTimeout(bind, 800);
-  setTimeout(bind, 2200);
-})();
-</script>
-<!-- end teacherAuthModal -->
-
 </body>
   </html>
   <!-- END: Inserted Photo Slider -->
@@ -482,13 +381,6 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
         <!-- QUICK PORTALS moved to TOP -->
         <div class="card">
           <h2>Quick Portals</h2>
-<!-- START: 3D Animated Quick Portals (assistant-inserted) -->
-<div class="qp-3d-wrap" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px">
-  <a class="qp-3d fee-3d" href="#" style="background:linear-gradient(135deg,#0b5fa8,#1274d1);color:#fff;padding:10px 14px;border-radius:12px;display:inline-flex;align-items:center;gap:8px;text-decoration:none"><span class="ico">💳</span>Fee Portal</a>
-  <a class="qp-3d marksheet-3d" href="#" style="background:linear-gradient(135deg,#10b981,#06d6a0);color:#fff;padding:10px 14px;border-radius:12px;display:inline-flex;align-items:center;gap:8px;text-decoration:none"><span class="ico">📄</span>Marksheet</a>
-  <a class="qp-3d teacher-3d" href="#" style="background:linear-gradient(135deg,#7b2ff7,#9d4bff);color:#fff;padding:10px 14px;border-radius:12px;display:inline-flex;align-items:center;gap:8px;text-decoration:none"><span class="ico">👨‍🏫</span>Teacher Login</a>
-</div>
-<!-- END: 3D Animated Quick Portals (assistant-inserted) -->
           <div style="margin-top:8px">
             <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
             <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
@@ -533,7 +425,7 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
   onReady(function(){
     const QUICK_BTN = document.getElementById('teacherQuickBtn');
     const EXIST_BTN = document.getElementById('teacherLoginBtn'); // may exist from earlier injection
-    const LINK = 'https://script.google.com/macros/s/AKfycbzN65xPZFne-r1dBaBF-07a9IBpu_w6Di2xzOFCOpLqCXXVl6RFvcrmfv2UTfh4IeiRXw/exec';
+    const LINK = 'https://script.google.com/macros/s/AKfycbySEMuUpsMAsvHFKCo25aViJuJBoB7YSgKiZPZnQExpQCoogXS71jNcYUn07NZwJgzdiw/exec';
     const AUTH_PASS = 'SBPSC@9044';
 
     function openLinkDirect(){
@@ -1242,125 +1134,6 @@ loadFeeAndMarks();
 <!-- ===== END StudyGenie Floating Helper ===== -->
 
 
-
-
-<!-- teacherAuthModal (assistant injected) -->
-<style>
-#teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
-#teacherAuthModal .modalCard{width:360px;max-width:94%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 60px rgba(2,6,23,0.36);font-family:Arial,Helvetica,sans-serif}
-#teacherAuthModal h3{margin:0 0 8px;color:#0b5fa8}
-#teacherAuthModal .hint{font-size:13px;color:#586574;margin-bottom:12px}
-#teacherAuthModal input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f0fb;font-size:15px}
-#teacherAuthModal .actions{display:flex;gap:8px;margin-top:12px}
-#teacherAuthModal button{flex:1;padding:8px 10px;border-radius:8px;border:0;cursor:pointer;font-weight:800}
-#teacherAuthModal .ok{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
-#teacherAuthModal .cancel{background:#f1f5f9;color:#042033}
-#teacherAuthModal .msg{margin-top:8px;font-size:13px}
-</style>
-
-<div id="teacherAuthModal" role="dialog" aria-hidden="true">
-  <div class="modalCard" role="document" aria-label="Teacher login">
-    <h3>Teacher Login</h3>
-    <div class="hint">Teacher Login खोलने के लिए पासवर्ड डालें</div>
-    <input id="teacherAuthPw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
-    <div class="actions">
-      <button class="ok" id="teacherAuthOk">Login</button>
-      <button class="cancel" id="teacherAuthCancel">Cancel</button>
-    </div>
-    <div id="teacherAuthMsg" class="msg" aria-live="polite"></div>
-  </div>
-</div>
-
-<script>
-// Modal logic (same as injected earlier)
-(function(){
-  const CONFIG_PASSWORD = "SBPSC@9044";
-  const SESSION_KEY = "sbps_teacher_authed";
-
-  function setMessage(text, isError){
-    const el = document.getElementById('teacherAuthMsg');
-    if(!el) return;
-    el.textContent = text;
-    el.style.color = isError ? '#c43' : '#1167b1';
-  }
-
-  function showModal(){
-    const modal = document.getElementById('teacherAuthModal');
-    const pw = document.getElementById('teacherAuthPw');
-    if(!modal || !pw) return;
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden','false');
-    pw.value = '';
-    setTimeout(()=> pw.focus(), 120);
-  }
-  function hideModal(){ const modal = document.getElementById('teacherAuthModal'); if(modal){ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); } }
-
-  // Find teacher link/button - look for .teacher-3d or text match
-  function findTeacherAnchor(){
-    let el = document.querySelector('.qp-3d.teacher-3d, .teacher-3d, .teacher-cta, #teacherQuickBtn');
-    if(el) return el;
-    const anchors = Array.from(document.querySelectorAll('a,button'));
-    for(const a of anchors){
-      try{
-        const txt = (a.innerText||'').trim().toLowerCase();
-        if(txt.includes('teacher login') || txt.includes('teacher')) return a;
-      }catch(e){}
-    }
-    return null;
-  }
-
-  function bind(){
-    const anchor = findTeacherAnchor();
-    if(!anchor) return;
-    if(anchor.getAttribute('data-auth-bound') === '1') return;
-    anchor.setAttribute('data-auth-bound','1');
-    // store original href/target
-    const origHref = anchor.getAttribute('href') || '#';
-    const origTarget = anchor.getAttribute('target') || '_blank';
-
-    anchor.addEventListener('click', function(e){
-      try{ if(sessionStorage.getItem(SESSION_KEY) === '1'){ return; } }catch(err){};
-      e.preventDefault(); e.stopPropagation();
-      showModal();
-      // handle login button
-      const ok = document.getElementById('teacherAuthOk');
-      const cancel = document.getElementById('teacherAuthCancel');
-      const pw = document.getElementById('teacherAuthPw');
-      if(!ok || !pw) return;
-      function attempt(){
-        const v = (pw.value||'').trim();
-        if(!v){ setMessage('Password डालें', true); pw.focus(); return; }
-        if(v === CONFIG_PASSWORD){
-          try{ sessionStorage.setItem(SESSION_KEY,'1'); }catch(e){}
-          setMessage('Login सफल — खोल रहा हूँ...', false);
-          hideModal();
-          setTimeout(()=>{
-            if(origHref && origHref !== '#'){
-              if(origTarget === '_self') window.location.href = origHref;
-              else window.open(origHref, origTarget);
-            }
-          }, 300);
-        } else {
-          setMessage('गलत पासवर्ड — पुन: प्रयास करें', true);
-          pw.value = ''; pw.focus();
-        }
-      }
-      ok.onclick = attempt;
-      cancel.onclick = function(){ hideModal(); };
-      pw.onkeydown = function(evt){ if(evt.key === 'Enter') attempt(); };
-    });
-  }
-
-  // bind after DOM ready
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
-  else bind();
-
-  // also attempt to bind if dynamic content loads later
-  setTimeout(bind, 800);
-  setTimeout(bind, 2200);
-})();
-</script>
-<!-- end teacherAuthModal -->
 
 </body>
 </html>
