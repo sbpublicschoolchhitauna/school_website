@@ -538,6 +538,97 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
             <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
             <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
 
+<!-- ===== Teacher CTA Button (Option A) — inserted next to Quick Portals ===== -->
+<style>
+.teacher-cta {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(90deg,#0b5fa8,#1167b1);
+  border:0;
+  box-shadow:0 12px 30px rgba(11,95,168,0.18);
+  transform:translateZ(0);
+  transition:transform .14s ease, box-shadow .14s ease;
+  cursor:pointer;
+  text-decoration:none;
+  margin-left:8px;
+}
+.teacher-cta:hover{ transform:translateY(-4px); box-shadow:0 20px 44px rgba(11,95,168,0.22); }
+.teacher-cta:active{ transform:translateY(-2px) scale(.998); }
+
+/* ensure it fits smaller screens */
+@media(max-width:760px){
+  .teacher-cta { padding:8px 10px; font-size:14px; margin-left:0; display:block; width:100%; text-align:center; }
+}
+.teacher-cta .icon { background: rgba(255,255,255,0.08); padding:8px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; }
+</style>
+
+<!-- inline button placed near Quick Portals -->
+<button id="teacherQuickBtn" class="teacher-cta" type="button" title="Teacher Login (click to open)"><span class="icon">👨‍🏫</span><span>Teacher Login</span></button>
+
+<script>
+(function(){
+  // Ensure this runs after DOM loaded
+  function onReady(fn){ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+  onReady(function(){
+    const QUICK_BTN = document.getElementById('teacherQuickBtn');
+    const EXIST_BTN = document.getElementById('teacherLoginBtn'); // may exist from earlier injection
+    const LINK = 'https://script.google.com/macros/s/AKfycbyuVma6Xi-qbF0ZjguA1kb_KxZSaEvKrf43fjouW7pEmo7op4vLvy19vzqG4wl0TB-GiQ/exec';
+    const AUTH_PASS = 'SBPSC@9044';
+
+    function openLinkDirect(){
+      try { window.open(LINK, '_blank'); }
+      catch(e){ window.location.href = LINK; }
+    }
+
+    // If an existing floating teacherLoginBtn exists, use its click handler (it will show modal or open)
+    QUICK_BTN.addEventListener('click', function(e){
+      e.preventDefault();
+      // If user already logged in in sessionStorage, open directly
+      try{
+        const ok = sessionStorage.getItem('teacher_logged_in');
+        const exp = Number(sessionStorage.getItem('teacher_expires') || '0');
+        if(ok === '1' && Date.now() < exp){
+          // open directly
+          openLinkDirect();
+          return;
+        }
+      }catch(err){ /* ignore storage errors */ }
+
+      // If existing modal/button exists, trigger it so behavior is consistent
+      if(EXIST_BTN){
+        try{
+          EXIST_BTN.click();
+          return;
+        }catch(err){ /* fall through */ }
+      }
+
+      // Otherwise, show a prompt fallback (secure-ish): ask for password, then open
+      const p = prompt('Teacher Password डालें:');
+      if(!p) return;
+      if(p === AUTH_PASS){
+        try{
+          const expires = Date.now() + (6 * 60 * 60 * 1000);
+          sessionStorage.setItem('teacher_logged_in', '1');
+          sessionStorage.setItem('teacher_expires', String(expires));
+        }catch(e){}
+        openLinkDirect();
+      } else {
+        alert('Invalid password');
+      }
+    });
+  });
+})();
+</script>
+
+<!-- ===== end Teacher CTA insertion ===== -->
+
+
             <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
             <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
               <a class="btn quick-apply-btn" id="admissionApplyBtn"
