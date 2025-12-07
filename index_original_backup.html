@@ -121,82 +121,17 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 /* END ADMISSION CTA styles */
 </style>
 
-
-
-
-<!-- START: 3D Glow Button Styles (added by assistant) -->
-<style>
-/* ===== NEW 3D GLOW BUTTONS FOR QUICK PORTALS ===== */
-.glow-btn {
-  position: relative;
-  display: inline-block;
-  padding: 10px 18px;
-  font-weight: 800;
-  font-size: 15px;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg,#0b5fa8,#1167b1);
-  box-shadow: 0 8px 30px rgba(11,95,168,0.22);
-  transition: transform .18s ease, box-shadow .18s ease;
-  overflow: hidden;
-  border: 0;
+<style id="assistant-button-fix">
+/* Make Quick Portals and Search buttons clearly visible */
+a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: none !important;
 }
-
-/* inner animated glow */
-.glow-btn::before{
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 260%;
-  height: 260%;
-  transform: translate(-50%,-50%) scale(.6);
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12), rgba(0,200,255,0.06) 8%, transparent 25%),
-              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.06), rgba(0,120,255,0.05) 8%, transparent 25%);
-  filter: blur(14px);
-  opacity: 0;
-  transition: transform .6s cubic-bezier(.2,.9,.2,1), opacity .35s ease;
-  z-index: 0;
-  border-radius: 12px;
-}
-
-/* soft neon border glow */
-.glow-btn::after{
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(11,95,168,0.22);
-  opacity: 0;
-  transition: opacity .25s ease, transform .25s ease;
-  z-index: 0;
-}
-
-/* hover / focus */
-.glow-btn:hover, .glow-btn:focus {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 18px 44px rgba(11,95,168,0.28);
-  outline: none;
-}
-.glow-btn:hover::before, .glow-btn:focus::before {
-  transform: translate(-50%,-50%) scale(1);
-  opacity: 1;
-}
-.glow-btn:hover::after, .glow-btn:focus::after {
-  opacity: 1;
-  transform: scale(1.01);
-}
-
-/* small icon inside won't be covered */
-.glow-btn > * { position: relative; z-index: 1; }
-
-/* responsive tweak */
-@media(max-width:640px){
-  .glow-btn { padding: 10px 14px; font-size: 15px; width: auto; display:inline-flex; align-items:center; justify-content:center; }
-}
+/* Ensure slider controls remain light */
+.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
 </style>
-<!-- END: 3D Glow Button Styles -->
 
 </head>
 <body>
@@ -297,7 +232,15 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
   .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
   @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
   </style>
-  
+  <style id="assistant-button-fix">
+  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #black !important;
+    box-shadow: none !important;
+  }
+  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
+  </style>
   </head>
   <body>
   <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
@@ -439,8 +382,8 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-            <a class="btn glow-btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-            <a class="btn glow-btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
+            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
 
 <!-- ===== Teacher CTA Button (Option A) — inserted next to Quick Portals ===== -->
 <style>
@@ -472,7 +415,7 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 </style>
 
 <!-- inline button placed near Quick Portals -->
-<button id="teacherQuickBtn" class="teacher-cta glow-btn" type="button" title="Teacher Login (click to open)"><span class="icon">👨‍🏫</span><span>Teacher Login</span></button>
+<button id="teacherQuickBtn" class="teacher-cta" type="button" title="Teacher Login (click to open)"><span class="icon">👨‍🏫</span><span>Teacher Login</span></button>
 
 <script>
 (function(){
