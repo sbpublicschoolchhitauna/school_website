@@ -121,17 +121,7 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 /* END ADMISSION CTA styles */
 </style>
 
-<style id="assistant-button-fix">
-/* Make Quick Portals and Search buttons clearly visible */
-a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-  background: #000 !important;
-  color: #fff !important;
-  border: 1px solid #000 !important;
-  box-shadow: none !important;
-}
-/* Ensure slider controls remain light */
-.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-</style>
+
 
 
 <!-- Quick Portals 3D buttons CSS -->
@@ -262,213 +252,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
   <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
-  <!doctype html>
-  <html lang="hi">
-  <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
-  <style>
-  :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-  .slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
-  .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
-  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
-  .slide.active{opacity:1;pointer-events:auto}
-  .slide img{width:100%;height:auto;display:block;object-fit:cover}
-  /* controls */
-  .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
-  .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
-  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
-  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
-  .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
-  .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
-  @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
-  </style>
-  <style id="assistant-button-fix">
-  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-    background: #000 !important;
-    color: #fff !important;
-    border: 1px solid #black !important;
-    box-shadow: none !important;
-  }
-  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-  </style>
-  </head>
-  <body>
-  <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
-    <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
-    <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
-    <div class="controls">
-      <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
-      <button class="btn slider-control" id="next" aria-label="Next">›</button>
-    </div>
-    <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
-  </div>
-
-  <script>
-  // IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
-  async function loadImagesDynamic(){
-    try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
-    try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
-    return [
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
-      'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
-      'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
-      'slider_images/logo.jpg',
-    ];
-  }
-
-  let IMAGES = []; // will be populated shortly
-
-  (async function(){
-    IMAGES = await loadImagesDynamic();
-    if(typeof createSlides === 'function') createSlides();
-    if(typeof start === 'function') start();
-  })();
-
-  const slider = document.getElementById('slider');
-  const sliderWrap = document.getElementById('sliderWrap');
-  const dotsWrap = document.getElementById('dots');
-  const prevBtn = document.getElementById('prev');
-  const nextBtn = document.getElementById('next');
-  const playToggle = document.getElementById('playToggle');
-
-  let slides = [];
-  let index = 0;
-  let timer = null;
-  let interval = 4000; // autoplay interval
-
-  function createSlides(){
-    IMAGES.forEach((src,i)=>{
-      const s = document.createElement('div');
-      s.className = 'slide';
-      s.setAttribute('role','group');
-      s.setAttribute('aria-roledescription','slide');
-      s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = `School photo ${i+1}`;
-      img.addEventListener('load', ()=>{
-        if(i===index) adjustHeightTo(img);
-      });
-      s.appendChild(img);
-      slider.appendChild(s);
-      slides.push(s);
-
-      const d = document.createElement('button');
-      d.className = 'dot';
-      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
-      d.addEventListener('click', ()=>{ pause(); goTo(i); });
-      dotsWrap.appendChild(d);
-    });
-    if(slides[0]) slides[0].classList.add('active');
-    updateDots();
-    setTimeout(()=>{ const img = slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
-  }
-
-  function adjustHeightTo(img){
-    const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
-    if(!img.naturalWidth) return;
-    const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
-    const maxH = Math.round(window.innerHeight * 0.65);
-    const finalH = Math.min(h, maxH);
-    slider.style.height = finalH + 'px';
-  }
-
-  function goTo(i){
-    index = (i + slides.length) % slides.length;
-    slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
-    updateDots();
-    const img = slides[index].querySelector('img');
-    if(img && img.complete) adjustHeightTo(img);
-    else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
-  }
-
-  function nextSlide(){ goTo(index+1); }
-  function prevSlide(){ goTo(index-1); }
-
-  function updateDots(){
-    const dots = dotsWrap.children;
-    for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
-  }
-
-  function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent = 'Pause'; playToggle.setAttribute('aria-pressed','false'); }
-  function pause(){ if(timer) clearInterval(timer); timer = null; playToggle.textContent = 'Play'; playToggle.setAttribute('aria-pressed','true'); }
-
-  nextBtn.addEventListener('click', ()=>{ pause(); nextSlide(); });
-  prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
-  playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
-
-  document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
-
-  let startX=0;
-  slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
-  slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
-
-  let resizeDeb;
-  window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
-
-  createSlides();
-  start();
-  </script>
   
-
-
-
-<!-- Quick Portals tilt + ripple JS -->
-<script>
-(function(){
-  const buttons = document.querySelectorAll('.portal-btn');
-  buttons.forEach(btn=>{
-    btn.addEventListener('mouseenter', ()=> btn.style.transition = 'transform .14s cubic-bezier(.2,.9,.3,1), box-shadow .14s ease');
-    btn.addEventListener('mousemove', (e)=>{
-      const rect = btn.getBoundingClientRect();
-      const cx = rect.left + rect.width/2;
-      const cy = rect.top + rect.height/2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const rx = (-dy / (rect.height/2)) * 6;
-      const ry = (dx / (rect.width/2)) * 8;
-      btn.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-    });
-    btn.addEventListener('mouseleave', ()=> btn.style.transform = '');
-    btn.addEventListener('click', function(e){
-      const r = document.createElement('span');
-      r.className = 'portal-ripple';
-      const rect = this.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height) * 1.2;
-      r.style.position = 'absolute';
-      r.style.left = (e.clientX - rect.left - size/2) + 'px';
-      r.style.top = (e.clientY - rect.top - size/2) + 'px';
-      r.style.width = r.style.height = size + 'px';
-      r.style.borderRadius = '50%';
-      r.style.pointerEvents = 'none';
-      r.style.background = 'rgba(255,255,255,0.36)';
-      r.style.opacity = '0.9';
-      r.style.transform = 'scale(0)';
-      r.style.transition = 'transform .55s cubic-bezier(.2,.9,.3,1), opacity .55s ease';
-      this.appendChild(r);
-      requestAnimationFrame(()=> r.style.transform = 'scale(1)');
-      setTimeout(()=> { r.style.opacity = '0'; }, 300);
-      setTimeout(()=> { try{ r.remove(); }catch(e){} }, 800);
-    });
-  });
-})();
-</script>
-<!-- End Quick Portals JS -->
-
-</body>
-  </html>
   <!-- END: Inserted Photo Slider -->
 
 <div class="container">
@@ -480,7 +264,8 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
             
-    <!-- 3D-style Portal Buttons (replaced old simple anchors) -->
+    
+    <!-- 3D-style Portal Buttons (Fee, Marksheet, Teacher variants) -->
     <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
       <a class="portal-btn btn-style-1" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener noreferrer" aria-label="Fee Portal">
         <span class="p-icon">💰</span>
@@ -493,115 +278,29 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
         <span class="p-title">Marksheet</span>
         <span class="p-sub">View / Download</span>
       </a>
+
+      <!-- Teacher - Glass 3D (Option 1) -->
+      <button class="portal-btn btn-style-1 teacher-variant" type="button" title="Teacher Login - Glass" onclick="EXIST_BTN && EXIST_BTN.click()">
+        <span class="p-icon">👨‍🏫</span>
+        <span class="p-title">Teacher Login</span>
+        <span class="p-sub">Glass</span>
+      </button>
+
+      <!-- Teacher - Neon 3D (Option 2) -->
+      <button class="portal-btn btn-style-2 teacher-variant" type="button" title="Teacher Login - Neon" onclick="EXIST_BTN && EXIST_BTN.click()">
+        <span class="p-icon">👨‍🏫</span>
+        <span class="p-title">Teacher Login</span>
+        <span class="p-sub">Neon</span>
+      </button>
+
+      <!-- Teacher - Flip Card 3D (Option 3) -->
+      <button class="portal-btn btn-style-3 teacher-variant" id="teacherFlipBtn" type="button" title="Teacher Login - Flip">
+        <span class="p-front"><span class="p-icon">👨‍🏫</span><span class="p-title">Teacher Login</span></span>
+        <span class="p-back">Login</span>
+      </button>
     </div>
     <!-- end 3D-style Portal Buttons -->
-
-
-<!-- ===== Teacher CTA Button (Option A) — inserted next to Quick Portals ===== -->
-<style>
-.teacher-cta {
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 14px;
-  border-radius:12px;
-  font-weight:800;
-  color:#fff;
-  background:linear-gradient(90deg,#0b5fa8,#1167b1);
-  border:0;
-  box-shadow:0 12px 30px rgba(11,95,168,0.18);
-  transform:translateZ(0);
-  transition:transform .14s ease, box-shadow .14s ease;
-  cursor:pointer;
-  text-decoration:none;
-  margin-left:8px;
-}
-.teacher-cta:hover{ transform:translateY(-4px); box-shadow:0 20px 44px rgba(11,95,168,0.22); }
-.teacher-cta:active{ transform:translateY(-2px) scale(.998); }
-
-/* ensure it fits smaller screens */
-@media(max-width:760px){
-  .teacher-cta { padding:8px 10px; font-size:14px; margin-left:0; display:block; width:100%; text-align:center; }
-}
-.teacher-cta .icon { background: rgba(255,255,255,0.08); padding:8px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; }
-</style>
-
-<!-- inline button placed near Quick Portals -->
-<button id="teacherQuickBtn" class="teacher-cta" type="button" title="Teacher Login (click to open)"><span class="icon">👨‍🏫</span><span>Teacher Login</span></button>
-
-<script>
-(function(){
-  // Ensure this runs after DOM loaded
-  function onReady(fn){ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
-
-  onReady(function(){
-    const QUICK_BTN = document.getElementById('teacherQuickBtn');
-    const EXIST_BTN = document.getElementById('teacherLoginBtn'); // may exist from earlier injection
-    const LINK = 'https://script.google.com/macros/s/AKfycbySEMuUpsMAsvHFKCo25aViJuJBoB7YSgKiZPZnQExpQCoogXS71jNcYUn07NZwJgzdiw/exec';
-    const AUTH_PASS = 'SBPSC@9044';
-
-    function openLinkDirect(){
-      try { window.open(LINK, '_blank'); }
-      catch(e){ window.location.href = LINK; }
-    }
-
-    // If an existing floating teacherLoginBtn exists, use its click handler (it will show modal or open)
-    QUICK_BTN.addEventListener('click', function(e){
-      e.preventDefault();
-      // If user already logged in in sessionStorage, open directly
-      try{
-        const ok = sessionStorage.getItem('teacher_logged_in');
-        const exp = Number(sessionStorage.getItem('teacher_expires') || '0');
-        if(ok === '1' && Date.now() < exp){
-          // open directly
-          openLinkDirect();
-          return;
-        }
-      }catch(err){ /* ignore storage errors */ }
-
-      // If existing modal/button exists, trigger it so behavior is consistent
-      if(EXIST_BTN){
-        try{
-          EXIST_BTN.click();
-          return;
-        }catch(err){ /* fall through */ }
-      }
-
-      // Otherwise, show a prompt fallback (secure-ish): ask for password, then open
-      const p = prompt('Teacher Password डालें:');
-      if(!p) return;
-      if(p === AUTH_PASS){
-        try{
-          const expires = Date.now() + (6 * 60 * 60 * 1000);
-          sessionStorage.setItem('teacher_logged_in', '1');
-          sessionStorage.setItem('teacher_expires', String(expires));
-        }catch(e){}
-        openLinkDirect();
-      } else {
-        alert('Invalid password');
-      }
-    });
-  });
-})();
-</script>
-
-<!-- ===== end Teacher CTA insertion ===== -->
-
-
-            <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
-            <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
-              <a class="btn quick-apply-btn" id="admissionApplyBtn"
-                 href="https://script.google.com/macros/s/AKfycby9g3PFa5A_SgDDT3yIMIEn8oZsyfEZxqCEblrEJmWtTy1OXzzS3Qbi6uQxqTN8GZB25A/exec"
-                 target="_blank" rel="noopener noreferrer" aria-label="Admission — Apply Now">
-                <span class="cta-left">📢 ADMISSION</span>
-                <span class="cta-main">ADMISSION OPEN — APPLY NOW</span>
-              </a>
-
-              <button class="btn admission-mini" id="admissionInfoBtn" aria-label="Admission info">Quick Info</button>
-            </div>
-            <!-- ===== end ADMISSION CTA ===== -->
-
-          </div>
+    
         </div>
 
       <div>
@@ -1207,7 +906,7 @@ loadFeeAndMarks();
     try{
       const el = document.getElementById('notifyOuter') || document.getElementById('notifs');
       if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus && el.focus(); return; }
-      window.open('/', '_self');
+      EXIST_BTN && EXIST_BTN.click();
     }catch(e){}
   });
 
