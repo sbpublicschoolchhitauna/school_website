@@ -370,6 +370,57 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   
 
 
+
+<!-- Ensure teacher-3d button triggers existing teacherAuthModal (binding fix) -->
+<script>
+(function(){
+  try{
+    const SELECTOR = '.qp-3d.teacher-3d';
+    const btn = document.querySelector(SELECTOR);
+    if(!btn) return;
+    // avoid double-binding
+    if(btn.getAttribute('data-auth-bound') === '1') return;
+    btn.setAttribute('data-auth-bound','1');
+
+    btn.addEventListener('click', function(e){
+      // left click only
+      if(e.button && e.button !== 0) return;
+      try{ if(sessionStorage.getItem('sbps_teacher_authed') === '1'){ return; } }catch(e){}
+      e.preventDefault();
+      e.stopPropagation();
+      // show existing modal if present
+      const modal = document.getElementById('teacherAuthModal');
+      const pwInput = document.getElementById('teacherAuthPw');
+      if(modal && pwInput){
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden','false');
+        pwInput.value = '';
+        setTimeout(()=> pwInput.focus(), 120);
+        return;
+      }
+      // fallback: simple prompt
+      const PASS = 'SBPSC@9044';
+      const p = prompt('Teacher Password डालें:');
+      if(!p) return;
+      if(p === PASS){
+        try{ sessionStorage.setItem('sbps_teacher_authed','1'); }catch(e){}
+        const href = btn.getAttribute('href') || '#';
+        const target = btn.getAttribute('target') || '_blank';
+        if(href && href !== '#'){
+          if(target === '_self') window.location.href = href;
+          else window.open(href, target);
+        }
+      } else {
+        alert('Invalid password');
+      }
+    }, {capture:false});
+  }catch(err){
+    console.error('Auth bind error', err);
+  }
+})();
+</script>
+<!-- End binding fix -->
+
 </body>
   </html>
   <!-- END: Inserted Photo Slider -->
@@ -1069,6 +1120,57 @@ loadFeeAndMarks();
 <!-- ===== END StudyGenie Floating Helper ===== -->
 
 
+
+
+<!-- Ensure teacher-3d button triggers existing teacherAuthModal (binding fix) -->
+<script>
+(function(){
+  try{
+    const SELECTOR = '.qp-3d.teacher-3d';
+    const btn = document.querySelector(SELECTOR);
+    if(!btn) return;
+    // avoid double-binding
+    if(btn.getAttribute('data-auth-bound') === '1') return;
+    btn.setAttribute('data-auth-bound','1');
+
+    btn.addEventListener('click', function(e){
+      // left click only
+      if(e.button && e.button !== 0) return;
+      try{ if(sessionStorage.getItem('sbps_teacher_authed') === '1'){ return; } }catch(e){}
+      e.preventDefault();
+      e.stopPropagation();
+      // show existing modal if present
+      const modal = document.getElementById('teacherAuthModal');
+      const pwInput = document.getElementById('teacherAuthPw');
+      if(modal && pwInput){
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden','false');
+        pwInput.value = '';
+        setTimeout(()=> pwInput.focus(), 120);
+        return;
+      }
+      // fallback: simple prompt
+      const PASS = 'SBPSC@9044';
+      const p = prompt('Teacher Password डालें:');
+      if(!p) return;
+      if(p === PASS){
+        try{ sessionStorage.setItem('sbps_teacher_authed','1'); }catch(e){}
+        const href = btn.getAttribute('href') || '#';
+        const target = btn.getAttribute('target') || '_blank';
+        if(href && href !== '#'){
+          if(target === '_self') window.location.href = href;
+          else window.open(href, target);
+        }
+      } else {
+        alert('Invalid password');
+      }
+    }, {capture:false});
+  }catch(err){
+    console.error('Auth bind error', err);
+  }
+})();
+</script>
+<!-- End binding fix -->
 
 </body>
 </html>
