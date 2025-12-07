@@ -460,6 +460,69 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </script>
 <!-- ===== end Teacher Quick Login injection ===== -->
 
+
+<!-- ===== Teacher Quick Login (Updated Robust Version) ===== -->
+<style>
+#teacherLoginBtn{position:fixed;right:18px;top:18px;z-index:2147483646;padding:10px 12px;border-radius:8px;border:0;background:#042033;color:#fff;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.18)}
+#teacherModal{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:2147483647}
+#teacherBox{width:360px;background:#fff;border-radius:12px;padding:18px;box-shadow:0 20px 60px rgba(2,6,23,0.32);max-width:94%}
+#teacherBox h3{margin:0 0 8px;font-size:18px;color:#0b5fa8}
+#teacherBox input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc}
+#teacherBox .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+#teacherMsg{margin-top:8px;font-size:13px;color:#c33;display:none}
+</style>
+
+<button id="teacherLoginBtn" type="button">Teacher Login</button>
+
+<div id="teacherModal" aria-hidden="true" role="dialog">
+  <div id="teacherBox">
+    <h3>Teacher Login</h3>
+    <input id="teacherPassword" type="password" placeholder="Enter password" />
+    <div class="actions">
+      <button id="teacherCancel" type="button">Cancel</button>
+      <button id="teacherSubmit" type="button">Login</button>
+    </div>
+    <div id="teacherMsg"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('teacherLoginBtn');
+    const modal = document.getElementById('teacherModal');
+    const pass = document.getElementById('teacherPassword');
+    const cancel = document.getElementById('teacherCancel');
+    const submit = document.getElementById('teacherSubmit');
+    const msg = document.getElementById('teacherMsg');
+
+    const PASS = "SBPSC@9044";
+    const LINK = "https://script.google.com/macros/s/AKfycbyuVma6Xi-qbF0ZjguA1kb_KxZSaEvKrf43fjouW7pEmo7op4vLvy19vzqG4wl0TB-GiQ/exec";
+
+    function show(){ modal.style.display="flex"; pass.value=""; msg.style.display="none"; pass.focus(); }
+    function hide(){ modal.style.display="none"; }
+
+    btn.onclick = show;
+    cancel.onclick = hide;
+
+    submit.onclick = function(){
+      if(pass.value === PASS){
+        window.open(LINK, "_blank");
+        hide();
+      } else {
+        msg.innerText = "Invalid password";
+        msg.style.display = "block";
+      }
+    };
+
+    pass.addEventListener("keydown", e => {
+      if(e.key === "Enter") submit.onclick();
+    });
+  });
+})();
+</script>
+<!-- ===== END Updated Teacher Login ===== -->
+
 </body>
   </html>
   <!-- END: Inserted Photo Slider -->
@@ -1223,6 +1286,69 @@ loadFeeAndMarks();
 })();
 </script>
 <!-- ===== end Teacher Quick Login injection ===== -->
+
+
+<!-- ===== Teacher Quick Login (Updated Robust Version) ===== -->
+<style>
+#teacherLoginBtn{position:fixed;right:18px;top:18px;z-index:2147483646;padding:10px 12px;border-radius:8px;border:0;background:#042033;color:#fff;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.18)}
+#teacherModal{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:2147483647}
+#teacherBox{width:360px;background:#fff;border-radius:12px;padding:18px;box-shadow:0 20px 60px rgba(2,6,23,0.32);max-width:94%}
+#teacherBox h3{margin:0 0 8px;font-size:18px;color:#0b5fa8}
+#teacherBox input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc}
+#teacherBox .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+#teacherMsg{margin-top:8px;font-size:13px;color:#c33;display:none}
+</style>
+
+<button id="teacherLoginBtn" type="button">Teacher Login</button>
+
+<div id="teacherModal" aria-hidden="true" role="dialog">
+  <div id="teacherBox">
+    <h3>Teacher Login</h3>
+    <input id="teacherPassword" type="password" placeholder="Enter password" />
+    <div class="actions">
+      <button id="teacherCancel" type="button">Cancel</button>
+      <button id="teacherSubmit" type="button">Login</button>
+    </div>
+    <div id="teacherMsg"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('teacherLoginBtn');
+    const modal = document.getElementById('teacherModal');
+    const pass = document.getElementById('teacherPassword');
+    const cancel = document.getElementById('teacherCancel');
+    const submit = document.getElementById('teacherSubmit');
+    const msg = document.getElementById('teacherMsg');
+
+    const PASS = "SBPSC@9044";
+    const LINK = "https://script.google.com/macros/s/AKfycbyuVma6Xi-qbF0ZjguA1kb_KxZSaEvKrf43fjouW7pEmo7op4vLvy19vzqG4wl0TB-GiQ/exec";
+
+    function show(){ modal.style.display="flex"; pass.value=""; msg.style.display="none"; pass.focus(); }
+    function hide(){ modal.style.display="none"; }
+
+    btn.onclick = show;
+    cancel.onclick = hide;
+
+    submit.onclick = function(){
+      if(pass.value === PASS){
+        window.open(LINK, "_blank");
+        hide();
+      } else {
+        msg.innerText = "Invalid password";
+        msg.style.display = "block";
+      }
+    };
+
+    pass.addEventListener("keydown", e => {
+      if(e.key === "Enter") submit.onclick();
+    });
+  });
+})();
+</script>
+<!-- ===== END Updated Teacher Login ===== -->
 
 </body>
 </html>
