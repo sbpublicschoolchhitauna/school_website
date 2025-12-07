@@ -1351,7 +1351,13 @@ loadFeeAndMarks();
     msgEl.style.color = isError ? '#c43' : '#1167b1';
   }
 
-  function openTarget(url){ hideModal(); if(!url || url === '#') return; if(originalTarget === '_self' || originalTarget === null) window.location.href = url; else window.open(url, originalTarget); }
+  function openTarget(url){
+    hideModal();
+    try{ sessionStorage.setItem(SESSION_KEY, '1'); }catch(e){}
+    if(!url || url === '#') return;
+    if(originalTarget === '_self' || originalTarget === null) window.location.href = url;
+    else window.open(url, originalTarget);
+  }
 
   // Auth check: if already authenticated in session, open directly
   function handleClick(e){
