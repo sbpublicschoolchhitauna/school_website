@@ -1084,6 +1084,149 @@ loadFeeAndMarks();
 
 
 
+<!-- Teacher-login intercept modal (paste before </body>) -->
+<style>
+/* simple modal styles */
+#teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
+#teacherAuthModal .modalCard{width:360px;max-width:94%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 60px rgba(2,6,23,0.36);font-family:Arial,Helvetica,sans-serif}
+#teacherAuthModal h3{margin:0 0 8px;color:#0b5fa8}
+#teacherAuthModal .hint{font-size:13px;color:#586574;margin-bottom:12px}
+#teacherAuthModal input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f0fb;font-size:15px}
+#teacherAuthModal .actions{display:flex;gap:8px;margin-top:12px}
+#teacherAuthModal button{flex:1;padding:8px 10px;border-radius:8px;border:0;cursor:pointer;font-weight:800}
+#teacherAuthModal .ok{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
+#teacherAuthModal .cancel{background:#f1f5f9;color:#042033}
+#teacherAuthModal .msg{margin-top:8px;font-size:13px}
+</style>
+
+<div id="teacherAuthModal" role="dialog" aria-hidden="true">
+  <div class="modalCard" role="document" aria-label="Teacher login">
+    <h3>Teacher Login</h3>
+    <div class="hint">Teacher Login खोलने के लिए पासवर्ड डालें</div>
+    <input id="teacherAuthPw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
+    <div class="actions">
+      <button class="ok" id="teacherAuthOk">Login</button>
+      <button class="cancel" id="teacherAuthCancel">Cancel</button>
+    </div>
+    <div id="teacherAuthMsg" class="msg" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // === CONFIG ===
+  const PASSWORD = "SBPSC@9044"; // आपका पासवर्ड (आप बदल सकते हैं)
+  const SESSION_KEY = "sbps_teacher_authed"; // session flag
+  // Select the Teacher Login anchor already in your page
+  // (selector targets the quick-portal teacher button you used: .qp-3d.teacher-3d)
+  const teacherAnchor = document.querySelector('.qp-3d.teacher-3d, a:contains("Teacher Login")');
+
+  // Fallback selector: try to find anchor whose text includes Teacher (Hindi/English)
+  function findTeacherAnchor(){
+    let el = document.querySelector('.qp-3d.teacher-3d');
+    if(el) return el;
+    const anchors = Array.from(document.querySelectorAll('a,button'));
+    for(const a of anchors){
+      try{
+        const txt = (a.innerText||'').trim().toLowerCase();
+        if(txt.includes('teacher login') || txt.includes('teacher') || txt.includes('teacher login')) return a;
+      }catch(e){}
+    }
+    return null;
+  }
+
+  const tAnchor = teacherAnchor || findTeacherAnchor();
+  if(!tAnchor) {
+    // no teacher anchor found — do nothing
+    return;
+  }
+
+  // Keep original href/target so we can open on successful auth
+  const originalHref = tAnchor.getAttribute('href') || '#';
+  const originalTarget = tAnchor.getAttribute('target') || '_blank';
+
+  // Modal elements
+  const modal = document.getElementById('teacherAuthModal');
+  const pwInput = document.getElementById('teacherAuthPw');
+  const okBtn = document.getElementById('teacherAuthOk');
+  const cancelBtn = document.getElementById('teacherAuthCancel');
+  const msgEl = document.getElementById('teacherAuthMsg');
+
+  function showModal(){
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden','false');
+    pwInput.value = '';
+    msgEl.textContent = '';
+    setTimeout(()=> pwInput.focus(), 120);
+  }
+  function hideModal(){
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+  }
+
+  function setMsg(text, isError){
+    msgEl.textContent = text;
+    msgEl.style.color = isError ? '#c43' : '#1167b1';
+  }
+
+  function openTarget(url){
+    hideModal();
+    try{ sessionStorage.setItem(SESSION_KEY, '1'); }catch(e){}
+    if(!url || url === '#') return;
+    if(originalTarget === '_self' || originalTarget === null) window.location.href = url;
+    else window.open(url, originalTarget);
+  }
+
+  // Auth check: if already authenticated in session, open directly
+  function handleClick(e){
+    // if already authed, allow default behavior (open)
+    try{
+      if(sessionStorage.getItem(SESSION_KEY) === '1'){
+        return; // allow default
+      }
+    }catch(e){}
+    // prevent default opening
+    e.preventDefault();
+    e.stopPropagation();
+    showModal();
+  }
+
+  // attach handler (works for <a> or <button>)
+  tAnchor.addEventListener('click', handleClick);
+
+  // Ok handler
+  function attemptLogin(){
+    const v = (pwInput.value||'').trim();
+    if(!v){ setMsg('Password डालें', true); pwInput.focus(); return; }
+    if(v === PASSWORD){
+      setMsg('Login सफल — खोल रहा हूँ...', false);
+      setTimeout(()=> openTarget(originalHref), 350);
+    } else {
+      setMsg('गलत पासवर्ड — पुन: प्रयास करें', true);
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+
+  okBtn.addEventListener('click', attemptLogin);
+  pwInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') attemptLogin(); });
+  cancelBtn.addEventListener('click', ()=>{ hideModal(); });
+
+  // close on outside click
+  modal.addEventListener('click', function(ev){
+    if(ev.target === modal) hideModal();
+  });
+
+  // Accessibility: close with Escape
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') hideModal();
+  });
+
+  // If teacherAnchor is a real link that opens on middle-click or ctrl+click,
+  // we still intercept normal left-click only. Middle-click/cmd+click will open in new tab.
+})();
+</script>
+<!-- End teacher-login intercept modal -->
 </body>
 </html>
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
