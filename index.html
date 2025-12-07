@@ -382,114 +382,63 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank">Fee Portal</a>
-            <a class="btn" data-portal="true" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" style="margin-left:8px">Marksheet</a>
+  <!-- START: 3D Animated Quick Portals (merged by assistant) -->
+  <style>
+  /* 3D container */
+  .qp-3d-wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;perspective:1200px;margin-top:10px}
+  .qp-3d{--w:160px;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:var(--w);min-width:120px;padding:12px 14px;border-radius:14px;font-weight:800;color:#fff;text-decoration:none;transform-style:preserve-3d;transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease;will-change:transform;position:relative;border:0;cursor:pointer}
+  .qp-3d .face{position:relative;z-index:2;transform: translateZ(18px);display:inline-flex;align-items:center;gap:8px}
+  .qp-3d::before{content:'';position:absolute;inset:0;z-index:1;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(0,0,0,0.04));pointer-events:none}
+  .qp-3d::after{content:'';position:absolute;inset:0;border-radius:14px;z-index:0;filter: blur(14px);opacity:.55;transition: opacity .28s ease, transform .28s ease}
+  .fee-3d{background: linear-gradient(135deg,#0b5fa8,#1274d1);box-shadow: 0 18px 40px rgba(11,95,168,0.22)}
+  .fee-3d::after{background: linear-gradient(90deg, rgba(11,95,168,0.28), rgba(6,129,212,0.12));transform: translateY(6px) scale(1.02)}
+  @keyframes feeTilt{0%{transform: rotateX(3deg) rotateY(-6deg)}50%{transform: rotateX(4deg) rotateY(6deg)}100%{transform: rotateX(3deg) rotateY(-6deg)}}
+  .fee-3d.idle{animation: feeTilt 6.8s ease-in-out infinite}
+  .fee-3d:hover{transform: translateY(-8px) rotateX(6deg) rotateY(12deg) scale(1.02);box-shadow:0 34px 64px rgba(11,95,168,0.30)}
+  .marksheet-3d{background: linear-gradient(135deg,#10b981,#06d6a0);box-shadow: 0 16px 36px rgba(6,129,80,0.18)}
+  .marksheet-3d::after{background: linear-gradient(90deg, rgba(6,129,80,0.2), rgba(12,200,150,0.10));transform: translateY(6px) scale(1.02)}
+  @keyframes markFloat{0%{transform: translateY(0px)}50%{transform: translateY(-8px) translateZ(10px)}100%{transform: translateY(0px)}}
+  .marksheet-3d.idle{animation: markFloat 4.2s ease-in-out infinite}
+  .marksheet-3d:hover{transform: translateY(-10px) scale(1.02);box-shadow:0 30px 54px rgba(6,129,80,0.26)}
+  .teacher-3d{background: linear-gradient(135deg,#7b2ff7,#9d4bff);box-shadow: 0 12px 28px rgba(135,60,255,0.18)}
+  .teacher-3d::after{background: linear-gradient(90deg, rgba(135,60,255,0.22), rgba(157,75,255,0.10));transform: translateY(6px) scale(1.02)}
+  @keyframes teacherPulse{0%{transform: scale(1)}50%{transform: scale(1.03)}100%{transform: scale(1)}}
+  .teacher-3d.idle{animation: teacherPulse 3.6s ease-in-out infinite}
+  .teacher-3d:hover{transform: translateY(-10px) scale(1.04);box-shadow:0 36px 86px rgba(157,75,255,0.32)}
+  .qp-3d .ico{font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background: rgba(255,255,255,0.08)}
+  @media(max-width:640px){.qp-3d{width:100%}}
+  </style>
 
-<!-- ===== Teacher CTA Button (Option A) — inserted next to Quick Portals ===== -->
-<style>
-.teacher-cta {
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 14px;
-  border-radius:12px;
-  font-weight:800;
-  color:#fff;
-  background:linear-gradient(90deg,#0b5fa8,#1167b1);
-  border:0;
-  box-shadow:0 12px 30px rgba(11,95,168,0.18);
-  transform:translateZ(0);
-  transition:transform .14s ease, box-shadow .14s ease;
-  cursor:pointer;
-  text-decoration:none;
-  margin-left:8px;
-}
-.teacher-cta:hover{ transform:translateY(-4px); box-shadow:0 20px 44px rgba(11,95,168,0.22); }
-.teacher-cta:active{ transform:translateY(-2px) scale(.998); }
+  <div class="qp-3d-wrap">
+    <a class="qp-3d fee-3d idle" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener">
+      <span class="face"><span class="ico">💳</span>Fee Portal</span>
+    </a>
 
-/* ensure it fits smaller screens */
-@media(max-width:760px){
-  .teacher-cta { padding:8px 10px; font-size:14px; margin-left:0; display:block; width:100%; text-align:center; }
-}
-.teacher-cta .icon { background: rgba(255,255,255,0.08); padding:8px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; }
-</style>
+    <a class="qp-3d marksheet-3d idle" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" rel="noopener">
+      <span class="face"><span class="ico">📄</span>Marksheet</span>
+    </a>
 
-<!-- inline button placed near Quick Portals -->
-<button id="teacherQuickBtn" class="teacher-cta" type="button" title="Teacher Login (click to open)"><span class="icon">👨‍🏫</span><span>Teacher Login</span></button>
+    <a class="qp-3d teacher-3d idle" href="https://script.google.com/macros/s/AKfycbzN65xPZFne-r1dBaBF-07a9IBpu_w6Di2xzOFCOpLqCXXVl6RFvcrmfv2UTfh4IeiRXw/exec" target="_blank" rel="noopener">
+      <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
+    </a>
+  </div>
 
-<script>
-(function(){
-  // Ensure this runs after DOM loaded
-  function onReady(fn){ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+  <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}}catch(e){}})();</script>
+  <!-- END: 3D Animated Quick Portals -->
+  <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
+  <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+    <a class="btn quick-apply-btn" id="admissionApplyBtn"
+       href="https://script.google.com/macros/s/AKfycby9g3PFa5A_SgDDT3yIMIEn8oZsyfEZxqCEblrEJmWtTy1OXzzS3Qbi6uQxqTN8GZB25A/exec"
+       target="_blank" rel="noopener noreferrer" aria-label="Admission — Apply Now">
+      <span class="cta-left">📢 ADMISSION</span>
+      <span class="cta-main">ADMISSION OPEN — APPLY NOW</span>
+    </a>
 
-  onReady(function(){
-    const QUICK_BTN = document.getElementById('teacherQuickBtn');
-    const EXIST_BTN = document.getElementById('teacherLoginBtn'); // may exist from earlier injection
-    const LINK = 'https://script.google.com/macros/s/AKfycbzN65xPZFne-r1dBaBF-07a9IBpu_w6Di2xzOFCOpLqCXXVl6RFvcrmfv2UTfh4IeiRXw/exec';
-    const AUTH_PASS = 'SBPSC@9044';
+    <button class="btn admission-mini" id="admissionInfoBtn" aria-label="Admission info">Quick Info</button>
+  </div>
+  <!-- ===== end ADMISSION CTA ===== -->
 
-    function openLinkDirect(){
-      try { window.open(LINK, '_blank'); }
-      catch(e){ window.location.href = LINK; }
-    }
-
-    // If an existing floating teacherLoginBtn exists, use its click handler (it will show modal or open)
-    QUICK_BTN.addEventListener('click', function(e){
-      e.preventDefault();
-      // If user already logged in in sessionStorage, open directly
-      try{
-        const ok = sessionStorage.getItem('teacher_logged_in');
-        const exp = Number(sessionStorage.getItem('teacher_expires') || '0');
-        if(ok === '1' && Date.now() < exp){
-          // open directly
-          openLinkDirect();
-          return;
-        }
-      }catch(err){ /* ignore storage errors */ }
-
-      // If existing modal/button exists, trigger it so behavior is consistent
-      if(EXIST_BTN){
-        try{
-          EXIST_BTN.click();
-          return;
-        }catch(err){ /* fall through */ }
-      }
-
-      // Otherwise, show a prompt fallback (secure-ish): ask for password, then open
-      const p = prompt('Teacher Password डालें:');
-      if(!p) return;
-      if(p === AUTH_PASS){
-        try{
-          const expires = Date.now() + (6 * 60 * 60 * 1000);
-          sessionStorage.setItem('teacher_logged_in', '1');
-          sessionStorage.setItem('teacher_expires', String(expires));
-        }catch(e){}
-        openLinkDirect();
-      } else {
-        alert('Invalid password');
-      }
-    });
-  });
-})();
-</script>
-
-<!-- ===== end Teacher CTA insertion ===== -->
-
-
-            <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
-            <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
-              <a class="btn quick-apply-btn" id="admissionApplyBtn"
-                 href="https://script.google.com/macros/s/AKfycby9g3PFa5A_SgDDT3yIMIEn8oZsyfEZxqCEblrEJmWtTy1OXzzS3Qbi6uQxqTN8GZB25A/exec"
-                 target="_blank" rel="noopener noreferrer" aria-label="Admission — Apply Now">
-                <span class="cta-left">📢 ADMISSION</span>
-                <span class="cta-main">ADMISSION OPEN — APPLY NOW</span>
-              </a>
-
-              <button class="btn admission-mini" id="admissionInfoBtn" aria-label="Admission info">Quick Info</button>
-            </div>
-            <!-- ===== end ADMISSION CTA ===== -->
-
-          </div>
+</div>
         </div>
 
       <div>
