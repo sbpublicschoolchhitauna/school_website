@@ -1,3 +1,5 @@
+Files:
+- index_with_admin_and_teacher_login.html (website with Teacher Login)
+- admin-auth-and-actions.js (Apps Script server-side)
 
-Final updated site with Staff Slider merged into your index.html. 
-Edit data/staff.json to set real names/posts and replace images in staff/staffphotos/ and staff/photoslide/.
+Deployment: update AUTH_URL in front-end if needed; deploy Apps Script as web app.
