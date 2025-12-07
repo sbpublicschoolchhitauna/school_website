@@ -1353,7 +1353,7 @@ loadFeeAndMarks();
 
   function openTarget(url){
     hideModal();
-    try{ }catch(e){}
+    try{ sessionStorage.setItem(SESSION_KEY, '1'); }catch(e){}
     if(!url || url === '#') return;
     if(originalTarget === '_self' || originalTarget === null) window.location.href = url;
     else window.open(url, originalTarget);
