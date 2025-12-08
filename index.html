@@ -133,12 +133,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
 </style>
 
-
-<style id="fix-qp-visibility">
-.qp-3d { display: inline-flex !important; visibility: visible !important; opacity: 1 !important; }
-.qp-3d .face { display: inline-flex !important; }
-.qp-3d.btn { background: linear-gradient(90deg,#0b5fa8,#1167b1) !important; color: #fff !important; border: none !important; }
-</style>
 </head>
 <body>
 
@@ -213,7 +207,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  <!-- START: Inserted Photo Slider (existing slider code kept as-is
+  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
   <!doctype html>
   <html lang="hi">
   <head>
@@ -375,6 +369,98 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </script>
   
 
+
+
+<!-- Teacher Password Modal (added by assistant) -->
+<style>
+/* Modal styles for teacher password */
+#teacherPassModal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+#teacherPassModal.visible { display: flex; }
+#teacherPassModal .overlay {
+  position: absolute; inset: 0; background: rgba(2,6,23,0.5); backdrop-filter: blur(4px);
+}
+#teacherPassModal .modal {
+  position: relative;
+  width: 380px;
+  max-width: calc(100% - 48px);
+  background: linear-gradient(180deg,#ffffff,#f8fbff);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(2,6,23,0.32);
+  padding: 18px;
+  z-index: 2;
+  transform: translateY(0);
+  font-family: Arial, Helvetica, sans-serif;
+}
+#teacherPassModal .modal h3 { margin:0 0 8px; font-size:18px; color:#0b5fa8; }
+#teacherPassModal .modal p { margin:0 0 12px; color:#234; font-size:14px; }
+#teacherPassModal .modal .row { display:flex; gap:8px; }
+#teacherPassModal .modal input[type="password"]{
+  flex:1; padding:10px 12px; border-radius:8px; border:1px solid #e6f0fb; font-size:14px;
+  box-shadow: inset 0 2px 6px rgba(3,19,43,0.04);
+}
+#teacherPassModal .modal .actions { margin-top:12px; display:flex; gap:8px; }
+#teacherPassModal .modal button {
+  padding:10px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800;
+}
+#teacherPassModal .modal .btn-cancel { background: transparent; color:#0b5fa8; border:1px solid #e6f0fb; }
+#teacherPassModal .modal .btn-submit { background: linear-gradient(90deg,#0b5fa8,#1167b1); color:#fff; }
+@media(max-width:420px){ #teacherPassModal .modal{ width:92%; padding:14px } }
+</style>
+
+<div id="teacherPassModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="overlay" tabindex="-1"></div>
+  <div class="modal" role="document" aria-labelledby="teacherPassTitle">
+    <h3 id="teacherPassTitle">Teacher Login</h3>
+    <p>कृपया अपना पासवर्ड डालें ताकि teacher portal खोला जा सके।</p>
+    <div class="row">
+      <input id="teacherPassInput" type="password" aria-label="Teacher password" placeholder="Password">
+    </div>
+    <div class="actions">
+      <button class="btn-cancel" id="teacherModalCancel" type="button">Cancel</button>
+      <button class="btn-submit" id="teacherModalSubmit" type="button">Open Portal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal = document.getElementById('teacherPassModal');
+  if(!modal) return;
+  const input = modal.querySelector('input');
+  const btnCancel = document.getElementById('teacherModalCancel');
+  const btnSubmit = document.getElementById('teacherModalSubmit');
+  const overlay = modal.querySelector('.overlay');
+
+  function closeModal(){ modal.classList.remove('visible'); modal.setAttribute('aria-hidden','true'); try{ input.blur(); }catch(e){} }
+  function openPortalWithPass(){
+    const val = input.value || '';
+    if(!val) { input.focus(); return; }
+    if(val === AUTH_PASS){
+      closeModal();
+      openLinkDirect();
+    } else {
+      alert('Invalid password');
+      input.focus();
+      input.select();
+    }
+  }
+
+  btnCancel.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  btnSubmit.addEventListener('click', openPortalWithPass);
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ openPortalWithPass(); } });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); } });
+})();
+</script>
+<!-- End teacher password modal -->
+
 </body>
   </html>
   <!-- END: Inserted Photo Slider -->
@@ -387,7 +473,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
         <div class="card">
           <h2>Quick Portals</h2>
           <div style="margin-top:8px">
-  <!-- START: 3D Animated Quick Portals (merged by assistant
+  <!-- START: 3D Animated Quick Portals (merged by assistant) -->
   <style>
   /* 3D container */
   .qp-3d-wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;perspective:1200px;margin-top:10px}
@@ -414,22 +500,21 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   @media(max-width:640px){.qp-3d{width:100%}}
   </style>
 
-  
-  <div class="qp-3d-wrap" aria-label="Quick Portals">
-    <a class="qp-3d fee-3d idle btn" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener noreferrer" aria-label="Fee Portal">
-      <span class="face"><span class="ico">💳</span><span style="margin-left:6px">Fee Portal</span></span>
+  <div class="qp-3d-wrap">
+    <a class="qp-3d fee-3d idle" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener">
+      <span class="face"><span class="ico">💳</span>Fee Portal</span>
     </a>
 
-    <a class="qp-3d marksheet-3d idle btn" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" rel="noopener noreferrer" aria-label="Marksheet">
-      <span class="face"><span class="ico">📄</span><span style="margin-left:6px">Marksheet</span></span>
+    <a class="qp-3d marksheet-3d idle" href="https://script.google.com/macros/s/AKfycbzmAK3rf7ah-4BDi5BEcZeu859kPWAthpPFgsMiCbM2Gp-Do0yuS7QpzucWRssZMwqLtA/exec" target="_blank" rel="noopener">
+      <span class="face"><span class="ico">📄</span>Marksheet</span>
     </a>
 
-    <a class="qp-3d teacher-3d idle btn" id="teacherPortalAnchor" href="https://script.google.com/macros/s/AKfycbySEMuUpsMAsvHFKCo25aViJuJBoB7YSgKiZPZnQExpQCoogXS71jNcYUn07NZwJgzdiw/exec" target="_blank" rel="noopener noreferrer" aria-label="Teacher Login">
-      <span class="face"><span class="ico">👨‍🏫</span><span style="margin-left:6px">Teacher Login</span></span>
+    <a class="qp-3d teacher-3d idle" href="https://script.google.com/macros/s/AKfycbySEMuUpsMAsvHFKCo25aViJuJBoB7YSgKiZPZnQExpQCoogXS71jNcYUn07NZwJgzdiw/exec" target="_blank" rel="noopener">
+      <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
   </div>
-  <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}}catch(e){}})();</script>
 
+  <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}}catch(e){}})();</script>
   <!-- END: 3D Animated Quick Portals -->
   <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
   <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
@@ -1088,9 +1173,100 @@ loadFeeAndMarks();
 </script>
 <!-- ===== END StudyGenie Floating Helper ===== -->
 
-<!-- Teacher-login intercept modal (paste before 
 
-</body>
+
+<!-- Teacher-login intercept modal (paste before 
+<!-- Teacher Password Modal (added by assistant) -->
+<style>
+/* Modal styles for teacher password */
+#teacherPassModal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+#teacherPassModal.visible { display: flex; }
+#teacherPassModal .overlay {
+  position: absolute; inset: 0; background: rgba(2,6,23,0.5); backdrop-filter: blur(4px);
+}
+#teacherPassModal .modal {
+  position: relative;
+  width: 380px;
+  max-width: calc(100% - 48px);
+  background: linear-gradient(180deg,#ffffff,#f8fbff);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(2,6,23,0.32);
+  padding: 18px;
+  z-index: 2;
+  transform: translateY(0);
+  font-family: Arial, Helvetica, sans-serif;
+}
+#teacherPassModal .modal h3 { margin:0 0 8px; font-size:18px; color:#0b5fa8; }
+#teacherPassModal .modal p { margin:0 0 12px; color:#234; font-size:14px; }
+#teacherPassModal .modal .row { display:flex; gap:8px; }
+#teacherPassModal .modal input[type="password"]{
+  flex:1; padding:10px 12px; border-radius:8px; border:1px solid #e6f0fb; font-size:14px;
+  box-shadow: inset 0 2px 6px rgba(3,19,43,0.04);
+}
+#teacherPassModal .modal .actions { margin-top:12px; display:flex; gap:8px; }
+#teacherPassModal .modal button {
+  padding:10px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800;
+}
+#teacherPassModal .modal .btn-cancel { background: transparent; color:#0b5fa8; border:1px solid #e6f0fb; }
+#teacherPassModal .modal .btn-submit { background: linear-gradient(90deg,#0b5fa8,#1167b1); color:#fff; }
+@media(max-width:420px){ #teacherPassModal .modal{ width:92%; padding:14px } }
+</style>
+
+<div id="teacherPassModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="overlay" tabindex="-1"></div>
+  <div class="modal" role="document" aria-labelledby="teacherPassTitle">
+    <h3 id="teacherPassTitle">Teacher Login</h3>
+    <p>कृपया अपना पासवर्ड डालें ताकि teacher portal खोला जा सके।</p>
+    <div class="row">
+      <input id="teacherPassInput" type="password" aria-label="Teacher password" placeholder="Password">
+    </div>
+    <div class="actions">
+      <button class="btn-cancel" id="teacherModalCancel" type="button">Cancel</button>
+      <button class="btn-submit" id="teacherModalSubmit" type="button">Open Portal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal = document.getElementById('teacherPassModal');
+  if(!modal) return;
+  const input = modal.querySelector('input');
+  const btnCancel = document.getElementById('teacherModalCancel');
+  const btnSubmit = document.getElementById('teacherModalSubmit');
+  const overlay = modal.querySelector('.overlay');
+
+  function closeModal(){ modal.classList.remove('visible'); modal.setAttribute('aria-hidden','true'); try{ input.blur(); }catch(e){} }
+  function openPortalWithPass(){
+    const val = input.value || '';
+    if(!val) { input.focus(); return; }
+    if(val === AUTH_PASS){
+      closeModal();
+      openLinkDirect();
+    } else {
+      alert('Invalid password');
+      input.focus();
+      input.select();
+    }
+  }
+
+  btnCancel.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  btnSubmit.addEventListener('click', openPortalWithPass);
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ openPortalWithPass(); } });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); } });
+})();
+</script>
+<!-- End teacher password modal -->
+
+</body>) -->
 <style>
 /* simple modal styles */
 #teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
@@ -1234,7 +1410,98 @@ loadFeeAndMarks();
 </script>
 <!-- End teacher-login intercept modal -->
 
-<!-- Teacher password protect (injected
+<!-- Teacher Password Modal (added by assistant) -->
+<style>
+/* Modal styles for teacher password */
+#teacherPassModal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+#teacherPassModal.visible { display: flex; }
+#teacherPassModal .overlay {
+  position: absolute; inset: 0; background: rgba(2,6,23,0.5); backdrop-filter: blur(4px);
+}
+#teacherPassModal .modal {
+  position: relative;
+  width: 380px;
+  max-width: calc(100% - 48px);
+  background: linear-gradient(180deg,#ffffff,#f8fbff);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(2,6,23,0.32);
+  padding: 18px;
+  z-index: 2;
+  transform: translateY(0);
+  font-family: Arial, Helvetica, sans-serif;
+}
+#teacherPassModal .modal h3 { margin:0 0 8px; font-size:18px; color:#0b5fa8; }
+#teacherPassModal .modal p { margin:0 0 12px; color:#234; font-size:14px; }
+#teacherPassModal .modal .row { display:flex; gap:8px; }
+#teacherPassModal .modal input[type="password"]{
+  flex:1; padding:10px 12px; border-radius:8px; border:1px solid #e6f0fb; font-size:14px;
+  box-shadow: inset 0 2px 6px rgba(3,19,43,0.04);
+}
+#teacherPassModal .modal .actions { margin-top:12px; display:flex; gap:8px; }
+#teacherPassModal .modal button {
+  padding:10px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:800;
+}
+#teacherPassModal .modal .btn-cancel { background: transparent; color:#0b5fa8; border:1px solid #e6f0fb; }
+#teacherPassModal .modal .btn-submit { background: linear-gradient(90deg,#0b5fa8,#1167b1); color:#fff; }
+@media(max-width:420px){ #teacherPassModal .modal{ width:92%; padding:14px } }
+</style>
+
+<div id="teacherPassModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="overlay" tabindex="-1"></div>
+  <div class="modal" role="document" aria-labelledby="teacherPassTitle">
+    <h3 id="teacherPassTitle">Teacher Login</h3>
+    <p>कृपया अपना पासवर्ड डालें ताकि teacher portal खोला जा सके।</p>
+    <div class="row">
+      <input id="teacherPassInput" type="password" aria-label="Teacher password" placeholder="Password">
+    </div>
+    <div class="actions">
+      <button class="btn-cancel" id="teacherModalCancel" type="button">Cancel</button>
+      <button class="btn-submit" id="teacherModalSubmit" type="button">Open Portal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal = document.getElementById('teacherPassModal');
+  if(!modal) return;
+  const input = modal.querySelector('input');
+  const btnCancel = document.getElementById('teacherModalCancel');
+  const btnSubmit = document.getElementById('teacherModalSubmit');
+  const overlay = modal.querySelector('.overlay');
+
+  function closeModal(){ modal.classList.remove('visible'); modal.setAttribute('aria-hidden','true'); try{ input.blur(); }catch(e){} }
+  function openPortalWithPass(){
+    const val = input.value || '';
+    if(!val) { input.focus(); return; }
+    if(val === AUTH_PASS){
+      closeModal();
+      openLinkDirect();
+    } else {
+      alert('Invalid password');
+      input.focus();
+      input.select();
+    }
+  }
+
+  btnCancel.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  btnSubmit.addEventListener('click', openPortalWithPass);
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ openPortalWithPass(); } });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); } });
+})();
+</script>
+<!-- End teacher password modal -->
+
+
+<!-- Teacher password protect (injected) -->
 <style>
 #teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
 #teacherAuthModal .modalCard{width:380px;max-width:94%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 60px rgba(2,6,23,0.36);font-family:Arial,Helvetica,sans-serif}
@@ -1248,6 +1515,10 @@ loadFeeAndMarks();
 #teacherAuthModal .msg{margin-top:8px;font-size:13px}
 </style>
 
+<div id="teacherAuthModal" role="dialog" aria-hidden="true">
+  <div class="modalCard" role="document" aria-label="Teacher login">
+    <h3>Teacher Login</h3>
+    <div class="hint">Teacher Portal खोलने के लिए पासवर्ड डालें</div>
     <input id="teacherAuthPw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
     <div class="actions">
       <button class="ok" id="teacherAuthOk">Login</button>
@@ -1345,3 +1616,14 @@ loadFeeAndMarks();
 <!-- end teacher password protect -->
 </body>
 </html>
+<!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
+<style>
+/* allow tables to shrink on narrow screens (fix mobile zoom-out) */
+table { min-width: 0 !important; width: 100%; }
+
+/* make horizontal table container smoothly scrollable on touch */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* safeguard: prevent accidental page-wide overflow */
+html, body { max-width: 100%; overflow-x: hidden; }
+</style>
