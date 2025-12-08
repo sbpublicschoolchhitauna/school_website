@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="hi">
 <head>
 <meta charset="utf-8" />
@@ -133,6 +134,33 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
 </style>
 
+<style>
+/* ===== MOBILE SAFEGUARDS (added by assistant) ===== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+img { max-width: 100%; height: auto; display: block; }
+.slider-wrap { max-width: 100%; margin: 12px auto; padding: 0 12px; }
+.slider { width: 100%; box-sizing: border-box; }
+.slider .slide { position: relative; inset: auto; pointer-events: auto; }
+.slider .slide img { width:100%; height:auto; object-fit:cover; max-height: 45vh; }
+table { min-width: 0 !important; width: 100% !important; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 420px) {
+  .header { padding: 12px 10px; border-radius: 0 0 10px 10px; }
+  .header h1 { font-size: 18px; line-height:1.05; }
+  .header .meta { font-size: 12px; }
+  .school-strip-outer { margin-top:8px; padding-bottom:6px; }
+}
+.qp-3d { --w:160px; min-height: 46px; padding:10px 12px; }
+@media (max-width: 640px) {
+  .qp-3d { width:100%; min-width:unset; justify-content:center; }
+}
+.sg-floating { right: 14px; bottom: 84px; }
+.btn, .qp-3d { touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.06); }
+</style>
 </head>
 <body>
 
@@ -208,8 +236,8 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
   <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
-  <!doctype html>
-  <html lang="hi">
+  
+  
   <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -462,7 +490,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 <!-- End teacher password modal -->
 
 </body>
-  </html>
+  
   <!-- END: Inserted Photo Slider -->
 
 <div class="container">
@@ -1615,7 +1643,7 @@ loadFeeAndMarks();
 </script>
 <!-- end teacher password protect -->
 </body>
-</html>
+
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
 <style>
 /* allow tables to shrink on narrow screens (fix mobile zoom-out) */
@@ -1627,3 +1655,4 @@ table { min-width: 0 !important; width: 100%; }
 /* safeguard: prevent accidental page-wide overflow */
 html, body { max-width: 100%; overflow-x: hidden; }
 </style>
+</html>
