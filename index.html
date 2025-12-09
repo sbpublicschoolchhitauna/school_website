@@ -259,7 +259,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
     try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
     return [
-      'slider_images/20251127_154340.jpg',
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
       'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
@@ -426,6 +425,88 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
   </div>
+  <!-- START: Quick Portals + Video column (inserted) -->
+  <style>
+  /* Quick portals + video side-by-side container */
+  .portal-with-video{{ display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }}
+  .portal-with-video .qp-3d-wrap{{ flex: 1 1 320px; min-width:220px; }}
+  .portal-video-box{{ flex: 0 0 380px; min-width:260px; max-width:420px; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 8px 30px rgba(2,6,23,0.06); padding:10px; }}
+  .portal-video-box h3{{ margin:0 0 8px; font-size:15px; color: #0b5fa8; }}
+  .portal-video-box video{{ width:100%; height:auto; display:block; border-radius:8px; background:#000; }}
+  .pv-playlist{{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }}
+  .pv-item{{ flex: 1 1 90px; min-width:80px; background:#f6fbff; border:1px solid #eef9ff; padding:8px; border-radius:8px; cursor:pointer; font-size:13px; text-align:center; }}
+  .pv-item.active{{ outline:3px solid rgba(11,95,168,0.12); box-shadow:0 8px 26px rgba(11,95,168,0.06); background:#ffffff; }}
+  @media(max-width:900px){{ .portal-with-video{{flex-direction:column}} .portal-video-box{{width:100%}} }}
+  </style>
+
+  <div class="portal-with-video" aria-hidden="false">
+    <!-- keep existing Quick Portals block (the qp-3d-wrap exists just before this insertion point) -->
+    <!-- VIDEO BOX -->
+    <div class="portal-video-box" id="portalVideoBox" aria-label="Quick Portals Video Player">
+      <h3>Quick Portals — वीडियो</h3>
+      <video id="qpMainVideo" controls autoplay muted playsinline preload="metadata">
+        <source src="slider_videos/upendra_1432_2-20251209-0001.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+      <div class="pv-playlist" id="pvPlaylist" aria-label="Video playlist">
+        <!-- playlist items injected by JS -->
+      </div>
+    </div>
+  </div>
+  <!-- END: Quick Portals + Video column -->
+  <script>
+  (function(){
+    const playlist = ['upendra_1432_2-20251209-0001.mp4'];
+    const base = 'slider_videos/';
+    const videoEl = document.getElementById('qpMainVideo');
+    const listWrap = document.getElementById('pvPlaylist');
+
+    function makeItem(name, idx){
+      const el = document.createElement('div');
+      el.className = 'pv-item' + (idx===0 ? ' active' : '');
+      el.tabIndex = 0;
+      // simple label (filename cleaned)
+      const label = name.replace(/[-_]/g,' ').replace(/\.(mp4|webm|mov|ogg)$/i,'');
+      el.innerText = label;
+      el.addEventListener('click', ()=> select(idx));
+      el.addEventListener('keydown', (e)=> { if(e.key === 'Enter') select(idx); });
+      return el;
+    }
+
+    function select(i){
+      const src = base + playlist[i];
+      if(!videoEl) return;
+      const cur = videoEl.querySelector('source') ? videoEl.querySelector('source').getAttribute('src') : '';
+      if(cur === src){
+        if(videoEl.paused) videoEl.play(); else videoEl.pause();
+        return;
+      }
+      videoEl.pause();
+      videoEl.innerHTML = '';
+      const s = document.createElement('source');
+      s.src = src;
+      s.type = 'video/mp4';
+      videoEl.appendChild(s);
+      videoEl.load();
+      videoEl.muted = true;
+      videoEl.play().catch(()=>{});
+      Array.from(listWrap.children).forEach((c, idx)=> c.classList.toggle('active', idx===i));
+    }
+
+    playlist.forEach((p, idx)=>{
+      listWrap.appendChild(makeItem(p, idx));
+    });
+
+    videoEl.addEventListener('ended', ()=>{
+      const curSrc = videoEl.querySelector('source') ? videoEl.querySelector('source').getAttribute('src') : '';
+      const curName = curSrc.replace(base, '');
+      const curIdx = playlist.indexOf(curName);
+      const next = (curIdx >= 0 && curIdx < playlist.length-1) ? curIdx+1 : 0;
+      select(next);
+    });
+  })();
+  </script>
+
 
   <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}}catch(e){}})();</script>
   <!-- END: 3D Animated Quick Portals -->
