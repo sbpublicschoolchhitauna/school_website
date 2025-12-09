@@ -260,6 +260,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
     return [
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
+            'slider_videos/school_event.mp4',
       'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
@@ -270,7 +271,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
       'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
       'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
-      'slider_images/logo.jpg',
+      'slider_images/logo.jpg'
     ];
   }
 
@@ -294,13 +295,76 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   let timer = null;
   let interval = 4000; // autoplay interval
 
-  function createSlides(){
+  
+function createSlides(){
+    // Clear any existing slides/dots (safe if function called twice)
+    slides = [];
+    slider.innerHTML = '';
+    dotsWrap.innerHTML = '';
+
     IMAGES.forEach((src,i)=>{
       const s = document.createElement('div');
       s.className = 'slide';
       s.setAttribute('role','group');
       s.setAttribute('aria-roledescription','slide');
       s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
+
+      let media;
+
+      // If the source ends with .mp4 (case-insensitive) -> use <video>
+      if(typeof src === 'string' && src.match(/\.mp4(\?.*)?$/i)){
+        media = document.createElement('video');
+        media.src = src;
+        media.controls = true;
+        media.autoplay = false;
+        media.muted = true;
+        media.loop = true;
+        media.playsInline = true;
+        media.style.width = '100%';
+        media.style.height = 'auto';
+        media.setAttribute('aria-label', `Video slide ${i+1}`);
+
+        // When video metadata loaded, adjust slider height to match aspect ratio
+        media.addEventListener('loadedmetadata', ()=>{
+          if(i===index) adjustHeightTo(media);
+        });
+
+        // If this slide becomes active and video exists, optionally play it
+        s.dataset.isVideo = '1';
+      } else {
+        // fallback to image
+        media = document.createElement('img');
+        media.src = src;
+        media.alt = `School photo ${i+1}`;
+        media.style.width = '100%';
+        media.style.height = 'auto';
+        media.addEventListener('load', ()=>{
+          if(i===index) adjustHeightTo(media);
+        });
+      }
+
+      s.appendChild(media);
+      slider.appendChild(s);
+      slides.push(s);
+
+      const d = document.createElement('button');
+      d.className = 'dot';
+      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+      d.addEventListener('click', ()=>{ pause(); goTo(i);
+          // If selected slide contains a video, play it
+          const vid = slides[i].querySelector('video');
+          if(vid){
+            try{ vid.currentTime = 0; vid.play(); }catch(e){}
+          }
+      });
+      dotsWrap.appendChild(d);
+    });
+
+    if(slides[0]) slides[0].classList.add('active');
+    updateDots();
+    setTimeout(()=>{ const first = slides[0] && slides[0].querySelector('img,video'); if(first && (first.complete || first.readyState>=2)) adjustHeightTo(first); }, 300);
+  }
+of ${IMAGES.length}`);
       const img = document.createElement('img');
       img.src = src;
       img.alt = `School photo ${i+1}`;
