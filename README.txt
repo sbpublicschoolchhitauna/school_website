@@ -1,21 +1,9 @@
-📘 README — Video Slider Setup (S.B. Public School)
+Updated site package
+- index.html has been updated to handle video files in the slider.
+- New injected script replaces or appends improved createSlides, adjustHeightTo and goTo functions.
+- slider_videos/ contains README explaining where to put your mp4 files.
+- Original index.html backed up as index.html.bak in the original /mnt/data location.
 
-1️⃣ slider_videos/ folder
-   - Put your real .mp4 video files inside this folder.
-   - Example: slider_videos/school_event.mp4
-
-2️⃣ How to add video in slider:
-   - Open index.html
-   - Find IMAGES array (inside slider script)
-   - Add your video file like this:
-       'slider_videos/school_event.mp4',
-
-3️⃣ Sample placeholder:
-   - sample_placeholder.mp4 is only a dummy file.
-   - Replace with real video.
-
-4️⃣ After uploading to hosting:
-   - Ensure folder structure remains same.
-   - Videos must be in slider_videos/ next to index.html.
-
-If you need help, contact Upendra ji or ask ChatGPT again.
+To use:
+- Put your mp4 in slider_videos/ with the exact name referenced in the IMAGES array inside index.html.
+- Upload entire folder to your server preserving paths, or test locally with a simple static server.

@@ -1,0 +1,1 @@
+This folder is meant for your video files. Add your .mp4 here.
