@@ -466,8 +466,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       el.className = 'pv-item' + (idx===0 ? ' active' : '');
       el.tabIndex = 0;
       // simple label (filename cleaned)
-      const label = name.replace(/[-_]/g,' ').replace(/\.(mp4|webm|mov|ogg)$/i,'');
-      el.innerText = label;
+      el.innerText = "Activity Video";
       el.addEventListener('click', ()=> select(idx));
       el.addEventListener('keydown', (e)=> { if(e.key === 'Enter') select(idx); });
       return el;
