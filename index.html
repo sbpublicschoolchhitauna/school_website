@@ -207,81 +207,48 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-  <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
-  <!doctype html>
-  <html lang="hi">
-  <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
-  <style>
-  :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-  .slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
-  .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
-  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
-  .slide.active{opacity:1;pointer-events:auto}
-  .slide img{width:100%;height:auto;display:block;object-fit:cover}
-  /* controls */
-  .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
-  .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
-  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
-  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
-  .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
-  .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
-  @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
-  </style>
-  <style id="assistant-button-fix">
-  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-    background: #000 !important;
-    color: #fff !important;
-    border: 1px solid #black !important;
-    box-shadow: none !important;
-  }
-  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-  </style>
-  </head>
-  <body>
-  <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
-    <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
-    <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
-    <div class="controls">
-      <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
-      <button class="btn slider-control" id="next" aria-label="Next">›</button>
-    </div>
-    <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
+  
+<!-- START: Fixed Photo Slider -->
+<div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
+  <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
+  <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
+  <div class="controls">
+    <button class="btn slider-control" id="prev" aria-label="Previous">‹</button>
+    <button class="btn slider-control" id="next" aria-label="Next">›</button>
   </div>
+  <div class="dots" id="dots" role="tablist" aria-label="Slide dots"></div>
+</div>
 
-  <script>
-  // IMAGES will be loaded dynamically: try /api/images (server), then images.json (static), then fallback to embedded list
+<style>
+/* Slider styles (kept small and compatible) */
+.slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
+.slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .6s ease;will-change:opacity;pointer-events:none}
+.slide.active{opacity:1;pointer-events:auto}
+.slide img, .slide video{width:100%;height:auto;display:block;object-fit:cover}
+.controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
+.slider-wrap .btn{background:rgba(255,255,255,0.95);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
+.dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
+.dot.active{background:#0b5fa8;transform:scale(1.2);opacity:1}
+.slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+@media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
+</style>
+
+<script>
+// Robust slider: supports images and mp4 videos, avoids duplicate definitions.
+(async function(){
   async function loadImagesDynamic(){
     try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
     try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
     return [
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
-            'slider_videos/school_event.mp4',
+      'slider_videos/school_event.mp4',
       'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.39_5f42559c.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.38_3193ced1.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.35.04_d1684284.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.05_6d3a2a2d.jpg',
-      'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_66cb599d.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.48_b61cc87d.jpg',
-      'slider_images/WhatsApp Image 2025-11-16 at 10.33.47_3953b4e7.jpg',
-      'slider_images/WhatsApp Image 2024-09-09 at 11.13.17_4b384d82.jpg',
-      'slider_images/WhatsApp Image 2024-09-09 at 11.13.16_040cf6d0.jpg',
       'slider_images/logo.jpg'
     ];
   }
-
-  let IMAGES = []; // will be populated shortly
-
-  (async function(){
-    IMAGES = await loadImagesDynamic();
-    if(typeof createSlides === 'function') createSlides();
-    if(typeof start === 'function') start();
-  })();
 
   const slider = document.getElementById('slider');
   const sliderWrap = document.getElementById('sliderWrap');
@@ -290,57 +257,48 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   const nextBtn = document.getElementById('next');
   const playToggle = document.getElementById('playToggle');
 
+  let IMAGES = await loadImagesDynamic();
   let slides = [];
   let index = 0;
   let timer = null;
-  let interval = 4000; // autoplay interval
+  const interval = 4000;
 
-  
-function createSlides(){
-    // Clear any existing slides/dots (safe if function called twice)
+  function adjustHeightTo(media){
+    if(!media) return;
+    const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
+    const naturalW = media.naturalWidth || media.videoWidth || 1;
+    const naturalH = media.naturalHeight || media.videoHeight || 1;
+    if(!naturalW) return;
+    const h = Math.round((naturalH / naturalW) * wrapWidth);
+    const maxH = Math.round(window.innerHeight * 0.65);
+    const finalH = Math.min(h, maxH);
+    slider.style.height = finalH + 'px';
+  }
+
+  function createSlides(){
     slides = [];
     slider.innerHTML = '';
     dotsWrap.innerHTML = '';
-
     IMAGES.forEach((src,i)=>{
       const s = document.createElement('div');
       s.className = 'slide';
       s.setAttribute('role','group');
-      s.setAttribute('aria-roledescription','slide');
       s.setAttribute('aria-label', `Slide ${i+1} of ${IMAGES.length}`);
 
       let media;
-
-      // If the source ends with .mp4 (case-insensitive) -> use <video>
       if(typeof src === 'string' && src.match(/\.mp4(\?.*)?$/i)){
         media = document.createElement('video');
         media.src = src;
         media.controls = true;
-        media.autoplay = false;
         media.muted = true;
         media.loop = true;
         media.playsInline = true;
-        media.style.width = '100%';
-        media.style.height = 'auto';
-        media.setAttribute('aria-label', `Video slide ${i+1}`);
-
-        // When video metadata loaded, adjust slider height to match aspect ratio
-        media.addEventListener('loadedmetadata', ()=>{
-          if(i===index) adjustHeightTo(media);
-        });
-
-        // If this slide becomes active and video exists, optionally play it
-        s.dataset.isVideo = '1';
+        media.addEventListener('loadedmetadata', ()=> { if(i===index) adjustHeightTo(media); });
       } else {
-        // fallback to image
         media = document.createElement('img');
         media.src = src;
-        media.alt = `School photo ${i+1}`;
-        media.style.width = '100%';
-        media.style.height = 'auto';
-        media.addEventListener('load', ()=>{
-          if(i===index) adjustHeightTo(media);
-        });
+        media.alt = `Slide ${i+1}`;
+        media.addEventListener('load', ()=> { if(i===index) adjustHeightTo(media); });
       }
 
       s.appendChild(media);
@@ -350,68 +308,31 @@ function createSlides(){
       const d = document.createElement('button');
       d.className = 'dot';
       d.setAttribute('aria-label', 'Go to slide ' + (i+1));
-      d.addEventListener('click', ()=>{ pause(); goTo(i);
-          // If selected slide contains a video, play it
-          const vid = slides[i].querySelector('video');
-          if(vid){
-            try{ vid.currentTime = 0; vid.play(); }catch(e){}
-          }
-      });
-      dotsWrap.appendChild(d);
-    });
-
-    if(slides[0]) slides[0].classList.add('active');
-    updateDots();
-    setTimeout(()=>{ const first = slides[0] && slides[0].querySelector('img,video'); if(first && (first.complete || first.readyState>=2)) adjustHeightTo(first); }, 300);
-  }
-of ${IMAGES.length}`);
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = `School photo ${i+1}`;
-      img.addEventListener('load', ()=>{
-        if(i===index) adjustHeightTo(img);
-      });
-      s.appendChild(img);
-      slider.appendChild(s);
-      slides.push(s);
-
-      const d = document.createElement('button');
-      d.className = 'dot';
-      d.setAttribute('aria-label', 'Go to slide ' + (i+1));
-      d.addEventListener('click', ()=>{ pause(); goTo(i); });
+      d.addEventListener('click', ()=>{ pause(); goTo(i); const vid = slides[i].querySelector('video'); if(vid){ try{ vid.currentTime = 0; vid.play(); }catch(e){} } });
       dotsWrap.appendChild(d);
     });
     if(slides[0]) slides[0].classList.add('active');
     updateDots();
-    setTimeout(()=>{ const img = slides[0].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 300);
-  }
-
-  function adjustHeightTo(img){
-    const wrapWidth = slider.clientWidth || sliderWrap.clientWidth;
-    if(!img.naturalWidth) return;
-    const h = Math.round((img.naturalHeight / img.naturalWidth) * wrapWidth);
-    const maxH = Math.round(window.innerHeight * 0.65);
-    const finalH = Math.min(h, maxH);
-    slider.style.height = finalH + 'px';
+    setTimeout(()=>{ const first = slides[0] && slides[0].querySelector('img,video'); if(first && (first.complete || first.readyState>=2)) adjustHeightTo(first); }, 250);
   }
 
   function goTo(i){
     index = (i + slides.length) % slides.length;
     slides.forEach((s, idx)=> s.classList.toggle('active', idx===index));
     updateDots();
-    const img = slides[index].querySelector('img');
-    if(img && img.complete) adjustHeightTo(img);
-    else if(img) img.addEventListener('load', ()=> adjustHeightTo(img), { once:true });
+    const media = slides[index].querySelector('img,video');
+    if(media){
+      if(media.tagName === 'VIDEO'){
+        try{ media.play(); }catch(e){}
+      }
+      if(media.complete || (media.readyState && media.readyState>=2)) adjustHeightTo(media);
+      else media.addEventListener('loadedmetadata' in media ? 'loadedmetadata' : 'load', ()=> adjustHeightTo(media), { once:true });
+    }
   }
 
   function nextSlide(){ goTo(index+1); }
   function prevSlide(){ goTo(index-1); }
-
-  function updateDots(){
-    const dots = dotsWrap.children;
-    for(let i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
-  }
-
+  function updateDots(){ const dots = dotsWrap.children; for(let i=0;i<dots.length;i++) dots[i].classList.toggle('active', i===index); }
   function start(){ if(timer) clearInterval(timer); timer = setInterval(nextSlide, interval); playToggle.textContent = 'Pause'; playToggle.setAttribute('aria-pressed','false'); }
   function pause(){ if(timer) clearInterval(timer); timer = null; playToggle.textContent = 'Play'; playToggle.setAttribute('aria-pressed','true'); }
 
@@ -419,27 +340,21 @@ of ${IMAGES.length}`);
   prevBtn.addEventListener('click', ()=>{ pause(); prevSlide(); });
   playToggle.addEventListener('click', ()=>{ if(timer) pause(); else start(); });
 
+  // keyboard & touch
   document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ pause(); nextSlide(); } else if(e.key==='ArrowLeft'){ pause(); prevSlide(); } });
-
   let startX=0;
   slider.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
   slider.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx)>40){ pause(); if(dx<0) nextSlide(); else prevSlide(); } });
+  // resize handling
+  let resizeDeb; window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const media = slides[index] && slides[index].querySelector('img,video'); if(media) adjustHeightTo(media); }, 120); });
 
-  let resizeDeb;
-  window.addEventListener('resize', ()=>{ clearTimeout(resizeDeb); resizeDeb = setTimeout(()=>{ const img = slides[index] && slides[index].querySelector('img'); if(img && img.complete) adjustHeightTo(img); }, 120); });
-
+  // initialize
   createSlides();
   start();
-  </script>
-  
+})();
+</script>
+<!-- END: Fixed Photo Slider -->
 
-
-
-
-
-</body>
-  </html>
-  <!-- END: Inserted Photo Slider -->
 
 <div class="container">
     <div class="grid">
