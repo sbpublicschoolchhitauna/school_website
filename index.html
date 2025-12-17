@@ -1001,60 +1001,69 @@ loadFeeAndMarks();
   .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
 }
 <style>
-/* ===== 3D ADMISSION BUTTON (Fee Portal Style) ===== */
+/* ===== ADMISSION BUTTON : EXACT FEE PORTAL STYLE ===== */
 #admissionApplyBtn{
-  --c1:#ffb703;
-  --c2:#ff7b00;
-  --c3:#0b5fa8;
-
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:10px;
 
   padding:16px 28px;
-  border-radius:16px;
+  border-radius:14px;
   font-size:17px;
-  font-weight:900;
-  letter-spacing:.6px;
+  font-weight:800;
+  letter-spacing:.5px;
   color:#fff;
   text-decoration:none;
 
-  background:linear-gradient(135deg,var(--c1),var(--c2));
+  /* initial color (will animate) */
+  background:linear-gradient(135deg,#ffb703,#ff7b00);
+
+  /* EXACT depth like Fee Portal */
+  transform-style:preserve-3d;
+  perspective:1200px;
+
   box-shadow:0 18px 40px rgba(11,95,168,0.25);
 
-  transform-style:preserve-3d;
-  perspective:1000px;
-
-  animation: admissionTilt 3.6s ease-in-out infinite,
-             admissionColor 6s linear infinite;
+  /* SAME idle animation + color animation */
+  animation:
+    feeLikeTilt 6.8s ease-in-out infinite,
+    admissionColorShift 8s linear infinite;
 }
 
-/* inner face (Fee Portal जैसा depth) */
+/* inner face = real 3D depth (same as Fee Portal .face) */
 #admissionApplyBtn span{
-  transform:translateZ(22px);
+  transform:translateZ(18px);
   display:inline-block;
 }
 
-/* HOVER = strong 3D */
+/* HOVER = same strong 3D punch */
 #admissionApplyBtn:hover{
-  transform:translateY(-8px) rotateX(10deg) rotateY(12deg) scale(1.03);
+  transform:translateY(-8px) rotateX(6deg) rotateY(12deg) scale(1.03);
   box-shadow:0 34px 64px rgba(11,95,168,0.35);
 }
 
-/* 3D TILT animation (same feel as Fee Portal) */
-@keyframes admissionTilt{
-  0%   { transform:rotateX(4deg) rotateY(-6deg); }
-  50%  { transform:rotateX(6deg) rotateY(6deg); }
-  100% { transform:rotateX(4deg) rotateY(-6deg); }
+/* ===== EXACT Fee Portal idle tilt ===== */
+@keyframes feeLikeTilt{
+  0%   { transform:rotateX(3deg) rotateY(-6deg); }
+  50%  { transform:rotateX(4deg) rotateY(6deg); }
+  100% { transform:rotateX(3deg) rotateY(-6deg); }
 }
 
-/* COLOR CHANGE animation */
-@keyframes admissionColor{
-  0%   { background:linear-gradient(135deg,#ffb703,#ff7b00); }
-  33%  { background:linear-gradient(135deg,#00f5d4,#0b5fa8); }
-  66%  { background:linear-gradient(135deg,#ff595e,#ff006e); }
-  100% { background:linear-gradient(135deg,#ffb703,#ff7b00); }
+/* ===== COLOR CHANGE LOOP ===== */
+@keyframes admissionColorShift{
+  0%{
+    background:linear-gradient(135deg,#ffb703,#ff7b00);
+  }
+  33%{
+    background:linear-gradient(135deg,#0ea5a4,#0b5fa8);
+  }
+  66%{
+    background:linear-gradient(135deg,#ff595e,#ff006e);
+  }
+  100%{
+    background:linear-gradient(135deg,#ffb703,#ff7b00);
+  }
 }
 
 /* MOBILE */
@@ -1065,6 +1074,7 @@ loadFeeAndMarks();
   }
 }
 </style>
+
 
 <div id="sgFloating" class="sg-floating" role="button" aria-label="StudyGenie help" tabindex="0" title="StudyGenie — Help">
   <span style="font-size:22px">🤖</span>
