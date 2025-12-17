@@ -1001,31 +1001,74 @@ loadFeeAndMarks();
   .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
 }
 <style>
-/* पहले से मौजूद CSS */
-body{margin:0;font-family:Arial;}
-.header{background:#0b5fa8;}
-/* ऊपर का code वैसे का वैसे रहने दें */
-
-/* 👇 यहीं paste करें */
+/* ===== REAL 3D ANIMATED ADMISSION BUTTON ===== */
 #admissionApplyBtn{
-  font-size:16px;
-  padding:14px 22px;
-  border-radius:14px;
+  display:inline-block;
+  font-size:18px;
+  padding:16px 30px;
+  border-radius:18px;
   font-weight:900;
-  letter-spacing:.5px;
+  letter-spacing:0.6px;
   color:#012032;
   background:linear-gradient(135deg,#ffb703,#ff7b00);
-  box-shadow:0 8px 0 #c25a00,0 18px 35px rgba(0,0,0,.25);
-  animation: admission3d 2s infinite;
+  position:relative;
+
+  /* 3D DEPTH */
+  box-shadow:
+    0 8px 0 #c25a00,
+    0 18px 35px rgba(0,0,0,0.35);
+
+  /* REAL ANIMATION */
+  animation: admissionMove 2s ease-in-out infinite;
 }
 
-@keyframes admission3d{
-  0%{background:linear-gradient(135deg,#ffb703,#ff7b00);}
-  50%{background:linear-gradient(135deg,#00f5d4,#0b5fa8);}
-  100%{background:linear-gradient(135deg,#ff595e,#ff006e);}
+/* OUTER GLOW */
+#admissionApplyBtn::before{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:22px;
+  border:3px solid rgba(255,183,3,0.6);
+  opacity:0;
+  animation: glowPulse 2s ease-in-out infinite;
 }
 
-/* 👆 paste खत्म */
+/* HOVER EXTRA EFFECT */
+#admissionApplyBtn:hover{
+  transform:translateY(-6px) scale(1.05);
+}
+
+/* BUTTON MOVE + SCALE */
+@keyframes admissionMove{
+  0%{
+    transform:translateY(0) scale(1);
+    background:linear-gradient(135deg,#ffb703,#ff7b00);
+  }
+  50%{
+    transform:translateY(-12px) scale(1.08);
+    background:linear-gradient(135deg,#00f5d4,#0b5fa8);
+  }
+  100%{
+    transform:translateY(0) scale(1);
+    background:linear-gradient(135deg,#ff595e,#ff006e);
+  }
+}
+
+/* GLOW RING ANIMATION */
+@keyframes glowPulse{
+  0%{opacity:0; transform:scale(0.9);}
+  50%{opacity:1; transform:scale(1.1);}
+  100%{opacity:0; transform:scale(0.9);}
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  #admissionApplyBtn{
+    width:100%;
+    text-align:center;
+    font-size:16px;
+  }
+}
 </style>
 
 <div id="sgFloating" class="sg-floating" role="button" aria-label="StudyGenie help" tabindex="0" title="StudyGenie — Help">
