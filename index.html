@@ -1001,39 +1001,60 @@ loadFeeAndMarks();
   .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
 }
 <style>
-/* ===== 3D ADMISSION BUTTON (FINAL) ===== */
+/* ===== PREMIUM 3D ADMISSION BUTTON ===== */
 #admissionApplyBtn{
+  position:relative;
+  display:inline-block;
+  padding:18px 30px;
   font-size:17px;
-  padding:16px 26px;
-  border-radius:16px;
   font-weight:900;
-  letter-spacing:.6px;
+  letter-spacing:1px;
   color:#fff;
-  text-transform:uppercase;
+  border-radius:18px;
+  text-decoration:none;
   background:linear-gradient(135deg,#ff9f1c,#ff5400);
   box-shadow:
-    0 10px 0 #c24100,
-    0 22px 40px rgba(0,0,0,.35);
-  transition:transform .25s ease, box-shadow .25s ease;
-  animation:admissionColor 2s infinite;
+    0 10px 0 #b84000,
+    0 22px 40px rgba(0,0,0,0.35);
+  transform-style:preserve-3d;
+  animation:admission3D 2s infinite;
+  transition:transform .3s ease, box-shadow .3s ease;
 }
 
-/* Hover / Click 3D effect */
+/* 3D shine layer */
+#admissionApplyBtn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:18px;
+  background:linear-gradient(
+    120deg,
+    rgba(255,255,255,0.35),
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.35)
+  );
+  opacity:.35;
+  transform:translateZ(20px);
+}
+
+/* Hover = ऊपर उठे */
 #admissionApplyBtn:hover{
-  transform:translateY(-6px);
+  transform:translateY(-8px) rotateX(6deg);
   box-shadow:
-    0 16px 0 #9b2c00,
-    0 30px 55px rgba(0,0,0,.45);
-}
-#admissionApplyBtn:active{
-  transform:translateY(4px);
-  box-shadow:
-    0 4px 0 #9b2c00,
-    0 10px 20px rgba(0,0,0,.35);
+    0 18px 0 #9b2c00,
+    0 35px 60px rgba(0,0,0,0.45);
 }
 
-/* 2 sec color animation */
-@keyframes admissionColor{
+/* Click = दबे */
+#admissionApplyBtn:active{
+  transform:translateY(6px);
+  box-shadow:
+    0 5px 0 #9b2c00,
+    0 12px 22px rgba(0,0,0,0.35);
+}
+
+/* Auto 3D + Color animation */
+@keyframes admission3D{
   0%{
     background:linear-gradient(135deg,#ff9f1c,#ff5400);
   }
@@ -1044,6 +1065,7 @@ loadFeeAndMarks();
     background:linear-gradient(135deg,#ff595e,#ff006e);
   }
 }
+
 </style>
 
 
