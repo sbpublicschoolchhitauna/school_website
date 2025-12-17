@@ -1001,80 +1001,33 @@ loadFeeAndMarks();
   .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
 }
 <style>
-/* ===== ADMISSION BUTTON : EXACT FEE PORTAL STYLE ===== */
+/* पहले से मौजूद CSS */
+body{margin:0;font-family:Arial;}
+.header{background:#0b5fa8;}
+/* ऊपर का code वैसे का वैसे रहने दें */
+
+/* 👇 यहीं paste करें */
 #admissionApplyBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-
-  padding:16px 28px;
+  font-size:16px;
+  padding:14px 22px;
   border-radius:14px;
-  font-size:17px;
-  font-weight:800;
+  font-weight:900;
   letter-spacing:.5px;
-  color:#fff;
-  text-decoration:none;
-
-  /* MULTI-COLOR GRADIENT (for smooth change) */
-  background:linear-gradient(
-    120deg,
-    #ffb703,
-    #ff7b00,
-    #0ea5a4,
-    #0b5fa8,
-    #ff595e,
-    #ff006e,
-    #ffb703
-  );
-  background-size:300% 300%;
-
-  /* SAME 3D SETTINGS AS FEE PORTAL */
-  transform-style:preserve-3d;
-  perspective:1200px;
-
-  box-shadow:0 18px 40px rgba(11,95,168,0.25);
-
-  /* EXACT Fee Portal tilt + Color animation */
-  animation:
-    feePortalTilt 6.8s ease-in-out infinite,
-    admissionGradient 6s linear infinite;
+  color:#012032;
+  background:linear-gradient(135deg,#ffb703,#ff7b00);
+  box-shadow:0 8px 0 #c25a00,0 18px 35px rgba(0,0,0,.25);
+  animation: admission3d 2s infinite;
 }
 
-/* inner face = real depth (Fee Portal जैसा) */
-#admissionApplyBtn span{
-  transform:translateZ(18px);
-  display:inline-block;
+@keyframes admission3d{
+  0%{background:linear-gradient(135deg,#ffb703,#ff7b00);}
+  50%{background:linear-gradient(135deg,#00f5d4,#0b5fa8);}
+  100%{background:linear-gradient(135deg,#ff595e,#ff006e);}
 }
 
-/* HOVER = SAME strong 3D punch */
-#admissionApplyBtn:hover{
-  transform:translateY(-8px) rotateX(6deg) rotateY(12deg) scale(1.03);
-  box-shadow:0 34px 64px rgba(11,95,168,0.35);
-}
-
-/* ===== EXACT Fee Portal idle animation ===== */
-@keyframes feePortalTilt{
-  0%   { transform:rotateX(3deg) rotateY(-6deg); }
-  50%  { transform:rotateX(4deg) rotateY(6deg); }
-  100% { transform:rotateX(3deg) rotateY(-6deg); }
-}
-
-/* ===== SMOOTH COLOR CHANGE (100% WORKING) ===== */
-@keyframes admissionGradient{
-  0%   { background-position:0% 50%; }
-  50%  { background-position:100% 50%; }
-  100% { background-position:0% 50%; }
-}
-
-/* MOBILE */
-@media(max-width:640px){
-  #admissionApplyBtn{
-    width:100%;
-    font-size:16px;
-  }
-}
+/* 👆 paste खत्म */
 </style>
+
 
 <div id="sgFloating" class="sg-floating" role="button" aria-label="StudyGenie help" tabindex="0" title="StudyGenie — Help">
   <span style="font-size:22px">🤖</span>
