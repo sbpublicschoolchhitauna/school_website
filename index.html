@@ -466,12 +466,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     const videoEl = document.getElementById('qpMainVideo');
     const listWrap = document.getElementById('pvPlaylist');
 
-function makeItem(name, idx){
-  const el = document.createElement('div');
-  el.className = 'pv-item';   // active भी नहीं चाहिए
-  el.style.display = 'none'; // 🔥 पूरी playlist hidden
-  return el;
-}
 
     function select(i){
       const src = base + playlist[i];
@@ -1006,6 +1000,32 @@ loadFeeAndMarks();
 @media(max-width:420px){
   .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
 }
+<style>
+/* पहले से मौजूद CSS */
+body{margin:0;font-family:Arial;}
+.header{background:#0b5fa8;}
+/* ऊपर का code वैसे का वैसे रहने दें */
+
+/* 👇 यहीं paste करें */
+#admissionApplyBtn{
+  font-size:16px;
+  padding:14px 22px;
+  border-radius:14px;
+  font-weight:900;
+  letter-spacing:.5px;
+  color:#012032;
+  background:linear-gradient(135deg,#ffb703,#ff7b00);
+  box-shadow:0 8px 0 #c25a00,0 18px 35px rgba(0,0,0,.25);
+  animation: admission3d 2s infinite;
+}
+
+@keyframes admission3d{
+  0%{background:linear-gradient(135deg,#ffb703,#ff7b00);}
+  50%{background:linear-gradient(135deg,#00f5d4,#0b5fa8);}
+  100%{background:linear-gradient(135deg,#ff595e,#ff006e);}
+}
+
+/* 👆 paste खत्म */
 </style>
 
 <div id="sgFloating" class="sg-floating" role="button" aria-label="StudyGenie help" tabindex="0" title="StudyGenie — Help">
