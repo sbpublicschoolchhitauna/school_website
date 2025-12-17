@@ -1001,75 +1001,56 @@ loadFeeAndMarks();
   .sg-popover{ right:12px; left:12px; width:auto; bottom:80px; }
 }
 <style>
-/* ===== PREMIUM 3D ADMISSION BUTTON ===== */
-#admissionApplyBtn{
+/* ===== FINAL REAL 3D ADMISSION BUTTON ===== */
+#admission3d{
   display:inline-block;
   font-size:18px;
-  padding:18px 30px;
-  border-radius:18px;
   font-weight:900;
-  letter-spacing:1px;
+  padding:18px 32px;
+  border-radius:18px;
   color:#fff;
-  text-transform:uppercase;
   text-decoration:none;
-
-  /* 3D base */
-  background:linear-gradient(135deg,#ff9f1c,#ff5400);
+  letter-spacing:1px;
+  background:linear-gradient(135deg,#ff8c00,#ff3d00);
   box-shadow:
-    0 12px 0 #b94a00,
-    0 28px 55px rgba(0,0,0,.35);
-
+    0 10px 0 #b12a00,
+    0 22px 40px rgba(0,0,0,.35);
   transform-style:preserve-3d;
-  transition:all .25s ease;
-
-  /* movement + color animation */
-  animation:
-    admissionColor 2s infinite alternate,
-    admissionMove 3s ease-in-out infinite;
+  animation:colorMove3d 2s infinite ease-in-out;
+  transition:transform .25s ease;
 }
 
-/* Hover = ऊपर उठे */
-#admissionApplyBtn:hover{
-  transform:translateY(-8px) scale(1.05);
+/* Hover movement */
+#admission3d:hover{
+  transform:translateY(-8px);
   box-shadow:
-    0 18px 0 #9c3c00,
-    0 40px 70px rgba(0,0,0,.45);
+    0 16px 0 #8f2000,
+    0 32px 55px rgba(0,0,0,.45);
 }
 
-/* Click = दबे */
-#admissionApplyBtn:active{
-  transform:translateY(6px) scale(.98);
+/* Click press */
+#admission3d:active{
+  transform:translateY(6px);
   box-shadow:
-    0 5px 0 #9c3c00,
-    0 14px 30px rgba(0,0,0,.35);
+    0 4px 0 #8f2000,
+    0 12px 22px rgba(0,0,0,.35);
 }
 
-/* 🎨 Color change animation */
-@keyframes admissionColor{
+/* Color + movement animation */
+@keyframes colorMove3d{
   0%{
-    background:linear-gradient(135deg,#ff9f1c,#ff5400);
+    background:linear-gradient(135deg,#ff8c00,#ff3d00);
+    transform:translateY(0);
   }
   50%{
-    background:linear-gradient(135deg,#00f5d4,#0b5fa8);
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+    transform:translateY(-4px);
   }
   100%{
-    background:linear-gradient(135deg,#ff595e,#ff006e);
+    background:linear-gradient(135deg,#ff006e,#ffbe0b);
+    transform:translateY(0);
   }
 }
-
-/* 🧊 3D movement animation */
-@keyframes admissionMove{
-  0%{
-    transform:translateY(0) rotateX(0deg);
-  }
-  50%{
-    transform:translateY(-4px) rotateX(6deg);
-  }
-  100%{
-    transform:translateY(0) rotateX(0deg);
-  }
-}
-
 </style>
 
 
