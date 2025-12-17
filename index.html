@@ -476,7 +476,9 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   function makeItem(name, idx){
     const d = document.createElement('div');
     d.className = 'pv-item';
-    d.textContent = 'Activity Video ' + (idx+1);
+       d.innerHTML = '▶';
+       d.style.fontSize = '0';
+       d.style.height = '8px';
     d.onclick = ()=> play(idx);
     return d;
   }
