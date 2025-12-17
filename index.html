@@ -466,16 +466,12 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     const videoEl = document.getElementById('qpMainVideo');
     const listWrap = document.getElementById('pvPlaylist');
 
-    function makeItem(name, idx){
-      const el = document.createElement('div');
-      el.className = 'pv-item' + (idx===0 ? ' active' : '');
-      el.tabIndex = 0;
-      // simple label (filename cleaned)
-      el.innerText = "Activity Video";
-      el.addEventListener('click', ()=> select(idx));
-      el.addEventListener('keydown', (e)=> { if(e.key === 'Enter') select(idx); });
-      return el;
-    }
+function makeItem(name, idx){
+  const el = document.createElement('div');
+  el.className = 'pv-item';   // active भी नहीं चाहिए
+  el.style.display = 'none'; // 🔥 पूरी playlist hidden
+  return el;
+}
 
     function select(i){
       const src = base + playlist[i];
