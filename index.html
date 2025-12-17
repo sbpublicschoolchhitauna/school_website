@@ -455,51 +455,67 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
   <!-- END: Quick Portals + Video column -->
-  <script>
-  (function(){
-  const playlist = [
-    'upendra_1432_2-20251209-0001.mp4',
-    'upendra_1432_2-20251216-0001.mp4',
-    'upendra_1432_2-20251216-0002.mp4'
-  ];
-    const base = 'slider_videos/';
-    const videoEl = document.getElementById('qpMainVideo');
-    const listWrap = document.getElementById('pvPlaylist');
+<script>
+(async function(){
+  const base = 'slider_videos/';
+  const videoEl = document.getElementById('qpMainVideo');
+  const listWrap = document.getElementById('pvPlaylist');
+  let playlist = [];
 
-
-    function select(i){
-      const src = base + playlist[i];
-      if(!videoEl) return;
-      const cur = videoEl.querySelector('source') ? videoEl.querySelector('source').getAttribute('src') : '';
-      if(cur === src){
-        if(videoEl.paused) videoEl.play(); else videoEl.pause();
-        return;
-      }
-      videoEl.pause();
-      videoEl.innerHTML = '';
-      const s = document.createElement('source');
-      s.src = src;
-      s.type = 'video/mp4';
-      videoEl.appendChild(s);
-      videoEl.load();
-      videoEl.muted = true;
-      videoEl.play().catch(()=>{});
-      Array.from(listWrap.children).forEach((c, idx)=> c.classList.toggle('active', idx===i));
+  async function loadVideos(){
+    try{
+      const res = await fetch('videos.json');
+      const data = await res.json();
+      if(Array.isArray(data.videos)) return data.videos;
+    }catch(e){
+      console.error('videos.json load failed', e);
     }
+    return [];
+  }
 
-    playlist.forEach((p, idx)=>{
-      listWrap.appendChild(makeItem(p, idx));
-    });
+  function makeItem(name, idx){
+    const d = document.createElement('div');
+    d.className = 'pv-item';
+    d.textContent = 'Activity Video ' + (idx+1);
+    d.onclick = ()=> play(idx);
+    return d;
+  }
 
-    videoEl.addEventListener('ended', ()=>{
-      const curSrc = videoEl.querySelector('source') ? videoEl.querySelector('source').getAttribute('src') : '';
-      const curName = curSrc.replace(base, '');
-      const curIdx = playlist.indexOf(curName);
-      const next = (curIdx >= 0 && curIdx < playlist.length-1) ? curIdx+1 : 0;
-      select(next);
+  function play(i){
+    const src = base + playlist[i];
+    videoEl.pause();
+    videoEl.innerHTML = '';
+    const s = document.createElement('source');
+    s.src = src;
+    s.type = 'video/mp4';
+    videoEl.appendChild(s);
+    videoEl.load();
+    videoEl.muted = true;
+    videoEl.play().catch(()=>{});
+
+    [...listWrap.children].forEach((el,idx)=>{
+      el.classList.toggle('active', idx===i);
     });
-  })();
-  </script>
+  }
+
+  playlist = await loadVideos();
+  if(!playlist.length){
+    listWrap.innerHTML = '<div style="color:#999">No videos found</div>';
+    return;
+  }
+
+  playlist.forEach((v,i)=>{
+    listWrap.appendChild(makeItem(v,i));
+  });
+
+  play(0);
+
+  videoEl.addEventListener('ended', ()=>{
+    let cur = [...listWrap.children].findIndex(x=>x.classList.contains('active'));
+    play((cur+1) % playlist.length);
+  });
+})();
+</script>
 
 
   <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}}catch(e){}})();</script>
