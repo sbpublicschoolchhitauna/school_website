@@ -1016,54 +1016,55 @@ loadFeeAndMarks();
   color:#fff;
   text-decoration:none;
 
-  /* initial color (will animate) */
-  background:linear-gradient(135deg,#ffb703,#ff7b00);
+  /* MULTI-COLOR GRADIENT (for smooth change) */
+  background:linear-gradient(
+    120deg,
+    #ffb703,
+    #ff7b00,
+    #0ea5a4,
+    #0b5fa8,
+    #ff595e,
+    #ff006e,
+    #ffb703
+  );
+  background-size:300% 300%;
 
-  /* EXACT depth like Fee Portal */
+  /* SAME 3D SETTINGS AS FEE PORTAL */
   transform-style:preserve-3d;
   perspective:1200px;
 
   box-shadow:0 18px 40px rgba(11,95,168,0.25);
 
-  /* SAME idle animation + color animation */
+  /* EXACT Fee Portal tilt + Color animation */
   animation:
-    feeLikeTilt 6.8s ease-in-out infinite,
-    admissionColorShift 8s linear infinite;
+    feePortalTilt 6.8s ease-in-out infinite,
+    admissionGradient 6s linear infinite;
 }
 
-/* inner face = real 3D depth (same as Fee Portal .face) */
+/* inner face = real depth (Fee Portal जैसा) */
 #admissionApplyBtn span{
   transform:translateZ(18px);
   display:inline-block;
 }
 
-/* HOVER = same strong 3D punch */
+/* HOVER = SAME strong 3D punch */
 #admissionApplyBtn:hover{
   transform:translateY(-8px) rotateX(6deg) rotateY(12deg) scale(1.03);
   box-shadow:0 34px 64px rgba(11,95,168,0.35);
 }
 
-/* ===== EXACT Fee Portal idle tilt ===== */
-@keyframes feeLikeTilt{
+/* ===== EXACT Fee Portal idle animation ===== */
+@keyframes feePortalTilt{
   0%   { transform:rotateX(3deg) rotateY(-6deg); }
   50%  { transform:rotateX(4deg) rotateY(6deg); }
   100% { transform:rotateX(3deg) rotateY(-6deg); }
 }
 
-/* ===== COLOR CHANGE LOOP ===== */
-@keyframes admissionColorShift{
-  0%{
-    background:linear-gradient(135deg,#ffb703,#ff7b00);
-  }
-  33%{
-    background:linear-gradient(135deg,#0ea5a4,#0b5fa8);
-  }
-  66%{
-    background:linear-gradient(135deg,#ff595e,#ff006e);
-  }
-  100%{
-    background:linear-gradient(135deg,#ffb703,#ff7b00);
-  }
+/* ===== SMOOTH COLOR CHANGE (100% WORKING) ===== */
+@keyframes admissionGradient{
+  0%   { background-position:0% 50%; }
+  50%  { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
 }
 
 /* MOBILE */
@@ -1074,7 +1075,6 @@ loadFeeAndMarks();
   }
 }
 </style>
-
 
 <div id="sgFloating" class="sg-floating" role="button" aria-label="StudyGenie help" tabindex="0" title="StudyGenie — Help">
   <span style="font-size:22px">🤖</span>
