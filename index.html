@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="hi">
 <head>
+
+<style>
+.install-3d{
+  background:linear-gradient(135deg,#00c853,#00a152);
+  box-shadow:0 16px 36px rgba(0,160,90,.25);
+}
+.install-3d::after{
+  background:linear-gradient(90deg,rgba(0,200,83,.35),rgba(0,160,82,.12));
+}
+</style>
+
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0b5fa8">
 
@@ -1553,6 +1564,29 @@ body{margin:0;font-family:Arial;}
     }
   });
 })();
+</script>
+
+<script>
+let deferredPrompt;
+const installBtn = document.getElementById("installAppBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if(installBtn) installBtn.style.display = "inline-flex";
+});
+
+if(installBtn){
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) {
+      alert("Chrome Menu (⋮) से ‘Install App’ चुनें");
+      return;
+    }
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+}
 </script>
 
 
