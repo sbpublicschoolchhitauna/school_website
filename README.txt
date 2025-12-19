@@ -1,20 +1,30 @@
+SBPSC FINAL PWA ZIP (100% FREE)
 
-SBPSC FREE PWA SETUP
+STEP 1:
+इस ZIP के सारे files को
+GitHub repo में upload करें
+जहाँ index.html है
 
-1. Upload all files to the same folder as index.html
-2. Add below lines inside <head> of index.html:
+STEP 2:
+index.html में <head> के अंदर जोड़ें:
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0b5fa8">
 
-3. Add this before </body>:
+STEP 3:
+</body> से पहले जोड़ें:
 
 <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js').then(r=>r.update());
 }
 </script>
 
-4. Open website in Chrome → Install App
+STEP 4 (IMPORTANT):
+Mobile में:
+- Old App uninstall करें
+- Chrome → Clear Cache
+- Website खोलें
+- Install App करें
 
-100% FREE – No Play Store – Auto Update Enabled
+अब App हर बार खुलेगा + auto update होगा
