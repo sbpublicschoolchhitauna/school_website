@@ -1624,6 +1624,32 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<script>
+(function(){
+  const PASSWORD = "SBPSC@9044";
+
+  const btn = document.querySelector(".qp-3d.teacher-3d");
+  if(!btn) return;
+
+  const url = btn.getAttribute("href");
+  const target = btn.getAttribute("target") || "_blank";
+
+  btn.addEventListener("click", function(e){
+    e.preventDefault();
+    const pw = prompt("Teacher Login Password डालें:");
+
+    if(pw === null) return;
+
+    if(pw === PASSWORD){
+      window.open(url, target);
+    } else {
+      alert("गलत पासवर्ड ❌");
+    }
+  });
+})();
+</script>
+
+
 </body>
 </html>
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
