@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="hi">
 <head>
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b5fa8">
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>S.B. Public School Chhitauna — Student Portal</title>
@@ -1508,6 +1512,15 @@ body{margin:0;font-family:Arial;}
 })();
 </script>
 <!-- end teacher password protect -->
+<!-- PWA Service Worker -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("PWA Service Worker Registered"))
+    .catch(err => console.log("SW failed", err));
+}
+</script>
+
 </body>
 </html>
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
