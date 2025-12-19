@@ -138,6 +138,17 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 
 </head>
 <body>
+<!-- PREMIUM APP SPLASH -->
+<div id="premiumSplash">
+  <div class="ps-card">
+    <img src="icon-512.png" class="ps-logo" alt="School Logo">
+    <h1 id="psTitle"></h1>
+    <p id="psLine1"></p>
+    <p id="psLine2"></p>
+    <p id="psLine3"></p>
+  </div>
+</div>
+
 
   <!-- CENTERED HEADER -->
   <div class="header" role="banner" aria-label="School header">
@@ -214,6 +225,69 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   <!doctype html>
   <html lang="hi">
   <head>
+<style>
+#premiumSplash{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top,#1fb6ff,#0b5fa8 60%,#05284d);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.ps-card{
+  text-align:center;
+  padding:30px 22px;
+  border-radius:22px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(10px);
+  box-shadow:
+    0 0 40px rgba(255,215,0,.35),
+    inset 0 0 30px rgba(255,255,255,.12);
+  animation:cardPop 1.2s ease;
+  max-width:92%;
+}
+
+.ps-logo{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  margin-bottom:14px;
+  background:#fff;
+  padding:6px;
+  box-shadow:0 0 25px gold;
+  animation:logoFloat 3s ease-in-out infinite;
+}
+
+.ps-card h1{
+  font-size:26px;
+  margin:10px 0;
+  font-weight:900;
+  letter-spacing:.6px;
+}
+
+.ps-card p{
+  font-size:14px;
+  margin:6px 0;
+  opacity:0;
+}
+
+@keyframes logoFloat{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+  100%{transform:translateY(0)}
+}
+
+@keyframes cardPop{
+  from{transform:scale(.8);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+</style>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
@@ -372,6 +446,40 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   start();
   </script>
   
+<script>
+(function(){
+  const text = {
+    t:"Welcome to S.B. PUBLIC SCHOOL",
+    l1:"Village Chhitauna · Post Meghauli Kala · Pin Code 273304",
+    l2:"Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200",
+    l3:"Created By — Upendra Vishwakarma | Official Application"
+  };
+
+  function type(el, msg, delay){
+    let i=0;
+    setTimeout(()=>{
+      el.style.opacity=1;
+      const tm=setInterval(()=>{
+        el.innerHTML+=msg.charAt(i);
+        i++;
+        if(i>=msg.length) clearInterval(tm);
+      },32);
+    },delay);
+  }
+
+  type(psTitle,text.t,300);
+  type(psLine1,text.l1,1600);
+  type(psLine2,text.l2,2800);
+  type(psLine3,text.l3,4200);
+
+  setTimeout(()=>{
+    const sp=document.getElementById("premiumSplash");
+    sp.style.transition="opacity .9s ease";
+    sp.style.opacity=0;
+    setTimeout(()=>sp.remove(),1000);
+  },6800);
+})();
+</script>
 
 
 
