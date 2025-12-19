@@ -481,6 +481,62 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 })();
 </script>
 
+<script>
+(function(){
+  const AUTH_PASS = "SBPSC@9044";   // ✅ Teacher Password
+  const SESSION_KEY = "sbpsc_teacher_authed";
+
+  const teacherBtn = document.querySelector(".qp-3d.teacher-3d");
+  if(!teacherBtn) return;
+
+  const modal = document.getElementById("teacherAuthModal");
+  const pw = document.getElementById("teacherAuthPw");
+  const ok = document.getElementById("teacherAuthOk");
+  const cancel = document.getElementById("teacherAuthCancel");
+  const msg = document.getElementById("teacherAuthMsg");
+
+  const targetURL = teacherBtn.getAttribute("href");
+  const targetTab = teacherBtn.getAttribute("target") || "_blank";
+
+  teacherBtn.addEventListener("click", function(e){
+    if(sessionStorage.getItem(SESSION_KEY) === "yes"){
+      return; // already logged in
+    }
+    e.preventDefault();
+    modal.style.display = "flex";
+    pw.value = "";
+    msg.textContent = "";
+    pw.focus();
+  });
+
+  ok.addEventListener("click", login);
+  pw.addEventListener("keydown", e=>{
+    if(e.key === "Enter") login();
+  });
+
+  cancel.addEventListener("click", close);
+
+  function login(){
+    if(pw.value === AUTH_PASS){
+      sessionStorage.setItem(SESSION_KEY,"yes");
+      msg.style.color = "green";
+      msg.textContent = "Login successful…";
+      setTimeout(()=>{
+        modal.style.display = "none";
+        window.open(targetURL, targetTab);
+      }, 400);
+    } else {
+      msg.style.color = "red";
+      msg.textContent = "गलत पासवर्ड ❌";
+      pw.focus();
+    }
+  }
+
+  function close(){
+    modal.style.display = "none";
+  }
+})();
+</script>
 
 
 
