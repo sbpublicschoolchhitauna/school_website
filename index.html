@@ -481,31 +481,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 })();
 </script>
 
-<script>
-(function(){
-  const PASS = "SBPSC@9044";
-
-  // find Teacher Login button
-  const btn = document.querySelector(".qp-3d.teacher-3d");
-  if(!btn) return;
-
-  const url = btn.href;
-  const target = btn.target || "_blank";
-
-  btn.addEventListener("click", function(e){
-    e.preventDefault();
-
-    const pw = prompt("Teacher Login Password डालें:");
-    if(pw === null) return;
-
-    if(pw === PASS){
-      window.open(url, target);
-    } else {
-      alert("गलत पासवर्ड ❌");
-    }
-  });
-})();
-</script>
 
 
 
