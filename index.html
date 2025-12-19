@@ -3,12 +3,62 @@
 <head>
 
 <style>
-.install-3d{
-  background:linear-gradient(135deg,#00c853,#00a152);
-  box-shadow:0 16px 36px rgba(0,160,90,.25);
+/* ===== 3D INSTALL BUTTON ===== */
+.btn-3d-install{
+  display:inline-block;
+  text-decoration:none;
+  perspective:900px;
+  margin:8px;
 }
-.install-3d::after{
-  background:linear-gradient(90deg,rgba(0,200,83,.35),rgba(0,160,82,.12));
+
+.btn-face{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  padding:14px 22px;
+  border-radius:16px;
+
+  background:linear-gradient(135deg,#00e676,#00c853);
+  color:#ffffff;
+  font-weight:900;
+  font-size:16px;
+
+  box-shadow:
+    0 10px 0 #009624,
+    0 22px 40px rgba(0,0,0,.30);
+
+  transform:translateY(0) rotateX(0);
+  transition:.25s ease;
+  animation:float3d 3s ease-in-out infinite;
+}
+
+/* floating motion */
+@keyframes float3d{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
+}
+
+/* press effect */
+.btn-3d-install:active .btn-face{
+  transform:translateY(6px);
+  box-shadow:
+    0 4px 0 #009624,
+    0 10px 18px rgba(0,0,0,.25);
+  animation:none;
+}
+
+/* icon animation */
+.btn-icon{
+  font-size:22px;
+  animation:pulseIcon 1.8s infinite;
+}
+
+@keyframes pulseIcon{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
 }
 </style>
 
@@ -548,26 +598,15 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
 
+<!-- 4th Button : Student App Install -->
 <a href="javascript:void(0)"
    id="installAppBtn"
-   class="qp-3d install-3d idle"
-   title="Mobile App Install करें">
-  <span class="face"><span class="ico">📲</span>Student App Install</span>
+   class="btn-3d-install">
+  <span class="btn-face">
+    <span class="btn-icon">📲</span>
+    <span class="btn-text">Student App Install</span>
+  </span>
 </a>
-
-<div class="qp-3d-wrap">
-  ... Fee Portal ...
-  ... Marksheet ...
-  ... Teacher Login ...
-
-  <!-- ✅ 4th button -->
-  <a href="javascript:void(0)"
-     id="installAppBtn"
-     class="qp-3d install-3d idle"
-     title="Mobile App Install करें">
-    <span class="face"><span class="ico">📲</span>Student App Install</span>
-  </a>
-</div>
 
   </div>
   <!-- START: Quick Portals + Video column (inserted) -->
@@ -1573,20 +1612,17 @@ const installBtn = document.getElementById("installAppBtn");
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  if(installBtn) installBtn.style.display = "inline-flex";
 });
 
-if(installBtn){
-  installBtn.addEventListener("click", async () => {
-    if (!deferredPrompt) {
-      alert("Chrome Menu (⋮) से ‘Install App’ चुनें");
-      return;
-    }
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  });
-}
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    alert("Chrome menu (⋮) से 'Install App' चुनें");
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+});
 </script>
 
 
