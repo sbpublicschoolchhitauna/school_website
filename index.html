@@ -1698,60 +1698,53 @@ table { min-width: 0 !important; width: 100%; }
 /* safeguard: prevent accidental page-wide overflow */
 html, body { max-width: 100%; overflow-x: hidden; }
 
-</script>
-
-/* 🔥 AUTO RESPONSIVE VIDEO */
-.responsive-video{
+/* ===== FINAL MOBILE-FIRST VIDEO FIX ===== */
+.portal-video-box{
   width:100%;
-  max-width:100%;
-  aspect-ratio:16/9;     /* video ka ratio auto maintain */
   background:#000;
-  border-radius:10px;
+  border-radius:12px;
   overflow:hidden;
 }
 
-.responsive-video video{
-  width:100%;
-  height:100%;
-  object-fit:contain;    /* ❗ video cut nahi hoga */
-  display:block;
-}
-/* ===== FORCE RESPONSIVE VIDEO (FINAL FIX) ===== */
-.portal-video-box{
-  width:100%;
-  max-width:100%;
-}
-
+/* 🔥 REAL AUTO FIT VIDEO */
 .portal-video-box video{
   width:100% !important;
   height:auto !important;
-  max-height:70vh;          /* mobile में ज्यादा बड़ा नहीं होगा */
+  max-height:none !important;
+
+  aspect-ratio:auto !important;
   object-fit:contain !important;
+
   display:block;
   background:#000;
 }
 
-/* Mobile special fix */
-@media (max-width: 768px){
+/* Portrait / Vertical video support */
+@media (max-width:768px){
   .portal-video-box video{
-    max-height:45vh;
+    width:100%;
+    height:auto;
   }
 }
+
+
+</script>
+
 <script>
 (function(){
-  const v = document.getElementById('qpMainVideo');
-  if(!v) return;
+  const video = document.getElementById('qpMainVideo');
+  if(!video) return;
 
-  function adjust(){
-    const w = v.clientWidth;
-    const ratio = v.videoHeight && v.videoWidth
-      ? (v.videoHeight / v.videoWidth)
-      : (9/16);
-    v.style.height = (w * ratio) + 'px';
+  function resizeVideo(){
+    if(video.videoWidth && video.videoHeight){
+      const ratio = video.videoHeight / video.videoWidth;
+      video.style.height = (video.clientWidth * ratio) + 'px';
+    }
   }
 
-  v.addEventListener('loadedmetadata', adjust);
-  window.addEventListener('resize', adjust);
+  video.addEventListener('loadedmetadata', resizeVideo);
+  video.addEventListener('loadeddata', resizeVideo);
+  window.addEventListener('resize', resizeVideo);
 })();
 </script>
 
