@@ -1698,8 +1698,44 @@ table { min-width: 0 !important; width: 100%; }
 /* safeguard: prevent accidental page-wide overflow */
 html, body { max-width: 100%; overflow-x: hidden; }
 
+/* ===== EXACT PHOTO LIKE MOBILE VIDEO ===== */
+.mobile-video-card{
+  width:100%;
+  background:#000;
+  border-radius:14px;
+  overflow:hidden;
+  margin:12px 0;
+}
+
+/* 👇 image जैसा behavior */
+.mobile-video-card video{
+  width:100%;
+  height:auto;          /* 🔥 सबसे जरूरी */
+  display:block;
+
+  object-fit:contain;  /* ❌ crop नहीं होगा */
+  background:#000;
+}
+
+/* Mobile only tuning */
+@media (max-width:768px){
+  .mobile-video-card{
+    border-radius:12px;
+  }
+}
+
+
 </script>
 
+<div class="mobile-video-card">
+  <video id="qpMainVideo"
+         src="slider_videos/upendra_1432_2-20251209-0001.mp4"
+         controls
+         autoplay
+         muted
+         playsinline>
+  </video>
+</div>
 
 
 </body>
