@@ -577,10 +577,14 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     <!-- VIDEO BOX -->
     <div class="portal-video-box" id="portalVideoBox" aria-label="Quick Portals Video Player">
       <h3>S.B. PUBLIC SCHOOL Game Activities</h3>
-      <video id="qpMainVideo" controls autoplay muted playsinline preload="metadata">
-        <source src="slider_videos/upendra_1432_2-20251209-0001.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-      </video>
+<div class="video-slider">
+  <video id="qpMainVideo"
+         controls
+         muted
+         playsinline
+         preload="metadata">
+  </video>
+</div>
       <div class="pv-playlist" id="pvPlaylist" aria-label="Video playlist">
         <!-- playlist items injected by JS -->
       </div>
@@ -1698,44 +1702,75 @@ table { min-width: 0 !important; width: 100%; }
 /* safeguard: prevent accidental page-wide overflow */
 html, body { max-width: 100%; overflow-x: hidden; }
 
-/* ===== EXACT PHOTO LIKE MOBILE VIDEO ===== */
-.mobile-video-card{
+/* ===== VIDEO SLIDE + MUTE SYSTEM ===== */
+.video-slider{
+  position:relative;
   width:100%;
+  aspect-ratio:16/9;
   background:#000;
-  border-radius:14px;
+  border-radius:12px;
   overflow:hidden;
-  margin:12px 0;
 }
 
-/* 👇 image जैसा behavior */
-.mobile-video-card video{
+.video-slider video{
   width:100%;
-  height:auto;          /* 🔥 सबसे जरूरी */
-  display:block;
-
-  object-fit:contain;  /* ❌ crop नहीं होगा */
-  background:#000;
+  height:100%;
+  object-fit:contain;
+  animation:videoFade .6s ease;
 }
 
-/* Mobile only tuning */
-@media (max-width:768px){
-  .mobile-video-card{
-    border-radius:12px;
-  }
+@keyframes videoFade{
+  from{opacity:0}
+  to{opacity:1}
 }
 
 
 </script>
 
-<div class="mobile-video-card">
-  <video id="qpMainVideo"
-         src="slider_videos/upendra_1432_2-20251209-0001.mp4"
-         controls
-         autoplay
-         muted
-         playsinline>
-  </video>
-</div>
+<script>
+(async function(){
+  const video = document.getElementById("qpMainVideo");
+  const base = "slider_videos/";
+  let list = [];
+  let index = 0;
+
+  async function loadVideos(){
+    try{
+      const res = await fetch("videos.json");
+      const data = await res.json();
+      return data.videos || [];
+    }catch(e){
+      console.error("videos.json नहीं मिला");
+      return [];
+    }
+  }
+
+  function playVideo(i){
+    video.style.opacity = 0;
+
+    setTimeout(()=>{
+      video.src = base + list[i];
+      video.load();
+
+      video.muted = true;   // ✅ default mute
+      video.volume = 1.0;
+
+      video.play().catch(()=>{});
+      video.style.opacity = 1;
+    },200);
+  }
+
+  list = await loadVideos();
+  if(!list.length) return;
+
+  playVideo(index);
+
+  video.addEventListener("ended", ()=>{
+    index = (index + 1) % list.length;
+    playVideo(index);
+  });
+})();
+</script>
 
 
 </body>
