@@ -1,68 +1,6 @@
 <!doctype html>
 <html lang="hi">
 <head>
-
-<style>
-/* ===== FRESH 3D INSTALL BUTTON ===== */
-.btn-3d-install{
-  display:inline-block;
-  text-decoration:none;
-  perspective:1000px;
-  margin:8px;
-}
-
-.btn-face{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-
-  padding:14px 24px;
-  border-radius:16px;
-
-  background:linear-gradient(135deg,#00e676,#00c853);
-  color:#ffffff;
-  font-weight:900;
-  font-size:16px;
-
-  box-shadow:
-    0 10px 0 #009624,
-    0 22px 40px rgba(0,0,0,.30);
-
-  animation:float3d 3s ease-in-out infinite;
-  transition:.25s ease;
-}
-
-/* floating movement */
-@keyframes float3d{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-  100%{transform:translateY(0)}
-}
-
-/* press effect */
-.btn-3d-install:active .btn-face{
-  transform:translateY(6px);
-  box-shadow:
-    0 4px 0 #009624,
-    0 10px 18px rgba(0,0,0,.25);
-  animation:none;
-}
-
-.btn-icon{
-  font-size:22px;
-  animation:pulseIcon 1.8s infinite;
-}
-
-@keyframes pulseIcon{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.15)}
-}
-</style>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b5fa8">
-
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>S.B. Public School Chhitauna — Student Portal</title>
@@ -198,29 +136,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </head>
 <body>
 
-<div id="installPopup" class="install-popup">
-  <div class="install-card">
-    <h3>📲 Student App Install</h3>
-    <p>क्या आप School Mobile App install करना चाहते हैं?</p>
-    <div class="install-actions">
-      <button id="installYes">Install</button>
-      <button id="installNo">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- PREMIUM APP SPLASH -->
-<div id="premiumSplash">
-  <div class="ps-card">
-    <img src="icon-512.png" class="ps-logo" alt="School Logo">
-    <h1 id="psTitle"></h1>
-    <p id="psLine1"></p>
-    <p id="psLine2"></p>
-    <p id="psLine3"></p>
-  </div>
-</div>
-
-
   <!-- CENTERED HEADER -->
   <div class="header" role="banner" aria-label="School header">
     <h1>S.B. PUBLIC SCHOOL</h1>
@@ -296,120 +211,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   <!doctype html>
   <html lang="hi">
   <head>
-<style>
-.install-popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:999999;
-}
-
-.install-card{
-  background:#fff;
-  padding:22px;
-  border-radius:18px;
-  width:90%;
-  max-width:320px;
-  text-align:center;
-  animation:popIn .35s ease;
-}
-
-.install-actions{
-  margin-top:18px;
-  display:flex;
-  gap:12px;
-  justify-content:center;
-}
-
-.install-actions button{
-  border:none;
-  padding:10px 18px;
-  border-radius:10px;
-  font-weight:800;
-  cursor:pointer;
-}
-
-#installYes{
-  background:linear-gradient(135deg,#00c853,#00a152);
-  color:#fff;
-}
-
-#installNo{
-  background:#e0e0e0;
-}
-
-@keyframes popIn{
-  from{transform:scale(.85);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-</style>
-
-<style>
-#premiumSplash{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at top,#1fb6ff,#0b5fa8 60%,#05284d);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:1000000;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-.ps-card{
-  text-align:center;
-  padding:30px 22px;
-  border-radius:22px;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(10px);
-  box-shadow:
-    0 0 40px rgba(255,215,0,.35),
-    inset 0 0 30px rgba(255,255,255,.12);
-  animation:cardPop 1.2s ease;
-  max-width:92%;
-}
-
-.ps-logo{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  margin-bottom:14px;
-  background:#fff;
-  padding:6px;
-  box-shadow:0 0 25px gold;
-  animation:logoFloat 3s ease-in-out infinite;
-}
-
-.ps-card h1{
-  font-size:26px;
-  margin:10px 0;
-  font-weight:900;
-  letter-spacing:.6px;
-}
-
-.ps-card p{
-  font-size:14px;
-  margin:6px 0;
-  opacity:0;
-}
-
-@keyframes logoFloat{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-8px)}
-  100%{transform:translateY(0)}
-}
-
-@keyframes cardPop{
-  from{transform:scale(.8);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-</style>
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
@@ -568,40 +369,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   start();
   </script>
   
-<script>
-(function(){
-  const text = {
-    t:"Welcome to S.B. PUBLIC SCHOOL",
-    l1:"Village Chhitauna · Post Meghauli Kala · Pin Code 273304",
-    l2:"Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200",
-    l3:"Created By — Upendra Vishwakarma | Official Application"
-  };
-
-  function type(el, msg, delay){
-    let i=0;
-    setTimeout(()=>{
-      el.style.opacity=1;
-      const tm=setInterval(()=>{
-        el.innerHTML+=msg.charAt(i);
-        i++;
-        if(i>=msg.length) clearInterval(tm);
-      },32);
-    },delay);
-  }
-
-  type(psTitle,text.t,300);
-  type(psLine1,text.l1,1600);
-  type(psLine2,text.l2,2800);
-  type(psLine3,text.l3,4200);
-
-  setTimeout(()=>{
-    const sp=document.getElementById("premiumSplash");
-    sp.style.transition="opacity .9s ease";
-    sp.style.opacity=0;
-    setTimeout(()=>sp.remove(),1000);
-  },6800);
-})();
-</script>
 
 
 
@@ -655,39 +422,18 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">📄</span>Marksheet</span>
     </a>
 
-    <a class="qp-3d teacher-3d idle" href="https://script.google.com/macros/s/AKfycbz0ZXmaec5FRsJjn3HMeJpqd9y3ZfBPDxKQpb9hPjRp7bqeG471Wb9wr32oc3IajaTyFQ/exec" target="_blank" rel="noopener">
+    <a class="qp-3d teacher-3d idle" href="https://script.google.com/macros/s/AKfycbySEMuUpsMAsvHFKCo25aViJuJBoB7YSgKiZPZnQExpQCoogXS71jNcYUn07NZwJgzdiw/exec" target="_blank" rel="noopener">
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
-
-<!-- 4th Button : Student App Install -->
-<a href="javascript:void(0)"
-   id="installAppBtn"
-   class="btn-3d-install">
-  <span class="btn-face">
-    <span class="btn-icon">📲</span>
-    <span class="btn-text">Student App Install</span>
-  </span>
-</a>
-
   </div>
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
+  .portal-with-video{{ display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }}
+  .portal-with-video .qp-3d-wrap{{ flex: 1 1 320px; min-width:220px; }}
+  .portal-video-box{{ flex: 0 0 380px; min-width:260px; max-width:420px; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 8px 30px rgba(2,6,23,0.06); padding:10px; }}
   .portal-video-box h3{{ margin:0 0 8px; font-size:15px; color: #0b5fa8; }}
-/* ✅ VIDEO AUTO ADJUST FOR ALL DEVICES */
-.portal-video-box{
-  position: relative;
-}
-
-.portal-video-box video{
-  width:100%;
-  height:100%;
-  aspect-ratio:16 / 9;   /* 🔥 main fix */
-  object-fit:contain;    /* video कटेगा नहीं */
-  display:block;
-  border-radius:8px;
-  background:#000;
-}
+  .portal-video-box video{{ width:100%; height:auto; display:block; border-radius:8px; background:#000; }}
   .pv-playlist{{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }}
   .pv-item{{ flex: 1 1 90px; min-width:80px; background:#f6fbff; border:1px solid #eef9ff; padding:8px; border-radius:8px; cursor:pointer; font-size:13px; text-align:center; }}
   .pv-item.active{{ outline:3px solid rgba(11,95,168,0.12); box-shadow:0 8px 26px rgba(11,95,168,0.06); background:#ffffff; }}
@@ -1114,9 +860,9 @@ loadFeeAndMarks();
   const NEWS = [
     'Website को Desktop Mode में चलाये तब अच्छा दिखेगा',
     'ADMISSION OPEN – APRIL 2026 · Nursery to Class 10 · Limited Seats — Apply Now',
-    'Registration: Mon–Sat 9:00 AM – 3:10 PM · Documents: Birth Certificate, Aadhar (if any)',
+    'Registration: Mon–Sat 8:30 AM – 3:00 PM · Documents: Birth Certificate, Aadhar (if any)',
     'Special Scholarship for Meritorious Students — Contact Principal Office',
-    'School Timings: 9:00 AM – 3:10 PM · Transport Available · Call +91 6389259200'
+    'School Timings: 8:30 AM to 3:00 PM · Transport Available · Call +91 6389259200'
   ];
   const el = document.getElementById('admissionNewsText');
   if(!el) return;
@@ -1650,67 +1396,118 @@ body{margin:0;font-family:Arial;}
 
 
 <!-- Teacher password protect (injected) -->
+<style>
+#teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
+#teacherAuthModal .modalCard{width:380px;max-width:94%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 60px rgba(2,6,23,0.36);font-family:Arial,Helvetica,sans-serif}
+#teacherAuthModal h3{margin:0 0 8px;color:#0b5fa8}
+#teacherAuthModal .hint{font-size:13px;color:#586574;margin-bottom:12px}
+#teacherAuthModal input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f0fb;font-size:15px}
+#teacherAuthModal .actions{display:flex;gap:8px;margin-top:12px}
+#teacherAuthModal button{flex:1;padding:8px 10px;border-radius:8px;border:0;cursor:pointer;font-weight:800}
+#teacherAuthModal .ok{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
+#teacherAuthModal .cancel{background:#f1f5f9;color:#042033}
+#teacherAuthModal .msg{margin-top:8px;font-size:13px}
+</style>
+
+<div id="teacherAuthModal" role="dialog" aria-hidden="true">
+  <div class="modalCard" role="document" aria-label="Teacher login">
+    <h3>Teacher Login</h3>
+    <div class="hint">Teacher Portal खोलने के लिए पासवर्ड डालें</div>
+    <input id="teacherAuthPw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
+    <div class="actions">
+      <button class="ok" id="teacherAuthOk">Login</button>
+      <button class="cancel" id="teacherAuthCancel">Cancel</button>
+    </div>
+    <div id="teacherAuthMsg" class="msg" aria-live="polite"></div>
+  </div>
+</div>
 
 <script>
 (function(){
-  const PASSWORD = "SBPSC@9044";
+  const AUTH_PASS = 'SBPSC@9044';
+  const SESSION_KEY = 'sbps_teacher_authed';
 
-  const btn = document.querySelector(".qp-3d.teacher-3d");
-  if(!btn) return;
+  const modal = document.getElementById('teacherAuthModal');
+  const pwInput = document.getElementById('teacherAuthPw');
+  const okBtn = document.getElementById('teacherAuthOk');
+  const cancelBtn = document.getElementById('teacherAuthCancel');
+  const msgEl = document.getElementById('teacherAuthMsg');
 
-  const url = btn.getAttribute("href");
-  const target = btn.getAttribute("target") || "_blank";
+  function showModal(){ modal.style.display='flex'; modal.setAttribute('aria-hidden','false'); pwInput.value=''; msgEl.textContent=''; setTimeout(()=>pwInput.focus(),120); }
+  function hideModal(){ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); }
+  function setMsg(t,e){ msgEl.textContent=t; msgEl.style.color = e? '#c43':'#1167b1'; }
 
-  btn.addEventListener("click", function(e){
-    e.preventDefault();
-    const pw = prompt("Teacher Login Password डालें:");
-
-    if(pw === null) return;
-
-    if(pw === PASSWORD){
-      window.open(url, target);
-    } else {
-      alert("गलत पासवर्ड ❌");
-    }
-  });
-})();
-</script>
-
-<script>
-let deferredPrompt = null;
-
-window.addEventListener("beforeinstallprompt", (e)=>{
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-const installBtn = document.getElementById("installAppBtn");
-const popup = document.getElementById("installPopup");
-const yesBtn = document.getElementById("installYes");
-const noBtn = document.getElementById("installNo");
-
-installBtn.addEventListener("click", ()=>{
-  popup.style.display = "flex";
-});
-
-noBtn.addEventListener("click", ()=>{
-  popup.style.display = "none";
-});
-
-yesBtn.addEventListener("click", async ()=>{
-  popup.style.display = "none";
-
-  if(!deferredPrompt){
-    alert("Chrome menu (⋮) से 'Install App' चुनें");
-    return;
+  function openTarget(url, target){
+    hideModal();
+    if(!url || url==='#') return;
+    try{
+      if(target === '_self' || !target) window.location.href = url;
+      else window.open(url, target);
+    }catch(err){ window.location.href = url; }
   }
 
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-});
-</script>
+  function attemptLogin(origHref, origTarget){
+    const v = (pwInput.value||'').trim();
+    if(!v){ setMsg('Password डालें', true); pwInput.focus(); return; }
+    if(v === AUTH_PASS){
+      try{ sessionStorage.setItem(SESSION_KEY, '1'); }catch(e){}
+      setMsg('Login सफल — खोल रहा हूँ...', false);
+      setTimeout(()=> openTarget(origHref, origTarget), 200);
+    } else {
+      setMsg('गलत पासवर्ड — पुन: प्रयास करें', true);
+      pwInput.value=''; pwInput.focus();
+    }
+  }
 
+  // Global click interceptor (captures early)
+  document.addEventListener('click', function(e){
+    // find nearest anchor or button
+    const el = e.target.closest('a,button');
+    if(!el) return;
+    // Allow elements explicitly marked data-no-auth
+    if(el.hasAttribute('data-no-auth')) return;
+    // text to check
+    const txt = (el.innerText || el.getAttribute('title') || el.getAttribute('aria-label') || el.getAttribute('alt') || '').toLowerCase();
+    // also check href path or classnames
+    const href = (el.getAttribute && el.getAttribute('href')) || '';
+    const cls = (el.className || '').toString().toLowerCase();
+
+    const triggers = ['teacher', 'teacher login', 'शिक्षक', 'टीचर', 'teacherportal', 'teacher-portal'];
+    const isTeacher = triggers.some(t => txt.includes(t) || href.toLowerCase().includes(t) || cls.includes(t));
+
+    if(!isTeacher) return;
+
+    // allow modified clicks to open in new tab/window without intercept
+    if(e.ctrlKey || e.metaKey || e.shiftKey || (e.button && e.button === 1)) return;
+
+    // if already authed in this session, let it proceed normally
+    try{ if(sessionStorage.getItem(SESSION_KEY) === '1') return; }catch(e){}
+
+    // intercept
+    e.preventDefault();
+    e.stopPropagation();
+
+    // store original target/href on modal dataset for later
+    modal.dataset.origHref = href || el.getAttribute('data-href') || '#';
+    modal.dataset.origTarget = el.getAttribute('target') || '_blank';
+    // if no href but has onclick navigation that we can't detect, try to open data-href or data-url attributes
+    if(!modal.dataset.origHref || modal.dataset.origHref === '#') {
+      modal.dataset.origHref = el.getAttribute('data-href') || el.getAttribute('data-url') || '#';
+    }
+    showModal();
+
+    // bind ok to attemptLogin with captured values
+    okBtn.onclick = function(){ attemptLogin(modal.dataset.origHref, modal.dataset.origTarget); };
+    pwInput.onkeydown = function(ev){ if(ev.key === 'Enter') attemptLogin(modal.dataset.origHref, modal.dataset.origTarget); };
+  }, true);
+
+  cancelBtn.addEventListener('click', hideModal);
+  modal.addEventListener('click', function(ev){ if(ev.target === modal) hideModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') hideModal(); });
+
+})();
+</script>
+<!-- end teacher password protect -->
 </body>
 </html>
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
