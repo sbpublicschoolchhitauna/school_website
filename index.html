@@ -1716,6 +1716,44 @@ html, body { max-width: 100%; overflow-x: hidden; }
   object-fit:contain;    /* ❗ video cut nahi hoga */
   display:block;
 }
+/* ===== FORCE RESPONSIVE VIDEO (FINAL FIX) ===== */
+.portal-video-box{
+  width:100%;
+  max-width:100%;
+}
+
+.portal-video-box video{
+  width:100% !important;
+  height:auto !important;
+  max-height:70vh;          /* mobile में ज्यादा बड़ा नहीं होगा */
+  object-fit:contain !important;
+  display:block;
+  background:#000;
+}
+
+/* Mobile special fix */
+@media (max-width: 768px){
+  .portal-video-box video{
+    max-height:45vh;
+  }
+}
+<script>
+(function(){
+  const v = document.getElementById('qpMainVideo');
+  if(!v) return;
+
+  function adjust(){
+    const w = v.clientWidth;
+    const ratio = v.videoHeight && v.videoWidth
+      ? (v.videoHeight / v.videoWidth)
+      : (9/16);
+    v.style.height = (w * ratio) + 'px';
+  }
+
+  v.addEventListener('loadedmetadata', adjust);
+  window.addEventListener('resize', adjust);
+})();
+</script>
 
 
 </body>
