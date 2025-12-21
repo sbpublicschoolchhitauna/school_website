@@ -1698,55 +1698,8 @@ table { min-width: 0 !important; width: 100%; }
 /* safeguard: prevent accidental page-wide overflow */
 html, body { max-width: 100%; overflow-x: hidden; }
 
-/* ===== FINAL MOBILE-FIRST VIDEO FIX ===== */
-.portal-video-box{
-  width:100%;
-  background:#000;
-  border-radius:12px;
-  overflow:hidden;
-}
-
-/* 🔥 REAL AUTO FIT VIDEO */
-.portal-video-box video{
-  width:100% !important;
-  height:auto !important;
-  max-height:none !important;
-
-  aspect-ratio:auto !important;
-  object-fit:contain !important;
-
-  display:block;
-  background:#000;
-}
-
-/* Portrait / Vertical video support */
-@media (max-width:768px){
-  .portal-video-box video{
-    width:100%;
-    height:auto;
-  }
-}
-
-
 </script>
 
-<script>
-(function(){
-  const video = document.getElementById('qpMainVideo');
-  if(!video) return;
-
-  function resizeVideo(){
-    if(video.videoWidth && video.videoHeight){
-      const ratio = video.videoHeight / video.videoWidth;
-      video.style.height = (video.clientWidth * ratio) + 'px';
-    }
-  }
-
-  video.addEventListener('loadedmetadata', resizeVideo);
-  video.addEventListener('loadeddata', resizeVideo);
-  window.addEventListener('resize', resizeVideo);
-})();
-</script>
 
 
 </body>
