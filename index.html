@@ -693,6 +693,18 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
         <source src="slider_videos/upendra_1432_2-20251209-0001.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
       </video>
+
+<div class="video-responsive">
+  <video id="qpMainVideo"
+         controls
+         autoplay
+         muted
+         playsinline
+         preload="metadata">
+    <source src="slider_videos/upendra_1432_2-20251209-0001.mp4" type="video/mp4">
+  </video>
+</div>
+
       <div class="pv-playlist" id="pvPlaylist" aria-label="Video playlist">
         <!-- playlist items injected by JS -->
       </div>
@@ -1699,6 +1711,25 @@ yesBtn.addEventListener("click", async ()=>{
   await deferredPrompt.userChoice;
   deferredPrompt = null;
 });
+
+/* ===== VIDEO AUTO ADJUST FIX ===== */
+.video-responsive{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* mobile + desktop auto adjust */
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.video-responsive video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* video कटेगा नहीं */
+}
+
 </script>
 
 </body>
