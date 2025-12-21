@@ -1710,6 +1710,82 @@ yesBtn.addEventListener("click", async ()=>{
   deferredPrompt = null;
 });
 </script>
+<style>
+/* =====================================
+   SLIDER-LIKE RESPONSIVE ADJUST SYSTEM
+   ===================================== */
+
+/* Desktop / Default */
+.container{
+  max-width:1100px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* Make every main section behave like slider */
+.card,
+.portal-video-box,
+.notify-wrap{
+  max-width:1100px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* Video same rule as slider */
+.portal-video-box video{
+  width:100%;
+  height:auto;
+  aspect-ratio:16/9;
+  object-fit:contain;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:640px){
+
+  /* same margin logic as slider */
+  .container{
+    padding:12px;
+  }
+
+  .card,
+  .portal-video-box,
+  .notify-wrap{
+    margin-left:0;
+    margin-right:0;
+    width:100%;
+  }
+
+  /* Quick Portals behave like slider items */
+  .qp-3d-wrap{
+    gap:10px;
+  }
+  .qp-3d{
+    width:100%;
+  }
+
+  /* Search row stack */
+  .search-row{
+    flex-direction:column;
+  }
+
+  /* Table like slider height control */
+  .table-wrap{
+    max-height:280px;
+  }
+}
+
+/* ================= TABLET ================= */
+@media (min-width:641px) and (max-width:900px){
+
+  .container{
+    padding:14px;
+  }
+
+  .qp-3d{
+    width:48%;
+  }
+}
+</style>
 
 </body>
 </html>
