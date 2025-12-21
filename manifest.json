@@ -1,18 +1,18 @@
 {
-  "name": "S.B. Public School",
-  "short_name": "SBPS App",
-  "start_url": "index.html",
+  "name": "S.B. Public School Chhitauna",
+  "short_name": "SBPS",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b5fa8",
   "theme_color": "#0b5fa8",
   "icons": [
     {
-      "src": "logo.jpg",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "logo.jpg",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

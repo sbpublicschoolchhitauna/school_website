@@ -419,6 +419,72 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   @media(max-width:640px){.qp-3d{width:100%}}
   </style>
 
+<style>
+/* ===== INSTALL APP 3D BUTTON (Quick Portals style match) ===== */
+.install-3d{
+  --w:160px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:var(--w);
+  min-width:120px;
+  padding:12px 14px;
+  border-radius:14px;
+  font-weight:900;
+  color:#fff;
+  background:linear-gradient(135deg,#ffb703,#ff7b00);
+  text-decoration:none;
+  cursor:pointer;
+  transform-style:preserve-3d;
+  transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease;
+  position:relative;
+  border:0;
+  box-shadow:0 16px 36px rgba(255,123,0,.35);
+}
+
+.install-3d .face{
+  transform:translateZ(18px);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.install-3d::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:14px;
+  filter:blur(14px);
+  opacity:.6;
+  background:linear-gradient(90deg,rgba(255,180,0,.35),rgba(255,120,0,.15));
+  transform:translateY(6px) scale(1.02);
+}
+
+/* floating movement */
+@keyframes installFloat{
+  0%{transform:translateY(0) rotateX(3deg)}
+  50%{transform:translateY(-8px) rotateX(6deg)}
+  100%{transform:translateY(0) rotateX(3deg)}
+}
+.install-3d.idle{
+  animation:installFloat 4s ease-in-out infinite;
+}
+
+.install-3d:hover{
+  transform:translateY(-10px) rotateX(10deg) rotateY(-6deg) scale(1.04);
+  box-shadow:0 30px 60px rgba(255,123,0,.55);
+}
+
+.install-3d:active{
+  transform:translateY(-2px) scale(.97);
+}
+
+@media(max-width:640px){
+  .install-3d{width:100%}
+}
+</style>
+
   <div class="qp-3d-wrap">
     <a class="qp-3d fee-3d idle" href="https://script.google.com/macros/s/AKfycbySz9lSW1cwCcBWtAKOzknP6yWyawhgrETP-1EYaZ4-K8V-41Lg1GjdpLW0zA8sHX-G/exec" target="_blank" rel="noopener">
       <span class="face"><span class="ico">💳</span>Fee Portal</span>
@@ -432,6 +498,11 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
   </div>
+
+<button id="installBtn" class="install-3d idle">
+  <span class="face">📲 Install App</span>
+</button>
+
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -1639,6 +1710,24 @@ html, body { max-width: 100%; overflow-x: hidden; }
     playVideo(index);
   });
 })();
+</script>
+
+<script>
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+document.getElementById("installBtn").addEventListener("click", () => {
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+  } else {
+    alert("Install option अभी available नहीं है। Chrome में खोलें।");
+  }
+});
 </script>
 
 </body>
