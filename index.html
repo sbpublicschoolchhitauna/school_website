@@ -1673,34 +1673,6 @@ yesBtn.addEventListener("click", async ()=>{
   await deferredPrompt.userChoice;
   deferredPrompt = null;
 });
-
-/* ===== VIDEO AUTO ADJUST (FINAL WORKING) ===== */
-.portal-video-box{
-  width:100%;
-  max-width:420px;
-  border-radius:12px;
-  overflow:hidden;
-  background:#fff;
-  box-shadow:0 8px 30px rgba(2,6,23,0.06);
-  padding:10px;
-}
-
-.portal-video-box h3{
-  margin:0 0 8px;
-  font-size:15px;
-  color:#0b5fa8;
-}
-
-.portal-video-box video{
-  width:100%;
-  height:auto;              /* 🔥 main fix */
-  aspect-ratio:16 / 9;      /* 🔥 device ratio fix */
-  object-fit:contain;       /* 🔥 video कटेगा नहीं */
-  display:block;
-  border-radius:8px;
-  background:#000;
-}
-
 </script>
 
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
