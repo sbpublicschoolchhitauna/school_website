@@ -2,11 +2,11 @@
 <html lang="hi">
 <head>
 <style>
-/* ===== FRESH 3D INSTALL BUTTON ===== */
+/* ===== 3D INSTALL BUTTON ===== */
 .btn-3d-install{
   display:inline-block;
   text-decoration:none;
-  perspective:1000px;
+  perspective:900px;
   margin:8px;
 }
 
@@ -16,7 +16,7 @@
   justify-content:center;
   gap:10px;
 
-  padding:14px 24px;
+  padding:14px 22px;
   border-radius:16px;
 
   background:linear-gradient(135deg,#00e676,#00c853);
@@ -28,11 +28,12 @@
     0 10px 0 #009624,
     0 22px 40px rgba(0,0,0,.30);
 
-  animation:float3d 3s ease-in-out infinite;
+  transform:translateY(0) rotateX(0);
   transition:.25s ease;
+  animation:float3d 3s ease-in-out infinite;
 }
 
-/* floating movement */
+/* floating motion */
 @keyframes float3d{
   0%{transform:translateY(0)}
   50%{transform:translateY(-6px)}
@@ -48,6 +49,7 @@
   animation:none;
 }
 
+/* icon animation */
 .btn-icon{
   font-size:22px;
   animation:pulseIcon 1.8s infinite;
@@ -1774,44 +1776,19 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </script>
 
 <script>
-let deferredPrompt = null;
+let deferredPrompt;
 const installBtn = document.getElementById("installAppBtn");
-const popup = document.getElementById("installPopup");
-const yesBtn = document.getElementById("installYes");
-const noBtn = document.getElementById("installNo");
 
-/* Button default disabled look */
-installBtn.style.opacity = "0.6";
-installBtn.style.pointerEvents = "none";
-
-/* Chrome decides when install is allowed */
-window.addEventListener("beforeinstallprompt", (e)=>{
+window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-
-  // NOW install is allowed
-  installBtn.style.opacity = "1";
-  installBtn.style.pointerEvents = "auto";
 });
 
-/* Button click */
-installBtn.addEventListener("click", ()=>{
-  if(!deferredPrompt){
-    alert("App install अभी available नहीं है");
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    alert("Chrome menu (⋮) से 'Install App' चुनें");
     return;
   }
-  popup.style.display = "flex";
-});
-
-/* Cancel */
-noBtn.addEventListener("click", ()=>{
-  popup.style.display = "none";
-});
-
-/* Install */
-yesBtn.addEventListener("click", async ()=>{
-  popup.style.display = "none";
-
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   deferredPrompt = null;
