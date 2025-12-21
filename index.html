@@ -503,6 +503,59 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     <div class="grid">
       <div>
 
+<!-- ===== SARKARI RESULT STYLE NOTIFICATION ===== -->
+<div class="container">
+  <div class="card sarkari-box">
+    <div class="sarkari-title">LATEST NOTIFICATIONS</div>
+
+    <ul id="notifs" class="sarkari-list">
+      <!-- JS से नोटिफिकेशन आएँगे -->
+    </ul>
+  </div>
+</div>
+<!-- ============================================ -->
+
+<style>
+/* Direction animations */
+@keyframes moveLeftRight {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(12px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes moveUpDown {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* Apply to notification items */
+.sarkari-list li{
+  border-bottom:1px dotted #9ca3af;
+  padding:8px 0;
+  font-size:14px;
+  animation-duration:3s;
+  animation-iteration-count:infinite;
+  animation-timing-function:ease-in-out;
+}
+
+/* Odd = Left ↔ Right */
+.sarkari-list li:nth-child(odd){
+  animation-name: moveLeftRight;
+}
+
+/* Even = Up ↕ Down */
+.sarkari-list li:nth-child(even){
+  animation-name: moveUpDown;
+}
+
+/* Hover पर रुक जाए (important) */
+.sarkari-list li:hover{
+  animation-play-state: paused;
+  background:#fff7ed;
+}
+</style>
+
         <!-- QUICK PORTALS moved to TOP -->
         <div class="card">
           <h2>Quick Portals</h2>
