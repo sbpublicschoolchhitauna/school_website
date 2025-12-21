@@ -1713,22 +1713,39 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </script>
 
 <script>
-let deferredPrompt;
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
 
-window.addEventListener("beforeinstallprompt", e => {
+/* hide button by default */
+installBtn.style.display = "none";
+
+/* listen install event */
+window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
+
+  /* अब button दिखाओ */
+  installBtn.style.display = "inline-flex";
 });
 
-document.getElementById("installBtn").addEventListener("click", () => {
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-  } else {
-    alert("Install option अभी available नहीं है। Chrome में खोलें।");
+/* click handler */
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    alert("Install option अभी available नहीं है।\nChrome browser में खोलें।");
+    return;
+  }
+
+  deferredPrompt.prompt();
+
+  const choice = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+
+  if (choice.outcome === "accepted") {
+    installBtn.style.display = "none";
   }
 });
 </script>
+
 
 </body>
 </html>
