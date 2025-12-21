@@ -673,11 +673,21 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
-  .portal-with-video{{ display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }}
-  .portal-with-video .qp-3d-wrap{{ flex: 1 1 320px; min-width:220px; }}
-  .portal-video-box{{ flex: 0 0 380px; min-width:260px; max-width:420px; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 8px 30px rgba(2,6,23,0.06); padding:10px; }}
   .portal-video-box h3{{ margin:0 0 8px; font-size:15px; color: #0b5fa8; }}
-  .portal-video-box video{{ width:100%; height:auto; display:block; border-radius:8px; background:#000; }}
+/* ✅ VIDEO AUTO ADJUST FOR ALL DEVICES */
+.portal-video-box{
+  position: relative;
+}
+
+.portal-video-box video{
+  width:100%;
+  height:100%;
+  aspect-ratio:16 / 9;   /* 🔥 main fix */
+  object-fit:contain;    /* video कटेगा नहीं */
+  display:block;
+  border-radius:8px;
+  background:#000;
+}
   .pv-playlist{{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }}
   .pv-item{{ flex: 1 1 90px; min-width:80px; background:#f6fbff; border:1px solid #eef9ff; padding:8px; border-radius:8px; cursor:pointer; font-size:13px; text-align:center; }}
   .pv-item.active{{ outline:3px solid rgba(11,95,168,0.12); box-shadow:0 8px 26px rgba(11,95,168,0.06); background:#ffffff; }}
