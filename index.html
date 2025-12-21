@@ -558,31 +558,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </span>
 </a>
 
-<div class="qp-3d-wrap">
-  ... Fee Portal ...
-  ... Marksheet ...
-  ... Teacher Login ...
-
-  <!-- ✅ 4th button -->
-  <a href="javascript:void(0)"
-     id="installAppBtn"
-     class="qp-3d install-3d idle"
-     title="Mobile App Install करें">
-    <span class="face"><span class="ico">📲</span>Student App Install</span>
-  </a>
-</div>
-
-<style>
-.install-3d{
-  background:linear-gradient(135deg,#00c853,#00a152);
-  box-shadow:0 16px 36px rgba(0,160,90,.25);
-}
-.install-3d::after{
-  background:linear-gradient(90deg,rgba(0,200,83,.35),rgba(0,160,82,.12));
-}
-</style>
-
-
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -1724,29 +1699,6 @@ table { min-width: 0 !important; width: 100%; }
 html, body { max-width: 100%; overflow-x: hidden; }
 
 </script>
-<script>
-let deferredPrompt;
-const installBtn = document.getElementById("installAppBtn");
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if(installBtn) installBtn.style.display = "inline-flex";
-});
-
-if(installBtn){
-  installBtn.addEventListener("click", async () => {
-    if (!deferredPrompt) {
-      alert("Chrome Menu (⋮) से ‘Install App’ चुनें");
-      return;
-    }
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  });
-}
-</script>
-
 
 </body>
 </html>
