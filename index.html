@@ -699,17 +699,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
             <button class="tab active" id="tabFee" onclick="showTab('fee')">Fee Student Details</button>
             <button class="tab" id="tabMarks" onclick="showTab('marks')">Marksheet Details</button>
           </div>
-          <div id="feeContainer" class="table-wrap" style="display:block">लोड हो रहा है...</div>
-          <div id="marksContainer" class="table-wrap" style="display:none;margin-top:10px">लोड हो रहा है...</div>
-        </div>
-      </div>
-
-      <div>
-
-        
-        </div>
-      </div>
-    </div>
+          <div id="feeContainer" class="table-wrap" style="display:block">लोड >
 
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
@@ -1816,6 +1806,54 @@ yesBtn.addEventListener("click", async ()=>{
   await deferredPrompt.userChoice;
   deferredPrompt = null;
 });
+</script>
+<script>
+/* ===== PWA INSTALL HANDLER (FINAL) ===== */
+let deferredPrompt = null;
+
+// Chrome jab allow kare tab yeh event aata hai
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+// Elements
+const installBtn = document.getElementById("installAppBtn");
+const popup = document.getElementById("installPopup");
+const yesBtn = document.getElementById("installYes");
+const noBtn = document.getElementById("installNo");
+
+// Safety check
+if(installBtn && popup && yesBtn && noBtn){
+
+  // Button click → popup
+  installBtn.addEventListener("click", () => {
+    if(!deferredPrompt){
+      alert("Chrome के Menu (⋮) से Install App चुनें");
+      return;
+    }
+    popup.style.display = "flex";
+  });
+
+  // Cancel
+  noBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+  });
+
+  // Install confirm
+  yesBtn.addEventListener("click", async () => {
+    popup.style.display = "none";
+
+    if(!deferredPrompt){
+      alert("Install option अभी available नहीं है");
+      return;
+    }
+
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+}
 </script>
 
 </body>
