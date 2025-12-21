@@ -1,202 +1,5 @@
 <!doctype html>
-<html lang="hi">
-<head>
-
-<style>
-/* ===== FRESH 3D INSTALL BUTTON ===== */
-.btn-3d-install{
-  display:inline-block;
-  text-decoration:none;
-  perspective:1000px;
-  margin:8px;
-}
-
-.btn-face{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-
-  padding:14px 24px;
-  border-radius:16px;
-
-  background:linear-gradient(135deg,#00e676,#00c853);
-  color:#ffffff;
-  font-weight:900;
-  font-size:16px;
-
-  box-shadow:
-    0 10px 0 #009624,
-    0 22px 40px rgba(0,0,0,.30);
-
-  animation:float3d 3s ease-in-out infinite;
-  transition:.25s ease;
-}
-
-/* floating movement */
-@keyframes float3d{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-  100%{transform:translateY(0)}
-}
-
-/* press effect */
-.btn-3d-install:active .btn-face{
-  transform:translateY(6px);
-  box-shadow:
-    0 4px 0 #009624,
-    0 10px 18px rgba(0,0,0,.25);
-  animation:none;
-}
-
-.btn-icon{
-  font-size:22px;
-  animation:pulseIcon 1.8s infinite;
-}
-
-@keyframes pulseIcon{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.15)}
-}
-</style>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b5fa8">
-
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>S.B. Public School Chhitauna — Student Portal</title>
-<style>
-:root{--accent:#0b5fa8;--accent2:#1167b1;--card:#fff;--muted:#54607a}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:Arial,Segoe UI,Roboto,sans-serif;color:#0f172a;background:linear-gradient(180deg,#eaf4ff,#f7fbff)}
-/* Centered header */
-.header{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  color:#fff;text-align:center;padding:18px 12px;border-radius:0 0 14px 14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.12); position:sticky; top:0; z-index:9999;
-}
-.header h1{margin:0;font-size:clamp(20px,4.5vw,30px);font-weight:800;letter-spacing:0.4px}
-.header .meta{margin-top:6px;font-size:14px;opacity:0.95}
-.header .meta small{display:block;font-size:13px;opacity:0.9;margin-top:4px}
-
-/* horizontal strip under header */
-.school-strip-outer{overflow:hidden;width:100%;margin-top:12px;padding-bottom:8px}
-.school-strip{white-space:nowrap;display:flex;gap:18px;align-items:center;will-change:transform;transform:translateX(0)}
-.school-chip{display:inline-block;font-weight:700;font-size:14px;background:rgba(255,255,255,0.06);padding:6px 12px;border-radius:8px}
-
-/* main layout */
-.container{max-width:1100px;margin:14px auto;padding:12px}
-.grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06);margin-bottom:12px}
-h2{margin:0;color:var(--accent);font-size:16px;margin-bottom:8px}
-.small{color:var(--muted);font-size:13px}
-.tabbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.tab{padding:8px 12px;border-radius:8px;background:#f1fbff;border:1px solid #d6ecff;color:var(--accent);cursor:pointer;font-weight:600}
-.tab.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:8px 12px;border:0;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block}
-.search-row{display:flex;gap:8px;margin-bottom:8px}
-@media(max-width:640px){.search-row{flex-direction:column} .tabbar{gap:6px}}
-
-/* tables */
-.table-wrap{overflow:auto;border-radius:8px;border:1px solid #eef6ff;padding:6px;background:#fff;max-height:360px}
-@media(max-width:900px){.table-wrap{max-height:300px}}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
-th,td{padding:8px 10px;border-bottom:1px solid #f1f7ff;text-align:left;vertical-align:middle}
-thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
-
-/* notifications */
-.notify-wrap{height:220px;overflow:hidden;position:relative;border-radius:8px}
-.notify-list{position:absolute;left:0;right:0;top:0;will-change:transform}
-.notify-item{padding:10px 12px;border-bottom:1px solid #eef4ff;background:#fff}
-.notify-item .date{font-size:12px;color:var(--accent);font-weight:700}
-.notify-item .text{font-size:14px;margin-top:4px}
-
-/* footer */
-.footer{ text-align:center;margin-top:12px;color:#555;font-size:13px}
-
-/* ===== ADDED: Admission CTA styles (assistant injected) ===== */
-.quick-apply-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 16px;
-  border-radius:12px;
-  font-weight:900;
-  text-decoration:none;
-  color:#042033;
-  background:linear-gradient(90deg,#fff8e6,#e7fbff);
-  border:1px solid rgba(1,48,62,0.08);
-  box-shadow:0 8px 30px rgba(3,19,43,0.08);
-  transform:translateZ(0);
-  transition:transform .18s ease, box-shadow .18s ease;
-  position:relative;
-  overflow:hidden;
-}
-.quick-apply-btn::before{
-  content:'';
-  position:absolute; inset:-30% -50%;
-  background: linear-gradient(60deg, rgba(0,197,255,0.12), rgba(0,150,255,0.18), rgba(255,200,0,0.12));
-  filter: blur(18px);
-  opacity:0;
-  transform: rotate(10deg) translateY(-6px);
-  transition: opacity .35s ease, transform .6s ease;
-}
-.quick-apply-btn::after{
-  content:'';
-  position:absolute;
-  left:50%; top:50%;
-  width:120%; height:120%;
-  transform:translate(-50%,-50%) scale(.9);
-  border-radius:14px;
-  box-shadow: 0 0 0 0 rgba(11,95,168,0.18);
-  opacity:0;
-}
-.quick-apply-btn .cta-left{ font-size:14px; opacity:0.95; }
-.quick-apply-btn .cta-main{ font-size:13px; color:#012032; }
-.quick-apply-btn:hover, .quick-apply-btn:focus{
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 18px 44px rgba(3,19,43,0.16);
-}
-.quick-apply-btn:hover::before, .quick-apply-btn:focus::before{
-  opacity:1;
-  transform: rotate(0deg) translateY(0);
-}
-.quick-apply-btn:active{ transform: translateY(-2px) scale(.995); }
-@keyframes ctaPulse {
-  0% { box-shadow: 0 0 0 0 rgba(11,95,168,0.08); }
-  50% { box-shadow: 0 0 36px 8px rgba(11,95,168,0.06); }
-  100% { box-shadow: 0 0 0 0 rgba(11,95,168,0.00); }
-}
-.quick-apply-btn.idle-animate::after{
-  animation: ctaPulse 2.8s ease-in-out infinite;
-  opacity:1;
-}
-.admission-mini{ background:transparent;border:1px solid rgba(1,48,62,0.08); color:#0b5fa8; padding:8px 10px; border-radius:8px; font-weight:700; }
-@media(max-width:640px){
-  .quick-apply-btn{ width:100%; justify-content:center; padding:12px; }
-  .quick-apply-btn .cta-main{ font-size:14px }
-}
-
-/* END ADMISSION CTA styles */
-</style>
-
-<style id="assistant-button-fix">
-/* Make Quick Portals and Search buttons clearly visible */
-a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-  background: #000 !important;
-  color: #fff !important;
-  border: 1px solid #000 !important;
-  box-shadow: none !important;
-}
-/* Ensure slider controls remain light */
-.slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-</style>
-
-</head>
-<body>
+<!-- removed nested document start -->
 
 <div id="installPopup" class="install-popup">
   <div class="install-card">
@@ -293,155 +96,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
   <!-- START: Inserted Photo Slider (existing slider code kept as-is) -->
-  <!-- removed-doctype -->
-  <!-- removed-html -->
-  <head>
-<style>
-.install-popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:999999;
-}
-
-.install-card{
-  background:#fff;
-  padding:22px;
-  border-radius:18px;
-  width:90%;
-  max-width:320px;
-  text-align:center;
-  animation:popIn .35s ease;
-}
-
-.install-actions{
-  margin-top:18px;
-  display:flex;
-  gap:12px;
-  justify-content:center;
-}
-
-.install-actions button{
-  border:none;
-  padding:10px 18px;
-  border-radius:10px;
-  font-weight:800;
-  cursor:pointer;
-}
-
-#installYes{
-  background:linear-gradient(135deg,#00c853,#00a152);
-  color:#fff;
-}
-
-#installNo{
-  background:#e0e0e0;
-}
-
-@keyframes popIn{
-  from{transform:scale(.85);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-</style>
-
-<style>
-#premiumSplash{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at top,#1fb6ff,#0b5fa8 60%,#05284d);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:1000000;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-.ps-card{
-  text-align:center;
-  padding:30px 22px;
-  border-radius:22px;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(10px);
-  box-shadow:
-    0 0 40px rgba(255,215,0,.35),
-    inset 0 0 30px rgba(255,255,255,.12);
-  animation:cardPop 1.2s ease;
-  max-width:92%;
-}
-
-.ps-logo{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  margin-bottom:14px;
-  background:#fff;
-  padding:6px;
-  box-shadow:0 0 25px gold;
-  animation:logoFloat 3s ease-in-out infinite;
-}
-
-.ps-card h1{
-  font-size:26px;
-  margin:10px 0;
-  font-weight:900;
-  letter-spacing:.6px;
-}
-
-.ps-card p{
-  font-size:14px;
-  margin:6px 0;
-  opacity:0;
-}
-
-@keyframes logoFloat{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-8px)}
-  100%{transform:translateY(0)}
-}
-
-@keyframes cardPop{
-  from{transform:scale(.8);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-</style>
-
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SB Public School — Photo Slider (Fade, Auto-height)</title>
-  <style>
-  :root{--accent:#0ea5a4;--bg:#fbfdff;--text:#0f1724}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-  .slider-wrap{max-width:1100px;margin:20px auto;position:relative;border-radius:12px;overflow:visible}
-  .slider{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08);background:#000;transition:height .45s ease}
-  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease;will-change:opacity;pointer-events:none}
-  .slide.active{opacity:1;pointer-events:auto}
-  .slide img{width:100%;height:auto;display:block;object-fit:cover}
-  /* controls */
-  .controls{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
-  .slider-wrap .btn{background:rgba(255,255,255,0.9);border:0;padding:10px;border-radius:999px;cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px rgba(2,6,23,0.12)}
-  .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px;pointer-events:auto}
-  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.8);cursor:pointer;opacity:0.8}
-  .dot.active{background:var(--accent);transform:scale(1.2);opacity:1}
-  .slider-wrap .play-toggle{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
-  @media(max-width:600px){ .slider-wrap{margin:12px} .btn{padding:8px} }
-  </style>
-  <style id="assistant-button-fix">
-  a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn {
-    background: #000 !important;
-    color: #fff !important;
-    border: 1px solid #black !important;
-    box-shadow: none !important;
-  }
-  .slider-wrap .btn { background: rgba(255,255,255,0.9); color: #000; }
-  </style>
-  </head>
-  <body>
+  <!-- removed nested document start -->
   <div class="slider-wrap" id="sliderWrap" aria-label="School photo slider (fade)">
     <button class="play-toggle" id="playToggle" aria-pressed="false">Pause</button>
     <div class="slider" id="slider" role="region" aria-roledescription="carousel"></div>
@@ -607,8 +262,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 
 
 
-</body>
-  <!-- removed-/html -->
+<!-- removed nested document end -->
   <!-- END: Inserted Photo Slider -->
 
 <div class="container">
@@ -629,21 +283,21 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   .qp-3d::after{content:'';position:absolute;inset:0;border-radius:14px;z-index:0;filter: blur(14px);opacity:.55;transition: opacity .28s ease, transform .28s ease}
   .fee-3d{background: linear-gradient(135deg,#0b5fa8,#1274d1);box-shadow: 0 18px 40px rgba(11,95,168,0.22)}
   .fee-3d::after{background: linear-gradient(90deg, rgba(11,95,168,0.28), rgba(6,129,212,0.12));transform: translateY(6px) scale(1.02)}
-  @keyframes feeTilt{0%{transform: rotateX(3deg) rotateY(-6deg)}50%{transform: rotateX(4deg) rotateY(6deg)}100%{transform: rotateX(3deg) rotateY(-6deg)}}
+  @keyframes feeTilt{0%{transform: rotateX(3deg) rotateY(-6deg)}50%{transform: rotateX(4deg) rotateY(6deg)}100%{transform: rotateX(3deg) rotateY(-6deg)}
   .fee-3d.idle{animation: feeTilt 6.8s ease-in-out infinite}
   .fee-3d:hover{transform: translateY(-8px) rotateX(6deg) rotateY(12deg) scale(1.02);box-shadow:0 34px 64px rgba(11,95,168,0.30)}
   .marksheet-3d{background: linear-gradient(135deg,#10b981,#06d6a0);box-shadow: 0 16px 36px rgba(6,129,80,0.18)}
   .marksheet-3d::after{background: linear-gradient(90deg, rgba(6,129,80,0.2), rgba(12,200,150,0.10));transform: translateY(6px) scale(1.02)}
-  @keyframes markFloat{0%{transform: translateY(0px)}50%{transform: translateY(-8px) translateZ(10px)}100%{transform: translateY(0px)}}
+  @keyframes markFloat{0%{transform: translateY(0px)}50%{transform: translateY(-8px) translateZ(10px)}100%{transform: translateY(0px)}
   .marksheet-3d.idle{animation: markFloat 4.2s ease-in-out infinite}
   .marksheet-3d:hover{transform: translateY(-10px) scale(1.02);box-shadow:0 30px 54px rgba(6,129,80,0.26)}
   .teacher-3d{background: linear-gradient(135deg,#7b2ff7,#9d4bff);box-shadow: 0 12px 28px rgba(135,60,255,0.18)}
   .teacher-3d::after{background: linear-gradient(90deg, rgba(135,60,255,0.22), rgba(157,75,255,0.10));transform: translateY(6px) scale(1.02)}
-  @keyframes teacherPulse{0%{transform: scale(1)}50%{transform: scale(1.03)}100%{transform: scale(1)}}
+  @keyframes teacherPulse{0%{transform: scale(1)}50%{transform: scale(1.03)}100%{transform: scale(1)}
   .teacher-3d.idle{animation: teacherPulse 3.6s ease-in-out infinite}
   .teacher-3d:hover{transform: translateY(-10px) scale(1.04);box-shadow:0 36px 86px rgba(157,75,255,0.32)}
   .qp-3d .ico{font-size:18px;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background: rgba(255,255,255,0.08)}
-  @media(max-width:640px){.qp-3d{width:100%}}
+  @media(max-width:640px){.qp-3d{width:100%}
   </style>
 
   <div class="qp-3d-wrap">
@@ -673,7 +327,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
-  .portal-video-box h3{{ margin:0 0 8px; font-size:15px; color: #0b5fa8; }}
+  .portal-video-box h3{ margin:0 0 8px; font-size:15px; color: #0b5fa8; }
 /* ✅ VIDEO AUTO ADJUST FOR ALL DEVICES */
 .portal-video-box{
   position: relative;
@@ -688,10 +342,10 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   border-radius:8px;
   background:#000;
 }
-  .pv-playlist{{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }}
-  .pv-item{{ flex: 1 1 90px; min-width:80px; background:#f6fbff; border:1px solid #eef9ff; padding:8px; border-radius:8px; cursor:pointer; font-size:13px; text-align:center; }}
-  .pv-item.active{{ outline:3px solid rgba(11,95,168,0.12); box-shadow:0 8px 26px rgba(11,95,168,0.06); background:#ffffff; }}
-  @media(max-width:900px){{ .portal-with-video{{flex-direction:column}} .portal-video-box{{width:100%}} }}
+  .pv-playlist{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+  .pv-item{ flex: 1 1 90px; min-width:80px; background:#f6fbff; border:1px solid #eef9ff; padding:8px; border-radius:8px; cursor:pointer; font-size:13px; text-align:center; }
+  .pv-item.active{ outline:3px solid rgba(11,95,168,0.12); box-shadow:0 8px 26px rgba(11,95,168,0.06); background:#ffffff; }
+  @media(max-width:900px){ .portal-with-video{flex-direction:column} .portal-video-box{width:100%} }
   </style>
 
   <div class="portal-with-video" aria-hidden="false">
@@ -774,7 +428,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </script>
 
 
-  <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}}catch(e){}})();</script>
+  <script>(function(){try{const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq&&mq.matches){document.querySelectorAll('.idle').forEach(x=>x.classList.remove('idle'))}catch(e){})();</script>
   <!-- END: 3D Animated Quick Portals -->
   <!-- ===== ADMISSION CTA inserted by assistant (ready-to-use) ===== -->
   <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
@@ -1502,6 +1156,33 @@ body{margin:0;font-family:Arial;}
 <!-- Teacher-login intercept modal (paste before 
 
 
+
+<style id="force-mobile-fullwidth-final">
+@media (max-width: 768px){
+  html, body{
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow-x:hidden!important;
+  }
+  .container,
+  .grid,
+  .card,
+  .portal-with-video,
+  .portal-video-box,
+  .slider-wrap,
+  .slider,
+  video,
+  img{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .grid{display:block!important}
+}
+</style>
+
 </body>) -->
 <style>
 /* simple modal styles */
@@ -1711,8 +1392,7 @@ yesBtn.addEventListener("click", async ()=>{
 });
 </script>
 
-</body>
-</html>
+<!-- removed nested document end -->
 <!-- मोबाइल zoom-out की फिक्स — इसे stylesheet के अंत में जोड़ें -->
 <style>
 /* allow tables to shrink on narrow screens (fix mobile zoom-out) */
