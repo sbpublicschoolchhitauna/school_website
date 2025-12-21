@@ -433,62 +433,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </a>
   </div>
 
-<!-- 🔥 3D INSTALL APP BUTTON -->
-<button id="installAppBtn" class="qp-3d install-3d idle" style="display:none">
-  <span class="face">
-    <span class="ico">📲</span> Install App
-  </span>
-</button>
-
-<style>
-/* ===== 3D INSTALL APP BUTTON ===== */
-.install-3d{
-  background: linear-gradient(135deg,#ffb703,#ff7b00);
-  box-shadow:
-    0 12px 0 #c25a00,
-    0 26px 45px rgba(0,0,0,.35);
-  color:#fff;
-  font-weight:900;
-  letter-spacing:.5px;
-}
-
-/* glowing shadow */
-.install-3d::after{
-  background: linear-gradient(90deg,
-    rgba(255,183,3,.6),
-    rgba(255,123,0,.4)
-  );
-  transform: translateY(10px) scale(1.05);
-}
-
-/* idle floating animation */
-@keyframes installFloat{
-  0%{transform:rotateX(6deg) rotateY(-6deg) translateY(0)}
-  50%{transform:rotateX(10deg) rotateY(6deg) translateY(-8px)}
-  100%{transform:rotateX(6deg) rotateY(-6deg) translateY(0)}
-}
-
-.install-3d.idle{
-  animation: installFloat 3.8s ease-in-out infinite;
-}
-
-/* hover effect */
-.install-3d:hover{
-  transform: translateY(-10px) rotateX(16deg) rotateY(-12deg) scale(1.06);
-  box-shadow:
-    0 16px 0 #a94e00,
-    0 40px 70px rgba(0,0,0,.45);
-}
-
-/* click press */
-.install-3d:active{
-  transform: translateY(-2px) scale(.97);
-  box-shadow:
-    0 6px 0 #a94e00,
-    0 16px 30px rgba(0,0,0,.35);
-}
-</style>
-
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -1696,34 +1640,6 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 </script>
-
-<script>
-let deferredPrompt;
-const installBtn = document.getElementById("installAppBtn");
-
-/* detect install support */
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = "inline-flex"; // बटन दिखाओ
-});
-
-/* button click = direct install */
-installBtn.addEventListener("click", async () => {
-  if (!deferredPrompt) return;
-
-  deferredPrompt.prompt(); // 🔥 install popup
-  const choice = await deferredPrompt.userChoice;
-
-  if (choice.outcome === "accepted") {
-    console.log("App Installed Successfully");
-  }
-
-  deferredPrompt = null;
-  installBtn.style.display = "none";
-});
-</script>
-
 
 </body>
 </html>
