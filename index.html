@@ -1528,18 +1528,30 @@ body{margin:0;font-family:Arial;}
 
 
 <!-- Teacher password protect (injected) -->
-<style>
-#teacherAuthModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);z-index:100000}
-#teacherAuthModal .modalCard{width:380px;max-width:94%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 60px rgba(2,6,23,0.36);font-family:Arial,Helvetica,sans-serif}
-#teacherAuthModal h3{margin:0 0 8px;color:#0b5fa8}
-#teacherAuthModal .hint{font-size:13px;color:#586574;margin-bottom:12px}
-#teacherAuthModal input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f0fb;font-size:15px}
-#teacherAuthModal .actions{display:flex;gap:8px;margin-top:12px}
-#teacherAuthModal button{flex:1;padding:8px 10px;border-radius:8px;border:0;cursor:pointer;font-weight:800}
-#teacherAuthModal .ok{background:linear-gradient(90deg,#0b5fa8,#1167b1);color:#fff}
-#teacherAuthModal .cancel{background:#f1f5f9;color:#042033}
-#teacherAuthModal .msg{margin-top:8px;font-size:13px}
-</style>
+<script>
+(function(){
+  const PASSWORD = "SBPSC@9044";
+
+  const btn = document.querySelector(".qp-3d.teacher-3d");
+  if(!btn) return;
+
+  const url = btn.getAttribute("href");
+  const target = btn.getAttribute("target") || "_blank";
+
+  btn.addEventListener("click", function(e){
+    e.preventDefault();
+    const pw = prompt("Teacher Login Password डालें:");
+
+    if(pw === null) return;
+
+    if(pw === PASSWORD){
+      window.open(url, target);
+    } else {
+      alert("गलत पासवर्ड ❌");
+    }
+  });
+})();
+</script>
 
 <div id="teacherAuthModal" role="dialog" aria-hidden="true">
   <div class="modalCard" role="document" aria-label="Teacher login">
