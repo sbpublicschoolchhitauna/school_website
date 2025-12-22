@@ -440,10 +440,9 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <button
+  id="studentInstallBtn"
   class="qp-3d student-3d idle"
   type="button"
-  onclick="alert('CLICK CONFIRMED')"
-  style="position:relative; z-index:999999; pointer-events:auto;"
 >
   <span class="face">
     <span class="ico">🎓</span>
@@ -1715,40 +1714,35 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-/* ===== FORCE STUDENT INSTALL CLICK ===== */
 (function () {
 
   let deferredPrompt = null;
 
-  // capture PWA install event (कहीं भी body हो)
+  // Capture PWA install availability
   window.addEventListener("beforeinstallprompt", function (e) {
     e.preventDefault();
     deferredPrompt = e;
   });
 
-  // GLOBAL CLICK LISTENER (force)
+  // Force click handler (safe)
   document.addEventListener("click", async function (e) {
-
-    // किसी भी जगह student button मिले तो
     const btn = e.target.closest("#studentInstallBtn");
     if (!btn) return;
 
     e.preventDefault();
     e.stopPropagation();
 
-    alert("Student Install Button CLICKED ✅");
-
     if (deferredPrompt) {
-      deferredPrompt.prompt();
+      deferredPrompt.prompt();           // Install popup
       await deferredPrompt.userChoice;
       deferredPrompt = null;
     } else {
       alert(
-        "Install popup Chrome ne block kar diya.\n\n" +
-        "Chrome ke 3 dots (⋮) → Install App / Add to Home Screen"
+        "Install popup अभी available नहीं है.\n\n" +
+        "Chrome के 3 dots (⋮) → Install App / Add to Home Screen"
       );
     }
-  }, true); // 🔥 capture mode
+  }, true);
 
 })();
 </script>
