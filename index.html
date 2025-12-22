@@ -139,6 +139,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </style>
 
 </head>
+
 <body>
   <!-- CENTERED HEADER -->
   <div class="header" role="banner" aria-label="School header">
@@ -439,7 +440,10 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <button id="studentInstallBtn" class="qp-3d student-3d idle" type="button">
-  <span class="face"><span class="ico">🎓</span>Student App</span>
+  <span class="face">
+    <span class="ico">🎓</span>
+    Student App
+  </span>
 </button>
 
   <!-- START: Quick Portals + Video column (inserted) -->
@@ -1706,30 +1710,32 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-console.log("Student Install JS loaded");
-
 let deferredPrompt = null;
 
-// Chrome install event
-window.addEventListener("beforeinstallprompt", function (e) {
+/* capture install event */
+window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault();
   deferredPrompt = e;
-  console.log("Install prompt captured");
 });
 
-// DOM ready
-window.addEventListener("DOMContentLoaded", function () {
+/* register service worker */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+
+/* button click */
+window.addEventListener("load", () => {
 
   const btn = document.getElementById("studentInstallBtn");
-
   if (!btn) {
-    alert("❌ studentInstallBtn button nahi mila");
+    alert("Student button not found");
     return;
   }
 
-  // CLICK TEST
-  btn.addEventListener("click", async function () {
-    alert("✅ Student Install Button clicked");
+  btn.addEventListener("click", async () => {
+
+    // click confirmation (IMPORTANT)
+    alert("Student Install button clicked");
 
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -1737,7 +1743,8 @@ window.addEventListener("DOMContentLoaded", function () {
       deferredPrompt = null;
     } else {
       alert(
-        "Install popup abhi available nahi hai.\n\n" +
+        "Install popup Chrome ne block kar diya hai.\n\n" +
+        "Install karne ke liye:\n" +
         "Chrome ke 3 dots (⋮) → Install App / Add to Home Screen"
       );
     }
