@@ -438,9 +438,15 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </a>
   </div>
 
-<button id="studentInstallBtn" class="student-install-3d">
-  <span class="icon">🎓</span>
-  <span class="text">विधार्थी</span>
+<button
+  id="studentInstallBtn"
+  class="qp-3d student-3d idle"
+  type="button"
+>
+  <span class="face">
+    <span class="ico">🎓</span>
+    Student App
+  </span>
 </button>
 
   <!-- START: Quick Portals + Video column (inserted) -->
@@ -1650,23 +1656,36 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 
-/* INSTALL APP 3D BUTTON */
-.install-3d{
+/* 🎓 STUDENT INSTALL APP BUTTON */
+.student-3d{
   background: linear-gradient(135deg,#ffb703,#ff7b00);
-  color:#fff;
-  border:none;
-  box-shadow: 0 12px 0 #c25a00, 0 30px 45px rgba(0,0,0,.35);
-  animation: installFloat 3s infinite;
+  box-shadow: 0 16px 36px rgba(255,123,0,0.25);
 }
 
-@keyframes installFloat{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-  100%{transform:translateY(0)}
+.student-3d::after{
+  background: linear-gradient(
+    90deg,
+    rgba(255,183,3,0.35),
+    rgba(255,123,0,0.15)
+  );
+  transform: translateY(6px) scale(1.02);
 }
 
-.install-3d:hover{
-  transform:translateY(-10px) scale(1.05);
+/* idle floating animation */
+@keyframes studentFloat{
+  0%{transform: translateY(0) rotateX(2deg)}
+  50%{transform: translateY(-10px) rotateX(6deg)}
+  100%{transform: translateY(0) rotateX(2deg)}
+}
+
+.student-3d.idle{
+  animation: studentFloat 4.5s ease-in-out infinite;
+}
+
+/* hover effect */
+.student-3d:hover{
+  transform: translateY(-12px) rotateX(10deg) scale(1.04);
+  box-shadow: 0 40px 70px rgba(255,123,0,0.45);
 }
 
 <script>
