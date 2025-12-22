@@ -438,14 +438,10 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </a>
   </div>
 
-<button
-  id="studentInstallBtn"
-  class="qp-3d student-3d idle"
-  type="button"
->
+<button id="studentInstallBtn" class="qp-3d student-3d idle" type="button">
   <span class="face">
     <span class="ico">🎓</span>
-    Student App
+    Student Install App
   </span>
 </button>
 
@@ -1656,59 +1652,64 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 
-/* 🎓 STUDENT INSTALL APP BUTTON */
+/* === FORCE STUDENT INSTALL BUTTON VISIBILITY === */
 .student-3d{
-  background: linear-gradient(135deg,#ffb703,#ff7b00);
-  box-shadow: 0 16px 36px rgba(255,123,0,0.25);
+  background: linear-gradient(135deg,#ff9800,#ff5722) !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 9999;
 }
 
-.student-3d::after{
-  background: linear-gradient(
-    90deg,
-    rgba(255,183,3,0.35),
-    rgba(255,123,0,0.15)
-  );
-  transform: translateY(6px) scale(1.02);
-}
-
-/* idle floating animation */
-@keyframes studentFloat{
-  0%{transform: translateY(0) rotateX(2deg)}
-  50%{transform: translateY(-10px) rotateX(6deg)}
-  100%{transform: translateY(0) rotateX(2deg)}
-}
-
-.student-3d.idle{
-  animation: studentFloat 4.5s ease-in-out infinite;
-}
-
-/* hover effect */
-.student-3d:hover{
-  transform: translateY(-12px) rotateX(10deg) scale(1.04);
-  box-shadow: 0 40px 70px rgba(255,123,0,0.45);
+.student-3d .face,
+.student-3d .ico{
+  color:#ffffff !important;
+  font-weight:900;
 }
 
 <script>
-let deferredPrompt = null;
+(function(){
 
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
+  let deferredPrompt = null;
 
-document.getElementById("studentInstallBtn").addEventListener("click", async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();   // ✅ यही popup खोलेगा
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  } else {
-    alert(
-      "Install करने के लिए:\n\n" +
-      "Chrome के ऊपर 3 डॉट (⋮) पर जाएँ\n" +
-      "➡️ Install App चुनें"
-    );
-  }
-});
+  // Catch install event
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    console.log("✅ Install prompt captured");
+  });
+
+  // Ensure button click works
+  window.addEventListener("load", function(){
+
+    const btn = document.getElementById("studentInstallBtn");
+
+    if(!btn){
+      alert("❌ Student Install Button नहीं मिला");
+      return;
+    }
+
+    btn.addEventListener("click", async function(){
+      alert("✅ Student button clicked");
+
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+      } else {
+        alert(
+          "⚠️ Install popup अभी available नहीं है.\n\n" +
+          "Chrome के 3 dots (⋮) → Install App चुनें"
+        );
+      }
+    });
+
+  });
+
+})();
 </script>
 
 </body>
