@@ -1652,61 +1652,36 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 
-/* ===============================
-   STUDENT INSTALL – FORCE 3D
-================================ */
-
-.qp-3d.student-3d{
-  background: linear-gradient(135deg,#ff9800,#ff5722) !important;
-  color:#fff !important;
-
-  /* 3D base */
-  transform-style: preserve-3d;
-  perspective: 1200px;
-
-  /* depth shadow */
-  box-shadow:
-    0 10px 0 #c2410c,
-    0 22px 40px rgba(0,0,0,.35);
-
-  /* force animation */
-  animation: studentFloat3D 3.5s ease-in-out infinite !important;
+/* ===== STUDENT INSTALL BUTTON (Quick Portal Style) ===== */
+.student-3d{
+  background: linear-gradient(135deg,#ff9800,#ff5722);
+  box-shadow: 0 18px 40px rgba(255,87,34,0.30);
 }
 
-/* text */
-.qp-3d.student-3d .face,
-.qp-3d.student-3d .ico{
-  color:#fff !important;
-  font-weight:900;
+.student-3d::after{
+  background: linear-gradient(
+    90deg,
+    rgba(255,152,0,0.30),
+    rgba(255,87,34,0.15)
+  );
+  transform: translateY(6px) scale(1.02);
 }
 
-/* floating animation */
-@keyframes studentFloat3D{
-  0%{
-    transform: translateY(0) rotateX(0deg);
-  }
-  50%{
-    transform: translateY(-10px) rotateX(12deg);
-  }
-  100%{
-    transform: translateY(0) rotateX(0deg);
-  }
+/* floating animation – like others */
+@keyframes studentFloat{
+  0%{transform: translateY(0)}
+  50%{transform: translateY(-8px) translateZ(10px)}
+  100%{transform: translateY(0)}
 }
 
-/* hover = tilt */
-.qp-3d.student-3d:hover{
-  transform: translateY(-14px) rotateX(18deg) rotateY(-10deg) scale(1.06) !important;
-  box-shadow:
-    0 14px 0 #9a3412,
-    0 40px 70px rgba(0,0,0,.45);
+.student-3d.idle{
+  animation: studentFloat 4.4s ease-in-out infinite;
 }
 
-/* active press */
-.qp-3d.student-3d:active{
-  transform: translateY(-4px) scale(.98) !important;
-  box-shadow:
-    0 6px 0 #9a3412,
-    0 16px 26px rgba(0,0,0,.35);
+/* hover effect */
+.student-3d:hover{
+  transform: translateY(-10px) scale(1.04);
+  box-shadow: 0 34px 64px rgba(255,87,34,0.45);
 }
 
 <script>
