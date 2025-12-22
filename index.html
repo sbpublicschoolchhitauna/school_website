@@ -433,41 +433,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </a>
   </div>
 
-<a href="javascript:void(0)"
-   id="installAppBtn"
-   class="btn-3d-install">
-  <span class="btn-face">
-    <span class="btn-icon">📲</span>
-    <span class="btn-text">Student App Install</span>
-  </span>
-</a>
-
-<script>
-let deferredPrompt = null;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-document.getElementById("installAppBtn").addEventListener("click", () => {
-
-  // अगर Chrome install allow कर रहा है
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-  } 
-  // अगर Chrome allow नहीं कर रहा
-  else {
-    alert(
-      "App install करने के लिए:\n" +
-      "Chrome Menu (⋮) खोलें\n" +
-      "→ Install App पर tap करें"
-    );
-  }
-});
-</script>
-
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
