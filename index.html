@@ -434,7 +434,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <!-- 🔹 4th Quick Portal : Install App -->
-<button class="qp-3d install-3d idle" id="installAppBtn" type="button">
+<button class="qp-3d install-3d idle" id="installAppBtn" style="display:none">
   <span class="face">
     <span class="ico">📲</span>
     Install App
@@ -1672,30 +1672,42 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 </script>
-<script>
-let deferredPrompt = null;
 
+<script>
+let deferredPrompt;
+
+// Chrome install event
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  document.getElementById('installAppBtn').style.display = 'inline-flex';
+
+  // अब button दिखाओ
+  const btn = document.getElementById('installAppBtn');
+  if (btn) btn.style.display = 'inline-flex';
 });
 
+// Button click
 document.getElementById('installAppBtn').addEventListener('click', async () => {
   if (!deferredPrompt) {
-    alert("⚠️ App पहले से Install है या Chrome अनुमति नहीं दे रहा।");
+    alert("❌ App install अभी available नहीं है");
     return;
   }
+
   deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  if (outcome === 'accepted') {
+  const result = await deferredPrompt.userChoice;
+
+  if (result.outcome === 'accepted') {
     console.log('✅ App Installed');
+  } else {
+    console.log('❌ User cancelled');
   }
+
   deferredPrompt = null;
 });
 
+// After install
 window.addEventListener('appinstalled', () => {
-  alert("🎉 S.B. Public School App सफलतापूर्वक Install हो गया!");
+  alert("🎉 S.B. Public School App Install हो गया!");
 });
 </script>
 
