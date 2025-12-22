@@ -434,12 +434,14 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <!-- 🔹 4th Quick Portal : Install App -->
-<button class="qp-3d install-3d idle" id="installAppBtn" style="display:none">
+<a class="qp-3d install-3d idle"
+   id="installAppBtn"
+   href="javascript:void(0)">
   <span class="face">
     <span class="ico">📲</span>
     Install App
   </span>
-</button>
+</a>
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -1674,41 +1676,35 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </script>
 
 <script>
-let deferredPrompt;
+document.getElementById("installAppBtn").addEventListener("click", function () {
 
-// Chrome install event
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
+  // Chrome only check
+  if (!window.matchMedia('(display-mode: standalone)').matches) {
 
-  // अब button दिखाओ
-  const btn = document.getElementById('installAppBtn');
-  if (btn) btn.style.display = 'inline-flex';
-});
+    alert(
+      "📲 App Install करने के लिए:\n\n" +
+      "1️⃣ Chrome के ऊपर 3 dots दबाएँ\n" +
+      "2️⃣ 'Add to Home screen' चुनें\n" +
+      "3️⃣ Install दबाएँ\n\n" +
+      "✅ App Home Screen पर आ जाएगा"
+    );
 
-// Button click
-document.getElementById('installAppBtn').addEventListener('click', async () => {
-  if (!deferredPrompt) {
-    alert("❌ App install अभी available नहीं है");
-    return;
-  }
-
-  deferredPrompt.prompt();
-  const result = await deferredPrompt.userChoice;
-
-  if (result.outcome === 'accepted') {
-    console.log('✅ App Installed');
   } else {
-    console.log('❌ User cancelled');
+    alert("✅ App पहले से Install है");
   }
 
-  deferredPrompt = null;
 });
 
-// After install
-window.addEventListener('appinstalled', () => {
-  alert("🎉 S.B. Public School App Install हो गया!");
-});
+.install-3d{
+  background: linear-gradient(135deg,#00e676,#00c853);
+  color:#fff;
+  box-shadow:0 14px 30px rgba(0,200,83,.35);
+}
+.install-3d:hover{
+  transform:translateY(-8px) scale(1.05);
+  box-shadow:0 30px 60px rgba(0,200,83,.45);
+}
+
 </script>
 
 </body>
