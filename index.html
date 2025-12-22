@@ -1650,73 +1650,23 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 
-/* ===== STUDENT INSTALL 3D BUTTON ===== */
-.student-install-3d{
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
-  padding: 16px 26px;
-  font-size: 17px;
-  font-weight: 900;
-  letter-spacing: .5px;
-
-  color: #fff;
+/* INSTALL APP 3D BUTTON */
+.install-3d{
   background: linear-gradient(135deg,#ffb703,#ff7b00);
-  border: none;
-  border-radius: 18px;
-  cursor: pointer;
-
-  transform-style: preserve-3d;
-  perspective: 800px;
-
-  box-shadow:
-    0 10px 0 #c25a00,
-    0 22px 38px rgba(0,0,0,.35);
-
-  animation: studentFloat 3.5s ease-in-out infinite;
-  transition: transform .25s ease, box-shadow .25s ease;
+  color:#fff;
+  border:none;
+  box-shadow: 0 12px 0 #c25a00, 0 30px 45px rgba(0,0,0,.35);
+  animation: installFloat 3s infinite;
 }
 
-/* 🎓 icon bubble */
-.student-install-3d .icon{
-  font-size: 22px;
-  background: rgba(255,255,255,.2);
-  padding: 6px 10px;
-  border-radius: 12px;
+@keyframes installFloat{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
 }
 
-/* floating motion */
-@keyframes studentFloat{
-  0%{transform: translateY(0) rotateX(0deg);}
-  50%{transform: translateY(-8px) rotateX(6deg);}
-  100%{transform: translateY(0) rotateX(0deg);}
-}
-
-/* hover 3D tilt */
-.student-install-3d:hover{
-  transform: translateY(-12px) rotateX(12deg) rotateY(-8deg) scale(1.06);
-  box-shadow:
-    0 14px 0 #a94e00,
-    0 40px 70px rgba(0,0,0,.45);
-}
-
-/* click press */
-.student-install-3d:active{
-  transform: translateY(-2px) scale(.98);
-  box-shadow:
-    0 6px 0 #a94e00,
-    0 14px 26px rgba(0,0,0,.35);
-}
-
-/* mobile full width */
-@media(max-width:640px){
-  .student-install-3d{
-    width: 100%;
-    justify-content: center;
-  }
+.install-3d:hover{
+  transform:translateY(-10px) scale(1.05);
 }
 
 <script>
