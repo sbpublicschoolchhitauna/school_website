@@ -1,66 +1,6 @@
 <!doctype html>
 <html lang="hi">
 <head>
-
-<style>
-/* ===== 3D INSTALL BUTTON ===== */
-.btn-3d-install{
-  display:inline-block;
-  text-decoration:none;
-  perspective:1000px;
-  margin:10px;
-}
-
-.btn-face{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-
-  padding:15px 26px;
-  border-radius:18px;
-
-  background:linear-gradient(135deg,#00e676,#00c853);
-  color:#fff;
-  font-weight:900;
-  font-size:16px;
-
-  box-shadow:
-    0 10px 0 #009624,
-    0 22px 40px rgba(0,0,0,.30);
-
-  animation:float3d 3s ease-in-out infinite;
-  transition:.25s ease;
-}
-
-/* Floating animation */
-@keyframes float3d{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-  100%{transform:translateY(0)}
-}
-
-/* Press effect */
-.btn-3d-install:active .btn-face{
-  transform:translateY(6px);
-  box-shadow:
-    0 4px 0 #009624,
-    0 10px 18px rgba(0,0,0,.25);
-  animation:none;
-}
-
-/* Icon pulse */
-.btn-icon{
-  font-size:22px;
-  animation:pulseIcon 1.8s infinite;
-}
-
-@keyframes pulseIcon{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.15)}
-}
-</style>
-
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>S.B. Public School Chhitauna — Student Portal</title>
@@ -492,17 +432,23 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
   </div>
-
-<!-- 🔹 Student App Install Button (3D Animated) -->
+<!-- Student App Install Button -->
 <a href="javascript:void(0)"
    id="installAppBtn"
-   class="btn-3d-install">
-  <span class="btn-face">
-    <span class="btn-icon">📲</span>
-    <span class="btn-text">Student App Install</span>
-  </span>
+   style="
+     display:inline-block;
+     padding:16px 26px;
+     margin:10px;
+     border-radius:18px;
+     font-weight:900;
+     font-size:16px;
+     color:#fff;
+     background:linear-gradient(135deg,#00e676,#00c853);
+     box-shadow:0 10px 0 #009624,0 22px 40px rgba(0,0,0,.3);
+     text-decoration:none;
+   ">
+  📲 Student App Install
 </a>
-
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -1711,89 +1657,32 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 </script>
-<!-- 🔹 Install Popup -->
-<div id="installPopup" class="install-popup">
-  <div class="install-card">
-    <h3>📲 App Install</h3>
-    <p>School Mobile App install करना चाहते हैं?</p>
-    <div class="install-actions">
-      <button id="installYes">Install</button>
-      <button id="installNo">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<style>
-.install-popup{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.6);
-  z-index:99999;
-}
-.install-card{
-  background:#fff;
-  padding:22px;
-  border-radius:18px;
-  width:90%;
-  max-width:320px;
-  text-align:center;
-  animation:popIn .3s ease;
-}
-@keyframes popIn{
-  from{transform:scale(.85);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-.install-actions{
-  margin-top:16px;
-  display:flex;
-  gap:12px;
-  justify-content:center;
-}
-.install-actions button{
-  border:none;
-  padding:10px 18px;
-  border-radius:10px;
-  font-weight:800;
-}
-#installYes{background:#00c853;color:#fff}
-</style>
-
 <script>
 let deferredPrompt = null;
 
-// Chrome install allow kare tab
-window.addEventListener("beforeinstallprompt",(e)=>{
+// Chrome jab install allow kare tab
+window.addEventListener("beforeinstallprompt", function (e) {
   e.preventDefault();
   deferredPrompt = e;
+  console.log("PWA install allowed");
 });
 
-// Button click → popup
-document.getElementById("installAppBtn").addEventListener("click", ()=>{
-  document.getElementById("installPopup").style.display="flex";
-});
+// Button click
+document.getElementById("installAppBtn").addEventListener("click", function () {
 
-// Cancel
-document.getElementById("installNo").addEventListener("click", ()=>{
-  document.getElementById("installPopup").style.display="none";
-});
-
-// Install
-document.getElementById("installYes").addEventListener("click", async ()=>{
-  document.getElementById("installPopup").style.display="none";
-
-  if(deferredPrompt){
+  if (deferredPrompt) {
+    // Chrome ka official install popup
     deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
     deferredPrompt = null;
-  }else{
+  } else {
     alert(
-      "Chrome Menu (⋮) खोलें\n" +
-      "→ Install App पर tap करें"
+      "App install करने के लिए:\n\n" +
+      "1️⃣ Chrome browser खोलें\n" +
+      "2️⃣ Menu (⋮) पर tap करें\n" +
+      "3️⃣ Install App चुनें"
     );
   }
+
 });
 </script>
 
