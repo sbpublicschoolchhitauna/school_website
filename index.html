@@ -1652,27 +1652,61 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 
-/* ===== STUDENT INSTALL BUTTON FINAL COLOR FIX ===== */
-.student-3d{
-  background: linear-gradient(135deg, #ff9800, #ff5722) !important;
-  color: #ffffff !important;
-  border-radius: 16px;
-  font-weight: 900;
+/* ===============================
+   STUDENT INSTALL – FORCE 3D
+================================ */
+
+.qp-3d.student-3d{
+  background: linear-gradient(135deg,#ff9800,#ff5722) !important;
+  color:#fff !important;
+
+  /* 3D base */
+  transform-style: preserve-3d;
+  perspective: 1200px;
+
+  /* depth shadow */
+  box-shadow:
+    0 10px 0 #c2410c,
+    0 22px 40px rgba(0,0,0,.35);
+
+  /* force animation */
+  animation: studentFloat3D 3.5s ease-in-out infinite !important;
 }
 
-.student-3d .face,
-.student-3d .ico{
-  color: #ffffff !important;
+/* text */
+.qp-3d.student-3d .face,
+.qp-3d.student-3d .ico{
+  color:#fff !important;
+  font-weight:900;
 }
 
-/* hover effect */
-.student-3d:hover{
-  background: linear-gradient(135deg, #ff5722, #ff9800) !important;
+/* floating animation */
+@keyframes studentFloat3D{
+  0%{
+    transform: translateY(0) rotateX(0deg);
+  }
+  50%{
+    transform: translateY(-10px) rotateX(12deg);
+  }
+  100%{
+    transform: translateY(0) rotateX(0deg);
+  }
 }
 
-/* active (press) effect */
-.student-3d:active{
-  transform: scale(0.97);
+/* hover = tilt */
+.qp-3d.student-3d:hover{
+  transform: translateY(-14px) rotateX(18deg) rotateY(-10deg) scale(1.06) !important;
+  box-shadow:
+    0 14px 0 #9a3412,
+    0 40px 70px rgba(0,0,0,.45);
+}
+
+/* active press */
+.qp-3d.student-3d:active{
+  transform: translateY(-4px) scale(.98) !important;
+  box-shadow:
+    0 6px 0 #9a3412,
+    0 16px 26px rgba(0,0,0,.35);
 }
 
 <script>
