@@ -1,9 +1,20 @@
-const CACHE_NAME="sbpsc-color-v9";
-self.addEventListener("install",e=>self.skipWaiting());
-self.addEventListener("activate",e=>{
- e.waitUntil(caches.keys().then(k=>Promise.all(k.map(x=>x!==CACHE_NAME&&caches.delete(x)))));
- self.clients.claim();
+const CACHE_NAME = "sbpsc-student-install-v11";
+
+self.addEventListener("install", event => {
+  self.skipWaiting();
 });
-self.addEventListener("fetch",e=>{
- e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match(event.request))
+  );
 });
