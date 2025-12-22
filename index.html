@@ -1676,45 +1676,43 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-(function(){
+alert("JS loaded OK");   // 🔥 यह दिखना ही चाहिए
 
-  let deferredPrompt = null;
+let deferredPrompt = null;
 
-  // Catch install event
-  window.addEventListener("beforeinstallprompt", function(e){
-    e.preventDefault();
-    deferredPrompt = e;
-    console.log("✅ Install prompt captured");
-  });
+// Capture install prompt
+window.addEventListener("beforeinstallprompt", function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  alert("Install prompt ready");  // 🔥 Chrome ने allow किया
+});
 
-  // Ensure button click works
-  window.addEventListener("load", function(){
+// Button click
+window.addEventListener("load", function(){
 
-    const btn = document.getElementById("studentInstallBtn");
+  const btn = document.getElementById("studentInstallBtn");
 
-    if(!btn){
-      alert("❌ Student Install Button नहीं मिला");
-      return;
+  if(!btn){
+    alert("Button NOT found");
+    return;
+  }
+
+  btn.addEventListener("click", async function(){
+    alert("Button clicked");   // 🔥 यह तो 100% आएगा
+
+    if(deferredPrompt){
+      deferredPrompt.prompt();   // popup
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    } else {
+      alert(
+        "Popup available nahi hai.\n\n" +
+        "Chrome ke 3 dots (⋮) → Install App"
+      );
     }
-
-    btn.addEventListener("click", async function(){
-      alert("✅ Student button clicked");
-
-      if(deferredPrompt){
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-      } else {
-        alert(
-          "⚠️ Install popup अभी available नहीं है.\n\n" +
-          "Chrome के 3 dots (⋮) → Install App चुनें"
-        );
-      }
-    });
-
   });
 
-})();
+});
 </script>
 
 </body>
