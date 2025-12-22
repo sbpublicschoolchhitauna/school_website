@@ -4,7 +4,7 @@
 
 <!-- PWA REQUIRED -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b5fa8">
+
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -1671,31 +1671,26 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
-installBtn.style.display = "none";
+let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  installBtn.style.display = "inline-flex";
 });
 
-installBtn.addEventListener("click", async () => {
-  if (!deferredPrompt) {
-    alert("App पहले से Install है या Chrome support नहीं कर रहा");
-    return;
+document.getElementById("studentInstallBtn").addEventListener("click", async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();   // ✅ यही popup खोलेगा
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  } else {
+    alert(
+      "Install करने के लिए:\n\n" +
+      "Chrome के ऊपर 3 डॉट (⋮) पर जाएँ\n" +
+      "➡️ Install App चुनें"
+    );
   }
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  installBtn.style.display = "none";
 });
-
-// Service Worker
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
 </script>
 
 </body>
