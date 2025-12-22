@@ -433,6 +433,15 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </a>
   </div>
 
+<a class="qp-3d install-3d idle"
+   href="javascript:void(0)"
+   id="installAppBtn">
+  <span class="face">
+    <span class="ico">📲</span>
+    Student App Install
+  </span>
+</a>
+
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -1639,6 +1648,30 @@ html, body { max-width: 100%; overflow-x: hidden; }
     playVideo(index);
   });
 })();
+</script>
+
+<script>
+let deferredPrompt = null;
+
+// Chrome jab install allow kare
+window.addEventListener("beforeinstallprompt", (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+// Button click
+document.getElementById("installAppBtn").addEventListener("click", ()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+  }else{
+    alert(
+      "App install करने के लिए:\n" +
+      "Chrome Menu (⋮) खोलें\n" +
+      "→ Install App पर tap करें"
+    );
+  }
+});
 </script>
 
 </body>
