@@ -432,23 +432,14 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
   </div>
-<!-- Student App Install Button -->
-<a href="javascript:void(0)"
-   id="installAppBtn"
-   style="
-     display:inline-block;
-     padding:16px 26px;
-     margin:10px;
-     border-radius:18px;
-     font-weight:900;
-     font-size:16px;
-     color:#fff;
-     background:linear-gradient(135deg,#00e676,#00c853);
-     box-shadow:0 10px 0 #009624,0 22px 40px rgba(0,0,0,.3);
-     text-decoration:none;
-   ">
-  📲 Student App Install
-</a>
+
+<!-- 🔹 4th Quick Portal : Install App -->
+<button class="qp-3d install-3d idle" id="installAppBtn" type="button">
+  <span class="face">
+    <span class="ico">📲</span>
+    Install App
+  </span>
+</button>
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -1656,49 +1647,57 @@ html, body { max-width: 100%; overflow-x: hidden; }
     playVideo(index);
   });
 })();
+
+/* ===== INSTALL APP 3D BUTTON ===== */
+.install-3d{
+  background: linear-gradient(135deg,#00e676,#00c853);
+  box-shadow: 0 14px 34px rgba(0,200,83,.35);
+  color:#fff;
+}
+.install-3d::after{
+  background: linear-gradient(90deg, rgba(0,200,83,.35), rgba(0,255,150,.15));
+  transform: translateY(6px) scale(1.03);
+}
+@keyframes installPulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+.install-3d.idle{
+  animation: installPulse 3s ease-in-out infinite;
+}
+.install-3d:hover{
+  transform: translateY(-10px) scale(1.06);
+  box-shadow:0 36px 70px rgba(0,200,83,.45);
+}
+
 </script>
 <script>
 let deferredPrompt = null;
 
-// Chrome jab install allow kare tab
-window.addEventListener("beforeinstallprompt", function (e) {
+window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  console.log("PWA install allowed");
+  document.getElementById('installAppBtn').style.display = 'inline-flex';
 });
 
-// Button click
-document.getElementById("installAppBtn").addEventListener("click", function () {
-
-  if (deferredPrompt) {
-    // Chrome ka official install popup
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-  } else {
-    alert(
-      "App install करने के लिए:\n\n" +
-      "1️⃣ Chrome browser खोलें\n" +
-      "2️⃣ Menu (⋮) पर tap करें\n" +
-      "3️⃣ Install App चुनें"
-    );
+document.getElementById('installAppBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) {
+    alert("⚠️ App पहले से Install है या Chrome अनुमति नहीं दे रहा।");
+    return;
   }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    console.log('✅ App Installed');
+  }
+  deferredPrompt = null;
+});
 
+window.addEventListener('appinstalled', () => {
+  alert("🎉 S.B. Public School App सफलतापूर्वक Install हो गया!");
 });
 </script>
-<button id="installAppBtn"
-style="
-  padding:18px 28px;
-  font-size:17px;
-  font-weight:900;
-  border:none;
-  border-radius:18px;
-  cursor:pointer;
-  color:#fff;
-  background:linear-gradient(135deg,#00e676,#00c853);
-  box-shadow:0 10px 0 #009624,0 22px 40px rgba(0,0,0,.3);
-">
-📲 Student App Install
-</button>
 
 </body>
 </html>
