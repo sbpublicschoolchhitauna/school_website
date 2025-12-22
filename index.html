@@ -433,21 +433,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </a>
   </div>
 
-<!-- 🔹 4th Quick Portal : Install App -->
-<button id="installTestBtn"
-  style="
-    padding:16px 26px;
-    border-radius:16px;
-    font-size:16px;
-    font-weight:900;
-    background:#00c853;
-    color:#fff;
-    border:none;
-    cursor:pointer;
-  ">
-  📲 Install App
-</button>
-
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -1654,67 +1639,5 @@ html, body { max-width: 100%; overflow-x: hidden; }
     playVideo(index);
   });
 })();
-
-/* ===== INSTALL APP 3D BUTTON ===== */
-.install-3d{
-  background: linear-gradient(135deg,#00e676,#00c853);
-  box-shadow: 0 14px 34px rgba(0,200,83,.35);
-  color:#fff;
-}
-.install-3d::after{
-  background: linear-gradient(90deg, rgba(0,200,83,.35), rgba(0,255,150,.15));
-  transform: translateY(6px) scale(1.03);
-}
-@keyframes installPulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.05)}
-  100%{transform:scale(1)}
-}
-.install-3d.idle{
-  animation: installPulse 3s ease-in-out infinite;
-}
-.install-3d:hover{
-  transform: translateY(-10px) scale(1.06);
-  box-shadow:0 36px 70px rgba(0,200,83,.45);
-}
-
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  var btn = document.getElementById("installTestBtn");
-
-  if (!btn) {
-    alert("❌ Install Button मिला ही नहीं");
-    return;
-  }
-
-  btn.addEventListener("click", function () {
-    alert("✅ Button Click Working");
-  });
-
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  var btn = document.getElementById("installTestBtn");
-
-  btn.addEventListener("click", function () {
-
-    alert(
-      "📲 App Install करने के लिए:\n\n" +
-      "1️⃣ Chrome के ऊपर 3 dots दबाएँ\n" +
-      "2️⃣ Add to Home screen चुनें\n" +
-      "3️⃣ Install दबाएँ"
-    );
-
-  });
-
-});
-</script>
-
 </body>
 </html>
