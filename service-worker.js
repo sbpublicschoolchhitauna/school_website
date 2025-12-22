@@ -1,4 +1,4 @@
-const CACHE_NAME="sbpsc-icon-v7";
+const CACHE_NAME="sbpsc-icon-v8";
 self.addEventListener("install",e=>self.skipWaiting());
 self.addEventListener("activate",e=>{
  e.waitUntil(caches.keys().then(k=>Promise.all(k.map(x=>x!==CACHE_NAME&&caches.delete(x)))));

@@ -1,19 +1,19 @@
 {
   "name": "S.B. Public School Chhitauna",
   "short_name": "SBPSC",
-  "start_url": "/school_website/?v=7",
+  "start_url": "/school_website/?v=8",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#0b5fa8",
   "theme_color": "#0b5fa8",
   "icons": [
     {
-      "src": "icon-192.png?v=7",
+      "src": "icon-192.png?v=8",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png?v=7",
+      "src": "icon-512.png?v=8",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
