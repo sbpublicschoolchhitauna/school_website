@@ -1652,22 +1652,27 @@ html, body { max-width: 100%; overflow-x: hidden; }
   });
 })();
 
-/* === FORCE STUDENT INSTALL BUTTON VISIBILITY === */
+/* ===== STUDENT INSTALL BUTTON FINAL COLOR FIX ===== */
 .student-3d{
-  background: linear-gradient(135deg,#ff9800,#ff5722) !important;
+  background: linear-gradient(135deg, #ff9800, #ff5722) !important;
   color: #ffffff !important;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: 9999;
+  border-radius: 16px;
+  font-weight: 900;
 }
 
 .student-3d .face,
 .student-3d .ico{
-  color:#ffffff !important;
-  font-weight:900;
+  color: #ffffff !important;
+}
+
+/* hover effect */
+.student-3d:hover{
+  background: linear-gradient(135deg, #ff5722, #ff9800) !important;
+}
+
+/* active (press) effect */
+.student-3d:active{
+  transform: scale(0.97);
 }
 
 <script>
