@@ -434,14 +434,19 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <!-- 🔹 4th Quick Portal : Install App -->
-<a class="qp-3d install-3d idle"
-   id="installAppBtn"
-   href="javascript:void(0)">
-  <span class="face">
-    <span class="ico">📲</span>
-    Install App
-  </span>
-</a>
+<button id="installTestBtn"
+  style="
+    padding:16px 26px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:900;
+    background:#00c853;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+  ">
+  📲 Install App
+</button>
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -1676,35 +1681,39 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </script>
 
 <script>
-document.getElementById("installAppBtn").addEventListener("click", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-  // Chrome only check
-  if (!window.matchMedia('(display-mode: standalone)').matches) {
+  var btn = document.getElementById("installTestBtn");
+
+  if (!btn) {
+    alert("❌ Install Button मिला ही नहीं");
+    return;
+  }
+
+  btn.addEventListener("click", function () {
+    alert("✅ Button Click Working");
+  });
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  var btn = document.getElementById("installTestBtn");
+
+  btn.addEventListener("click", function () {
 
     alert(
       "📲 App Install करने के लिए:\n\n" +
       "1️⃣ Chrome के ऊपर 3 dots दबाएँ\n" +
-      "2️⃣ 'Add to Home screen' चुनें\n" +
-      "3️⃣ Install दबाएँ\n\n" +
-      "✅ App Home Screen पर आ जाएगा"
+      "2️⃣ Add to Home screen चुनें\n" +
+      "3️⃣ Install दबाएँ"
     );
 
-  } else {
-    alert("✅ App पहले से Install है");
-  }
+  });
 
 });
-
-.install-3d{
-  background: linear-gradient(135deg,#00e676,#00c853);
-  color:#fff;
-  box-shadow:0 14px 30px rgba(0,200,83,.35);
-}
-.install-3d:hover{
-  transform:translateY(-8px) scale(1.05);
-  box-shadow:0 30px 60px rgba(0,200,83,.45);
-}
-
 </script>
 
 </body>
