@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="hi">
 <head>
+
+<!-- PWA REQUIRED -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b5fa8">
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>S.B. Public School Chhitauna — Student Portal</title>
@@ -432,6 +437,12 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       <span class="face"><span class="ico">👨‍🏫</span>Teacher Login</span>
     </a>
   </div>
+
+<button id="installBtn" class="qp-3d install-3d">
+  <span class="face">
+    <span class="ico">⬇️</span> Install App
+  </span>
+</button>
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -1639,5 +1650,53 @@ html, body { max-width: 100%; overflow-x: hidden; }
     playVideo(index);
   });
 })();
+
+/* INSTALL APP 3D BUTTON */
+.install-3d{
+  background: linear-gradient(135deg,#ffb703,#ff7b00);
+  color:#fff;
+  border:none;
+  box-shadow: 0 12px 0 #c25a00, 0 30px 45px rgba(0,0,0,.35);
+  animation: installFloat 3s infinite;
+}
+
+@keyframes installFloat{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
+}
+
+.install-3d:hover{
+  transform:translateY(-10px) scale(1.05);
+}
+
+<script>
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+installBtn.style.display = "none";
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "inline-flex";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    alert("App पहले से Install है या Chrome support नहीं कर रहा");
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+// Service Worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
 </body>
 </html>
