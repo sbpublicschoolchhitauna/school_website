@@ -1710,32 +1710,28 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-let deferredPrompt = null;
+/* ===== FORCE STUDENT INSTALL CLICK ===== */
+(function () {
 
-/* capture install event */
-window.addEventListener("beforeinstallprompt", e => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
+  let deferredPrompt = null;
 
-/* register service worker */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
+  // capture PWA install event (कहीं भी body हो)
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
 
-/* button click */
-window.addEventListener("load", () => {
+  // GLOBAL CLICK LISTENER (force)
+  document.addEventListener("click", async function (e) {
 
-  const btn = document.getElementById("studentInstallBtn");
-  if (!btn) {
-    alert("Student button not found");
-    return;
-  }
+    // किसी भी जगह student button मिले तो
+    const btn = e.target.closest("#studentInstallBtn");
+    if (!btn) return;
 
-  btn.addEventListener("click", async () => {
+    e.preventDefault();
+    e.stopPropagation();
 
-    // click confirmation (IMPORTANT)
-    alert("Student Install button clicked");
+    alert("Student Install Button CLICKED ✅");
 
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -1743,14 +1739,13 @@ window.addEventListener("load", () => {
       deferredPrompt = null;
     } else {
       alert(
-        "Install popup Chrome ne block kar diya hai.\n\n" +
-        "Install karne ke liye:\n" +
+        "Install popup Chrome ne block kar diya.\n\n" +
         "Chrome ke 3 dots (⋮) → Install App / Add to Home Screen"
       );
     }
-  });
+  }, true); // 🔥 capture mode
 
-});
+})();
 </script>
 
 </body>
