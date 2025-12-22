@@ -439,10 +439,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <button id="studentInstallBtn" class="qp-3d student-3d idle" type="button">
-  <span class="face">
-    <span class="ico">🎓</span>
-    Student Install App
-  </span>
+  <span class="face"><span class="ico">🎓</span>Student App</span>
 </button>
 
   <!-- START: Quick Portals + Video column (inserted) -->
@@ -1709,38 +1706,39 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-alert("JS loaded OK");   // 🔥 यह दिखना ही चाहिए
+console.log("Student Install JS loaded");
 
 let deferredPrompt = null;
 
-// Capture install prompt
-window.addEventListener("beforeinstallprompt", function(e){
+// Chrome install event
+window.addEventListener("beforeinstallprompt", function (e) {
   e.preventDefault();
   deferredPrompt = e;
-  alert("Install prompt ready");  // 🔥 Chrome ने allow किया
+  console.log("Install prompt captured");
 });
 
-// Button click
-window.addEventListener("load", function(){
+// DOM ready
+window.addEventListener("DOMContentLoaded", function () {
 
   const btn = document.getElementById("studentInstallBtn");
 
-  if(!btn){
-    alert("Button NOT found");
+  if (!btn) {
+    alert("❌ studentInstallBtn button nahi mila");
     return;
   }
 
-  btn.addEventListener("click", async function(){
-    alert("Button clicked");   // 🔥 यह तो 100% आएगा
+  // CLICK TEST
+  btn.addEventListener("click", async function () {
+    alert("✅ Student Install Button clicked");
 
-    if(deferredPrompt){
-      deferredPrompt.prompt();   // popup
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       deferredPrompt = null;
     } else {
       alert(
-        "Popup available nahi hai.\n\n" +
-        "Chrome ke 3 dots (⋮) → Install App"
+        "Install popup abhi available nahi hai.\n\n" +
+        "Chrome ke 3 dots (⋮) → Install App / Add to Home Screen"
       );
     }
   });
