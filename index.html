@@ -1716,33 +1716,35 @@ html, body { max-width: 100%; overflow-x: hidden; }
 <script>
 let deferredPrompt = null;
 
-// Chrome install eligibility
+// Chrome install availability
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
 });
 
-// Student button click
+// Button click
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest("#studentInstallBtn");
   if (!btn) return;
 
   e.preventDefault();
 
-  // 🔔 CLICK CONFIRM (जरूरी)
-  alert("Install Student App");
+  // 🔔 STEP 1: Permission-like confirmation
+  const allow = confirm(
+    "क्या आप S.B. Public School का Student App install करना चाहते हैं?"
+  );
 
+  if (!allow) return;
+
+  // 🔔 STEP 2: Real Install popup
   if (deferredPrompt) {
-    // ✅ Chrome allowed popup
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
     deferredPrompt = null;
   } else {
-    // ⚠️ Chrome blocked popup
     alert(
-      "Install करने के लिए:\n\n" +
-      "1️⃣ Chrome के ऊपर 3 डॉट (⋮) दबाएँ\n" +
-      "2️⃣ Install App / Add to Home Screen चुनें"
+      "Install popup अभी उपलब्ध नहीं है.\n\n" +
+      "Chrome के 3 डॉट (⋮) → Install App / Add to Home Screen चुनें"
     );
   }
 });
