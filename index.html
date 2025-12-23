@@ -748,15 +748,7 @@ async function searchStudent(){
       out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
       return;
     }
-// ✅ STUDENT NAME CONFIRM (AUTO SAFE)
-confirmStudent(
-  rec["Student Name"] || rec["Name"],
-  rec["Class"]
-);
 
-// ✅ DOB SAVE (Birthday / Age calculation के लिए)
-localStorage.studentDOB_FULL =
-  rec["Date of Birth"] || rec["DOB"];
     const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
     let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
     fields.forEach(f=>{
@@ -1785,5 +1777,6 @@ html, body { max-width: 100%; overflow-x: hidden; }
 
 <!-- ✅ NAME CONFIRM (यह सबसे नीचे होना चाहिए) -->
 <script src="greeting/name-confirm.js"></script>
+
 </body>
 </html>
