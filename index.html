@@ -490,6 +490,17 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </span>
 </button>
 
+<!-- AUTO PROMOTION AD -->
+<div class="auto-ad" id="autoAd">
+  <span class="close-ad" onclick="closeAd()">✖</span>
+  <div class="ad-track" id="adTrack">
+    <div class="ad-item">🎓 ADMISSION OPEN 2026–27 — Apply Now</div>
+    <div class="ad-item">💻 Smart Classes | Online Fee | Online Result</div>
+    <div class="ad-item">📱 Student App Available — Install Now</div>
+    <div class="ad-item">📞 Contact: 6389259200 — Limited Seats</div>
+  </div>
+</div>
+
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -1753,6 +1764,46 @@ html, body { max-width: 100%; overflow-x: hidden; }
     0 18px 28px rgba(0,0,0,.45);
 }
 
+.auto-ad{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(90deg,#ff9f1c,#ffbf69);
+  color:#2b1700;
+  font-weight:900;
+  padding:14px 40px 14px 14px;
+  margin:12px auto;
+  max-width:1100px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.ad-track{
+  display:flex;
+  animation:adSlide 16s linear infinite;
+}
+
+.ad-item{
+  min-width:100%;
+  text-align:center;
+  font-size:16px;
+}
+
+@keyframes adSlide{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-100%)}
+  50%{transform:translateX(-200%)}
+  75%{transform:translateX(-300%)}
+  100%{transform:translateX(0)}
+}
+
+.close-ad{
+  position:absolute;
+  right:12px;
+  top:8px;
+  cursor:pointer;
+  font-size:18px;
+}
+
 /* ===== FORCE FOOTER STYLE (FINAL FIX) ===== */
 .footer{
   background: linear-gradient(90deg, #0b3c6f, #0b5fa8) !important;
@@ -1767,6 +1818,12 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
+
+<script>
+function closeAd(){
+  document.getElementById("autoAd").style.display="none";
+}
+</script>
 
 </body>
 </html>
