@@ -1714,45 +1714,37 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 <script>
-let deferredPrompt = null;
+(function () {
 
-// Capture install eligibility
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
+  let deferredPrompt = null;
 
-// Button click
-document.addEventListener("click", async (e) => {
-  const btn = e.target.closest("#studentInstallBtn");
-  if (!btn) return;
+  // Capture PWA install availability
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
 
-  e.preventDefault();
+  // Force click handler (safe)
+  document.addEventListener("click", async function (e) {
+    const btn = e.target.closest("#studentInstallBtn");
+    if (!btn) return;
 
-  // STEP 1: Ask Notification Permission
-  if ("Notification" in window) {
-    if (Notification.permission === "default") {
-      const permission = await Notification.requestPermission();
+    e.preventDefault();
+    e.stopPropagation();
 
-      if (permission !== "granted") {
-        alert("Permission allow करने पर ही App install हो पाएगा");
-        return;
-      }
+    if (deferredPrompt) {
+      deferredPrompt.prompt();           // Install popup
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    } else {
+      alert(
+        "Install popup अभी available नहीं है.\n\n" +
+        "Chrome के 3 dots (⋮) → Install App / Add to Home Screen"
+      );
     }
-  }
+  }, true);
 
-  // STEP 2: Show Install Popup
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  } else {
-    alert(
-      "Install popup अभी उपलब्ध नहीं है.\n\n" +
-      "Chrome के 3 डॉट (⋮) → Install App / Add to Home Screen"
-    );
-  }
-});
+})();
 </script>
 
 </body>
