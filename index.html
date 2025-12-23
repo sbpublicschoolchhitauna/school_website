@@ -748,6 +748,31 @@ async function searchStudent(){
       out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
       return;
     }
+// 🔴 DIRECT CONFIRM (NO EXTRA FILE)
+const studentName =
+  rec["Student Name"] || rec["Name"] || rec["StudentName"];
+
+const studentClass = rec["Class"] || "";
+
+if(studentName){
+  const ok = confirm(
+    "क्या आप यही छात्र हैं?\n\n" +
+    "नाम: " + studentName + "\n" +
+    "Class: " + studentClass
+  );
+
+  if(ok){
+    // ✅ सही छात्र
+    localStorage.studentName = studentName;
+  }else{
+    // ❌ गलत छात्र
+    localStorage.removeItem("studentName");
+  }
+}
+
+// 🎂 DOB SAVE (Birthday / Age के लिए)
+localStorage.studentDOB_FULL =
+  rec["Date of Birth"] || rec["DOB"];
 
     const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
     let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
@@ -1776,7 +1801,6 @@ html, body { max-width: 100%; overflow-x: hidden; }
 <script src="greeting/weather.js"></script>
 
 <!-- ✅ NAME CONFIRM (यह सबसे नीचे होना चाहिए) -->
-<script src="greeting/name-confirm.js"></script>
 
 </body>
 </html>
