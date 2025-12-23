@@ -636,45 +636,8 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       </div>
     </div>
 
-<!-- ===== GOVT STYLE FOOTER ===== -->
-<footer class="govt-footer">
-  <div class="footer-top">
-    <div class="footer-col">
-      <h4>Tenders</h4>
-      <p>Last Updated : <strong>12.11.2025</strong></p>
-      <p>Visitors : <strong id="visitorCount">000123</strong></p>
-    </div>
-
-    <div class="footer-col">
-      <h4>Important Links</h4>
-      <ul>
-        <li><a href="#">Terms & Conditions</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Disclaimer</a></li>
-        <li><a href="#">Contact Us</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <h4>Contact Details</h4>
-      <p>
-        <strong>S.B. PUBLIC SCHOOL</strong><br>
-        Village Chhitauna, Post Meghauli Kala<br>
-        Pin Code – 273305
-      </p>
-    </div>
-
-    <div class="footer-col">
-      <h4>Helpline & Support</h4>
-      <p>📞 6388907639, 6388907627</p>
-      <p>✉ info@suksn.edu.in</p>
-    </div>
+    <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
-
-  <div class="footer-bottom">
-    © 2025 S.B. PUBLIC SCHOOL — All Rights Reserved
-  </div>
-</footer>
 
 <script>
 /* CONFIG */
@@ -1790,64 +1753,20 @@ html, body { max-width: 100%; overflow-x: hidden; }
     0 18px 28px rgba(0,0,0,.45);
 }
 
-/* ===== SUKSN STYLE GOVT FOOTER ===== */
-.govt-footer{
-  background: linear-gradient(90deg,#0b3c6f,#0b5fa8);
-  color:#ffffff;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-top:30px;
+/* ===== FORCE FOOTER STYLE (FINAL FIX) ===== */
+.footer{
+  background: linear-gradient(90deg, #0b3c6f, #0b5fa8) !important;
+  color: #ffffff !important;
+  padding: 16px 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  margin-top: 20px !important;
 }
 
-.footer-top{
-  max-width:1200px;
-  margin:auto;
-  padding:25px 15px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
+.footer *{
+  color:#ffffff !important;
 }
 
-.footer-col h4{
-  margin-bottom:10px;
-  font-size:15px;
-  border-bottom:2px solid rgba(255,255,255,0.3);
-  padding-bottom:6px;
-}
-
-.footer-col p,
-.footer-col li{
-  font-size:13px;
-  line-height:1.6;
-}
-
-.footer-col ul{
-  list-style:none;
-  padding:0;
-  margin:0;
-}
-
-.footer-col ul li a{
-  color:#ffffff;
-  text-decoration:none;
-}
-
-.footer-col ul li a:hover{
-  text-decoration:underline;
-}
-
-.footer-bottom{
-  background:#062d54;
-  text-align:center;
-  padding:12px 8px;
-  font-size:13px;
-  font-weight:600;
-}
-
-/* Mobile friendly */
-@media(max-width:600px){
-  .footer-top{
-    text-align:center;
-  }
-}
 </body>
 </html>
