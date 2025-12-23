@@ -1,0 +1,2 @@
+
+function refreshGreeting(){runGreetingScene();}
