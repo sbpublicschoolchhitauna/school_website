@@ -748,9 +748,6 @@ async function searchStudent(){
       out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
       return;
     }
-// ✅ AUTO SAVE STUDENT DATA (ADD THIS)
-localStorage.studentName = rec["Student Name"];
-localStorage.studentDOB_FULL = rec["Date of Birth"]; // YYYY-MM-DD
 
     const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
     let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
