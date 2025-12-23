@@ -749,6 +749,14 @@ async function searchStudent(){
       return;
     }
 
+confirmStudent(
+  rec["Student Name"],
+  rec["Class"]
+);
+
+// DOB अलग से save
+localStorage.studentDOB_FULL = rec["Date of Birth"]; // YYYY-MM-DD
+
     const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
     let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
     fields.forEach(f=>{
