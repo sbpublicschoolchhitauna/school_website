@@ -749,16 +749,6 @@ async function searchStudent(){
       return;
     }
 
-// ✅ NAME CONFIRM (यहाँ ही call करना है)
-confirmStudent(
-  rec["Student Name"] || rec["Name"],
-  rec["Class"]
-);
-
-// ✅ DOB save (Birthday system के लिए)
-localStorage.studentDOB_FULL =
-  rec["Date of Birth"] || rec["DOB"];
-
     const fields = ["Student Name","Father Name","Mother Name","Date of Birth","Class","Address"];
     let html = '<div style="padding:10px;border-radius:8px;background:#fff;border:1px solid #eef6ff">';
     fields.forEach(f=>{
