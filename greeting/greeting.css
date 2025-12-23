@@ -1,0 +1,6 @@
+
+#greet3d{position:fixed;inset:0;background:linear-gradient(#87ceeb,#fff);z-index:999999;display:none;text-align:center;font-family:Arial}
+#greet3d.show{display:block}
+.lottie-box{width:240px;margin:70px auto}
+.greet-title{font-size:32px;font-weight:900}
+.greet-msg{font-size:18px}
