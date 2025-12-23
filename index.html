@@ -1716,7 +1716,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 <script>
 let deferredPrompt = null;
 
-// Chrome install availability
+// Capture install eligibility
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -1729,14 +1729,19 @@ document.addEventListener("click", async (e) => {
 
   e.preventDefault();
 
-  // 🔔 STEP 1: Permission-like confirmation
-  const allow = confirm(
-    "क्या आप S.B. Public School का Student App install करना चाहते हैं?"
-  );
+  // STEP 1: Ask Notification Permission
+  if ("Notification" in window) {
+    if (Notification.permission === "default") {
+      const permission = await Notification.requestPermission();
 
-  if (!allow) return;
+      if (permission !== "granted") {
+        alert("Permission allow करने पर ही App install हो पाएगा");
+        return;
+      }
+    }
+  }
 
-  // 🔔 STEP 2: Real Install popup
+  // STEP 2: Show Install Popup
   if (deferredPrompt) {
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
@@ -1744,7 +1749,7 @@ document.addEventListener("click", async (e) => {
   } else {
     alert(
       "Install popup अभी उपलब्ध नहीं है.\n\n" +
-      "Chrome के 3 डॉट (⋮) → Install App / Add to Home Screen चुनें"
+      "Chrome के 3 डॉट (⋮) → Install App / Add to Home Screen"
     );
   }
 });
