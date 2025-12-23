@@ -1768,5 +1768,138 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
+<!-- 🎒 NEXT LEVEL CARTOON STUDENT WISH -->
+<div id="wishOverlay">
+  <div class="scene">
+    <div class="sky">
+      <div id="sunMoon"></div>
+      <div class="stars"></div>
+    </div>
+
+    <div class="student">
+      <div class="head"></div>
+      <div class="body"></div>
+      <div class="hand left"></div>
+      <div class="hand right"></div>
+    </div>
+
+    <h1 id="wishTitle"></h1>
+    <p id="wishText"></p>
+
+    <button onclick="closeWish()">😊 OK Students</button>
+  </div>
+</div>
+<style>
+#wishOverlay{
+  position:fixed; inset:0;
+  background:linear-gradient(#87ceeb,#ffffff);
+  display:none; justify-content:center; align-items:center;
+  z-index:999999;
+}
+.scene{text-align:center; animation:zoom 1s ease}
+.sky{position:relative;height:180px}
+#sunMoon{
+  width:140px;height:140px;border-radius:50%;
+  margin:auto;
+  animation:rise 3s ease-in-out;
+}
+.morning{background:radial-gradient(circle,#ffeb3b,#ff9800)}
+.afternoon{background:radial-gradient(circle,#fff59d,#ffca28)}
+.evening{background:radial-gradient(circle,#ff8a65,#d84315)}
+.night{background:radial-gradient(circle,#e3f2fd,#90caf9)}
+
+.stars{
+  display:none;
+  position:absolute; inset:0;
+  background:url('https://i.imgur.com/9Qx6K6G.png') repeat;
+  opacity:.6;
+}
+
+.student{
+  position:relative;
+  width:120px;height:180px;
+  margin:10px auto;
+  animation:bounce 2s infinite;
+}
+.head{
+  width:60px;height:60px;border-radius:50%;
+  background:#ffccbc;margin:auto;
+}
+.body{
+  width:70px;height:80px;
+  background:#4fc3f7;
+  margin:auto;border-radius:12px;
+}
+.hand{
+  width:12px;height:60px;
+  background:#ffccbc;
+  position:absolute; top:70px;
+}
+.hand.left{left:-10px; animation:wave 1.2s infinite}
+.hand.right{right:-10px}
+
+h1{color:#0b5fa8;font-size:34px}
+p{font-size:18px;max-width:320px;margin:auto}
+
+button{
+  margin-top:15px;
+  padding:12px 24px;
+  border:none;border-radius:25px;
+  background:#0b5fa8;color:white;
+  font-size:16px;
+}
+
+@keyframes wave{0%{transform:rotate(0)}50%{transform:rotate(25deg)}100%{transform:rotate(0)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes zoom{from{transform:scale(.7)}to{transform:scale(1)}}
+@keyframes rise{from{transform:translateY(80px)}to{transform:translateY(0)}}
+</style>
+<script>
+(function(){
+  const key="wish_"+new Date().toDateString();
+  if(localStorage.getItem(key)) return;
+
+  const h=new Date().getHours();
+  let title="",text="",cls="";
+
+  if(h>=5 && h<11){
+    title="🌞 Good Morning Students";
+    text="मुस्कुराओ, सीखो और आज का दिन शानदार बनाओ।";
+    cls="morning";
+  }else if(h>=11 && h<16){
+    title="🌞 Good Afternoon Students";
+    text="मेहनत करते रहो, सफलता जरूर मिलेगी।";
+    cls="afternoon";
+  }else if(h>=16 && h<20){
+    title="🌇 Good Evening Students";
+    text="आज जो सीखा है वही आपकी ताकत है।";
+    cls="evening";
+  }else{
+    title="🌙 Good Night Students";
+    text="अच्छे सपने देखो, कल नई शुरुआत होगी।";
+    cls="night";
+    document.querySelector(".stars").style.display="block";
+  }
+
+  document.getElementById("wishOverlay").style.display="flex";
+  document.getElementById("sunMoon").className=cls;
+  document.getElementById("wishTitle").innerText=title;
+  document.getElementById("wishText").innerText=text;
+
+  // 🎤 Child Friendly Voice
+  const v=new SpeechSynthesisUtterance(title+" "+text);
+  v.lang="hi-IN";
+  v.pitch=1.3;
+  v.rate=0.85;
+  speechSynthesis.speak(v);
+
+  window.closeWish=function(){
+    document.getElementById("wishOverlay").style.display="none";
+    speechSynthesis.cancel();
+    localStorage.setItem(key,"yes");
+  }
+})();
+</script>
+
 </body>
 </html>
