@@ -5,6 +5,46 @@
 <!-- PWA REQUIRED -->
 <link rel="manifest" href="manifest.json">
 
+<script>
+let deferredPrompt = null;
+
+// PWA install availability
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+// Student button click
+document.addEventListener("click", async e => {
+  const btn = e.target.closest("#studentInstallBtn");
+  if (!btn) return;
+
+  e.preventDefault();
+
+  // STEP 1: Ask real browser permission
+  if ("Notification" in window) {
+    if (Notification.permission === "default") {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        alert("Permission allow करने पर ही App install होगा");
+        return;
+      }
+    }
+  }
+
+  // STEP 2: Show install popup
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  } else {
+    alert(
+      "Install popup अभी Chrome ने नहीं दिखाया.\n\n" +
+      "Chrome के 3 dots (⋮) → Install App / Add to Home Screen चुनें"
+    );
+  }
+});
+</script>
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -1712,47 +1752,5 @@ html, body { max-width: 100%; overflow-x: hidden; }
     0 6px 0 #7c2d12,
     0 18px 28px rgba(0,0,0,.45);
 }
-
-<script>
-let deferredPrompt = null;
-
-// PWA install availability
-window.addEventListener("beforeinstallprompt", e => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-// Student button click
-document.addEventListener("click", async e => {
-  const btn = e.target.closest("#studentInstallBtn");
-  if (!btn) return;
-
-  e.preventDefault();
-
-  // STEP 1: Ask real browser permission
-  if ("Notification" in window) {
-    if (Notification.permission === "default") {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        alert("Permission allow करने पर ही App install होगा");
-        return;
-      }
-    }
-  }
-
-  // STEP 2: Show install popup
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  } else {
-    alert(
-      "Install popup अभी Chrome ने नहीं दिखाया.\n\n" +
-      "Chrome के 3 dots (⋮) → Install App / Add to Home Screen चुनें"
-    );
-  }
-});
-</script>
-
 </body>
 </html>
