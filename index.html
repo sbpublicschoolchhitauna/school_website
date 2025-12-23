@@ -763,14 +763,6 @@ async function searchStudent(){
   }
 }
 
-// searchStudent() के अंदर, rec मिलने के बाद
-if(!rec){
-  out.innerHTML = "No details found";
-  return;
-}
-
-confirmStudent(rec["Student Name"], rec["Class"]);
-
 /* NOTIFICATIONS vertical scroll */
 let notifRAF = null;
 let notifPos = 0;
