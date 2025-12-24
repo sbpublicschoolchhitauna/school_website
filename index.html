@@ -1793,6 +1793,88 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
+<!-- ================= FULL SCREEN GREETING (VISIBLE & SAFE) ================= -->
+<style>
+#safeGreeting{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  z-index:9999999;
+  background:linear-gradient(to top,#4facfe,#00f2fe);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+#safeGreeting .box{
+  text-align:center;
+  color:#ffffff;
+}
+
+#safeGreeting .sun{
+  width:220px;
+  height:220px;
+  margin:0 auto 15px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff59d,#ff9800);
+  animation:sunrise 3s ease-out forwards;
+}
+
+@keyframes sunrise{
+  from{transform:translateY(200px)}
+  to{transform:translateY(0)}
+}
+
+#safeGreeting h1{
+  font-size:38px;
+  margin:10px 0;
+  font-weight:900;
+}
+
+#safeGreeting p{
+  font-size:20px;
+}
+</style>
+
+<script>
+(function(){
+  // Create container
+  const g = document.createElement("div");
+  g.id = "safeGreeting";
+
+  // Content
+  g.innerHTML = `
+    <div class="box">
+      <div class="sun"></div>
+      <h1>Good Morning 🌞</h1>
+      <p>वेबसाइट खोलने के लिए धन्यवाद</p>
+    </div>
+  `;
+
+  // Add to page
+  document.body.appendChild(g);
+
+  // Voice (Hindi)
+  if ("speechSynthesis" in window) {
+    const sp = new SpeechSynthesisUtterance(
+      "गुड मॉर्निंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।"
+    );
+    sp.lang = "hi-IN";
+    sp.rate = 0.95;
+    speechSynthesis.speak(sp);
+  }
+
+  // Auto close after 5 sec
+  setTimeout(()=>{
+    g.remove();
+  },5000);
+})();
+</script>
+<!-- ================= END GREETING ================= -->
+
 
 <!-- ========== FULL SCREEN REAL CARTOON + REAL WEATHER GREETING ========== -->
 <style>
