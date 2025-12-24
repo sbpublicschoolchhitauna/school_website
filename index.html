@@ -1876,227 +1876,134 @@ html, body { max-width: 100%; overflow-x: hidden; }
 <!-- ================= END GREETING ================= -->
 
 
-<!-- ========== FULL SCREEN REAL CARTOON + REAL WEATHER GREETING ========== -->
+<!-- ================= TIME BASED MOTIVATIONAL GREETING ================= -->
 <style>
-#fullGreeting{
+#safeGreeting{
   position:fixed;
-  inset:0;
+  top:0;
+  left:0;
   width:100vw;
   height:100vh;
-  z-index:2147483647;
-  overflow:hidden;
+  z-index:9999999;
+  background:linear-gradient(to top,#4facfe,#00f2fe);
   display:flex;
   align-items:center;
   justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
   animation:fadeIn 1s ease;
 }
-#fullGreeting.hide{
-  animation:fadeOut 1s forwards;
-}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
-.sky{
-  position:absolute;
-  inset:0;
+#safeGreeting .box{
+  text-align:center;
+  color:#ffffff;
 }
 
-/* ☀️ SUN */
-.sun{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  width:260px;
-  height:260px;
+#safeGreeting .sun{
+  width:220px;
+  height:220px;
+  margin:0 auto 15px;
   border-radius:50%;
   background:radial-gradient(circle,#fff59d,#ff9800);
-}
-.sunrise{bottom:-280px;animation:sunrise 4s forwards}
-@keyframes sunrise{to{bottom:55%}}
-.sunset{bottom:55%;animation:sunset 4s forwards}
-@keyframes sunset{to{bottom:-320px}}
-
-/* ☁️ CLOUDS */
-.cloud{
-  position:absolute;
-  top:18%;
-  font-size:140px;
-  opacity:.6;
-  animation:cloudMove 45s linear infinite;
-}
-.cloud.c2{
-  top:34%;
-  font-size:100px;
-  animation-duration:65s;
-}
-@keyframes cloudMove{
-  from{left:-40%}
-  to{left:120%}
+  animation:sunrise 3s ease-out forwards;
 }
 
-/* 🐦 BIRDS */
-.bird{
-  position:absolute;
-  top:26%;
-  font-size:42px;
-  animation:birdFly 18s linear infinite;
-}
-@keyframes birdFly{
-  from{left:-10%}
-  to{left:110%}
+@keyframes sunrise{
+  from{transform:translateY(200px)}
+  to{transform:translateY(0)}
 }
 
-/* 👦 SVG CARTOON */
-svg{
-  width:200px;
-  margin-bottom:10px;
-}
-.hand{
-  transform-origin:top center;
-  animation:wave 2s infinite;
-}
-@keyframes wave{
-  0%,100%{transform:rotate(0deg)}
-  50%{transform:rotate(25deg)}
-}
-
-.content{
-  position:relative;
-  z-index:5;
-  text-align:center;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-  text-shadow:0 6px 18px rgba(0,0,0,.45);
-}
-.content h1{
-  font-size:42px;
-  margin:8px 0;
+#safeGreeting h1{
+  font-size:38px;
+  margin:10px 0;
   font-weight:900;
 }
-.content p{
-  font-size:22px;
-  line-height:1.5;
+
+#safeGreeting p{
+  font-size:20px;
+  line-height:1.6;
 }
 </style>
 
 <script>
-(async function(){
+(function(){
 
-/* 🔑 YOUR FREE WEATHER API KEY */
-const WEATHER_API_KEY = "ec205c82afed56e514e32b2eaafa1079";
+  const hour = new Date().getHours();
 
-/* 📍 GET LOCATION */
-function getLocation(){
-  return new Promise((resolve,reject)=>{
-    navigator.geolocation.getCurrentPosition(
-      pos=>resolve(pos.coords),
-      err=>reject(err)
-    );
-  });
-}
+  let title="", message="", voice="", bg="";
 
-/* 🌦️ GET WEATHER DATA */
-async function getWeather(lat,lon){
-  const url =
-    "https://api.openweathermap.org/data/2.5/weather" +
-    "?lat="+lat+"&lon="+lon+
-    "&appid="+WEATHER_API_KEY+"&units=metric";
-  const res = await fetch(url);
-  return res.json();
-}
+  /* ⏰ TIME BASED LOGIC */
+  if(hour >= 5 && hour < 12){
+    title = "Good Morning 🌞";
+    message =
+      "प्रिय विद्यार्थी,\n" +
+      "आज का दिन नई उम्मीद और नए लक्ष्य लेकर आया है।\n" +
+      "पूरे मन से पढ़ाई करो, सफलता ज़रूर मिलेगी।";
+    voice =
+      "गुड मॉर्निंग विद्यार्थी। आज का दिन नई उम्मीद और नए लक्ष्य लेकर आया है। पूरे मन से पढ़ाई करो, सफलता ज़रूर मिलेगी।";
+    bg = "linear-gradient(to top,#4facfe,#00f2fe)";
+  }
+  else if(hour >= 12 && hour < 16){
+    title = "Good Afternoon 🌤️";
+    message =
+      "प्रिय विद्यार्थी,\n" +
+      "लगातार मेहनत करने वाला ही आगे बढ़ता है।\n" +
+      "थोड़ा आराम करो और फिर पूरे ध्यान से पढ़ाई करो।";
+    voice =
+      "गुड आफ्टरनून विद्यार्थी। लगातार मेहनत करने वाला ही आगे बढ़ता है। पूरे ध्यान से पढ़ाई करते रहो।";
+    bg = "linear-gradient(to top,#43cea2,#185a9d)";
+  }
+  else if(hour >= 16 && hour < 20){
+    title = "Good Evening 🌇";
+    message =
+      "प्रिय विद्यार्थी,\n" +
+      "आज की मेहनत कल की सफलता बनेगी।\n" +
+      "खुद पर विश्वास रखो और आगे बढ़ते रहो।";
+    voice =
+      "गुड ईवनिंग विद्यार्थी। आज की मेहनत कल की सफलता बनेगी। खुद पर विश्वास रखो।";
+    bg = "linear-gradient(to top,#fa709a,#fee140)";
+  }
+  else{
+    title = "Good Night 🌙";
+    message =
+      "प्रिय विद्यार्थी,\n" +
+      "आज आपने जो सीखा वही आपकी असली ताकत है।\n" +
+      "अब आराम करो ताकि कल और बेहतर कर सको।";
+    voice =
+      "गुड नाइट विद्यार्थी। आज आपने जो सीखा वही आपकी असली ताकत है। अब आराम करो ताकि कल और बेहतर कर सको।";
+    bg = "linear-gradient(to top,#141e30,#243b55)";
+  }
 
-/* DEFAULT VALUES */
-let city="आपके शहर";
-let weatherType="Clear";
+  const g = document.createElement("div");
+  g.id = "safeGreeting";
+  g.style.background = bg;
 
-/* TRY REAL WEATHER */
-try{
-  const coords = await getLocation();
-  const data = await getWeather(coords.latitude, coords.longitude);
-  city = data.name || city;
-  weatherType = data.weather[0].main;
-}catch(e){
-  console.log("Weather fallback mode");
-}
+  g.innerHTML = `
+    <div class="box">
+      <div class="sun"></div>
+      <h1>${title}</h1>
+      <p>${message.replace(/\n/g,"<br>")}</p>
+    </div>
+  `;
 
-/* 🌦️ SKY COLOR BY WEATHER */
-let bg="linear-gradient(to top,#4facfe,#00f2fe)";
-if(weatherType==="Clouds") bg="linear-gradient(to top,#bdc3c7,#2c3e50)";
-if(weatherType==="Rain") bg="linear-gradient(to top,#373b44,#4286f4)";
-if(weatherType==="Thunderstorm") bg="linear-gradient(to top,#141e30,#000)";
+  document.body.appendChild(g);
 
-/* ⏰ TIME LOGIC */
-const h = new Date().getHours();
-let title="",text="",voice="",sunClass="";
-
-if(h>=5 && h<12){
-  title="Good Morning 🌞";
-  text=`${city} में आज ${weatherType} मौसम है।<br>वेबसाइट खोलने के लिए धन्यवाद।`;
-  voice=`गुड मॉर्निंग विद्यार्थी। ${city} में आज ${weatherType} मौसम है। वेबसाइट खोलने के लिए धन्यवाद।`;
-  sunClass="sunrise";
-}
-else if(h>=12 && h<16){
-  title="Good Afternoon 🌤️";
-  text=`${city} में आज ${weatherType} मौसम है।<br>वेबसाइट खोलने के लिए धन्यवाद।`;
-  voice=`गुड आफ्टरनून विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।`;
-}
-else if(h>=16 && h<20){
-  title="Good Evening 🌇";
-  text=`${city} में आज ${weatherType} मौसम है।<br>वेबसाइट खोलने के लिए धन्यवाद।`;
-  voice=`गुड ईवनिंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।`;
-  sunClass="sunset";
-}
-else{
-  title="Good Night 🌙";
-  text="वेबसाइट खोलने के लिए धन्यवाद।<br>अब आराम करने का समय है।";
-  voice="गुड नाइट विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।";
-}
-
-/* 🧩 BUILD UI */
-const g=document.createElement("div");
-g.id="fullGreeting";
-g.innerHTML=`
-  <div class="sky" style="background:${bg}"></div>
-  ${sunClass ? `<div class="sun ${sunClass}"></div>` : ``}
-  <div class="cloud">☁️</div>
-  <div class="cloud c2">☁️</div>
-  <div class="bird">🐦</div>
-
-  <div class="content">
-    <!-- REAL SVG CARTOON -->
-    <svg viewBox="0 0 200 200">
-      <circle cx="100" cy="55" r="30" fill="#ffccbc"/>
-      <rect x="70" y="90" width="60" height="65" rx="20" fill="#4caf50"/>
-      <rect x="45" y="90" width="25" height="60" rx="15" fill="#ffccbc"/>
-      <rect x="130" y="90" width="25" height="60" rx="15" fill="#ffccbc" class="hand"/>
-    </svg>
-
-    <h1>${title}</h1>
-    <p>${text}</p>
-  </div>
-`;
-document.body.appendChild(g);
-
-/* 🎤 HINDI VOICE */
-setTimeout(()=>{
+  /* 🎤 Hindi Voice */
   if("speechSynthesis" in window){
-    speechSynthesis.cancel();
     const sp = new SpeechSynthesisUtterance(voice);
     sp.lang = "hi-IN";
     sp.rate = 0.95;
     speechSynthesis.speak(sp);
   }
-},800);
 
-/* ⏱️ AUTO CLOSE */
-setTimeout(()=>{
-  g.classList.add("hide");
-  setTimeout(()=>g.remove(),1200);
-},5000);
+  /* ⏱️ AUTO CLOSE */
+  setTimeout(()=>{
+    g.remove();
+  },5000);
 
 })();
 </script>
-<!-- ========== END GREETING ========== -->
+<!-- ================= END GREETING ================= -->
 
 </body>
 </html>
