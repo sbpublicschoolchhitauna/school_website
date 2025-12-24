@@ -1793,116 +1793,107 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
-<!-- ===== STUDENT GREETING AUTO-CLOSE FIXED ===== -->
-<div id="sgx-wrap" style="display:none">
-  <div class="sgx-scene">
-    <div id="sgx-sun">🌞</div>
-    <div id="sgx-moon" style="display:none">🌙</div>
-    <div id="sgx-kid">👦</div>
-    <div id="sgx-text"></div>
-    <button id="sgx-skip" aria-label="Skip greeting">✖</button>
+<!-- ================= FINAL REAL VOICE GREETING SYSTEM ================= -->
+
+<div id="finalGreeting" class="fg hidden">
+  <div class="fg-scene">
+    <div id="fgChar" class="fg-char">👦</div>
+    <div id="fgText" class="fg-text"></div>
   </div>
 </div>
 
 <style>
-#sgx-wrap{
+.fg{
   position:fixed;
   inset:0;
-  z-index:1000000;
+  z-index:999999;
   display:flex;
   align-items:center;
   justify-content:center;
   background:#87ceeb;
+  animation:fadeIn 1s ease;
 }
-.sgx-scene{text-align:center}
-#sgx-sun{font-size:150px;animation:rise 3.5s ease forwards}
-#sgx-kid{font-size:110px;animation:wave 2s infinite}
-#sgx-text{margin-top:18px;font-size:26px;font-weight:900;color:#012032}
-#sgx-skip{
-  margin-top:16px;
-  padding:6px 14px;
-  font-size:14px;
-  border-radius:20px;
-  border:none;
-  cursor:pointer;
+.hidden{display:none}
+
+.fg-scene{text-align:center}
+.fg-char{
+  font-size:150px;
+  animation:wave 2s infinite;
+  transform-origin:70% 70%;
 }
-@keyframes rise{
-  from{transform:translateY(220px)}
-  to{transform:translateY(0)}
+.fg-text{
+  margin-top:18px;
+  font-size:30px;
+  font-weight:900;
+  color:#012032;
 }
+
 @keyframes wave{
-  0%{transform:rotate(0)}
-  25%{transform:rotate(15deg)}
-  50%{transform:rotate(-10deg)}
-  75%{transform:rotate(15deg)}
-  100%{transform:rotate(0)}
+  0%{transform:rotate(0deg)}
+  20%{transform:rotate(15deg)}
+  40%{transform:rotate(-10deg)}
+  60%{transform:rotate(15deg)}
+  100%{transform:rotate(0deg)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 </style>
 
 <script>
 (function(){
-  try{
-    const KEY = "sgx_auto_" + new Date().toDateString();
-    if(localStorage.getItem(KEY)) return;
-    localStorage.setItem(KEY,"1");
 
-    const wrap = document.getElementById("sgx-wrap");
-    const sun  = document.getElementById("sgx-sun");
-    const moon = document.getElementById("sgx-moon");
-    const kid  = document.getElementById("sgx-kid");
-    const text = document.getElementById("sgx-text");
-    const skip = document.getElementById("sgx-skip");
+  /* 🔁 दिन में सिर्फ 1 बार */
+  const key = "FINAL_GREETING_" + new Date().toDateString();
+  if(localStorage.getItem(key)) return;
+  localStorage.setItem(key,"1");
 
-    kid.textContent = Math.random()>0.5 ? "👧" : "👦";
+  const box  = document.getElementById("finalGreeting");
+  const text = document.getElementById("fgText");
+  const char = document.getElementById("fgChar");
 
-    const h = new Date().getHours();
-    let msg="", speak="";
+  /* 👦👧 Random Cartoon */
+  char.textContent = Math.random()>0.5 ? "👧" : "👦";
 
-    if(h>=5 && h<12){
-      msg="🌞 Good Morning Students!<br>आज की मेहनत कल की सफलता है 📚✨";
-      speak="Good Morning Students. Aaj ki mehnat kal ki safalta hai.";
-    }else if(h<17){
-      msg="☀️ Good Afternoon Students!<br>खुद पर विश्वास रखो 💪";
-      speak="Good Afternoon Students. Khud par vishwas rakho.";
-    }else if(h<21){
-      msg="🌇 Good Evening Students!<br>हर दिन थोड़ा बेहतर बनो 🚀";
-      speak="Good Evening Students. Har din thoda behtar bano.";
-    }else{
-      msg="🌙 Good Night Students!<br>कल फिर नई शुरुआत होगी 😴";
-      speak="Good Night Students. Kal phir nayi shuruaat hogi.";
-      sun.style.display="none";
-      moon.style.display="block";
-      wrap.style.background="linear-gradient(#020024,#090979,#000)";
-      text.style.color="#fff";
-    }
+  /* ⏰ Time Based Message + REAL Voice */
+  const h = new Date().getHours();
+  let msg="", audioFile="";
 
-    text.innerHTML = msg;
-    wrap.style.display = "flex";
-
-    if("speechSynthesis" in window){
-      const u = new SpeechSynthesisUtterance(speak);
-      u.lang="hi-IN";
-      u.rate=0.95;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    }
-
-    function closeGreeting(){
-      wrap.style.display = "none";
-      speechSynthesis.cancel();
-    }
-
-    skip.onclick = closeGreeting;
-
-    // ✅ HARD FORCE AUTO CLOSE
-    setTimeout(closeGreeting, 7000);
-
-  }catch(e){
-    console.warn("Greeting error", e);
+  if(h>=5 && h<12){
+    msg = "🌞 Good Morning!<br>आज मेहनत करोगे तो कल सफलता खुद आएगी 📚✨";
+    audioFile = "voices/morning.mp3";
   }
+  else if(h>=12 && h<17){
+    msg = "☀️ Good Afternoon!<br>खुद पर भरोसा रखो, तुम कुछ भी कर सकते हो 💪🌟";
+    audioFile = "voices/afternoon.mp3";
+  }
+  else if(h>=17 && h<21){
+    msg = "🌇 Good Evening!<br>हर दिन थोड़ा आगे बढ़ना ही जीत है 🚀📖";
+    audioFile = "voices/evening.mp3";
+  }
+  else{
+    msg = "🌙 Good Night!<br>आज का प्रयास कल की सफलता बनेगा 😴🌙";
+    audioFile = "voices/night.mp3";
+    box.style.background = "linear-gradient(#020024,#090979,#000)";
+    text.style.color = "#ffffff";
+  }
+
+  text.innerHTML = msg;
+  box.classList.remove("hidden");
+
+  /* 🔊 REAL HUMAN VOICE (MP3) */
+  const audio = new Audio(audioFile);
+  audio.volume = 1;
+  audio.play().catch(()=>{});
+
+  /* ⏳ Auto close */
+  setTimeout(()=>box.classList.add("hidden"),9000);
+
 })();
 </script>
-<!-- ===== END GREETING ===== -->
+
+<!-- ================= END FINAL GREETING SYSTEM ================= -->
 
 <!-- =====================================================
   STUDENT TIME BASED 3D GREETING SYSTEM (EXTRA ADD-ON)
