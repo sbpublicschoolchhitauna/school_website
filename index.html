@@ -2652,5 +2652,44 @@ setTimeout(()=>{
 })();
 </script>
 
+<style>
+/* 🎉 Birthday Heading – Responsive */
+#birthdayScrollBox h3{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  line-height:1.2;
+  text-align:center;
+  word-break:break-word;
+  white-space:normal;
+}
+
+/* 📱 Mobile */
+@media (max-width:480px){
+  #birthdayScrollBox h3{
+    font-size:14px;
+    padding:8px 6px;
+  }
+}
+
+/* 📲 Tablet */
+@media (min-width:481px) and (max-width:768px){
+  #birthdayScrollBox h3{
+    font-size:15px;
+    padding:10px 8px;
+  }
+}
+
+/* 🖥️ Desktop */
+@media (min-width:769px){
+  #birthdayScrollBox h3{
+    font-size:16px;
+    padding:12px;
+  }
+}
+</style>
+
+
 </body>
 </html>
