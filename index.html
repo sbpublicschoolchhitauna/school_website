@@ -2310,83 +2310,115 @@ setTimeout(()=>{
 </script>
 <!-- ========== END SYSTEM ========== -->
 
-<!-- ========= FULL SCREEN GREETING – 3D SUN VERSION ========= -->
+<!-- ========= FULL SCREEN GREETING : SUN–EARTH–MOON SYSTEM ========= -->
 <style>
-#greeting3D{
+#cosmicGreeting{
   position:fixed;
   inset:0;
   width:100vw;
   height:100vh;
   z-index:9999999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:Arial,Helvetica,sans-serif;
   overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
   animation:fadeIn 1s ease;
 }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-.light-overlay{
+.sky{
   position:absolute;
   inset:0;
-  background:rgba(255,220,120,0);
-  transition:background 4s ease;
+  transition:background 3s ease;
+}
+
+/* 🌍 EARTH CURVE */
+.earth{
+  position:absolute;
+  bottom:-35%;
+  left:50%;
+  transform:translateX(-50%);
+  width:160%;
+  height:70%;
+  background:radial-gradient(ellipse at top,#2e7d32,#0b3d0b);
+  border-radius:50%;
+  box-shadow:0 -40px 120px rgba(0,0,0,.6);
+}
+
+/* 🌞 SUN */
+.sun{
+  position:absolute;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff9c4,#ff9800);
+  box-shadow:
+    0 0 80px rgba(255,200,0,.9),
+    0 0 200px rgba(255,180,0,.6);
+}
+
+/* 🌙 MOON */
+.moon{
+  position:absolute;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle,#f5f5f5,#bdbdbd);
+  box-shadow:0 0 40px rgba(255,255,255,.6);
+}
+
+/* 🌞 SUN PATH (ARC) */
+.sun-path{
+  position:absolute;
+  width:120%;
+  height:120%;
+  left:-10%;
+  bottom:-20%;
   pointer-events:none;
 }
+.sun-path.morning{
+  animation:sunArcMorning 12s linear infinite;
+}
+.sun-path.evening{
+  animation:sunArcEvening 12s linear infinite;
+}
 
-/* 🌞 3D SUN */
-.sun3d{
+/* 🌙 MOON ORBIT */
+.moon-path{
   position:absolute;
-  left:50%;
-  transform-style:preserve-3d;
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  background:radial-gradient(circle,#fff7b2,#ff9800);
-  box-shadow:
-    0 0 60px rgba(255,200,0,.8),
-    0 0 140px rgba(255,180,0,.6);
-  animation:spinSun 8s linear infinite;
-}
-@keyframes spinSun{
-  from{transform:translateX(-50%) rotateY(0deg) rotateZ(0deg);}
-  to{transform:translateX(-50%) rotateY(360deg) rotateZ(360deg);}
+  width:120%;
+  height:120%;
+  left:-10%;
+  bottom:-20%;
+  animation:moonOrbit 18s linear infinite;
 }
 
-/* ☀️ SUN POSITIONS */
-.sunrise{
-  bottom:-260px;
-  animation:
-    sunriseMove 4s forwards,
-    spinSun 8s linear infinite;
+/* 🌞 KEYFRAMES */
+@keyframes sunArcMorning{
+  0%{transform:rotate(-120deg)}
+  100%{transform:rotate(0deg)}
 }
-@keyframes sunriseMove{
-  to{bottom:55%}
-}
-
-.sunset{
-  bottom:55%;
-  animation:
-    sunsetMove 4s forwards,
-    spinSun 8s linear infinite;
-}
-@keyframes sunsetMove{
-  to{bottom:-320px}
+@keyframes sunArcEvening{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(120deg)}
 }
 
-/* 🌤️ SKY TEXT */
+/* 🌙 KEYFRAMES */
+@keyframes moonOrbit{
+  from{transform:rotate(180deg)}
+  to{transform:rotate(540deg)}
+}
+
 .content{
   position:relative;
   z-index:5;
   text-align:center;
   color:#fff;
   text-shadow:0 6px 18px rgba(0,0,0,.45);
+  top:8%;
 }
 .content h1{
   font-size:40px;
-  margin:10px 0;
   font-weight:900;
+  margin-bottom:10px;
 }
 .content p{
   font-size:22px;
@@ -2397,61 +2429,63 @@ setTimeout(()=>{
 (function(){
 
   const hour = new Date().getHours();
-  let title="", info="", sunClass="", bg="", light="";
 
-  /* ⏰ TIME BASED LOGIC */
+  let title="", text="", skyBg="", mode="";
+
+  /* ⏰ TIME LOGIC */
   if(hour >= 5 && hour < 12){
-    title = "Good Morning 🌞";
-    info  = "नई सुबह, नई ऊर्जा के साथ पढ़ाई शुरू करें।";
-    sunClass = "sunrise";
-    bg = "linear-gradient(to top,#4facfe,#00f2fe)";
-    light = "rgba(255,220,120,0.65)";
+    title="Good Morning 🌅";
+    text="नई सुबह, नई ऊर्जा। पूरे मन से पढ़ाई शुरू करें।";
+    skyBg="linear-gradient(to top,#4facfe,#00f2fe)";
+    mode="morning";
   }
   else if(hour >= 12 && hour < 16){
-    title = "Good Afternoon 🌤️";
-    info  = "मौसम साफ है, पढ़ाई पर ध्यान बनाए रखें।";
-    sunClass = "";
-    bg = "linear-gradient(to top,#43cea2,#185a9d)";
-    light = "rgba(255,240,180,0.45)";
+    title="Good Afternoon ☀️";
+    text="दोपहर का समय है, ध्यान बनाए रखें और पढ़ाई जारी रखें।";
+    skyBg="linear-gradient(to top,#43cea2,#185a9d)";
+    mode="zenith";
   }
   else if(hour >= 16 && hour < 20){
-    title = "Good Evening 🌇";
-    info  = "दिन समाप्त हो रहा है, लक्ष्य की समीक्षा करें।";
-    sunClass = "sunset";
-    bg = "linear-gradient(to top,#fa709a,#fee140)";
-    light = "rgba(255,180,120,0.25)";
+    title="Good Evening 🌇";
+    text="सूरज ढल रहा है, आज की मेहनत पर गर्व करें।";
+    skyBg="linear-gradient(to top,#fa709a,#fee140)";
+    mode="evening";
   }
   else{
-    title = "Good Night 🌙";
-    info  = "अब आराम करें ताकि कल नई ऊर्जा मिले।";
-    bg = "linear-gradient(to top,#141e30,#243b55)";
-    light = "rgba(0,0,0,0)";
+    title="Good Night 🌙";
+    text="रात का समय है, आराम करें ताकि कल नई ऊर्जा मिले।";
+    skyBg="linear-gradient(to top,#0f2027,#203a43,#2c5364)";
+    mode="night";
   }
 
-  const g = document.createElement("div");
-  g.id = "greeting3D";
-  g.style.background = bg;
+  const g=document.createElement("div");
+  g.id="cosmicGreeting";
+  g.innerHTML=`
+    <div class="sky" style="background:${skyBg}"></div>
 
-  g.innerHTML = `
-    <div class="light-overlay" id="lightLayer"></div>
-    ${sunClass !== "" ? `<div class="sun3d ${sunClass}"></div>` : `<div class="sun3d" style="bottom:55%"></div>`}
+    ${
+      mode==="morning"
+      ? `<div class="sun-path morning"><div class="sun"></div></div>`
+      : mode==="evening"
+      ? `<div class="sun-path evening"><div class="sun"></div></div>`
+      : mode==="zenith"
+      ? `<div class="sun" style="left:50%;top:20%;transform:translateX(-50%)"></div>`
+      : `<div class="moon-path"><div class="moon"></div></div>`
+    }
+
+    <div class="earth"></div>
+
     <div class="content">
       <h1>${title}</h1>
-      <p>${info}</p>
+      <p>${text}</p>
     </div>
   `;
-
   document.body.appendChild(g);
 
-  /* 🌟 LIGHT EFFECT */
-  setTimeout(()=>{
-    document.getElementById("lightLayer").style.background = light;
-  },600);
-
-  /* ⏱️ AUTO CLOSE */
+  /* AUTO CLOSE */
   setTimeout(()=>{
     g.remove();
-  },6000);
+  },7000);
 
 })();
 </script>
