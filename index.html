@@ -437,11 +437,8 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 
 <div id="birthdayScrollBox">
   <h3>🎉 Today Birthday 🎂</h3>
-
   <div class="birthday-scroll">
-    <div class="birthday-scroll-inner" id="birthdayScrollInner">
-      <!-- Names auto load here -->
-    </div>
+    <div class="birthday-scroll-inner" id="birthdayScrollInner"></div>
   </div>
 </div>
 
@@ -2321,7 +2318,6 @@ setTimeout(()=>{
 <!-- ========== END SYSTEM ========== -->
 
 <style>
-/* 🎂 Birthday Scroll Box */
 #birthdayScrollBox{
   display:none;
   max-width:380px;
@@ -2331,7 +2327,6 @@ setTimeout(()=>{
   box-shadow:0 12px 30px rgba(0,0,0,.25);
   overflow:hidden;
 }
-
 #birthdayScrollBox h3{
   margin:0;
   padding:12px;
@@ -2341,19 +2336,16 @@ setTimeout(()=>{
   font-weight:900;
   font-size:16px;
 }
-
 .birthday-scroll{
   height:180px;
   overflow:hidden;
   position:relative;
 }
-
 .birthday-scroll-inner{
   position:absolute;
   width:100%;
   animation:scrollUp 12s linear infinite;
 }
-
 .birthday-item{
   padding:12px;
   text-align:center;
@@ -2361,13 +2353,11 @@ setTimeout(()=>{
   color:#0b5fa8;
   font-size:15px;
 }
-
 .birthday-wish{
   font-size:13px;
   color:#333;
   margin-top:4px;
 }
-
 @keyframes scrollUp{
   0%{top:100%}
   100%{top:-100%}
@@ -2375,86 +2365,77 @@ setTimeout(()=>{
 </style>
 
 <script>
-/* 🎂 FINAL BIRTHDAY SCROLL SYSTEM */
 (async function(){
 
-const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+// Google Sheet ID from your link
+const SHEET_ID = "1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0";
 
-/* 🔊 Hindi Voice */
-function speakHindi(text){
+// Correctly encoded sheet name (has apostrophe)
+const SHEET_TAB = "Student''s Details"; // note double apostrophe for correct gviz URL
+
+function speakHindi(txt){
   if(!("speechSynthesis" in window)) return;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "hi-IN";
-  u.rate = 0.9;
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang="hi-IN"; u.rate=0.9;
   speechSynthesis.speak(u);
 }
 
-/* 📅 DOB parser */
-function parseDOB(dob){
-  if(!dob) return null;
-  const p = dob.toString().split(/[-\/]/);
+function parseDOB(d){
+  if(!d) return null;
+  const p=d.toString().split(/[-\/]/);
   return (p[0].length===4)
-    ? {day:+p[2],month:+p[1]}
-    : {day:+p[0],month:+p[1]};
+    ? {day:+p[2], month:+p[1]}
+    : {day:+p[0], month:+p[1]};
 }
 
-/* 📊 Load Marksheet Details */
-async function loadMarksheet(){
+async function loadSheet(){
   const url =
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Marksheet Details&tqx=out:json`;
-  const res = await fetch(url);
-  const txt = await res.text();
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(SHEET_TAB)}&tqx=out:json`;
+  const r = await fetch(url);
+  const txt = await r.text();
   return JSON.parse(txt.replace(/^[^{]*/,"").replace(/\);$/,"")).table;
 }
 
-/* 🗓 Today */
 const today = new Date();
-const day = today.getDate();
-const month = today.getMonth()+1;
+const d = today.getDate();
+const m = today.getMonth() + 1;
+const key = "birthdayScroll_"+d+"_"+m;
+if(localStorage.getItem(key)) return;
 
-/* 🔒 Show only once per day */
-const onceKey = "birthdayScroll_"+day+"_"+month;
-if(localStorage.getItem(onceKey)) return;
-
-/* 📥 Data */
-const table = await loadMarksheet();
+const table = await loadSheet();
 const cols = table.cols.map(c=>c.label);
 const rows = table.rows;
 
 const nameCol = cols.indexOf("Student Name");
-const dobCol  = cols.indexOf("Date of Birth");
-if(nameCol<0 || dobCol<0) return;
+const dobCol = cols.indexOf("Date of Birth");
+if(nameCol<0||dobCol<0) return;
 
-/* 🎂 Find today birthdays */
-let html = "";
-let found = false;
+let html="";
+let found=false;
 
 rows.forEach(r=>{
-  const dob = parseDOB(r.c[dobCol]?.v);
-  if(dob && dob.day===day && dob.month===month){
-    found = true;
-    const name = r.c[nameCol]?.v;
+  const dob=parseDOB(r.c[dobCol]?.v);
+  if(dob && dob.day===d && dob.month===m){
+    found=true;
+    const name=r.c[nameCol]?.v;
     html += `
       <div class="birthday-item">
         🎂 ${name}
         <div class="birthday-wish">
-          जन्मदिन की हार्दिक शुभकामनाएँ 🌸
+          जन्मदिन की शुभकामनाएँ 🌸
         </div>
-      </div>
-    `;
+      </div>`;
   }
 });
 
 if(!found) return;
 
-/* 🔁 Duplicate for smooth scroll */
 document.getElementById("birthdayScrollInner").innerHTML = html + html;
-document.getElementById("birthdayScrollBox").style.display = "block";
+document.getElementById("birthdayScrollBox").style.display="block";
 
-/* 🔊 Voice Wish */
 speakHindi("आज जन्मदिन की हार्दिक शुभकामनाएँ। ईश्वर आपको स्वस्थ, खुशहाल और उज्ज्वल भविष्य प्रदान करे।");
 
-localStorage.setItem(onceKey,"yes");
+localStorage.setItem(key,"yes");
 
 })();
 </script>
