@@ -2017,5 +2017,235 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </script>
 <!-- ================= END GREETING ================= -->
 
+<!-- ========== FINAL WEATHER + TEMPERATURE GREETING SYSTEM ========== -->
+<style>
+#weatherGreeting{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  z-index:9999999;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+  animation:fadeIn 1s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+#weatherGreeting.hide{
+  animation:fadeOut 1s forwards;
+}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+
+.sky{position:absolute;inset:0}
+
+/* ☀️ SUN */
+.sun{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:220px;height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff59d,#ff9800);
+}
+.sunrise{bottom:-260px;animation:sunrise 4s forwards}
+@keyframes sunrise{to{bottom:55%}}
+.sunset{bottom:55%;animation:sunset 4s forwards}
+@keyframes sunset{to{bottom:-320px}}
+
+/* ☁️ CLOUDS (PARALLAX) */
+.cloud{
+  position:absolute;
+  top:15%;
+  font-size:160px;
+  opacity:.6;
+  animation:cloudMove 50s linear infinite;
+}
+.cloud.c2{
+  top:35%;
+  font-size:110px;
+  animation-duration:70s;
+}
+@keyframes cloudMove{
+  from{left:-40%}
+  to{left:120%}
+}
+
+/* 🐦 BIRDS */
+.bird{
+  position:absolute;
+  top:25%;
+  font-size:42px;
+  animation:birdFly 18s linear infinite;
+}
+@keyframes birdFly{
+  from{left:-10%}
+  to{left:110%}
+}
+
+/* 🌧️ RAIN */
+.rain{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,.25) 0px,
+      rgba(255,255,255,.25) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+  animation:rainFall .4s linear infinite;
+}
+@keyframes rainFall{
+  from{background-position:0 0}
+  to{background-position:-20px 40px}
+}
+
+.content{
+  position:relative;
+  z-index:5;
+  text-align:center;
+  color:#fff;
+  text-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+.content h1{
+  font-size:40px;
+  margin:8px 0;
+  font-weight:900;
+}
+.content p{
+  font-size:22px;
+  line-height:1.5;
+}
+</style>
+
+<script>
+(async function(){
+
+/* 🔒 Stop any old voice */
+if("speechSynthesis" in window){ speechSynthesis.cancel(); }
+
+/* 🔑 WEATHER API KEY */
+const API_KEY = "ec205c82afed56e514e32b2eaafa1079";
+
+/* 📍 LOCATION */
+function getLocation(){
+  return new Promise((res,rej)=>{
+    navigator.geolocation.getCurrentPosition(
+      p=>res(p.coords),
+      e=>rej(e)
+    );
+  });
+}
+
+/* 🌦️ WEATHER */
+async function getWeather(lat,lon){
+  const url =
+    "https://api.openweathermap.org/data/2.5/weather"+
+    "?lat="+lat+"&lon="+lon+
+    "&appid="+API_KEY+"&units=metric";
+  const r = await fetch(url);
+  return r.json();
+}
+
+/* DEFAULT */
+let city="आपके शहर";
+let temp="--";
+let weather="Clear";
+
+try{
+  const c = await getLocation();
+  const d = await getWeather(c.latitude,c.longitude);
+  city = d.name || city;
+  temp = Math.round(d.main.temp);
+  weather = d.weather[0].main;
+}catch(e){
+  console.log("Weather fallback");
+}
+
+/* 🌦️ SKY COLOR */
+let bg="linear-gradient(to top,#4facfe,#00f2fe)";
+let showRain=false;
+
+if(weather==="Clouds") bg="linear-gradient(to top,#bdc3c7,#2c3e50)";
+if(weather==="Rain"){ 
+  bg="linear-gradient(to top,#373b44,#4286f4)";
+  showRain=true;
+}
+if(weather==="Thunderstorm"){
+  bg="linear-gradient(to top,#141e30,#000)";
+  showRain=true;
+}
+
+/* ⏰ TIME */
+const h=new Date().getHours();
+let title="",msg="",voice="",sun="";
+
+if(h>=5 && h<12){
+  title="Good Morning 🌞";
+  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>आज का दिन नई शुरुआत का है।`;
+  voice=`गुड मॉर्निंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। आज का दिन नई शुरुआत का है।`;
+  sun="sunrise";
+}
+else if(h>=12 && h<16){
+  title="Good Afternoon 🌤️";
+  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>लगातार मेहनत करते रहें।`;
+  voice=`गुड आफ्टरनून विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। मेहनत करते रहें।`;
+}
+else if(h>=16 && h<20){
+  title="Good Evening 🌇";
+  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>आज की मेहनत कल रंग लाएगी।`;
+  voice=`गुड ईवनिंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। आज की मेहनत कल रंग लाएगी।`;
+  sun="sunset";
+}
+else{
+  title="Good Night 🌙";
+  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>अब आराम करने का समय है।`;
+  voice=`गुड नाइट विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। अब आराम करने का समय है।`;
+}
+
+/* 🧩 UI */
+const g=document.createElement("div");
+g.id="weatherGreeting";
+g.innerHTML=`
+  <div class="sky" style="background:${bg}"></div>
+  ${sun?`<div class="sun ${sun}"></div>`:""}
+  <div class="cloud">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="bird">🐦</div>
+  ${showRain?`<div class="rain"></div>`:""}
+
+  <div class="content">
+    <h1>${title}</h1>
+    <p>${msg}</p>
+  </div>
+`;
+document.body.appendChild(g);
+
+/* 🎤 VOICE (temperature included) */
+setTimeout(()=>{
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(voice);
+    u.lang="hi-IN";
+    u.rate=0.95;
+    speechSynthesis.speak(u);
+  }
+},700);
+
+/* ⏱️ AUTO CLOSE */
+setTimeout(()=>{
+  g.classList.add("hide");
+  setTimeout(()=>g.remove(),1200);
+},5000);
+
+})();
+</script>
+<!-- ========== END WEATHER GREETING ========== -->
+
 </body>
 </html>
