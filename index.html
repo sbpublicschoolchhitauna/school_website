@@ -196,7 +196,7 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-<!-- ===== FINAL FESTIVAL POPUP ===== -->
+<!-- ===== FINAL BLUE FESTIVAL POPUP ===== -->
 <div id="popupOverlay" style="
 display:none;
 position:fixed;
@@ -208,38 +208,27 @@ justify-content:center;
 font-family:Arial;
 ">
 
-<div id="popupBox" style="
-background:linear-gradient(135deg,#ffecd2,#fcb69f,#a1c4fd,#c2e9fb);
-background-size:300% 300%;
-animation:boxGradient 8s ease infinite;
+  <div id="popupBox" style="
+  background:#0b5fa8; /* PURE BLUE */
+  width:96%;
+  max-width:880px;
+  min-height:380px;
+  border-radius:30px;
+  padding:42px;
+  text-align:center;
 
-width:96%;
-max-width:860px;
-min-height:380px;
-border-radius:30px;
-padding:42px;
-text-align:center;
+  box-shadow:
+    0 30px 70px rgba(0,0,0,0.45),
+    inset 0 4px 8px rgba(255,255,255,0.15);
 
-box-shadow:
-  0 30px 70px rgba(0,0,0,0.4),
-  inset 0 4px 8px rgba(255,255,255,0.8);
+  transform:perspective(1200px) rotateX(4deg);
+  ">
 
-transform:perspective(1200px) rotateX(4deg);
-">
+    <h2 id="popupTitle"></h2>
 
-    <h2 id="popupTitle" style="margin:0;font-size:26px;color:#0b5fa8;"></h2>
+    <p id="popupText"></p>
 
-    <p id="popupText" style="
-    margin-top:18px;
-    font-size:17px;
-    line-height:1.8;
-    color:#333;"></p>
-
-    <p id="popupCountdown" style="
-    margin-top:22px;
-    font-weight:bold;
-    font-size:16px;
-    color:#d32f2f;"></p>
+    <p id="popupCountdown"></p>
 
   </div>
 </div>
@@ -250,11 +239,7 @@ transform:perspective(1200px) rotateX(4deg);
 </audio>
 
 <!-- 🎆 FESTIVAL ANIMATION LAYER -->
-<div id="festivalAnimationLayer" style="
-position:fixed;
-top:0;left:0;right:0;bottom:0;
-pointer-events:none;
-z-index:999998;"></div>
+<div id="festivalAnimationLayer"></div>
 
   <!-- ====== ADMISSION TICKER (premium, eye-friendly gradient, multiple rotating messages) ====== -->
   <style>
