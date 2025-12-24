@@ -1793,13 +1793,14 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
-<!-- ========= SAFE STUDENT GREETING ADD-ON (ISOLATED) ========= -->
-<div id="sgx-wrap" hidden>
+<!-- ===== STUDENT GREETING AUTO-CLOSE FIXED ===== -->
+<div id="sgx-wrap" style="display:none">
   <div class="sgx-scene">
-    <div id="sgx-sun" class="sgx-sun">🌞</div>
-    <div id="sgx-moon" class="sgx-moon">🌙</div>
-    <div id="sgx-kid" class="sgx-kid">👦</div>
-    <div id="sgx-text" class="sgx-text"></div>
+    <div id="sgx-sun">🌞</div>
+    <div id="sgx-moon" style="display:none">🌙</div>
+    <div id="sgx-kid">👦</div>
+    <div id="sgx-text"></div>
+    <button id="sgx-skip" aria-label="Skip greeting">✖</button>
   </div>
 </div>
 
@@ -1813,19 +1814,23 @@ html, body { max-width: 100%; overflow-x: hidden; }
   justify-content:center;
   background:#87ceeb;
 }
-#sgx-wrap[hidden]{display:none}
-
 .sgx-scene{text-align:center}
-.sgx-sun{font-size:150px;animation:sgx-rise 3.8s ease forwards}
-.sgx-moon{font-size:130px;display:none}
-.sgx-kid{font-size:110px;margin-top:8px;animation:sgx-wave 2s infinite}
-.sgx-text{margin-top:18px;font-size:26px;font-weight:900;color:#012032}
-
-@keyframes sgx-rise{
+#sgx-sun{font-size:150px;animation:rise 3.5s ease forwards}
+#sgx-kid{font-size:110px;animation:wave 2s infinite}
+#sgx-text{margin-top:18px;font-size:26px;font-weight:900;color:#012032}
+#sgx-skip{
+  margin-top:16px;
+  padding:6px 14px;
+  font-size:14px;
+  border-radius:20px;
+  border:none;
+  cursor:pointer;
+}
+@keyframes rise{
   from{transform:translateY(220px)}
   to{transform:translateY(0)}
 }
-@keyframes sgx-wave{
+@keyframes wave{
   0%{transform:rotate(0)}
   25%{transform:rotate(15deg)}
   50%{transform:rotate(-10deg)}
@@ -1837,7 +1842,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 <script>
 (function(){
   try{
-    const KEY = "sgx_once_" + new Date().toDateString();
+    const KEY = "sgx_auto_" + new Date().toDateString();
     if(localStorage.getItem(KEY)) return;
     localStorage.setItem(KEY,"1");
 
@@ -1845,9 +1850,10 @@ html, body { max-width: 100%; overflow-x: hidden; }
     const sun  = document.getElementById("sgx-sun");
     const moon = document.getElementById("sgx-moon");
     const kid  = document.getElementById("sgx-kid");
-    const txt  = document.getElementById("sgx-text");
+    const text = document.getElementById("sgx-text");
+    const skip = document.getElementById("sgx-skip");
 
-    kid.textContent = Math.random() > 0.5 ? "👧" : "👦";
+    kid.textContent = Math.random()>0.5 ? "👧" : "👦";
 
     const h = new Date().getHours();
     let msg="", speak="";
@@ -1867,26 +1873,36 @@ html, body { max-width: 100%; overflow-x: hidden; }
       sun.style.display="none";
       moon.style.display="block";
       wrap.style.background="linear-gradient(#020024,#090979,#000)";
-      txt.style.color="#fff";
+      text.style.color="#fff";
     }
 
-    txt.innerHTML = msg;
-    wrap.hidden = false;
+    text.innerHTML = msg;
+    wrap.style.display = "flex";
 
     if("speechSynthesis" in window){
       const u = new SpeechSynthesisUtterance(speak);
       u.lang="hi-IN";
       u.rate=0.95;
+      speechSynthesis.cancel();
       speechSynthesis.speak(u);
     }
 
-    setTimeout(()=>{ wrap.hidden = true; }, 8500);
+    function closeGreeting(){
+      wrap.style.display = "none";
+      speechSynthesis.cancel();
+    }
+
+    skip.onclick = closeGreeting;
+
+    // ✅ HARD FORCE AUTO CLOSE
+    setTimeout(closeGreeting, 7000);
+
   }catch(e){
-    console.warn("Greeting skipped:", e);
+    console.warn("Greeting error", e);
   }
 })();
 </script>
-<!-- ========= END SAFE ADD-ON ========= -->
+<!-- ===== END GREETING ===== -->
 
 <!-- =====================================================
   STUDENT TIME BASED 3D GREETING SYSTEM (EXTRA ADD-ON)
