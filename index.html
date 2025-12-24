@@ -748,9 +748,6 @@ async function searchStudent(){
       out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
       return;
     }
-
-runGreeting();
-
 // 🔴 DIRECT CONFIRM (NO EXTRA FILE)
 const studentName =
   rec["Student Name"] || rec["Name"] || rec["StudentName"];
@@ -1795,9 +1792,5 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
-
-<link rel="stylesheet" href="greeting/greeting.css">
-<script src="greeting/greeting.js"></script>
-
 </body>
 </html>
