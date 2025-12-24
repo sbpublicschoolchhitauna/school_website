@@ -2883,46 +2883,50 @@ setTimeout(()=>{
 })();
 </script>
 
-<!-- ===== NEW COUNTDOWN POPUP ===== -->
+<!-- ===== BIG COUNTDOWN POPUP ===== -->
 <div id="popupOverlay" style="
 display:none;
 position:fixed;
 top:0;left:0;right:0;bottom:0;
-background:rgba(0,0,0,0.6);
+background:rgba(0,0,0,0.65);
 z-index:999999;
 align-items:center;
 justify-content:center;
 font-family:Arial;
 ">
 
-  <div style="
+  <div id="popupBox" style="
   background:#ffffff;
-  width:90%;
-  max-width:380px;
-  border-radius:14px;
-  padding:20px;
+  width:95%;
+  max-width:650px;        /* 👈 BOX बड़ा */
+  min-height:280px;       /* 👈 ऊँचाई */
+  border-radius:20px;
+  padding:30px;
   text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  box-shadow:0 25px 80px rgba(0,0,0,0.45);
   ">
 
-    <h2 id="popupTitle" style="margin:0;color:#0b5fa8;">
+    <h2 id="popupTitle" style="
+    margin:0;
+    font-size:26px;        /* 👈 बड़ा title */
+    color:#0b5fa8;">
       🎉 महत्वपूर्ण सूचना
     </h2>
 
     <p id="popupText" style="
-    margin-top:12px;
-    font-size:15px;
-    line-height:1.6;
+    margin-top:18px;
+    font-size:17px;        /* 👈 बड़ा text */
+    line-height:1.8;
     color:#333;">
       S.B. PUBLIC SCHOOL परिवार की ओर से  
       आप सभी को हार्दिक शुभकामनाएँ।
     </p>
 
     <p id="popupCountdown" style="
-    margin-top:14px;
+    margin-top:22px;
     font-weight:bold;
-    color:#d32f2f;
-    font-size:14px;">
+    font-size:16px;
+    color:#d32f2f;">
       10 सेकंड शेष…
     </p>
 
