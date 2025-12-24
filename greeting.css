@@ -77,3 +77,50 @@
 @keyframes sunset{
   to{bottom:-260px}
 }
+/* ===== CARTOON CHARACTER ===== */
+.cartoon{
+  font-size:120px;
+  margin-bottom:10px;
+  animation: wave 2s infinite ease-in-out;
+}
+
+@keyframes wave{
+  0%{transform:rotate(0deg)}
+  25%{transform:rotate(6deg)}
+  50%{transform:rotate(-6deg)}
+  75%{transform:rotate(6deg)}
+  100%{transform:rotate(0deg)}
+}
+
+/* ☁️ CLOUDS */
+.cloud{
+  position:absolute;
+  top:15%;
+  font-size:120px;
+  opacity:.7;
+  animation: cloudMove 30s linear infinite;
+}
+
+.cloud.c2{
+  top:30%;
+  font-size:90px;
+  animation-duration:45s;
+}
+
+@keyframes cloudMove{
+  from{left:-20%}
+  to{left:120%}
+}
+
+/* 🐦 BIRDS */
+.bird{
+  position:absolute;
+  top:20%;
+  font-size:40px;
+  animation: birdFly 18s linear infinite;
+}
+
+@keyframes birdFly{
+  from{left:-10%; transform:scale(1)}
+  to{left:110%; transform:scale(.8)}
+}
