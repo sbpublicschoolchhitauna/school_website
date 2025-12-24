@@ -2883,5 +2883,176 @@ setTimeout(()=>{
 })();
 </script>
 
+<style>
+@keyframes popupZoom{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+#festivalEffectsLayer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999999;
+}
+
+/* 🌸 Flower */
+.flower{
+  position:absolute;
+  top:-40px;
+  font-size:26px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* 🇮🇳 Tiranga */
+.flag{
+  position:absolute;
+  top:10px;
+  font-size:34px;
+  animation:wave 3s ease-in-out infinite;
+}
+@keyframes wave{
+  50%{transform:translateX(24px)}
+}
+
+/* 🪔 Diya */
+.diya{
+  position:absolute;
+  bottom:18px;
+  font-size:36px;
+  animation:glow 2s ease-in-out infinite;
+}
+@keyframes glow{
+  50%{filter:drop-shadow(0 0 22px gold)}
+}
+</style>
+
+<!-- 🎉 FESTIVAL POPUP -->
+<div id="festivalPopup" style="
+display:none;
+position:fixed;
+inset:0;
+z-index:1000000;
+background:rgba(0,0,0,.55);
+align-items:center;
+justify-content:center;
+font-family:Arial;
+">
+
+  <div style="
+  background:#ffffff;
+  max-width:420px;
+  width:92%;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+  animation:popupZoom .5s ease;
+  ">
+    <h2 id="festivalTitle" style="margin:0;color:#0b5fa8"></h2>
+    <p id="festivalDesc" style="margin-top:10px;font-size:15px;color:#333"></p>
+    <small style="color:#777">यह जानकारी 10 सेकंड में अपने आप बंद हो जाएगी</small>
+  </div>
+
+</div>
+
+<!-- 🎆 FESTIVAL ANIMATION LAYER -->
+<div id="festivalEffectsLayer"></div>
+
+<!-- 🎶 FESTIVAL SOFT MUSIC -->
+<audio id="festivalMusic" loop>
+  <source src="festival-music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* 🔥 FINAL FESTIVAL / JAYANTI SYSTEM */
+
+const FESTIVAL_API =
+"https://script.google.com/macros/s/AKfycbyB9R7ZVXXNQ0kZgUWC6VEKrdaDibyFvd2X1SzfaGlKkw14RFHS4mAP57vZGJkSDxqo3A/exec";
+
+const popup = document.getElementById("festivalPopup");
+const titleEl = document.getElementById("festivalTitle");
+const descEl  = document.getElementById("festivalDesc");
+const effects = document.getElementById("festivalEffectsLayer");
+const music   = document.getElementById("festivalMusic");
+
+/* 🎆 Animations */
+function startFlowers(){
+  for(let i=0;i<20;i++){
+    const f=document.createElement("div");
+    f.className="flower";
+    f.innerText="🌸";
+    f.style.left=Math.random()*100+"%";
+    f.style.animationDuration=(6+Math.random()*6)+"s";
+    effects.appendChild(f);
+  }
+}
+function startTiranga(){
+  for(let i=0;i<6;i++){
+    const t=document.createElement("div");
+    t.className="flag";
+    t.innerText="🇮🇳";
+    t.style.left=(i*15+5)+"%";
+    effects.appendChild(t);
+  }
+}
+function startDiya(){
+  for(let i=0;i<7;i++){
+    const d=document.createElement("div");
+    d.className="diya";
+    d.innerText="🪔";
+    d.style.left=(i*14+5)+"%";
+    effects.appendChild(d);
+  }
+}
+
+/* 🎤 Voice */
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "hi-IN";
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+
+/* 🚀 MAIN */
+async function checkFestival(){
+  try{
+    const res = await fetch(FESTIVAL_API);
+    const data = await res.json();
+
+    if(!data.events || !data.events.length) return;
+
+    const fest = data.events[0];
+
+    popup.style.display = "flex";
+    titleEl.innerText = fest.title;
+    descEl.innerText  = "आज विशेष दिवस है।";
+
+    if(fest.type==="flag") startTiranga();
+    else if(fest.type==="diya") startDiya();
+    else startFlowers();
+
+    speak(fest.voice || ("आज " + fest.title + " है"));
+
+    setTimeout(()=>music.play().catch(()=>{}),800);
+
+    setTimeout(()=>{
+      popup.style.display="none";
+      effects.innerHTML="";
+      music.pause();
+    },10000);
+
+  }catch(e){
+    console.error("Festival API Error:", e);
+  }
+}
+
+checkFestival();
+</script>
+
 </body>
 </html>
