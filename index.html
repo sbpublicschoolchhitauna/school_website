@@ -1794,175 +1794,145 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
-<!-- ================== TIME BASED 3D CARTOON GREETING (INLINE) ================== -->
+<!-- ===== FULL SCREEN TIME BASED GREETING (INLINE) ===== -->
 <style>
-#greetingOverlay{
+#timeGreeting{
   position:fixed;
   inset:0;
   z-index:999999;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(to top,#4facfe,#00f2fe);
-  animation:fadeIn 1s;
+  overflow:hidden;
+  animation:fadeIn 1s ease;
 }
-#greetingOverlay.hide{
+#timeGreeting.hide{
   animation:fadeOut 1s forwards;
 }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
-.greet-box{
-  text-align:center;
-  color:white;
-  padding:20px;
-}
-
-.cartoon{
-  font-size:120px;
-  animation:wave 2s infinite;
-}
-@keyframes wave{
-  0%,100%{transform:rotate(0deg)}
-  50%{transform:rotate(10deg)}
-}
-
-.cloud{
+.sky{
   position:absolute;
-  top:20%;
-  font-size:120px;
-  opacity:.6;
-  animation:cloudMove 35s linear infinite;
-}
-.cloud.c2{
-  top:35%;
-  font-size:90px;
-  animation-duration:50s;
-}
-@keyframes cloudMove{
-  from{left:-30%}
-  to{left:120%}
-}
-
-.bird{
-  position:absolute;
-  top:28%;
-  font-size:36px;
-  animation:birdFly 18s linear infinite;
-}
-@keyframes birdFly{
-  from{left:-10%}
-  to{left:110%}
+  inset:0;
 }
 
 .sun{
   position:absolute;
-  bottom:-200px;
+  left:50%;
+  transform:translateX(-50%);
   width:260px;
   height:260px;
   border-radius:50%;
-  background:radial-gradient(circle,#ffeb3b,#ff9800);
-  animation:sunrise 4s forwards;
+  background:radial-gradient(circle,#fff176,#ff9800);
 }
-.sun.sunset{
-  animation:sunset 4s forwards;
-}
-@keyframes sunrise{to{bottom:55%}}
-@keyframes sunset{to{bottom:-300px}}
 
-.title{
-  font-size:36px;
-  font-weight:900;
-  margin-top:10px;
+.sunrise{
+  bottom:-260px;
+  animation:sunrise 4s ease forwards;
 }
-.text{
-  font-size:20px;
-  margin-top:6px;
+@keyframes sunrise{
+  to{bottom:55%}
+}
+
+.sunset{
+  bottom:55%;
+  animation:sunset 4s ease forwards;
+}
+@keyframes sunset{
+  to{bottom:-300px}
+}
+
+.content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  color:#fff;
+  font-family:Arial, sans-serif;
+}
+
+.content h1{
+  font-size:40px;
+  margin:10px 0;
+  font-weight:900;
+}
+
+.content p{
+  font-size:22px;
+  line-height:1.5;
 }
 </style>
 
 <script>
 (function(){
-  /* दिन में सिर्फ 1 बार */
+
+  /* 🔒 दिन में सिर्फ 1 बार */
   const today=new Date().toDateString();
-  if(localStorage.greetingDone===today) return;
-  localStorage.greetingDone=today;
+  if(localStorage.timeGreetingDone===today) return;
+  localStorage.timeGreetingDone=today;
 
   const hour=new Date().getHours();
 
-  let title="",text="",voice="",cartoon="👦",sun="",bg="";
-
-  /* simple weather feel */
-  const r=Math.random();
-  if(r<0.33) bg="linear-gradient(to top,#4facfe,#00f2fe)";
-  else if(r<0.66) bg="linear-gradient(to top,#bdc3c7,#2c3e50)";
-  else bg="linear-gradient(to top,#141e30,#243b55)";
+  let title="",text="",voice="",bg="",sunClass="";
 
   if(hour>=5 && hour<12){
     title="Good Morning 🌞";
-    text="आज का दिन नई शुरुआत का है। पूरे मन से पढ़ाई करें।";
-    voice="गुड मॉर्निंग विद्यार्थी। आज पढ़ाई से जीत पक्की है।";
-    sun="sunrise";
-    cartoon="👦";
+    text="आज का दिन नई शुरुआत का है।\nपूरे मन से पढ़ाई करें।";
+    voice="गुड मॉर्निंग विद्यार्थी। आज का दिन नई शुरुआत का है। पूरे मन से पढ़ाई करें।";
+    bg="linear-gradient(to top,#4facfe,#00f2fe)";
+    sunClass="sunrise";
   }
   else if(hour>=12 && hour<16){
     title="Good Afternoon 🌤️";
-    text="नियमित अभ्यास ही सफलता की कुंजी है।";
-    voice="गुड आफ्टरनून विद्यार्थी। आप बहुत अच्छा कर रहे हैं।";
-    cartoon="👧";
+    text="नियमित अभ्यास ही सफलता की कुंजी है।\nखुद पर भरोसा रखें।";
+    voice="गुड आफ्टरनून विद्यार्थी। नियमित अभ्यास ही सफलता की कुंजी है।";
+    bg="linear-gradient(to top,#43cea2,#185a9d)";
   }
   else if(hour>=16 && hour<20){
     title="Good Evening 🌇";
-    text="आज की मेहनत कल की सफलता बनेगी।";
-    voice="गुड ईवनिंग विद्यार्थी। खुद पर भरोसा रखें।";
-    sun="sunset";
-    cartoon="👦";
+    text="आज की मेहनत कल की सफलता बनेगी।\nआगे बढ़ते रहें।";
+    voice="गुड ईवनिंग विद्यार्थी। आज की मेहनत कल की सफलता बनेगी।";
+    bg="linear-gradient(to top,#fa709a,#fee140)";
+    sunClass="sunset";
   }
   else{
     title="Good Night 🌙";
-    text="अब आराम का समय है। कल फिर नई ऊर्जा से मिलेंगे।";
-    voice="गुड नाइट विद्यार्थी। अच्छे सपने देखो।";
-    cartoon="😴";
+    text="आज का दिन शानदार रहा।\nअब आराम करें।";
+    voice="गुड नाइट विद्यार्थी। आज का दिन शानदार रहा। अब आराम करें।";
+    bg="linear-gradient(to top,#141e30,#243b55)";
   }
 
-  const o=document.createElement("div");
-  o.id="greetingOverlay";
-  o.style.background=bg;
-
-  o.innerHTML=`
-    ${sun?`<div class="sun ${sun}"></div>`:""}
-    <div class="cloud">☁️</div>
-    <div class="cloud c2">☁️</div>
-    <div class="bird">🐦</div>
-
-    <div class="greet-box">
-      <div class="cartoon">${cartoon}</div>
-      <div class="title">${title}</div>
-      <div class="text">${text}</div>
+  const box=document.createElement("div");
+  box.id="timeGreeting";
+  box.innerHTML=`
+    <div class="sky" style="background:${bg}"></div>
+    ${sunClass ? `<div class="sun ${sunClass}"></div>` : ``}
+    <div class="content">
+      <h1>${title}</h1>
+      <p>${text.replace(/\n/g,"<br>")}</p>
     </div>
   `;
+  document.body.appendChild(box);
 
-  document.body.appendChild(o);
-
-  /* Hindi Voice */
+  /* 🎤 Hindi Voice */
   setTimeout(()=>{
     if("speechSynthesis" in window){
-      const s=new SpeechSynthesisUtterance(voice);
-      s.lang="hi-IN";
-      s.rate=0.95;
-      speechSynthesis.speak(s);
+      const sp=new SpeechSynthesisUtterance(voice);
+      sp.lang="hi-IN";
+      sp.rate=0.95;
+      speechSynthesis.speak(sp);
     }
   },700);
 
-  /* Auto close 5 sec */
+  /* ⏱️ Auto close 5 sec */
   setTimeout(()=>{
-    o.classList.add("hide");
-    setTimeout(()=>o.remove(),1200);
+    box.classList.add("hide");
+    setTimeout(()=>box.remove(),1200);
   },5000);
 
 })();
 </script>
-<!-- ================== END GREETING ================== -->
+<!-- ===== END GREETING ===== -->
 
 </body>
 </html>
