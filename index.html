@@ -2964,21 +2964,21 @@ setTimeout(()=>{
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function(){
 
   const popup = document.getElementById("popupOverlay");
   const titleEl = document.getElementById("popupTitle");
-  const textEl = document.getElementById("popupText");
+  const textEl  = document.getElementById("popupText");
   const countEl = document.getElementById("popupCountdown");
-  const music = document.getElementById("festivalMusic");
-  const layer = document.getElementById("festivalAnimationLayer");
+  const music   = document.getElementById("festivalMusic");
+  const layer   = document.getElementById("festivalAnimationLayer");
 
   const festivals = {
-    "01-26": {title:"🇮🇳 गणतंत्र दिवस", text:"आज भारत का गणतंत्र दिवस है।", type:"flag", voice:"आज गणतंत्र दिवस है"},
-    "08-15": {title:"🇮🇳 स्वतंत्रता दिवस", text:"आज हमारा स्वतंत्रता दिवस है।", type:"flag", voice:"आज स्वतंत्रता दिवस है"},
-    "10-02": {title:"🙏 गांधी जयंती", text:"आज गांधी जयंती है।", type:"flower", voice:"आज गांधी जयंती है"},
-    "11-14": {title:"👶 बाल दिवस", text:"आज बाल दिवस है।", type:"flower", voice:"आज बाल दिवस है"},
-    "12-25": {title:"🎄 क्रिसमस", text:"आज क्रिसमस का पर्व है।", type:"flower", voice:"आज क्रिसमस है"}
+    "01-26": {title:"🇮🇳 गणतंत्र दिवस", text:"आज भारत का गणतंत्र दिवस है", type:"flag", voice:"आज गणतंत्र दिवस है"},
+    "08-15": {title:"🇮🇳 स्वतंत्रता दिवस", text:"आज हमारा स्वतंत्रता दिवस है", type:"flag", voice:"आज स्वतंत्रता दिवस है"},
+    "10-02": {title:"🙏 गांधी जयंती", text:"आज गांधी जयंती है", type:"flower", voice:"आज गांधी जयंती है"},
+    "11-14": {title:"👶 बाल दिवस", text:"आज बाल दिवस है", type:"flower", voice:"आज बाल दिवस है"},
+    "12-25": {title:"🎄 क्रिसमस", text:"आज क्रिसमस का पर्व है", type:"flower", voice:"आज क्रिसमस है"}
   };
 
   const d = new Date();
@@ -2990,47 +2990,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const fest = festivals[key];
 
+  /* SHOW POPUP */
   popup.style.display = "flex";
   titleEl.innerText = fest.title;
   textEl.innerText =
     "S.B. PUBLIC SCHOOL परिवार की ओर से\n\n" +
-    fest.text + "\n\n" +
+    fest.text + "।\n\n" +
     "आप सभी को हार्दिक शुभकामनाएँ।";
 
+  /* 🎤 VOICE */
   if("speechSynthesis" in window){
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(fest.voice);
-    u.lang="hi-IN";
+    const voiceText =
+      "एस बी पब्लिक स्कूल परिवार की ओर से। " +
+      fest.voice + "। " +
+      "आप सभी को हार्दिक शुभकामनाएँ।";
+
+    const u = new SpeechSynthesisUtterance(voiceText);
+    u.lang = "hi-IN";
+    u.rate = 0.9;
     speechSynthesis.speak(u);
   }
 
+  /* 🎶 MUSIC */
   setTimeout(()=>{
     music.currentTime = 0;
     music.play().catch(()=>{});
   },800);
 
-  function startAnim(type){
-    layer.innerHTML="";
-    if(type==="flag"){
-      for(let i=0;i<6;i++){
-        const t=document.createElement("div");
-        t.className="flag"; t.innerText="🇮🇳";
-        t.style.left=(i*15+5)+"%";
-        layer.appendChild(t);
-      }
-    }else{
-      for(let i=0;i<20;i++){
-        const f=document.createElement("div");
-        f.className="flower"; f.innerText="🌸";
-        f.style.left=Math.random()*100+"%";
-        f.style.animationDuration=(6+Math.random()*6)+"s";
-        layer.appendChild(f);
-      }
+  /* 🎆 ANIMATION */
+  layer.innerHTML="";
+  if(fest.type==="flag"){
+    for(let i=0;i<6;i++){
+      const t=document.createElement("div");
+      t.className="flag"; t.innerText="🇮🇳";
+      t.style.left=(i*15+5)+"%";
+      layer.appendChild(t);
+    }
+  }else{
+    for(let i=0;i<20;i++){
+      const f=document.createElement("div");
+      f.className="flower"; f.innerText="🌸";
+      f.style.left=Math.random()*100+"%";
+      f.style.animationDuration=(6+Math.random()*6)+"s";
+      layer.appendChild(f);
     }
   }
-  startAnim(fest.type);
 
-  let timeLeft = 20;
+  /* COUNTDOWN */
+  let timeLeft = 20; // ⏱️ यहाँ बदल सकते हैं
   countEl.innerText = timeLeft + " सेकंड शेष…";
 
   const timer = setInterval(()=>{
@@ -3048,7 +3056,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
 <style>
+
 /* ===============================
    🔵 BLUE THEME – WHITE 3D POPUP
    =============================== */
