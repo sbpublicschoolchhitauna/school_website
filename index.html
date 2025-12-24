@@ -2585,5 +2585,120 @@ setTimeout(()=>{
 }
 </style>
 
+<script>
+/* 🎂 FINAL BIRTHDAY SYSTEM (Today + Tomorrow Preview) */
+(async function(){
+
+  const SHEET_ID = "1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0";
+  const SHEET_NAME = "Student's Details";
+
+  function parseDOB(d){
+    if(!d) return null;
+    const p = d.toString().split(/[-\/]/);
+    return (p[0].length===4)
+      ? {day:+p[2], month:+p[1]}
+      : {day:+p[0], month:+p[1]};
+  }
+
+  async function loadSheet(){
+    const url =
+      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(SHEET_NAME)}&tqx=out:json`;
+    const res = await fetch(url);
+    const txt = await res.text();
+    return JSON.parse(txt.replace(/^[^{]*/,"").replace(/\);$/,"")).table;
+  }
+
+  const today = new Date();
+  const tDay = today.getDate();
+  const tMonth = today.getMonth()+1;
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate()+1);
+  const tmDay = tomorrow.getDate();
+  const tmMonth = tomorrow.getMonth()+1;
+
+  const table = await loadSheet();
+  const cols = table.cols.map(c=>c.label);
+  const rows = table.rows;
+
+  const nameCol = cols.indexOf("Student Name");
+  const dobCol  = cols.indexOf("Date of Birth");
+  if(nameCol < 0 || dobCol < 0) return;
+
+  let todayHTML = "";
+  let tomorrowNames = [];
+
+  rows.forEach(r=>{
+    const dob = parseDOB(r.c[dobCol]?.v);
+    if(!dob) return;
+
+    const name = r.c[nameCol]?.v;
+
+    if(dob.day === tDay && dob.month === tMonth){
+      todayHTML += `
+        <div class="birthday-item">
+          🎂 ${name}
+          <div class="birthday-wish">
+            जन्मदिन की हार्दिक शुभकामनाएँ 🌸
+          </div>
+        </div>
+      `;
+    }
+
+    if(dob.day === tmDay && dob.month === tmMonth){
+      tomorrowNames.push(name);
+    }
+  });
+
+  const box = document.getElementById("birthdayScrollBox");
+  const inner = document.getElementById("birthdayScrollInner");
+
+  /* OPTION-1: No Birthday Today */
+  if(!todayHTML){
+    inner.innerHTML = `
+      <div class="birthday-item">
+        🎈 आज किसी का जन्मदिन नहीं है
+      </div>
+      ${
+        tomorrowNames.length
+        ? `<div class="birthday-wish">
+             📅 कल जन्मदिन: <b>${tomorrowNames.join(", ")}</b>
+           </div>`
+        : ""
+      }
+    `;
+    box.style.display = "block";
+    return;
+  }
+
+  /* OPTION-2: Birthday Today + Tomorrow Preview */
+  if(tomorrowNames.length){
+    todayHTML += `
+      <div class="birthday-item">
+        📅 कल जन्मदिन:
+        <div class="birthday-wish">
+          ${tomorrowNames.join(", ")}
+        </div>
+      </div>
+    `;
+  }
+
+  /* 🔁 Duplicate for auto scroll */
+  inner.innerHTML = todayHTML + todayHTML;
+  box.style.display = "block";
+
+  /* ⬆️ AUTO SCROLL */
+  let pos = 0;
+  function scroll(){
+    pos -= 0.35;
+    if(Math.abs(pos) >= inner.scrollHeight/2) pos = 0;
+    inner.style.transform = `translateY(${pos}px)`;
+    requestAnimationFrame(scroll);
+  }
+  scroll();
+
+})();
+</script>
+
 </body>
 </html>
