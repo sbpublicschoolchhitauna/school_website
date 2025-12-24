@@ -637,6 +637,16 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       </div>
     </div>
 
+<!-- 🎂 Birthday Box (Footer के ऊपर दिखेगा) -->
+
+<div id="birthdayScrollBox">
+  <h3>🎉 Today Birthday 🎂</h3>
+  <div class="birthday-scroll">
+    <div id="birthdayScrollInner" class="birthday-scroll-inner"></div>
+  </div>
+</div>
+
+
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
 
@@ -2367,9 +2377,10 @@ setTimeout(()=>{
 </div>
 
 <script>
-<!-- ================== 🎂 BIRTHDAY AUTO SCROLL SYSTEM ================== -->
+<!-- ================== 🎂 FINAL BIRTHDAY SYSTEM ================== -->
 
 <style>
+/* 🎂 Birthday Box */
 #birthdayScrollBox{
   display:none;
   max-width:380px;
@@ -2380,6 +2391,7 @@ setTimeout(()=>{
   overflow:hidden;
 }
 
+/* Header */
 #birthdayScrollBox h3{
   margin:0;
   padding:12px;
@@ -2390,12 +2402,14 @@ setTimeout(()=>{
   font-size:16px;
 }
 
+/* Scroll Area */
 .birthday-scroll{
   height:170px;
   overflow:hidden;
   position:relative;
 }
 
+/* Moving Content */
 .birthday-scroll-inner{
   position:absolute;
   top:0;
@@ -2404,6 +2418,7 @@ setTimeout(()=>{
   will-change:transform;
 }
 
+/* Each Student */
 .birthday-item{
   padding:12px;
   text-align:center;
@@ -2412,30 +2427,38 @@ setTimeout(()=>{
   font-size:15px;
 }
 
+/* Wish Text */
 .birthday-wish{
   font-size:13px;
   color:#333;
   margin-top:4px;
 }
-</style>
 
-<div id="birthdayScrollBox">
-  <h3>🎉 Today Birthday 🎂</h3>
-  <div class="birthday-scroll">
-    <div id="birthdayScrollInner" class="birthday-scroll-inner"></div>
-  </div>
-</div>
+/* 📱 Mobile Responsive */
+@media (max-width:480px){
+  #birthdayScrollBox{
+    max-width:94%;
+    border-radius:14px;
+  }
+  #birthdayScrollBox h3{
+    font-size:14px;
+  }
+  .birthday-item{
+    font-size:14px;
+  }
+}
+</style>
 
 <script>
 
-/* ================= 🎂 FINAL BIRTHDAY AUTO SCROLL LOGIC ================= */
+/* ================= 🎂 FINAL BIRTHDAY LOGIC ================= */
 (async function(){
 
-  /* 🔗 Google Sheet details */
+  /* 🔗 Google Sheet Details */
   const SHEET_ID = "1K9EU36olQPdENJ_8wY-9AslkarnOWdrgx7F1DErnSO0";
   const SHEET_NAME = "Student's Details";
 
-  /* 📅 DOB parser */
+  /* 📅 DOB Parser */
   function parseDOB(d){
     if(!d) return null;
     const p = d.toString().split(/[-\/]/);
@@ -2453,15 +2476,16 @@ setTimeout(()=>{
     return JSON.parse(txt.replace(/^[^{]*/,"").replace(/\);$/,"")).table;
   }
 
-  /* 🗓 Today date */
+  /* 🗓 Today */
   const today = new Date();
   const day = today.getDate();
-  const month = today.getMonth()+1;
+  const month = today.getMonth() + 1;
 
-  /* 🔒 show only once per day */
-  const onceKey = "birthdayScroll_"+day+"_"+month;
+  /* 🔒 Show only once per day */
+  const onceKey = "birthday_"+day+"_"+month;
   if(localStorage.getItem(onceKey)) return;
 
+  /* 📥 Get Data */
   const table = await loadSheet();
   const cols = table.cols.map(c=>c.label);
   const rows = table.rows;
@@ -2475,10 +2499,9 @@ setTimeout(()=>{
   rows.forEach(r=>{
     const dob = parseDOB(r.c[dobCol]?.v);
     if(dob && dob.day===day && dob.month===month){
-      const name = r.c[nameCol]?.v;
       html += `
         <div class="birthday-item">
-          🎂 ${name}
+          🎂 ${r.c[nameCol]?.v}
           <div class="birthday-wish">
             जन्मदिन की हार्दिक शुभकामनाएँ 🌸
           </div>
@@ -2487,28 +2510,27 @@ setTimeout(()=>{
     }
   });
 
+  /* ❌ No birthday today */
   if(!html) return;
 
-  /* 🔁 duplicate content for infinite scroll */
+  /* 🔁 Duplicate for infinite scroll */
   const inner = document.getElementById("birthdayScrollInner");
   inner.innerHTML = html + html;
 
   document.getElementById("birthdayScrollBox").style.display = "block";
 
-  /* ⬆️ AUTO SCROLL ENGINE */
+  /* ⬆️ Auto Scroll Engine */
   let pos = 0;
   const speed = 0.35; // scroll speed
 
   function scrollStep(){
     pos -= speed;
-    const halfHeight = inner.scrollHeight / 2;
-    if(Math.abs(pos) >= halfHeight){
+    if(Math.abs(pos) >= inner.scrollHeight / 2){
       pos = 0;
     }
     inner.style.transform = `translateY(${pos}px)`;
     requestAnimationFrame(scrollStep);
   }
-
   requestAnimationFrame(scrollStep);
 
   localStorage.setItem(onceKey,"yes");
@@ -2516,17 +2538,8 @@ setTimeout(()=>{
 })();
 </script>
 
-<!-- ================== 🎂 END BIRTHDAY SYSTEM ================== -->
+<!-- ================== 🎂 END FINAL BIRTHDAY SYSTEM ================== -->
 
-<script>
-document.getElementById("birthdayScrollBox")?.style.display = "block";
-document.getElementById("birthdayScrollInner")?.insertAdjacentHTML(
-  "beforeend",
-  "<div class='birthday-item'>🎂 TEST STUDENT<div class='birthday-wish'>जन्मदिन की शुभकामनाएँ</div></div>"
-);
-</script>
-
-<style>
 /* 📱 Mobile Responsive */
 @media (max-width: 480px){
   #birthdayScrollBox{
