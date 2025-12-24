@@ -3064,42 +3064,75 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <style>
-/* 🎉 WHITE 3D TITLE */
+/* ===============================
+   🔵 BLUE THEME – WHITE 3D POPUP
+   =============================== */
+
+#festivalAnimationLayer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999998;
+}
+
+/* 🎉 TITLE */
 #popupTitle{
-  font-size:var(--popup-title-size);
+  font-size:38px;
   font-weight:900;
   color:#ffffff;
   letter-spacing:1px;
   text-shadow:
-    0 2px 0 rgba(0,0,0,0.25),
-    0 4px 0 rgba(0,0,0,0.20),
-    0 8px 18px rgba(0,0,0,0.45);
+    0 2px 0 rgba(0,0,0,0.35),
+    0 5px 0 rgba(0,0,0,0.25),
+    0 10px 22px rgba(0,0,0,0.55);
   animation:titleFloat 3s ease-in-out infinite;
 }
 
-/* 📝 WHITE 3D BODY TEXT */
+/* 📝 TEXT */
 #popupText{
   margin-top:22px;
-  font-size:var(--popup-text-size);
+  font-size:22px;
   font-weight:700;
-  line-height:var(--popup-line-gap);
+  line-height:1.9;
   color:#ffffff;
   text-shadow:
-    0 1px 0 rgba(0,0,0,0.25),
-    0 3px 8px rgba(0,0,0,0.45);
+    0 1px 0 rgba(0,0,0,0.35),
+    0 4px 10px rgba(0,0,0,0.55);
   animation:textGlow 4s ease-in-out infinite;
 }
 
 /* ⏱️ COUNTDOWN */
 #popupCountdown{
   margin-top:26px;
-  font-size:var(--popup-count-size);
+  font-size:20px;
   font-weight:900;
   color:#ffffff;
   text-shadow:
-    0 2px 0 rgba(0,0,0,0.35),
-    0 5px 12px rgba(0,0,0,0.55);
+    0 2px 0 rgba(0,0,0,0.45),
+    0 6px 14px rgba(0,0,0,0.65);
   animation:pulse 1.2s ease-in-out infinite;
+}
+
+/* 🌸 FLOWER */
+.flower{
+  position:absolute;
+  top:-40px;
+  font-size:26px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* 🇮🇳 FLAG */
+.flag{
+  position:absolute;
+  top:10px;
+  font-size:34px;
+  animation:wave 3s ease-in-out infinite;
+}
+@keyframes wave{
+  50%{transform:translateX(25px)}
 }
 
 /* ✨ ANIMATIONS */
@@ -3109,7 +3142,7 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 @keyframes textGlow{
   0%,100%{opacity:1}
-  50%{opacity:0.9}
+  50%{opacity:0.92}
 }
 @keyframes pulse{
   0%,100%{transform:scale(1)}
