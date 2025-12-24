@@ -1792,5 +1792,142 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
+
+<!-- =====================================================
+  STUDENT TIME BASED 3D GREETING (EXTRA ADD-ON)
+  ❌ Existing code untouched
+===================================================== -->
+
+<div id="studentGreeting" class="sg-box sg-hide">
+  <div class="sg-scene">
+    <div id="sgSky" class="sg-sky"></div>
+
+    <div id="sgSun" class="sg-sun">🌞</div>
+    <div id="sgMoon" class="sg-moon">🌙</div>
+
+    <div id="sgCartoon" class="sg-cartoon">👦</div>
+
+    <div id="sgText" class="sg-text"></div>
+  </div>
+</div>
+
+<style>
+.sg-box{
+  position:fixed; inset:0;
+  z-index:1000000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#87ceeb;
+  animation:sgFade 1s ease;
+}
+.sg-hide{display:none}
+
+.sg-scene{text-align:center}
+
+.sg-sun{
+  font-size:160px;
+  animation:sunRise 4s ease forwards;
+}
+.sg-moon{
+  font-size:140px;
+  display:none;
+}
+
+.sg-cartoon{
+  font-size:120px;
+  margin-top:10px;
+  animation:wave 2s infinite;
+}
+
+.sg-text{
+  margin-top:20px;
+  font-size:28px;
+  font-weight:900;
+  color:#012032;
+  animation:pop 1.6s infinite;
+}
+
+@keyframes sunRise{
+  from{transform:translateY(220px)}
+  to{transform:translateY(0)}
+}
+@keyframes wave{
+  0%{transform:rotate(0deg)}
+  25%{transform:rotate(14deg)}
+  50%{transform:rotate(-10deg)}
+  75%{transform:rotate(14deg)}
+  100%{transform:rotate(0)}
+}
+@keyframes pop{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+}
+@keyframes sgFade{
+  from{opacity:0}
+  to{opacity:1}
+}
+</style>
+
+<script>
+(function(){
+
+  /* 🔁 Day में सिर्फ 1 बार */
+  const key = "studentGreeting_" + new Date().toDateString();
+  if(localStorage.getItem(key)) return;
+  localStorage.setItem(key,"1");
+
+  const box   = document.getElementById("studentGreeting");
+  const sun   = document.getElementById("sgSun");
+  const moon  = document.getElementById("sgMoon");
+  const text  = document.getElementById("sgText");
+  const emoji = document.getElementById("sgCartoon");
+
+  /* 👦👧 Random Student */
+  emoji.textContent = Math.random() > 0.5 ? "👧" : "👦";
+
+  const h = new Date().getHours();
+  let msg="", voice="";
+
+  if(h>=5 && h<12){
+    msg = "🌞 Good Morning Students!<br>आज मेहनत करोगे तो कल सफलता जरूर मिलेगी 📚✨";
+    voice = "Good Morning Students. Aaj mehnat karoge to kal safalta jarur milegi.";
+  }
+  else if(h>=12 && h<17){
+    msg = "☀️ Good Afternoon Students!<br>खुद पर भरोसा रखो, तुम बहुत कुछ कर सकते हो 💪🌟";
+    voice = "Good Afternoon Students. Khud par bharosa rakho, tum bahut kuch kar sakte ho.";
+  }
+  else if(h>=17 && h<21){
+    msg = "🌇 Good Evening Students!<br>हर दिन थोड़ा आगे बढ़ना ही सच्ची जीत है 🚀📖";
+    voice = "Good Evening Students. Har din thoda aage badhna hi sachi jeet hai.";
+  }
+  else{
+    msg = "🌙 Good Night Students!<br>आज का प्रयास कल की सफलता बनेगा 😴🌙";
+    voice = "Good Night Students. Aaj ka prayas kal ki safalta banega.";
+    sun.style.display="none";
+    moon.style.display="block";
+    box.style.background="linear-gradient(#020024,#090979,#000)";
+    text.style.color="#fff";
+  }
+
+  text.innerHTML = msg;
+  box.classList.remove("sg-hide");
+
+  /* 🔊 Voice (Best possible browser voice) */
+  if("speechSynthesis" in window){
+    const u = new SpeechSynthesisUtterance(voice);
+    u.lang = "hi-IN";
+    u.rate = 0.95;
+    speechSynthesis.speak(u);
+  }
+
+  /* ⏳ Auto close */
+  setTimeout(()=>box.classList.add("sg-hide"),9000);
+
+})();
+</script>
+
+<!-- =============== END STUDENT GREETING ADD-ON =============== -->
+
 </body>
 </html>
