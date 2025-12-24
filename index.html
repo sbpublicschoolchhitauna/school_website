@@ -2128,5 +2128,180 @@ setTimeout(()=>{
 </script>
 <!-- ========== END ========== -->
 
+<!-- ===== SUNSET + CARTOON STUDENT SYSTEM ===== -->
+<style>
+#sunSystem{
+  position:fixed;
+  inset:0;
+  z-index:9999999;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+  animation:fadeIn 1s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#sunSystem.hide{animation:fadeOut 1s forwards}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+
+.sky{position:absolute;inset:0;transition:background 2s ease}
+
+/* 🌞 SUN */
+.sun{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:240px;height:240px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff9c4,#ff9800);
+  box-shadow:0 0 120px rgba(255,200,0,.9);
+}
+
+/* ☁️ CLOUDS */
+.cloud{
+  position:absolute;
+  top:15%;
+  font-size:160px;
+  opacity:.6;
+  animation:cloudMove 50s linear infinite;
+}
+.cloud.c2{top:35%;font-size:110px;animation-duration:70s}
+@keyframes cloudMove{from{left:-40%}to{left:120%}}
+
+/* 🐦 BIRDS */
+.bird{
+  position:absolute;
+  top:25%;
+  font-size:42px;
+  animation:birdFly 18s linear infinite;
+}
+@keyframes birdFly{from{left:-10%}to{left:110%}}
+
+/* 🎭 CARTOON STUDENT */
+.student{
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:120px;
+  animation:lookSun 4s ease-in-out infinite;
+}
+@keyframes lookSun{
+  0%,100%{transform:translateX(-50%) rotate(0deg)}
+  50%{transform:translateX(-50%) rotate(-6deg)}
+}
+
+.content{
+  position:relative;
+  z-index:5;
+  text-align:center;
+  color:#fff;
+  text-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+.content h1{font-size:40px;font-weight:900}
+.content p{font-size:22px;line-height:1.5}
+.countdown{font-size:26px;font-weight:700;margin-top:10px}
+</style>
+
+<script>
+(async function(){
+
+if("speechSynthesis" in window) speechSynthesis.cancel();
+
+const API_KEY="ec205c82afed56e514e32b2eaafa1079";
+
+/* LOCATION */
+function getLocation(){
+  return new Promise((res,rej)=>{
+    navigator.geolocation.getCurrentPosition(p=>res(p.coords),e=>rej(e));
+  });
+}
+
+/* WEATHER */
+async function getWeather(lat,lon){
+  const url=`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+  const r=await fetch(url);
+  return r.json();
+}
+
+let city="आपके शहर",temp="--",sunset=0;
+try{
+  const c=await getLocation();
+  const d=await getWeather(c.latitude,c.longitude);
+  city=d.name;
+  temp=Math.round(d.main.temp);
+  sunset=d.sys.sunset*1000;
+}catch(e){}
+
+const fmt=t=>new Date(t).toLocaleTimeString("hi-IN",{hour:"2-digit",minute:"2-digit"});
+
+/* UI */
+const g=document.createElement("div");
+g.id="sunSystem";
+g.innerHTML=`
+  <div class="sky" id="sky" style="background:linear-gradient(to top,#fa709a,#fee140)"></div>
+  <div class="sun" id="sun"></div>
+  <div class="cloud">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="bird">🐦</div>
+
+  <!-- 🎭 CARTOON STUDENT -->
+  <div class="student">🧒</div>
+
+  <div class="content">
+    <h1>Good Evening 🌇</h1>
+    <p>${city} में तापमान ${temp}°C है<br>आज सूर्यास्त ${fmt(sunset)} बजे होगा</p>
+    <div class="countdown" id="countdown"></div>
+  </div>
+`;
+document.body.appendChild(g);
+
+/* VOICE */
+setTimeout(()=>{
+  const u=new SpeechSynthesisUtterance(
+    `गुड ईवनिंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। सूरज डूबने का समय नज़दीक है।`
+  );
+  u.lang="hi-IN";
+  speechSynthesis.speak(u);
+},800);
+
+/* 🌇 REAL-TIME SUNSET COUNTDOWN */
+const sunEl=document.getElementById("sun");
+const cd=document.getElementById("countdown");
+
+const interval=setInterval(()=>{
+  const diff=sunset-new Date().getTime();
+  if(diff<=0){
+    clearInterval(interval);
+    cd.innerText="🌇 सूर्य अस्त हो चुका है";
+    sunEl.style.opacity="0";
+    document.getElementById("sky").style.background="#000";
+    return;
+  }
+  const min=Math.floor(diff/60000);
+  const sec=Math.floor((diff%60000)/1000);
+  cd.innerText=`सूर्यास्त में शेष: ${min} मिनट ${sec} सेकंड`;
+
+  sunEl.style.bottom=(diff/60000*2)+"px";
+
+  if(diff<=1800000){
+    speechSynthesis.cancel();
+    const alert=new SpeechSynthesisUtterance("सूरज डूबने वाला है।");
+    alert.lang="hi-IN";
+    speechSynthesis.speak(alert);
+  }
+},1000);
+
+/* AUTO CLOSE */
+setTimeout(()=>{
+  g.classList.add("hide");
+  setTimeout(()=>g.remove(),1200);
+},9000);
+
+})();
+</script>
+<!-- ===== END SYSTEM ===== -->
+
 </body>
 </html>
