@@ -2310,11 +2310,13 @@ setTimeout(()=>{
 </script>
 <!-- ========== END SYSTEM ========== -->
 
-<!-- ========= FULL SCREEN GREETING : SUN–EARTH–MOON–STARS ========= -->
+<!-- ========= FULL SCREEN GREETING : FINAL COSMIC SYSTEM ========= -->
 <style>
 #cosmicGreeting{
-  position:fixed; inset:0;
-  width:100vw; height:100vh;
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
   z-index:9999999;
   overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;
@@ -2323,31 +2325,12 @@ setTimeout(()=>{
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
 .sky{
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
   transition:background 3s ease;
 }
 
-/* ✨ STARS */
-.stars{
-  position:absolute; inset:0;
-  pointer-events:none;
-}
-.star{
-  position:absolute;
-  width:2px; height:2px;
-  background:#fff;
-  border-radius:50%;
-  opacity:.6;
-  animation:twinkle 2.5s infinite ease-in-out;
-}
-.star.big{width:3px;height:3px;opacity:.8}
-.star.small{width:1.5px;height:1.5px;opacity:.5}
-@keyframes twinkle{
-  0%,100%{opacity:.2}
-  50%{opacity:1}
-}
-
-/* 🌍 EARTH CURVE */
+/* 🌍 EARTH CURVATURE */
 .earth{
   position:absolute;
   bottom:-35%;
@@ -2360,58 +2343,115 @@ setTimeout(()=>{
   box-shadow:0 -40px 120px rgba(0,0,0,.6);
 }
 
-/* 🌞 SUN */
+/* 🌞 SUN (SMALL & SAFE) */
 .sun{
   position:absolute;
-  width:200px; height:200px;
+  width:130px;
+  height:130px;
   border-radius:50%;
   background:radial-gradient(circle,#fff9c4,#ff9800);
   box-shadow:
-    0 0 80px rgba(255,200,0,.9),
-    0 0 200px rgba(255,180,0,.6);
-}
-
-/* 🌙 MOON */
-.moon{
-  position:absolute;
-  width:140px; height:140px;
-  border-radius:50%;
-  background:radial-gradient(circle,#f5f5f5,#bdbdbd);
-  box-shadow:0 0 40px rgba(255,255,255,.6);
+    0 0 40px rgba(255,200,0,.9),
+    0 0 100px rgba(255,180,0,.6);
 }
 
 /* 🌞 SUN ARC PATH */
 .sun-path{
   position:absolute;
-  width:120%; height:120%;
-  left:-10%; bottom:-20%;
+  width:100vw;
+  height:100vw;
+  left:50%;
+  bottom:-50vw;
+  transform:translateX(-50%);
+  pointer-events:none;
 }
-.sun-path.morning{animation:sunArcMorning 12s linear infinite}
-.sun-path.evening{animation:sunArcEvening 12s linear infinite}
-@keyframes sunArcMorning{from{transform:rotate(-120deg)}to{transform:rotate(0deg)}}
-@keyframes sunArcEvening{from{transform:rotate(0deg)}to{transform:rotate(120deg)}}
+.sun-path.morning{animation:sunArcMorning 10s linear infinite}
+.sun-path.evening{animation:sunArcEvening 10s linear infinite}
+.sun-path .sun{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+/* 🌞 ARC KEYFRAMES (LIMITED – VISIBLE) */
+@keyframes sunArcMorning{
+  from{transform:translateX(-50%) rotate(-95deg)}
+  to{transform:translateX(-50%) rotate(-30deg)}
+}
+@keyframes sunArcEvening{
+  from{transform:translateX(-50%) rotate(-30deg)}
+  to{transform:translateX(-50%) rotate(95deg)}
+}
+
+/* 🌙 MOON */
+.moon{
+  position:absolute;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:radial-gradient(circle,#f5f5f5,#bdbdbd);
+  box-shadow:0 0 40px rgba(255,255,255,.6);
+}
 
 /* 🌙 MOON ORBIT */
 .moon-path{
   position:absolute;
-  width:120%; height:120%;
-  left:-10%; bottom:-20%;
+  width:120%;
+  height:120%;
+  left:-10%;
+  bottom:-20%;
   animation:moonOrbit 18s linear infinite;
 }
-@keyframes moonOrbit{from{transform:rotate(180deg)}to{transform:rotate(540deg)}}
+@keyframes moonOrbit{
+  from{transform:rotate(180deg)}
+  to{transform:rotate(540deg)}
+}
 
+/* ✨ STARS */
+.stars{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#fff;
+  border-radius:50%;
+  opacity:.6;
+  animation:twinkle 2.5s infinite ease-in-out;
+}
+.star.big{width:3px;height:3px}
+.star.small{width:1.5px;height:1.5px}
+@keyframes twinkle{
+  0%,100%{opacity:.2}
+  50%{opacity:1}
+}
+
+/* 📢 TEXT */
 .content{
-  position:relative; z-index:5;
-  text-align:center; color:#fff;
+  position:relative;
+  z-index:5;
+  text-align:center;
+  color:#fff;
   text-shadow:0 6px 18px rgba(0,0,0,.45);
   top:8%;
 }
-.content h1{font-size:40px;font-weight:900;margin-bottom:10px}
-.content p{font-size:22px}
+.content h1{
+  font-size:40px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.content p{
+  font-size:22px;
+}
 </style>
 
 <script>
 (function(){
+
   const hour=new Date().getHours();
   let title="",text="",skyBg="",mode="";
 
@@ -2420,17 +2460,20 @@ setTimeout(()=>{
     text="नई सुबह, नई ऊर्जा। पूरे मन से पढ़ाई शुरू करें।";
     skyBg="linear-gradient(to top,#4facfe,#00f2fe)";
     mode="morning";
-  }else if(hour>=12&&hour<16){
+  }
+  else if(hour>=12&&hour<16){
     title="Good Afternoon ☀️";
     text="दोपहर का समय है, ध्यान बनाए रखें और पढ़ाई जारी रखें।";
     skyBg="linear-gradient(to top,#43cea2,#185a9d)";
     mode="zenith";
-  }else if(hour>=16&&hour<20){
+  }
+  else if(hour>=16&&hour<20){
     title="Good Evening 🌇";
     text="सूरज ढल रहा है, आज की मेहनत पर गर्व करें।";
     skyBg="linear-gradient(to top,#fa709a,#fee140)";
     mode="evening";
-  }else{
+  }
+  else{
     title="Good Night 🌙";
     text="रात का समय है, आराम करें ताकि कल नई ऊर्जा मिले।";
     skyBg="linear-gradient(to top,#0f2027,#203a43,#2c5364)";
@@ -2441,7 +2484,6 @@ setTimeout(()=>{
   g.id="cosmicGreeting";
   g.innerHTML=`
     <div class="sky" style="background:${skyBg}"></div>
-    ${mode==="night" ? `<div class="stars" id="stars"></div>` : ``}
 
     ${
       mode==="morning"
@@ -2449,11 +2491,14 @@ setTimeout(()=>{
         : mode==="evening"
         ? `<div class="sun-path evening"><div class="sun"></div></div>`
         : mode==="zenith"
-        ? `<div class="sun" style="left:50%;top:18%;transform:translateX(-50%)"></div>`
+        ? `<div class="sun" style="left:50%;top:14%;transform:translateX(-50%)"></div>`
         : `<div class="moon-path"><div class="moon"></div></div>`
     }
 
+    ${mode==="night" ? `<div class="stars" id="stars"></div>` : ``}
+
     <div class="earth"></div>
+
     <div class="content">
       <h1>${title}</h1>
       <p>${text}</p>
@@ -2461,14 +2506,13 @@ setTimeout(()=>{
   `;
   document.body.appendChild(g);
 
-  /* ✨ CREATE STARS (Night only) */
+  /* ✨ CREATE STARS */
   if(mode==="night"){
     const stars=document.getElementById("stars");
-    const count=120; // safe number
-    for(let i=0;i<count;i++){
+    for(let i=0;i<120;i++){
       const s=document.createElement("div");
-      const size=Math.random();
-      s.className="star "+(size>.7?"big":size<.3?"small":"");
+      const r=Math.random();
+      s.className="star "+(r>.7?"big":r<.3?"small":"");
       s.style.left=Math.random()*100+"%";
       s.style.top=Math.random()*100+"%";
       s.style.animationDelay=(Math.random()*3)+"s";
@@ -2476,10 +2520,23 @@ setTimeout(()=>{
     }
   }
 
+  /* 🌞 KEEP SUN VISIBLE BEFORE CLOSE */
+  setTimeout(()=>{
+    const sun=document.querySelector(".sun");
+    if(sun){
+      sun.style.transition="all 1s ease";
+      sun.style.top="16%";
+      sun.style.left="50%";
+      sun.style.transform="translateX(-50%) scale(0.85)";
+    }
+  },5500);
+
+  /* ⏱️ AUTO CLOSE */
   setTimeout(()=>g.remove(),7000);
+
 })();
 </script>
-<!-- ========= END FULL SCREEN GREETING ========= -->
+<!-- ========= END FINAL COSMIC SYSTEM ========= -->
 
 </body>
 </html>
