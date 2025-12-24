@@ -1856,6 +1856,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
   from{opacity:0}to{opacity:1}
 }
 </style>
+
 <script>
 (function(){
   const h = new Date().getHours();
@@ -1901,6 +1902,127 @@ html, body { max-width: 100%; overflow-x: hidden; }
 })();
 </script>
 <!-- ===== END GREETING SYSTEM ===== -->
+<!-- ===== ADVANCED CARTOON GREETING ===== -->
+<div id="cgBox" class="cg hidden">
+  <div class="cg-scene">
+    <div id="cgChar" class="char boy">👦</div>
+    <div id="cgText" class="cg-text"></div>
+  </div>
+</div>
+
+<style>
+.cg{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  z-index:999999;
+  background:#87ceeb;
+  animation:fadeIn 1s ease;
+}
+.hidden{display:none}
+
+.cg-scene{text-align:center}
+.char{
+  font-size:140px;
+  animation:wave 2s infinite;
+  transform-origin:70% 70%;
+}
+.boy{ }
+.girl{ }
+
+.cg-text{
+  margin-top:20px;
+  font-size:28px;
+  font-weight:900;
+  color:#012032;
+  animation:pop 1.8s infinite;
+}
+
+@keyframes wave{
+  0%{transform:rotate(0deg)}
+  20%{transform:rotate(15deg)}
+  40%{transform:rotate(-10deg)}
+  60%{transform:rotate(15deg)}
+  100%{transform:rotate(0deg)}
+}
+@keyframes pop{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+}
+@keyframes fadeIn{
+  from{opacity:0}to{opacity:1}
+}
+</style>
+<script>
+(async function(){
+  const box = document.getElementById("cgBox");
+  const text = document.getElementById("cgText");
+  const char = document.getElementById("cgChar");
+
+  /* 🎭 Random Cartoon Boy / Girl */
+  if(Math.random() > 0.5){
+    char.textContent = "👧";
+    char.className = "char girl";
+  }else{
+    char.textContent = "👦";
+    char.className = "char boy";
+  }
+
+  /* ⏰ Time Greeting */
+  const h = new Date().getHours();
+  let msg="", voiceText="";
+
+  if(h>=5 && h<12){
+    msg="🌞 Good Morning!<br>आज पढ़ाई से जीत पक्की है 📚";
+    voiceText="Good Morning Students, aaj padhai se jeet pakki hai";
+  }
+  else if(h<17){
+    msg="☀️ Good Afternoon!<br>खुद पर भरोसा रखो 💪";
+    voiceText="Good Afternoon Students, khud par bharosa rakho";
+  }
+  else if(h<21){
+    msg="🌇 Good Evening!<br>हर दिन कुछ नया सीखो 🌟";
+    voiceText="Good Evening Students, har din kuch naya seekho";
+  }
+  else{
+    msg="🌙 Good Night!<br>कल और बेहतर करेंगे 😴";
+    voiceText="Good Night Students, kal aur behtar karenge";
+    box.style.background="linear-gradient(#020024,#090979,#000)";
+  }
+
+  text.innerHTML = msg;
+
+  /* 🌦️ Weather Based Background */
+  try{
+    const res = await fetch(
+      "https://api.openweathermap.org/data/2.5/weather?q=Gorakhpur,in&appid=YOUR_API_KEY&units=metric"
+    );
+    const data = await res.json();
+    const w = data.weather[0].main.toLowerCase();
+
+    if(w.includes("rain")) box.style.background="#4a6fa5";
+    else if(w.includes("cloud")) box.style.background="#cfd8dc";
+    else if(w.includes("fog")) box.style.background="#e0e0e0";
+    else box.style.background="#87ceeb";
+  }catch(e){}
+
+  box.classList.remove("hidden");
+
+  /* 🎤 Random Child Voice */
+  if("speechSynthesis" in window){
+    const voices = speechSynthesis.getVoices();
+    const childVoices = voices.filter(v =>
+      v.lang.includes("hi") || v.lang.includes("en")
+    );
+    const u = new SpeechSynthesisUtterance(voiceText);
+    u.voice = childVoices[Math.floor(Math.random()*childVoices.length)];
+    u.rate = 0.95;
+    speechSynthesis.speak(u);
+  }
+
+  setTimeout(()=>box.classList.add("hidden"),9000);
+})();
+</script>
+<!-- ===== END CARTOON GREETING ===== -->
 
 </body>
 </html>
