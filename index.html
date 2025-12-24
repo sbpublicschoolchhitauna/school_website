@@ -208,16 +208,19 @@ justify-content:center;
 font-family:Arial;
 ">
 
-  <div id="popupBox" style="
-  background:#ffffff;
-  width:95%;
-  max-width:650px;
-  min-height:300px;
-  border-radius:20px;
-  padding:30px;
-  text-align:center;
-  box-shadow:0 25px 80px rgba(0,0,0,0.45);
-  ">
+<div id="popupBox" style="
+background:linear-gradient(145deg,#ffffff,#f1f1f1);
+width:96%;
+max-width:820px;              /* 👈 और बड़ा box */
+min-height:360px;
+border-radius:28px;
+padding:40px;
+text-align:center;
+box-shadow:
+  0 25px 50px rgba(0,0,0,0.35),
+  inset 0 2px 4px rgba(255,255,255,0.9);
+transform:perspective(1000px) rotateX(3deg);
+">
 
     <h2 id="popupTitle" style="margin:0;font-size:26px;color:#0b5fa8;"></h2>
 
@@ -3054,6 +3057,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<style>
+/* 🔳 3D TITLE TEXT */
+#popupTitle{
+  font-size:34px;               /* 👈 बड़ा title */
+  font-weight:900;
+  color:#0b5fa8;
+  text-shadow:
+    0 2px 0 #cfd8dc,
+    0 4px 0 #b0bec5,
+    0 8px 18px rgba(0,0,0,0.35);
+}
+
+/* 📝 3D BODY TEXT */
+#popupText{
+  font-size:21px;               /* 👈 बड़ा text */
+  line-height:1.9;
+  font-weight:600;
+  color:#333;
+  text-shadow:
+    0 1px 0 #eee,
+    0 3px 6px rgba(0,0,0,0.25);
+}
+
+/* ⏱️ 3D COUNTDOWN */
+#popupCountdown{
+  font-size:20px;
+  font-weight:800;
+  color:#d32f2f;
+  text-shadow:
+    0 1px 0 #ffdada,
+    0 3px 8px rgba(0,0,0,0.35);
+}
+
+/* ✨ 3D HOVER EFFECT (Desktop bonus) */
+#popupBox:hover{
+  transform:perspective(1000px) rotateX(0deg) scale(1.02);
+  transition:transform .4s ease;
+}
+</style>
 
 </body>
 </html>
