@@ -2525,5 +2525,52 @@ document.getElementById("birthdayScrollInner")?.insertAdjacentHTML(
   "<div class='birthday-item'>🎂 TEST STUDENT<div class='birthday-wish'>जन्मदिन की शुभकामनाएँ</div></div>"
 );
 </script>
+
+<style>
+/* 📱 Mobile Responsive */
+@media (max-width: 480px){
+  #birthdayScrollBox{
+    max-width:94%;
+    margin:12px auto;
+    border-radius:14px;
+  }
+
+  #birthdayScrollBox h3{
+    font-size:14px;
+    padding:10px;
+  }
+
+  .birthday-scroll{
+    height:140px;
+  }
+
+  .birthday-item{
+    font-size:14px;
+    padding:10px;
+  }
+
+  .birthday-wish{
+    font-size:12px;
+  }
+}
+
+/* 📲 Tablet Responsive */
+@media (min-width:481px) and (max-width:768px){
+  #birthdayScrollBox{
+    max-width:70%;
+  }
+  .birthday-scroll{
+    height:160px;
+  }
+}
+
+/* 🖥️ Desktop Large Screen */
+@media (min-width:1200px){
+  #birthdayScrollBox{
+    max-width:420px;
+  }
+}
+</style>
+
 </body>
 </html>
