@@ -637,6 +637,25 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
       </div>
     </div>
 
+<div id="birthdayBanner"></div>
+
+<div id="birthdayPopup">
+  <div class="card">
+    <h2>🎉 Happy Birthday 🎂</h2>
+
+    <div class="multi-cakes">
+      <span>🎂</span><span>🧁</span><span>🍰</span><span>🎂</span><span>🧁</span>
+    </div>
+
+    <p id="birthdayText"></p>
+    <button onclick="closeBirthday()">धन्यवाद</button>
+  </div>
+</div>
+
+<div class="balloons">
+  <span>🎈</span><span>🎈</span><span>🎈</span><span>🎈</span><span>🎈</span>
+</div>
+
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
 
@@ -2309,5 +2328,188 @@ setTimeout(()=>{
 })();
 </script>
 <!-- ========== END SYSTEM ========== -->
+
+<style>
+/* 📢 Birthday Banner */
+#birthdayBanner{
+  display:none;
+  background:linear-gradient(90deg,#ffb703,#ff006e);
+  color:#fff;
+  padding:14px;
+  text-align:center;
+  font-weight:900;
+  border-radius:14px;
+  margin:14px auto;
+  max-width:1100px;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+/* 🎈 Popup */
+#birthdayPopup{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.6);
+  z-index:999999;
+}
+#birthdayPopup .card{
+  background:#fff;
+  padding:24px;
+  border-radius:20px;
+  text-align:center;
+  width:360px;
+  max-width:90%;
+  transform:scale(.7) rotateX(25deg);
+  animation:popup3d .6s forwards;
+}
+@keyframes popup3d{
+  to{transform:scale(1) rotateX(0)}
+}
+#birthdayPopup h2{color:#ff006e;margin:0}
+#birthdayPopup p{font-size:15px;margin-top:8px}
+#birthdayPopup button{
+  margin-top:14px;
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  background:#0b5fa8;
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* 🎂 Multi Cakes */
+.multi-cakes{display:flex;justify-content:center;gap:10px;margin:10px 0}
+.multi-cakes span{
+  font-size:42px;
+  animation:cakeDance 2.4s ease-in-out infinite;
+}
+.multi-cakes span:nth-child(2){animation-delay:.3s}
+.multi-cakes span:nth-child(3){animation-delay:.6s}
+.multi-cakes span:nth-child(4){animation-delay:.9s}
+.multi-cakes span:nth-child(5){animation-delay:1.2s}
+
+@keyframes cakeDance{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-14px) rotate(8deg)}
+  100%{transform:translateY(0)}
+}
+
+/* 🎈 Balloons */
+.balloons{position:fixed;inset:0;pointer-events:none;z-index:999998}
+.balloons span{
+  position:absolute;
+  bottom:-60px;
+  font-size:46px;
+  animation:fly 8s linear infinite;
+}
+.balloons span:nth-child(1){left:10%}
+.balloons span:nth-child(2){left:30%;animation-delay:1s}
+.balloons span:nth-child(3){left:50%;animation-delay:2s}
+.balloons span:nth-child(4){left:70%;animation-delay:1.5s}
+.balloons span:nth-child(5){left:90%;animation-delay:.5s}
+
+@keyframes fly{
+  to{transform:translateY(-120vh)}
+}
+
+/* 🎆 Confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:999997}
+.confetti span{
+  position:absolute;
+  top:-10px;
+  width:8px;
+  height:14px;
+  animation:confettiFall 4s linear forwards;
+}
+@keyframes confettiFall{
+  to{transform:translateY(110vh) rotate(720deg);opacity:0}
+}
+</style>
+
+<script>
+/* 🎂 FINAL BIRTHDAY SYSTEM — Marksheet Details */
+(async function(){
+
+const SHEET_ID="1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+
+function speakHindi(t){
+  if(!speechSynthesis) return;
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang="hi-IN"; u.rate=.9;
+  speechSynthesis.speak(u);
+}
+
+function parseDOB(d){
+  if(!d) return null;
+  const p=d.split(/[-\/]/);
+  return (p[0].length===4)
+    ?{day:+p[2],month:+p[1]}
+    :{day:+p[0],month:+p[1]};
+}
+
+async function loadSheet(){
+  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=Marksheet Details&tqx=out:json`;
+  const r=await fetch(url);
+  const t=await r.text();
+  return JSON.parse(t.replace(/^[^{]*/,"").replace(/\);$/,"")).table;
+}
+
+const d=new Date();
+const key="birthday_"+d.getDate()+"_"+(d.getMonth()+1);
+if(localStorage.getItem(key)) return;
+
+const table=await loadSheet();
+const cols=table.cols.map(c=>c.label);
+const rows=table.rows;
+
+const nCol=cols.indexOf("Student Name");
+const dobCol=cols.indexOf("Date of Birth");
+if(nCol<0||dobCol<0) return;
+
+let kids=[];
+rows.forEach(r=>{
+  const dob=parseDOB(r.c[dobCol]?.v);
+  if(dob && dob.day===d.getDate() && dob.month===d.getMonth()+1){
+    kids.push(r.c[nCol]?.v);
+  }
+});
+
+if(!kids.length) return;
+localStorage.setItem(key,"yes");
+
+document.getElementById("birthdayBanner").style.display="block";
+document.getElementById("birthdayBanner").innerHTML=
+"🎂 आज जन्मदिन है: <b>"+kids.join(", ")+"</b>";
+
+const msg="जन्मदिन की हार्दिक शुभकामनाएँ। ईश्वर आपको स्वस्थ, खुशहाल और पढ़ाई में निरंतर सफलता प्रदान करे।";
+document.getElementById("birthdayText").innerText=kids.join(", ")+" — "+msg;
+document.getElementById("birthdayPopup").style.display="flex";
+speakHindi(msg);
+confettiBlast();
+
+})();
+
+function confettiBlast(){
+  const c=document.createElement("div");
+  c.className="confetti";
+  const colors=["#ff006e","#ffbe0b","#3a86ff","#06d6a0","#8338ec"];
+  for(let i=0;i<120;i++){
+    const s=document.createElement("span");
+    s.style.left=Math.random()*100+"%";
+    s.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),4500);
+}
+
+function closeBirthday(){
+  document.getElementById("birthdayPopup").style.display="none";
+}
+</script>
+
 </body>
 </html>
