@@ -2310,5 +2310,152 @@ setTimeout(()=>{
 </script>
 <!-- ========== END SYSTEM ========== -->
 
+<!-- ========= FULL SCREEN GREETING – 3D SUN VERSION ========= -->
+<style>
+#greeting3D{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  z-index:9999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow:hidden;
+  animation:fadeIn 1s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.light-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(255,220,120,0);
+  transition:background 4s ease;
+  pointer-events:none;
+}
+
+/* 🌞 3D SUN */
+.sun3d{
+  position:absolute;
+  left:50%;
+  transform-style:preserve-3d;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff7b2,#ff9800);
+  box-shadow:
+    0 0 60px rgba(255,200,0,.8),
+    0 0 140px rgba(255,180,0,.6);
+  animation:spinSun 8s linear infinite;
+}
+@keyframes spinSun{
+  from{transform:translateX(-50%) rotateY(0deg) rotateZ(0deg);}
+  to{transform:translateX(-50%) rotateY(360deg) rotateZ(360deg);}
+}
+
+/* ☀️ SUN POSITIONS */
+.sunrise{
+  bottom:-260px;
+  animation:
+    sunriseMove 4s forwards,
+    spinSun 8s linear infinite;
+}
+@keyframes sunriseMove{
+  to{bottom:55%}
+}
+
+.sunset{
+  bottom:55%;
+  animation:
+    sunsetMove 4s forwards,
+    spinSun 8s linear infinite;
+}
+@keyframes sunsetMove{
+  to{bottom:-320px}
+}
+
+/* 🌤️ SKY TEXT */
+.content{
+  position:relative;
+  z-index:5;
+  text-align:center;
+  color:#fff;
+  text-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+.content h1{
+  font-size:40px;
+  margin:10px 0;
+  font-weight:900;
+}
+.content p{
+  font-size:22px;
+}
+</style>
+
+<script>
+(function(){
+
+  const hour = new Date().getHours();
+  let title="", info="", sunClass="", bg="", light="";
+
+  /* ⏰ TIME BASED LOGIC */
+  if(hour >= 5 && hour < 12){
+    title = "Good Morning 🌞";
+    info  = "नई सुबह, नई ऊर्जा के साथ पढ़ाई शुरू करें।";
+    sunClass = "sunrise";
+    bg = "linear-gradient(to top,#4facfe,#00f2fe)";
+    light = "rgba(255,220,120,0.65)";
+  }
+  else if(hour >= 12 && hour < 16){
+    title = "Good Afternoon 🌤️";
+    info  = "मौसम साफ है, पढ़ाई पर ध्यान बनाए रखें।";
+    sunClass = "";
+    bg = "linear-gradient(to top,#43cea2,#185a9d)";
+    light = "rgba(255,240,180,0.45)";
+  }
+  else if(hour >= 16 && hour < 20){
+    title = "Good Evening 🌇";
+    info  = "दिन समाप्त हो रहा है, लक्ष्य की समीक्षा करें।";
+    sunClass = "sunset";
+    bg = "linear-gradient(to top,#fa709a,#fee140)";
+    light = "rgba(255,180,120,0.25)";
+  }
+  else{
+    title = "Good Night 🌙";
+    info  = "अब आराम करें ताकि कल नई ऊर्जा मिले।";
+    bg = "linear-gradient(to top,#141e30,#243b55)";
+    light = "rgba(0,0,0,0)";
+  }
+
+  const g = document.createElement("div");
+  g.id = "greeting3D";
+  g.style.background = bg;
+
+  g.innerHTML = `
+    <div class="light-overlay" id="lightLayer"></div>
+    ${sunClass !== "" ? `<div class="sun3d ${sunClass}"></div>` : `<div class="sun3d" style="bottom:55%"></div>`}
+    <div class="content">
+      <h1>${title}</h1>
+      <p>${info}</p>
+    </div>
+  `;
+
+  document.body.appendChild(g);
+
+  /* 🌟 LIGHT EFFECT */
+  setTimeout(()=>{
+    document.getElementById("lightLayer").style.background = light;
+  },600);
+
+  /* ⏱️ AUTO CLOSE */
+  setTimeout(()=>{
+    g.remove();
+  },6000);
+
+})();
+</script>
+<!-- ========= END FULL SCREEN GREETING ========= -->
+
 </body>
 </html>
