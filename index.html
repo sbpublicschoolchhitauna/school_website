@@ -3065,7 +3065,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <style>
 /* 🔳 3D TITLE TEXT */
 #popupTitle{
-  font-size:34px;               /* 👈 बड़ा title */
+  font-size:38px;               /* 👈 बड़ा title */
   font-weight:900;
   color:#0b5fa8;
   text-shadow:
@@ -3076,7 +3076,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* 📝 3D BODY TEXT */
 #popupText{
-  font-size:21px;               /* 👈 बड़ा text */
+  font-size:28px;               /* 👈 बड़ा text */
   line-height:1.9;
   font-weight:600;
   color:#333;
@@ -3098,71 +3098,6 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ✨ 3D HOVER EFFECT (Desktop bonus) */
 #popupBox:hover{
   transform:perspective(1000px) rotateX(0deg) scale(1.02);
-  transition:transform .4s ease;
-}
-</style>
-
-<style>
-/* 🌈 BOX GRADIENT ANIMATION */
-@keyframes boxGradient{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-
-/* 🎉 3D ANIMATED TITLE */
-#popupTitle{
-  font-size:36px;
-  font-weight:900;
-  color:#0b2a4a;
-  text-shadow:
-    0 2px 0 #ffffff,
-    0 4px 0 #cfd8dc,
-    0 10px 22px rgba(0,0,0,0.45);
-  animation:titleFloat 3s ease-in-out infinite;
-}
-
-@keyframes titleFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-
-/* 📝 3D BODY TEXT */
-#popupText{
-  font-size:22px;
-  font-weight:700;
-  line-height:1.9;
-  color:#1a1a1a;
-  text-shadow:
-    0 1px 0 #fff,
-    0 3px 6px rgba(0,0,0,0.35);
-  animation:textGlow 4s ease-in-out infinite;
-}
-
-@keyframes textGlow{
-  0%,100%{filter:brightness(1)}
-  50%{filter:brightness(1.15)}
-}
-
-/* ⏱️ COUNTDOWN – 3D PULSE */
-#popupCountdown{
-  font-size:21px;
-  font-weight:900;
-  color:#b71c1c;
-  text-shadow:
-    0 2px 0 #ffd6d6,
-    0 5px 10px rgba(0,0,0,0.4);
-  animation:pulse 1s ease-in-out infinite;
-}
-
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.08)}
-}
-
-/* ✨ HOVER (Desktop bonus) */
-#popupBox:hover{
-  transform:perspective(1200px) rotateX(0deg) scale(1.03);
   transition:transform .4s ease;
 }
 </style>
