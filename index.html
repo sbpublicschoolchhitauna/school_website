@@ -1875,7 +1875,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </script>
 <!-- ================= END GREETING ================= -->
 
-<!-- ========== FINAL WEATHER + TEMPERATURE GREETING SYSTEM ========== -->
+<!-- ========== FINAL WEATHER + MOTIVATION + SUN LIGHT SYSTEM ========== -->
 <style>
 #weatherGreeting{
   position:fixed;
@@ -1891,29 +1891,70 @@ html, body { max-width: 100%; overflow-x: hidden; }
   animation:fadeIn 1s ease;
 }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-#weatherGreeting.hide{
-  animation:fadeOut 1s forwards;
-}
+#weatherGreeting.hide{animation:fadeOut 1s forwards}
 @keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
-.sky{position:absolute;inset:0}
+.sky{
+  position:absolute;
+  inset:0;
+  transition:background 4s ease;
+}
 
-/* ☀️ SUN */
+/* 🌞 SUN */
 .sun{
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  width:220px;height:220px;
+  width:240px;
+  height:240px;
   border-radius:50%;
-  background:radial-gradient(circle,#fff59d,#ff9800);
+  background:radial-gradient(circle,#fff9c4,#ff9800);
+  box-shadow:
+    0 0 60px rgba(255,200,0,.9),
+    0 0 140px rgba(255,200,0,.7),
+    0 0 260px rgba(255,200,0,.5);
+  opacity:0;
 }
-.sunrise{bottom:-260px;animation:sunrise 4s forwards}
-@keyframes sunrise{to{bottom:55%}}
-.sunset{bottom:55%;animation:sunset 4s forwards}
-@keyframes sunset{to{bottom:-320px}}
 
-/* ☁️ CLOUDS (PARALLAX) */
+/* ☀️ MORNING */
+.sunrise{
+  bottom:-280px;
+  animation:
+    sunriseMove 4s forwards,
+    lightOn 4s forwards;
+}
+@keyframes sunriseMove{
+  to{bottom:55%}
+}
+@keyframes lightOn{
+  to{
+    opacity:1;
+    box-shadow:
+      0 0 80px rgba(255,220,120,1),
+      0 0 180px rgba(255,200,0,.8),
+      0 0 320px rgba(255,180,0,.6);
+  }
+}
+
+/* 🌇 EVENING */
+.sunset{
+  bottom:55%;
+  animation:
+    sunsetMove 4s forwards,
+    lightOff 4s forwards;
+}
+@keyframes sunsetMove{
+  to{bottom:-320px}
+}
+@keyframes lightOff{
+  to{
+    opacity:0;
+    box-shadow:
+      0 0 10px rgba(255,120,0,.2);
+  }
+}
+
+/* ☁️ CLOUDS */
 .cloud{
   position:absolute;
   top:15%;
@@ -1926,10 +1967,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
   font-size:110px;
   animation-duration:70s;
 }
-@keyframes cloudMove{
-  from{left:-40%}
-  to{left:120%}
-}
+@keyframes cloudMove{from{left:-40%}to{left:120%}}
 
 /* 🐦 BIRDS */
 .bird{
@@ -1938,10 +1976,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
   font-size:42px;
   animation:birdFly 18s linear infinite;
 }
-@keyframes birdFly{
-  from{left:-10%}
-  to{left:110%}
-}
+@keyframes birdFly{from{left:-10%}to{left:110%}}
 
 /* 🌧️ RAIN */
 .rain{
@@ -1958,10 +1993,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
     );
   animation:rainFall .4s linear infinite;
 }
-@keyframes rainFall{
-  from{background-position:0 0}
-  to{background-position:-20px 40px}
-}
+@keyframes rainFall{to{background-position:-20px 40px}}
 
 .content{
   position:relative;
@@ -1984,13 +2016,11 @@ html, body { max-width: 100%; overflow-x: hidden; }
 <script>
 (async function(){
 
-/* 🔒 Stop any old voice */
 if("speechSynthesis" in window){ speechSynthesis.cancel(); }
 
-/* 🔑 WEATHER API KEY */
-const API_KEY = "ec205c82afed56e514e32b2eaafa1079";
+const API_KEY="ec205c82afed56e514e32b2eaafa1079";
 
-/* 📍 LOCATION */
+/* LOCATION */
 function getLocation(){
   return new Promise((res,rej)=>{
     navigator.geolocation.getCurrentPosition(
@@ -2000,83 +2030,73 @@ function getLocation(){
   });
 }
 
-/* 🌦️ WEATHER */
+/* WEATHER */
 async function getWeather(lat,lon){
-  const url =
+  const url=
     "https://api.openweathermap.org/data/2.5/weather"+
     "?lat="+lat+"&lon="+lon+
     "&appid="+API_KEY+"&units=metric";
-  const r = await fetch(url);
+  const r=await fetch(url);
   return r.json();
 }
 
-/* DEFAULT */
-let city="आपके शहर";
-let temp="--";
-let weather="Clear";
-
+let city="आपके शहर", temp="--", weather="Clear";
 try{
-  const c = await getLocation();
-  const d = await getWeather(c.latitude,c.longitude);
-  city = d.name || city;
-  temp = Math.round(d.main.temp);
-  weather = d.weather[0].main;
-}catch(e){
-  console.log("Weather fallback");
-}
+  const c=await getLocation();
+  const d=await getWeather(c.latitude,c.longitude);
+  city=d.name||city;
+  temp=Math.round(d.main.temp);
+  weather=d.weather[0].main;
+}catch(e){}
 
-/* 🌦️ SKY COLOR */
+/* SKY COLOR */
 let bg="linear-gradient(to top,#4facfe,#00f2fe)";
 let showRain=false;
-
 if(weather==="Clouds") bg="linear-gradient(to top,#bdc3c7,#2c3e50)";
-if(weather==="Rain"){ 
-  bg="linear-gradient(to top,#373b44,#4286f4)";
-  showRain=true;
-}
-if(weather==="Thunderstorm"){
-  bg="linear-gradient(to top,#141e30,#000)";
-  showRain=true;
-}
+if(weather==="Rain"){bg="linear-gradient(to top,#373b44,#4286f4)";showRain=true;}
+if(weather==="Thunderstorm"){bg="linear-gradient(to top,#141e30,#000)";showRain=true;}
 
-/* ⏰ TIME */
+/* ⏰ TIME + MOTIVATION */
 const h=new Date().getHours();
-let title="",msg="",voice="",sun="";
+let title="",msg="",voice="",sunClass="";
 
-if(h>=5 && h<12){
+if(h>=5&&h<12){
   title="Good Morning 🌞";
-  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>आज का दिन नई शुरुआत का है।`;
-  voice=`गुड मॉर्निंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। आज का दिन नई शुरुआत का है।`;
-  sun="sunrise";
+  msg=`${city} में तापमान ${temp}°C है।<br>
+  आज नियमित पढ़ाई करो, लक्ष्य पर ध्यान रखो, मेहनत कभी बेकार नहीं जाती।`;
+  voice=`गुड मॉर्निंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। आज नियमित पढ़ाई करो।`;
+  sunClass="sunrise";
 }
-else if(h>=12 && h<16){
-  title="Good Afternoon 🌤️";
-  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>लगातार मेहनत करते रहें।`;
-  voice=`गुड आफ्टरनून विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। मेहनत करते रहें।`;
-}
-else if(h>=16 && h<20){
+else if(h>=16&&h<20){
   title="Good Evening 🌇";
-  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>आज की मेहनत कल रंग लाएगी।`;
-  voice=`गुड ईवनिंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। आज की मेहनत कल रंग लाएगी।`;
-  sun="sunset";
+  msg=`${city} में तापमान ${temp}°C है।<br>
+  आज की मेहनत कल चमकेगी, आत्मविश्वास बनाए रखो।`;
+  voice=`गुड ईवनिंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। आज की मेहनत कल चमकेगी।`;
+  sunClass="sunset";
+}
+else if(h>=12&&h<16){
+  title="Good Afternoon 🌤️";
+  msg=`${city} में तापमान ${temp}°C है।<br>
+  रोज थोड़ा पढ़ना आदत बनाओ, यही सफलता की कुंजी है।`;
+  voice=`गुड आफ्टरनून विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। पढ़ाई जारी रखो।`;
 }
 else{
   title="Good Night 🌙";
-  msg=`${city} में तापमान ${temp} डिग्री सेल्सियस है।<br>अब आराम करने का समय है।`;
-  voice=`गुड नाइट विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। अब आराम करने का समय है।`;
+  msg=`${city} में तापमान ${temp}°C है।<br>
+  आज जो सीखा उसे याद करो, समय पर सोओ।`;
+  voice=`गुड नाइट विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। समय पर आराम करो।`;
 }
 
-/* 🧩 UI */
+/* UI */
 const g=document.createElement("div");
 g.id="weatherGreeting";
 g.innerHTML=`
   <div class="sky" style="background:${bg}"></div>
-  ${sun?`<div class="sun ${sun}"></div>`:""}
+  ${sunClass?`<div class="sun ${sunClass}"></div>`:""}
   <div class="cloud">☁️</div>
   <div class="cloud c2">☁️</div>
   <div class="bird">🐦</div>
   ${showRain?`<div class="rain"></div>`:""}
-
   <div class="content">
     <h1>${title}</h1>
     <p>${msg}</p>
@@ -2084,7 +2104,7 @@ g.innerHTML=`
 `;
 document.body.appendChild(g);
 
-/* 🎤 VOICE (temperature included) */
+/* VOICE */
 setTimeout(()=>{
   if("speechSynthesis" in window){
     speechSynthesis.cancel();
@@ -2095,7 +2115,7 @@ setTimeout(()=>{
   }
 },700);
 
-/* ⏱️ AUTO CLOSE */
+/* AUTO CLOSE */
 setTimeout(()=>{
   g.classList.add("hide");
   setTimeout(()=>g.remove(),1200);
@@ -2103,7 +2123,7 @@ setTimeout(()=>{
 
 })();
 </script>
-<!-- ========== END WEATHER GREETING ========== -->
+<!-- ========== END ========== -->
 
 </body>
 </html>
