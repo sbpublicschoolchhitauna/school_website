@@ -958,7 +958,6 @@ loadFeeAndMarks();
 
   function startMessage(i){
     const msg = NEWS[i];
-msg += `<br><br><strong>${adviceText}</strong>`;
     el.textContent = msg + ' \u00A0 \u00A0 \u00A0 ' + msg; // repeat for smooth scroll
     void el.offsetWidth;
     const containerWidth = el.parentElement.clientWidth || 600;
@@ -2044,7 +2043,7 @@ async function getWeather(lat,lon){
 let city="आपके शहर", temp="--", weather="Clear";
 /* 🧠 WEATHER ADVICE FOR STUDENTS */
 let adviceText = "";
-let adviceVoice = ""; voice += " " + adviceVoice;
+let adviceVoice = "";
 
 /* Temperature + Weather based advice */
 if (weather === "Rain" || weather === "Thunderstorm") {
