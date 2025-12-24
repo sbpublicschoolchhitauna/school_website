@@ -1793,5 +1793,179 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
+
+<!-- ================= FULL SCREEN CARTOON GREETING ================= -->
+<style>
+#visitGreeting{
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  z-index:2147483647;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:fadeIn 1s ease;
+}
+#visitGreeting.hide{
+  animation:fadeOut 1s forwards;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+
+.sky{
+  position:absolute;
+  inset:0;
+}
+
+/* 🌞 SUN */
+.sun{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:260px;height:260px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff59d,#ff9800);
+}
+.sunrise{bottom:-300px;animation:sunrise 4s forwards}
+@keyframes sunrise{to{bottom:55%}}
+.sunset{bottom:55%;animation:sunset 4s forwards}
+@keyframes sunset{to{bottom:-320px}}
+
+/* ☁️ CLOUDS */
+.cloud{
+  position:absolute;
+  top:18%;
+  font-size:140px;
+  opacity:.6;
+  animation:cloudMove 40s linear infinite;
+}
+.cloud.c2{
+  top:32%;
+  font-size:100px;
+  animation-duration:60s;
+}
+@keyframes cloudMove{
+  from{left:-40%}
+  to{left:120%}
+}
+
+/* 🐦 BIRDS */
+.bird{
+  position:absolute;
+  top:26%;
+  font-size:40px;
+  animation:birdFly 18s linear infinite;
+}
+@keyframes birdFly{
+  from{left:-10%}
+  to{left:110%}
+}
+
+/* 👦👧 CARTOON */
+.cartoon{
+  font-size:140px;
+  animation:wave 2s infinite;
+}
+@keyframes wave{
+  0%,100%{transform:rotate(0deg)}
+  50%{transform:rotate(10deg)}
+}
+
+.content{
+  position:relative;
+  z-index:3;
+  text-align:center;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  text-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+.content h1{
+  font-size:42px;
+  margin:10px 0;
+  font-weight:900;
+}
+.content p{
+  font-size:22px;
+  line-height:1.5;
+}
+</style>
+
+<script>
+(function(){
+
+  const hour=new Date().getHours();
+
+  let title="",text="",voice="",bg="",sun="",cartoon="";
+
+  if(hour>=5 && hour<12){
+    title="Good Morning 🌞";
+    text="वेबसाइट खोलने के लिए धन्यवाद।\nआज का दिन नई शुरुआत का है।";
+    voice="गुड मॉर्निंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। आज का दिन नई शुरुआत का है।";
+    bg="linear-gradient(to top,#4facfe,#00f2fe)";
+    sun="sunrise";
+    cartoon="👦";
+  }
+  else if(hour>=12 && hour<16){
+    title="Good Afternoon 🌤️";
+    text="वेबसाइट खोलने के लिए धन्यवाद।\nनियमित अभ्यास से सफलता मिलेगी।";
+    voice="गुड आफ्टरनून विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। नियमित अभ्यास से सफलता मिलेगी।";
+    bg="linear-gradient(to top,#43cea2,#185a9d)";
+    cartoon="👧";
+  }
+  else if(hour>=16 && hour<20){
+    title="Good Evening 🌇";
+    text="वेबसाइट खोलने के लिए धन्यवाद।\nआज की मेहनत कल चमकेगी।";
+    voice="गुड ईवनिंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। आज की मेहनत कल चमकेगी।";
+    bg="linear-gradient(to top,#fa709a,#fee140)";
+    sun="sunset";
+    cartoon="👦";
+  }
+  else{
+    title="Good Night 🌙";
+    text="वेबसाइट खोलने के लिए धन्यवाद।\nअब आराम करने का समय है।";
+    voice="गुड नाइट विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। अब आराम करने का समय है।";
+    bg="linear-gradient(to top,#141e30,#243b55)";
+    cartoon="😴";
+  }
+
+  const wrap=document.createElement("div");
+  wrap.id="visitGreeting";
+  wrap.innerHTML=`
+    <div class="sky" style="background:${bg}"></div>
+    ${sun?`<div class="sun ${sun}"></div>`:""}
+    <div class="cloud">☁️</div>
+    <div class="cloud c2">☁️</div>
+    <div class="bird">🐦</div>
+
+    <div class="content">
+      <div class="cartoon">${cartoon}</div>
+      <h1>${title}</h1>
+      <p>${text.replace(/\n/g,"<br>")}</p>
+    </div>
+  `;
+  document.body.appendChild(wrap);
+
+  /* 🎤 Hindi Voice */
+  setTimeout(()=>{
+    if("speechSynthesis" in window){
+      speechSynthesis.cancel();
+      const sp=new SpeechSynthesisUtterance(voice);
+      sp.lang="hi-IN";
+      sp.rate=0.95;
+      speechSynthesis.speak(sp);
+    }
+  },700);
+
+  /* ⏱️ Auto close */
+  setTimeout(()=>{
+    wrap.classList.add("hide");
+    setTimeout(()=>wrap.remove(),1000);
+  },5000);
+
+})();
+</script>
+<!-- ================= END GREETING ================= -->
+
 </body>
 </html>
