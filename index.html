@@ -46,26 +46,6 @@ document.addEventListener("click", async e => {
 });
 </script>
 
-<style>
-/* ===== GREETING CSS (INLINE) ===== */
-#greetingOverlay{
-  position:fixed;inset:0;z-index:999999;
-  display:flex;align-items:center;justify-content:center;
-  background:#000;animation:fadeIn 1s;
-}
-#greetingOverlay.hide{animation:fadeOut 1s forwards}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes fadeOut{to{opacity:0;visibility:hidden}}
-.greeting-box{text-align:center;color:#fff}
-.greeting-title{font-size:34px;font-weight:900}
-.greeting-text{font-size:18px;margin-top:8px}
-.cartoon{font-size:110px;animation:wave 2s infinite}
-@keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(6deg)}}
-.cloud{position:absolute;top:20%;font-size:120px;opacity:.6;animation:cloud 30s linear infinite}
-@keyframes cloud{from{left:-20%}to{left:120%}}
-.bird{position:absolute;top:30%;font-size:36px;animation:bird 16s linear infinite}
-@keyframes bird{from{left:-10%}to{left:110%}}
-</style>
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -1814,62 +1794,175 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
+<!-- ================== TIME BASED 3D CARTOON GREETING (INLINE) ================== -->
+<style>
+#greetingOverlay{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(to top,#4facfe,#00f2fe);
+  animation:fadeIn 1s;
+}
+#greetingOverlay.hide{
+  animation:fadeOut 1s forwards;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+
+.greet-box{
+  text-align:center;
+  color:white;
+  padding:20px;
+}
+
+.cartoon{
+  font-size:120px;
+  animation:wave 2s infinite;
+}
+@keyframes wave{
+  0%,100%{transform:rotate(0deg)}
+  50%{transform:rotate(10deg)}
+}
+
+.cloud{
+  position:absolute;
+  top:20%;
+  font-size:120px;
+  opacity:.6;
+  animation:cloudMove 35s linear infinite;
+}
+.cloud.c2{
+  top:35%;
+  font-size:90px;
+  animation-duration:50s;
+}
+@keyframes cloudMove{
+  from{left:-30%}
+  to{left:120%}
+}
+
+.bird{
+  position:absolute;
+  top:28%;
+  font-size:36px;
+  animation:birdFly 18s linear infinite;
+}
+@keyframes birdFly{
+  from{left:-10%}
+  to{left:110%}
+}
+
+.sun{
+  position:absolute;
+  bottom:-200px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:radial-gradient(circle,#ffeb3b,#ff9800);
+  animation:sunrise 4s forwards;
+}
+.sun.sunset{
+  animation:sunset 4s forwards;
+}
+@keyframes sunrise{to{bottom:55%}}
+@keyframes sunset{to{bottom:-300px}}
+
+.title{
+  font-size:36px;
+  font-weight:900;
+  margin-top:10px;
+}
+.text{
+  font-size:20px;
+  margin-top:6px;
+}
+</style>
+
 <script>
 (function(){
+  /* दिन में सिर्फ 1 बार */
   const today=new Date().toDateString();
-  if(localStorage.greetedDate===today) return;
-  localStorage.greetedDate=today;
+  if(localStorage.greetingDone===today) return;
+  localStorage.greetingDone=today;
 
-  const h=new Date().getHours();
-  let title,text,voice,bg,cartoon;
+  const hour=new Date().getHours();
 
-  if(h>=5&&h<12){
+  let title="",text="",voice="",cartoon="👦",sun="",bg="";
+
+  /* simple weather feel */
+  const r=Math.random();
+  if(r<0.33) bg="linear-gradient(to top,#4facfe,#00f2fe)";
+  else if(r<0.66) bg="linear-gradient(to top,#bdc3c7,#2c3e50)";
+  else bg="linear-gradient(to top,#141e30,#243b55)";
+
+  if(hour>=5 && hour<12){
     title="Good Morning 🌞";
-    text="आज पढ़ाई से जीत पक्की है।";
-    voice="गुड मॉर्निंग विद्यार्थी। मेहनत करो और आगे बढ़ो।";
-    bg="#4facfe"; cartoon="👦";
-  }else if(h>=12&&h<16){
+    text="आज का दिन नई शुरुआत का है। पूरे मन से पढ़ाई करें।";
+    voice="गुड मॉर्निंग विद्यार्थी। आज पढ़ाई से जीत पक्की है।";
+    sun="sunrise";
+    cartoon="👦";
+  }
+  else if(hour>=12 && hour<16){
     title="Good Afternoon 🌤️";
-    text="निरंतर अभ्यास ही सफलता है।";
-    voice="गुड आफ्टरनून विद्यार्थी।";
-    bg="#43cea2"; cartoon="👧";
-  }else if(h>=16&&h<20){
+    text="नियमित अभ्यास ही सफलता की कुंजी है।";
+    voice="गुड आफ्टरनून विद्यार्थी। आप बहुत अच्छा कर रहे हैं।";
+    cartoon="👧";
+  }
+  else if(hour>=16 && hour<20){
     title="Good Evening 🌇";
-    text="आज की मेहनत कल चमकेगी।";
-    voice="गुड ईवनिंग विद्यार्थी।";
-    bg="#fa709a"; cartoon="👦";
-  }else{
+    text="आज की मेहनत कल की सफलता बनेगी।";
+    voice="गुड ईवनिंग विद्यार्थी। खुद पर भरोसा रखें।";
+    sun="sunset";
+    cartoon="👦";
+  }
+  else{
     title="Good Night 🌙";
-    text="अब आराम करो, कल फिर मिलेंगे।";
-    voice="गुड नाइट विद्यार्थी।";
-    bg="#141e30"; cartoon="😴";
+    text="अब आराम का समय है। कल फिर नई ऊर्जा से मिलेंगे।";
+    voice="गुड नाइट विद्यार्थी। अच्छे सपने देखो।";
+    cartoon="😴";
   }
 
   const o=document.createElement("div");
   o.id="greetingOverlay";
   o.style.background=bg;
+
   o.innerHTML=`
+    ${sun?`<div class="sun ${sun}"></div>`:""}
     <div class="cloud">☁️</div>
+    <div class="cloud c2">☁️</div>
     <div class="bird">🐦</div>
-    <div class="greeting-box">
+
+    <div class="greet-box">
       <div class="cartoon">${cartoon}</div>
-      <div class="greeting-title">${title}</div>
-      <div class="greeting-text">${text}</div>
-    </div>`;
+      <div class="title">${title}</div>
+      <div class="text">${text}</div>
+    </div>
+  `;
+
   document.body.appendChild(o);
 
+  /* Hindi Voice */
   setTimeout(()=>{
-    const s=new SpeechSynthesisUtterance(voice);
-    s.lang="hi-IN";speechSynthesis.speak(s);
-  },800);
+    if("speechSynthesis" in window){
+      const s=new SpeechSynthesisUtterance(voice);
+      s.lang="hi-IN";
+      s.rate=0.95;
+      speechSynthesis.speak(s);
+    }
+  },700);
 
-  setTimeout(()=>{o.classList.add("hide")},5000);
+  /* Auto close 5 sec */
+  setTimeout(()=>{
+    o.classList.add("hide");
+    setTimeout(()=>o.remove(),1200);
+  },5000);
+
 })();
 </script>
-
-<script>
-alert("JS LOADED SUCCESSFULLY");
-</script>
+<!-- ================== END GREETING ================== -->
 
 </body>
 </html>
