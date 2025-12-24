@@ -2786,6 +2786,20 @@ setTimeout(()=>{
 </script>
 
 <!-- ================== 🎂 END FINAL BIRTHDAY SYSTEM ================== -->
+<script>
+(async function(){
+  const url =
+    "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Marksheet%20Details&tqx=out:json";
+
+  const res = await fetch(url);
+  const txt = await res.text();
+  const data = JSON.parse(txt.replace(/^[^{]*/,"").replace(/\);$/,""));
+
+  console.log("SHEET DATA 👉", data.table.rows);
+
+  alert("Rows found: " + data.table.rows.length);
+})();
+</script>
 
 </body>
 </html>
