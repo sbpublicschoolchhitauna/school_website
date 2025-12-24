@@ -2689,6 +2689,194 @@ setTimeout(()=>{
   }
 }
 </style>
+<!-- ================== 🎂 FINAL BIRTHDAY SYSTEM ================== -->
+
+<style>
+/* 🎂 Birthday Box */
+#birthdayScrollBox{
+  display:none;
+  max-width:380px;
+  margin:20px auto;
+  background:linear-gradient(135deg,#fff1eb,#ace0f9);
+  border-radius:18px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+
+/* Header */
+#birthdayScrollBox h3{
+  margin:0;
+  padding:16px;
+  background:#ff006e;
+  color:#fff;
+  text-align:center;
+  font-weight:900;
+  font-size:26px;
+  letter-spacing:0.8px;
+}
+
+/* Scroll Area */
+.birthday-scroll{
+  height:170px;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Moving Content */
+.birthday-scroll-inner{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  will-change:transform;
+}
+
+/* Each Student */
+.birthday-item{
+  padding:12px;
+  text-align:center;
+  font-weight:800;
+  color:#0b5fa8;
+  font-size:15px;
+}
+
+/* Wish Text */
+.birthday-wish{
+  font-size:13px;
+  color:#333;
+  margin-top:4px;
+}
+
+/* Mobile Smaller */
+@media (max-width:480px){
+  #birthdayScrollBox h3{font-size:22px;}
+  .birthday-item{font-size:14px;}
+}
+</style>
+
+<div id="birthdayScrollBox">
+  <h3>🎉 Today Birthday 🎂</h3>
+  <div class="birthday-scroll">
+    <div id="birthdayScrollInner" class="birthday-scroll-inner"></div>
+  </div>
+</div>
+
+<script>
+/* 🎂 UPDATED BIRTHDAY AUTO SCROLL SYSTEM */
+
+(async function(){
+
+  /* 📌 UPDATED Sheet Info */
+  const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
+  const SHEET_NAME = "Marksheet Details";
+
+  function parseDOB(d){
+    if(!d) return null;
+    const p = d.toString().split(/[-\/]/);
+    return (p[0].length===4)
+      ? {day:+p[2], month:+p[1]}
+      : {day:+p[0], month:+p[1]};
+  }
+
+  async function loadSheet(){
+    const url =
+      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(SHEET_NAME)}&tqx=out:json`;
+    const res = await fetch(url);
+    const txt = await res.text();
+    return JSON.parse(txt.replace(/^[^{]*/,"").replace(/\);$/,"")).table;
+  }
+
+  const today = new Date();
+  const tDay = today.getDate();
+  const tMonth = today.getMonth()+1;
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate()+1);
+  const tmDay = tomorrow.getDate();
+  const tmMonth = tomorrow.getMonth()+1;
+
+  const table = await loadSheet();
+  const cols = table.cols.map(c=>c.label);
+  const rows = table.rows;
+
+  const nameCol = cols.indexOf("Student Name");
+  const dobCol  = cols.indexOf("Date of Birth");
+  if(nameCol < 0 || dobCol < 0) return;
+
+  let todayHTML = "";
+  let tomorrowNames = [];
+
+  rows.forEach(r=>{
+    const dob = parseDOB(r.c[dobCol]?.v);
+    if(!dob) return;
+
+    const name = r.c[nameCol]?.v;
+
+    if(dob.day === tDay && dob.month === tMonth){
+      todayHTML += `
+        <div class="birthday-item">
+          🎂 ${name}
+          <div class="birthday-wish">
+            जन्मदिन की हार्दिक शुभकामनाएँ 🌸
+          </div>
+        </div>
+      `;
+    }
+
+    if(dob.day === tmDay && dob.month === tmMonth){
+      tomorrowNames.push(name);
+    }
+  });
+
+  const box = document.getElementById("birthdayScrollBox");
+  const inner = document.getElementById("birthdayScrollInner");
+
+  /* Case-1: No birthday today */
+  if(!todayHTML){
+    inner.innerHTML = `
+      <div class="birthday-item">
+        🎈 आज किसी का जन्मदिन नहीं है
+      </div>
+      ${
+        tomorrowNames.length
+        ? `<div class="birthday-wish">
+             📅 कल जन्मदिन: <b>${tomorrowNames.join(", ")}</b>
+           </div>`
+        : ""
+      }
+    `;
+    box.style.display = "block";
+    return;
+  }
+
+  /* Case-2: Birthday today */
+  if(tomorrowNames.length){
+    todayHTML += `
+      <div class="birthday-item">
+        📅 कल जन्मदिन:
+        <div class="birthday-wish">
+          ${tomorrowNames.join(", ")}
+        </div>
+      </div>
+    `;
+  }
+
+  inner.innerHTML = todayHTML + todayHTML;
+  box.style.display = "block";
+
+  let pos = 0;
+  function scroll(){
+    pos -= 0.35;
+    if(Math.abs(pos) >= inner.scrollHeight/2) pos = 0;
+    inner.style.transform = `translateY(${pos}px)`;
+    requestAnimationFrame(scroll);
+  }
+  scroll();
+
+})();
+</script>
+
+<!-- ================== 🎂 END FINAL BIRTHDAY SYSTEM ================== -->
 
 </body>
 </html>
