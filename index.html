@@ -1794,12 +1794,13 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
-<!-- ================= FULL SCREEN CARTOON GREETING ================= -->
+<!-- ========== FULL SCREEN REAL CARTOON + REAL WEATHER GREETING ========== -->
 <style>
-#visitGreeting{
+#fullGreeting{
   position:fixed;
-  top:0;left:0;
-  width:100vw;height:100vh;
+  inset:0;
+  width:100vw;
+  height:100vh;
   z-index:2147483647;
   overflow:hidden;
   display:flex;
@@ -1807,7 +1808,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
   justify-content:center;
   animation:fadeIn 1s ease;
 }
-#visitGreeting.hide{
+#fullGreeting.hide{
   animation:fadeOut 1s forwards;
 }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -1818,16 +1819,17 @@ html, body { max-width: 100%; overflow-x: hidden; }
   inset:0;
 }
 
-/* 🌞 SUN */
+/* ☀️ SUN */
 .sun{
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  width:260px;height:260px;
+  width:260px;
+  height:260px;
   border-radius:50%;
   background:radial-gradient(circle,#fff59d,#ff9800);
 }
-.sunrise{bottom:-300px;animation:sunrise 4s forwards}
+.sunrise{bottom:-280px;animation:sunrise 4s forwards}
 @keyframes sunrise{to{bottom:55%}}
 .sunset{bottom:55%;animation:sunset 4s forwards}
 @keyframes sunset{to{bottom:-320px}}
@@ -1838,12 +1840,12 @@ html, body { max-width: 100%; overflow-x: hidden; }
   top:18%;
   font-size:140px;
   opacity:.6;
-  animation:cloudMove 40s linear infinite;
+  animation:cloudMove 45s linear infinite;
 }
 .cloud.c2{
-  top:32%;
+  top:34%;
   font-size:100px;
-  animation-duration:60s;
+  animation-duration:65s;
 }
 @keyframes cloudMove{
   from{left:-40%}
@@ -1854,7 +1856,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .bird{
   position:absolute;
   top:26%;
-  font-size:40px;
+  font-size:42px;
   animation:birdFly 18s linear infinite;
 }
 @keyframes birdFly{
@@ -1862,19 +1864,23 @@ html, body { max-width: 100%; overflow-x: hidden; }
   to{left:110%}
 }
 
-/* 👦👧 CARTOON */
-.cartoon{
-  font-size:140px;
+/* 👦 SVG CARTOON */
+svg{
+  width:200px;
+  margin-bottom:10px;
+}
+.hand{
+  transform-origin:top center;
   animation:wave 2s infinite;
 }
 @keyframes wave{
   0%,100%{transform:rotate(0deg)}
-  50%{transform:rotate(10deg)}
+  50%{transform:rotate(25deg)}
 }
 
 .content{
   position:relative;
-  z-index:3;
+  z-index:5;
   text-align:center;
   color:#fff;
   font-family:Arial,Helvetica,sans-serif;
@@ -1882,7 +1888,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 .content h1{
   font-size:42px;
-  margin:10px 0;
+  margin:8px 0;
   font-weight:900;
 }
 .content p{
@@ -1892,80 +1898,123 @@ html, body { max-width: 100%; overflow-x: hidden; }
 </style>
 
 <script>
-(function(){
+(async function(){
 
-  const hour=new Date().getHours();
+/* 🔑 YOUR FREE WEATHER API KEY */
+const WEATHER_API_KEY = "ec205c82afed56e514e32b2eaafa1079";
 
-  let title="",text="",voice="",bg="",sun="",cartoon="";
+/* 📍 GET LOCATION */
+function getLocation(){
+  return new Promise((resolve,reject)=>{
+    navigator.geolocation.getCurrentPosition(
+      pos=>resolve(pos.coords),
+      err=>reject(err)
+    );
+  });
+}
 
-  if(hour>=5 && hour<12){
-    title="Good Morning 🌞";
-    text="वेबसाइट खोलने के लिए धन्यवाद।\nआज का दिन नई शुरुआत का है।";
-    voice="गुड मॉर्निंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। आज का दिन नई शुरुआत का है।";
-    bg="linear-gradient(to top,#4facfe,#00f2fe)";
-    sun="sunrise";
-    cartoon="👦";
+/* 🌦️ GET WEATHER DATA */
+async function getWeather(lat,lon){
+  const url =
+    "https://api.openweathermap.org/data/2.5/weather" +
+    "?lat="+lat+"&lon="+lon+
+    "&appid="+WEATHER_API_KEY+"&units=metric";
+  const res = await fetch(url);
+  return res.json();
+}
+
+/* DEFAULT VALUES */
+let city="आपके शहर";
+let weatherType="Clear";
+
+/* TRY REAL WEATHER */
+try{
+  const coords = await getLocation();
+  const data = await getWeather(coords.latitude, coords.longitude);
+  city = data.name || city;
+  weatherType = data.weather[0].main;
+}catch(e){
+  console.log("Weather fallback mode");
+}
+
+/* 🌦️ SKY COLOR BY WEATHER */
+let bg="linear-gradient(to top,#4facfe,#00f2fe)";
+if(weatherType==="Clouds") bg="linear-gradient(to top,#bdc3c7,#2c3e50)";
+if(weatherType==="Rain") bg="linear-gradient(to top,#373b44,#4286f4)";
+if(weatherType==="Thunderstorm") bg="linear-gradient(to top,#141e30,#000)";
+
+/* ⏰ TIME LOGIC */
+const h = new Date().getHours();
+let title="",text="",voice="",sunClass="";
+
+if(h>=5 && h<12){
+  title="Good Morning 🌞";
+  text=`${city} में आज ${weatherType} मौसम है।<br>वेबसाइट खोलने के लिए धन्यवाद।`;
+  voice=`गुड मॉर्निंग विद्यार्थी। ${city} में आज ${weatherType} मौसम है। वेबसाइट खोलने के लिए धन्यवाद।`;
+  sunClass="sunrise";
+}
+else if(h>=12 && h<16){
+  title="Good Afternoon 🌤️";
+  text=`${city} में आज ${weatherType} मौसम है।<br>वेबसाइट खोलने के लिए धन्यवाद।`;
+  voice=`गुड आफ्टरनून विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।`;
+}
+else if(h>=16 && h<20){
+  title="Good Evening 🌇";
+  text=`${city} में आज ${weatherType} मौसम है।<br>वेबसाइट खोलने के लिए धन्यवाद।`;
+  voice=`गुड ईवनिंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।`;
+  sunClass="sunset";
+}
+else{
+  title="Good Night 🌙";
+  text="वेबसाइट खोलने के लिए धन्यवाद।<br>अब आराम करने का समय है।";
+  voice="गुड नाइट विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद।";
+}
+
+/* 🧩 BUILD UI */
+const g=document.createElement("div");
+g.id="fullGreeting";
+g.innerHTML=`
+  <div class="sky" style="background:${bg}"></div>
+  ${sunClass ? `<div class="sun ${sunClass}"></div>` : ``}
+  <div class="cloud">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="bird">🐦</div>
+
+  <div class="content">
+    <!-- REAL SVG CARTOON -->
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="55" r="30" fill="#ffccbc"/>
+      <rect x="70" y="90" width="60" height="65" rx="20" fill="#4caf50"/>
+      <rect x="45" y="90" width="25" height="60" rx="15" fill="#ffccbc"/>
+      <rect x="130" y="90" width="25" height="60" rx="15" fill="#ffccbc" class="hand"/>
+    </svg>
+
+    <h1>${title}</h1>
+    <p>${text}</p>
+  </div>
+`;
+document.body.appendChild(g);
+
+/* 🎤 HINDI VOICE */
+setTimeout(()=>{
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    const sp = new SpeechSynthesisUtterance(voice);
+    sp.lang = "hi-IN";
+    sp.rate = 0.95;
+    speechSynthesis.speak(sp);
   }
-  else if(hour>=12 && hour<16){
-    title="Good Afternoon 🌤️";
-    text="वेबसाइट खोलने के लिए धन्यवाद।\nनियमित अभ्यास से सफलता मिलेगी।";
-    voice="गुड आफ्टरनून विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। नियमित अभ्यास से सफलता मिलेगी।";
-    bg="linear-gradient(to top,#43cea2,#185a9d)";
-    cartoon="👧";
-  }
-  else if(hour>=16 && hour<20){
-    title="Good Evening 🌇";
-    text="वेबसाइट खोलने के लिए धन्यवाद।\nआज की मेहनत कल चमकेगी।";
-    voice="गुड ईवनिंग विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। आज की मेहनत कल चमकेगी।";
-    bg="linear-gradient(to top,#fa709a,#fee140)";
-    sun="sunset";
-    cartoon="👦";
-  }
-  else{
-    title="Good Night 🌙";
-    text="वेबसाइट खोलने के लिए धन्यवाद।\nअब आराम करने का समय है।";
-    voice="गुड नाइट विद्यार्थी। वेबसाइट खोलने के लिए धन्यवाद। अब आराम करने का समय है।";
-    bg="linear-gradient(to top,#141e30,#243b55)";
-    cartoon="😴";
-  }
+},800);
 
-  const wrap=document.createElement("div");
-  wrap.id="visitGreeting";
-  wrap.innerHTML=`
-    <div class="sky" style="background:${bg}"></div>
-    ${sun?`<div class="sun ${sun}"></div>`:""}
-    <div class="cloud">☁️</div>
-    <div class="cloud c2">☁️</div>
-    <div class="bird">🐦</div>
-
-    <div class="content">
-      <div class="cartoon">${cartoon}</div>
-      <h1>${title}</h1>
-      <p>${text.replace(/\n/g,"<br>")}</p>
-    </div>
-  `;
-  document.body.appendChild(wrap);
-
-  /* 🎤 Hindi Voice */
-  setTimeout(()=>{
-    if("speechSynthesis" in window){
-      speechSynthesis.cancel();
-      const sp=new SpeechSynthesisUtterance(voice);
-      sp.lang="hi-IN";
-      sp.rate=0.95;
-      speechSynthesis.speak(sp);
-    }
-  },700);
-
-  /* ⏱️ Auto close */
-  setTimeout(()=>{
-    wrap.classList.add("hide");
-    setTimeout(()=>wrap.remove(),1000);
-  },5000);
+/* ⏱️ AUTO CLOSE */
+setTimeout(()=>{
+  g.classList.add("hide");
+  setTimeout(()=>g.remove(),1200);
+},5000);
 
 })();
 </script>
-<!-- ================= END GREETING ================= -->
+<!-- ========== END GREETING ========== -->
 
 </body>
 </html>
