@@ -1792,5 +1792,115 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
+
+<!-- ===== TIME BASED 3D GREETING SYSTEM ===== -->
+<div id="timeGreeting" class="tg hidden">
+  <div class="scene">
+    <div class="sun"></div>
+    <div class="moon"></div>
+    <div class="clouds"></div>
+    <div class="stars"></div>
+
+    <div class="greet-text" id="greetText"></div>
+  </div>
+</div>
+
+<style>
+.tg{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(#87ceeb,#e0f6ff);
+  animation:fadeIn 1s ease;
+}
+.hidden{display:none}
+.scene{text-align:center;perspective:1000px}
+.sun{
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,#fff700,#ff9800);
+  margin:auto;
+  animation:sunRise 4s ease forwards;
+}
+.moon{
+  width:120px;height:120px;border-radius:50%;
+  background:#eee;display:none;
+}
+.clouds{
+  font-size:60px;animation:cloudMove 8s linear infinite;
+}
+.stars{display:none;font-size:40px}
+.greet-text{
+  margin-top:20px;
+  font-size:28px;
+  font-weight:900;
+  color:#012032;
+  animation:pop3d 2s infinite;
+}
+
+@keyframes sunRise{
+  from{transform:translateY(200px)}
+  to{transform:translateY(0)}
+}
+@keyframes cloudMove{
+  from{transform:translateX(-120px)}
+  to{transform:translateX(120px)}
+}
+@keyframes pop3d{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
+@keyframes fadeIn{
+  from{opacity:0}to{opacity:1}
+}
+</style>
+<script>
+(function(){
+  const h = new Date().getHours();
+  const box = document.getElementById("timeGreeting");
+  const text = document.getElementById("greetText");
+
+  let msg = "";
+  let speakText = "";
+
+  if(h>=5 && h<12){
+    msg = "🌞 Good Morning Students!<br>आज का दिन नई शुरुआत है 🚀";
+    speakText = "Good Morning Students. Aaj ka din nayi shuruaat hai.";
+  }
+  else if(h>=12 && h<17){
+    msg = "☀️ Good Afternoon!<br>मेहनत कभी बेकार नहीं जाती 💪";
+    speakText = "Good Afternoon Students. Mehnat kabhi bekaar nahi jaati.";
+  }
+  else if(h>=17 && h<21){
+    msg = "🌇 Good Evening!<br>आज जो सीखा, वही सफलता बनेगा 🌟";
+    speakText = "Good Evening Students. Aaj jo seekha wahi safalta banega.";
+  }
+  else{
+    msg = "🌙 Good Night!<br>अच्छी नींद = अच्छा कल 😴";
+    speakText = "Good Night Students. Achhi neend se hi achha kal banta hai.";
+    box.style.background="linear-gradient(#020024,#090979,#000)";
+    document.querySelector(".sun").style.display="none";
+    document.querySelector(".moon").style.display="block";
+    document.querySelector(".stars").style.display="block";
+  }
+
+  text.innerHTML = msg;
+  box.classList.remove("hidden");
+
+  // 🔊 Voice
+  if("speechSynthesis" in window){
+    const u = new SpeechSynthesisUtterance(speakText);
+    u.lang="hi-IN";
+    speechSynthesis.speak(u);
+  }
+
+  // auto close after 8 sec
+  setTimeout(()=>box.classList.add("hidden"),8000);
+})();
+</script>
+<!-- ===== END GREETING SYSTEM ===== -->
+
 </body>
 </html>
