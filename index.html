@@ -2690,6 +2690,40 @@ setTimeout(()=>{
 }
 </style>
 
+<style>
+/* 🎉 Birthday Heading BIG + Responsive */
+#birthdayScrollBox h3{
+  font-size: clamp(18px, 5vw, 26px); /* 🔥 auto big */
+  padding: 14px 10px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  text-align: center;
+  line-height: 1.25;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: linear-gradient(90deg,#ff006e,#ff8c00);
+  color: #fff;
+}
+
+/* 📱 Extra boost for small mobile */
+@media (max-width: 480px){
+  #birthdayScrollBox h3{
+    font-size: 22px;   /* 👈 mobile में बड़ा */
+    padding: 16px 8px;
+  }
+}
+
+/* 🖥️ Large screen */
+@media (min-width: 1200px){
+  #birthdayScrollBox h3{
+    font-size: 28px;   /* 👈 desktop में premium */
+  }
+}
+</style>
 
 </body>
 </html>
