@@ -3062,43 +3062,71 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+
 <style>
-/* 🔳 3D TITLE TEXT */
+/* 🎉 WHITE 3D TITLE */
 #popupTitle{
-  font-size:38px;               /* 👈 बड़ा title */
+  font-size:var(--popup-title-size);
   font-weight:900;
-  color:#0b5fa8;
+  color:#ffffff;
+  letter-spacing:1px;
   text-shadow:
-    0 2px 0 #cfd8dc,
-    0 4px 0 #b0bec5,
-    0 8px 18px rgba(0,0,0,0.35);
+    0 2px 0 rgba(0,0,0,0.25),
+    0 4px 0 rgba(0,0,0,0.20),
+    0 8px 18px rgba(0,0,0,0.45);
+  animation:titleFloat 3s ease-in-out infinite;
 }
 
-/* 📝 3D BODY TEXT */
+/* 📝 WHITE 3D BODY TEXT */
 #popupText{
-  font-size:28px;               /* 👈 बड़ा text */
-  line-height:1.9;
-  font-weight:600;
-  color:#333;
+  margin-top:22px;
+  font-size:var(--popup-text-size);
+  font-weight:700;
+  line-height:var(--popup-line-gap);
+  color:#ffffff;
   text-shadow:
-    0 1px 0 #eee,
-    0 3px 6px rgba(0,0,0,0.25);
+    0 1px 0 rgba(0,0,0,0.25),
+    0 3px 8px rgba(0,0,0,0.45);
+  animation:textGlow 4s ease-in-out infinite;
 }
 
-/* ⏱️ 3D COUNTDOWN */
+/* ⏱️ COUNTDOWN */
 #popupCountdown{
-  font-size:20px;
-  font-weight:800;
-  color:#d32f2f;
+  margin-top:26px;
+  font-size:var(--popup-count-size);
+  font-weight:900;
+  color:#ffffff;
   text-shadow:
-    0 1px 0 #ffdada,
-    0 3px 8px rgba(0,0,0,0.35);
+    0 2px 0 rgba(0,0,0,0.35),
+    0 5px 12px rgba(0,0,0,0.55);
+  animation:pulse 1.2s ease-in-out infinite;
 }
 
-/* ✨ 3D HOVER EFFECT (Desktop bonus) */
-#popupBox:hover{
-  transform:perspective(1000px) rotateX(0deg) scale(1.02);
-  transition:transform .4s ease;
+/* ✨ ANIMATIONS */
+@keyframes titleFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+@keyframes textGlow{
+  0%,100%{opacity:1}
+  50%{opacity:0.9}
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+}
+</style>
+
+<style>
+/* ==============================
+   🔧 TEXT SIZE & SPACING CONTROL
+   ============================== */
+
+:root{
+  --popup-title-size: 38px;   /* 🔹 Title बड़ा/छोटा */
+  --popup-text-size: 22px;    /* 🔹 Main text size */
+  --popup-line-gap: 1.9;      /* 🔹 Line spacing (छिटा) */
+  --popup-count-size: 20px;   /* 🔹 Countdown size */
 }
 </style>
 
