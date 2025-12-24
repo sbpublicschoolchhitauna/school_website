@@ -3034,86 +3034,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 
-<!-- 🎉 FESTIVAL POPUP -->
-<div id="festivalPopup" style="
-display:none;
-position:fixed;
-inset:0;
-z-index:1000000;
-background:rgba(0,0,0,0.55);
-align-items:center;
-justify-content:center;
-font-family:Arial;
-">
-
-  <div style="
-  background:#ffffff;
-  max-width:420px;
-  width:92%;
-  border-radius:18px;
-  padding:22px;
-  text-align:center;
-  box-shadow:0 30px 80px rgba(0,0,0,.4);
-  ">
-
-    <!-- TITLE -->
-    <h2 id="festivalTitle" style="
-    margin:0;
-    color:#0b5fa8;
-    font-size:22px;">
-    </h2>
-
-    <!-- MAIN TEXT -->
-    <p id="festivalDesc" style="
-    margin-top:12px;
-    font-size:15px;
-    line-height:1.6;
-    color:#333;">
-    </p>
-
-    <!-- COUNTDOWN TEXT -->
-    <p id="festivalCountdown" style="
-    margin-top:12px;
-    font-weight:bold;
-    font-size:14px;
-    color:#d32f2f;">
-    </p>
-
-  </div>
-</div>
-
-<!-- 🎶 MUSIC -->
-<audio id="festivalMusic" loop>
-  <source src="festival-music.mp3" type="audio/mpeg">
-</audio>
-
-<!-- SIMPLE TEST POPUP -->
-<div id="testPopup" style="
-display:none;
-position:fixed;
-top:0;left:0;right:0;bottom:0;
-background:rgba(0,0,0,0.6);
-z-index:999999;
-align-items:center;
-justify-content:center;
-font-family:Arial;
-">
-
-  <div style="
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  max-width:320px;
-  text-align:center;
-  ">
-    <h3>✅ TEST POPUP</h3>
-    <p>
-      अगर यह popup दिख रहा है,<br>
-      तो HTML + JS सही है।
-    </p>
-  </div>
-
-</div>
+<script>
+setTimeout(()=>{
+  document.getElementById("festivalPopup").style.display="flex";
+  document.getElementById("festivalTitle").innerText="🎉 TEST POPUP";
+  document.getElementById("festivalDesc").innerText=
+    "अगर यह दिख रहा है तो popup system 100% सही है।";
+},1000);
+</script>
 
 </body>
 </html>
