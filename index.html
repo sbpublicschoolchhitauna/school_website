@@ -2968,75 +2968,40 @@ font-family:Arial;
 </audio>
 
 <script>
+
 /* 🔥 FINAL FESTIVAL / JAYANTI SYSTEM */
 
-const FESTIVAL_API =
-"https://script.google.com/macros/s/AKfycbyB9R7ZVXXNQ0kZgUWC6VEKrdaDibyFvd2X1SzfaGlKkw14RFHS4mAP57vZGJkSDxqo3A/exec";
+<script>
+document.addEventListener("DOMContentLoaded", async ()=>{
 
-const popup = document.getElementById("festivalPopup");
-const titleEl = document.getElementById("festivalTitle");
-const descEl  = document.getElementById("festivalDesc");
-const effects = document.getElementById("festivalEffectsLayer");
-const music   = document.getElementById("festivalMusic");
+  const popup  = document.getElementById("festivalPopup");
+  const titleEl = document.getElementById("festivalTitle");
+  const descEl  = document.getElementById("festivalDesc");
+  const effects = document.getElementById("festivalEffectsLayer");
+  const music   = document.getElementById("festivalMusic");
 
-/* 🎆 Animations */
-function startFlowers(){
-  for(let i=0;i<20;i++){
-    const f=document.createElement("div");
-    f.className="flower";
-    f.innerText="🌸";
-    f.style.left=Math.random()*100+"%";
-    f.style.animationDuration=(6+Math.random()*6)+"s";
-    effects.appendChild(f);
-  }
-}
-function startTiranga(){
-  for(let i=0;i<6;i++){
-    const t=document.createElement("div");
-    t.className="flag";
-    t.innerText="🇮🇳";
-    t.style.left=(i*15+5)+"%";
-    effects.appendChild(t);
-  }
-}
-function startDiya(){
-  for(let i=0;i<7;i++){
-    const d=document.createElement("div");
-    d.className="diya";
-    d.innerText="🪔";
-    d.style.left=(i*14+5)+"%";
-    effects.appendChild(d);
-  }
-}
-
-/* 🎤 Voice */
-function speak(text){
-  if(!("speechSynthesis" in window)) return;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "hi-IN";
-  u.rate = 0.9;
-  speechSynthesis.speak(u);
-}
-
-/* 🚀 MAIN */
-async function checkFestival(){
   try{
-    const res = await fetch(FESTIVAL_API);
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbyB9R7ZVXXNQ0kZgUWC6VEKrdaDibyFvd2X1SzfaGlKkw14RFHS4mAP57vZGJkSDxqo3A/exec"
+    );
     const data = await res.json();
 
     if(!data.events || !data.events.length) return;
 
     const fest = data.events[0];
 
-    popup.style.display = "flex";
+    popup.style.display="flex";
     titleEl.innerText = fest.title;
-    descEl.innerText  = "आज विशेष दिवस है।";
+    descEl.innerText =
+      "S.B. PUBLIC SCHOOL परिवार की ओर से\n\n" +
+      "आप सभी को हार्दिक शुभकामनाएँ।";
 
-    if(fest.type==="flag") startTiranga();
-    else if(fest.type==="diya") startDiya();
-    else startFlowers();
-
-    speak(fest.voice || ("आज " + fest.title + " है"));
+    if(window.speechSynthesis){
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(fest.voice || fest.title);
+      u.lang="hi-IN";
+      speechSynthesis.speak(u);
+    }
 
     setTimeout(()=>music.play().catch(()=>{}),800);
 
@@ -3044,14 +3009,13 @@ async function checkFestival(){
       popup.style.display="none";
       effects.innerHTML="";
       music.pause();
+      music.currentTime=0;
     },10000);
 
   }catch(e){
-    console.error("Festival API Error:", e);
+    console.error(e);
   }
-}
-
-checkFestival();
+});
 </script>
 
 <script>
