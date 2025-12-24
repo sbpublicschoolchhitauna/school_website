@@ -2972,60 +2972,120 @@ font-family:Arial;
 /* 🔥 FINAL FESTIVAL / JAYANTI SYSTEM */
 
 <script>
-document.addEventListener("DOMContentLoaded", async ()=>{
+document.addEventListener("DOMContentLoaded", async () => {
 
-  const popup  = document.getElementById("festivalPopup");
+  const popup = document.getElementById("festivalPopup");
   const titleEl = document.getElementById("festivalTitle");
   const descEl  = document.getElementById("festivalDesc");
-  const effects = document.getElementById("festivalEffectsLayer");
+  const countEl = document.getElementById("festivalCountdown");
   const music   = document.getElementById("festivalMusic");
 
-  try{
+  try {
     const res = await fetch(
       "https://script.google.com/macros/s/AKfycbyB9R7ZVXXNQ0kZgUWC6VEKrdaDibyFvd2X1SzfaGlKkw14RFHS4mAP57vZGJkSDxqo3A/exec"
     );
     const data = await res.json();
 
-    if(!data.events || !data.events.length) return;
+    if (!data.events || !data.events.length) return;
 
     const fest = data.events[0];
 
-    popup.style.display="flex";
+    /* 🔔 SHOW POPUP */
+    popup.style.display = "flex";
     titleEl.innerText = fest.title;
     descEl.innerText =
       "S.B. PUBLIC SCHOOL परिवार की ओर से\n\n" +
       "आप सभी को हार्दिक शुभकामनाएँ।";
 
-    if(window.speechSynthesis){
+    /* 🎤 VOICE */
+    if ("speechSynthesis" in window) {
       speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(fest.voice || fest.title);
-      u.lang="hi-IN";
+      const u = new SpeechSynthesisUtterance(fest.voice || fest.title);
+      u.lang = "hi-IN";
       speechSynthesis.speak(u);
     }
 
-    setTimeout(()=>music.play().catch(()=>{}),800);
+    /* 🎶 MUSIC */
+    setTimeout(() => {
+      music.currentTime = 0;
+      music.play().catch(()=>{});
+    }, 800);
 
-    setTimeout(()=>{
-      popup.style.display="none";
-      effects.innerHTML="";
-      music.pause();
-      music.currentTime=0;
-    },10000);
+    /* ⏱️ COUNTDOWN SYSTEM */
+    let timeLeft = 10;
+    countEl.innerText = timeLeft + " सेकंड शेष…";
 
-  }catch(e){
-    console.error(e);
+    const timer = setInterval(() => {
+      timeLeft--;
+      countEl.innerText = timeLeft + " सेकंड शेष…";
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+
+        popup.style.display = "none";
+        music.pause();
+        music.currentTime = 0;
+      }
+    }, 1000);
+
+  } catch (err) {
+    console.error("Festival Popup Error:", err);
   }
 });
 </script>
 
-<script>
-setTimeout(()=>{
-  document.getElementById("festivalPopup").style.display="flex";
-  document.getElementById("festivalTitle").innerText="🎉 TEST POPUP";
-  document.getElementById("festivalDesc").innerText=
-    "अगर यह दिख रहा है तो popup system 100% सही है।";
-},1000);
-</script>
+<!-- 🎉 FESTIVAL POPUP -->
+<div id="festivalPopup" style="
+display:none;
+position:fixed;
+inset:0;
+z-index:1000000;
+background:rgba(0,0,0,0.55);
+align-items:center;
+justify-content:center;
+font-family:Arial;
+">
+
+  <div style="
+  background:#ffffff;
+  max-width:420px;
+  width:92%;
+  border-radius:18px;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+  ">
+
+    <!-- TITLE -->
+    <h2 id="festivalTitle" style="
+    margin:0;
+    color:#0b5fa8;
+    font-size:22px;">
+    </h2>
+
+    <!-- MAIN TEXT -->
+    <p id="festivalDesc" style="
+    margin-top:12px;
+    font-size:15px;
+    line-height:1.6;
+    color:#333;">
+    </p>
+
+    <!-- COUNTDOWN TEXT -->
+    <p id="festivalCountdown" style="
+    margin-top:12px;
+    font-weight:bold;
+    font-size:14px;
+    color:#d32f2f;">
+    </p>
+
+  </div>
+</div>
+
+<!-- 🎶 MUSIC -->
+<audio id="festivalMusic" loop>
+  <source src="festival-music.mp3" type="audio/mpeg">
+</audio>
 
 </body>
 </html>
