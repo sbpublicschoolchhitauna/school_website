@@ -1793,38 +1793,138 @@ html, body { max-width: 100%; overflow-x: hidden; }
   color:#ffffff !important;
 }
 
+<!-- ========= SAFE STUDENT GREETING ADD-ON (ISOLATED) ========= -->
+<div id="sgx-wrap" hidden>
+  <div class="sgx-scene">
+    <div id="sgx-sun" class="sgx-sun">🌞</div>
+    <div id="sgx-moon" class="sgx-moon">🌙</div>
+    <div id="sgx-kid" class="sgx-kid">👦</div>
+    <div id="sgx-text" class="sgx-text"></div>
+  </div>
+</div>
+
+<style>
+#sgx-wrap{
+  position:fixed;
+  inset:0;
+  z-index:1000000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#87ceeb;
+}
+#sgx-wrap[hidden]{display:none}
+
+.sgx-scene{text-align:center}
+.sgx-sun{font-size:150px;animation:sgx-rise 3.8s ease forwards}
+.sgx-moon{font-size:130px;display:none}
+.sgx-kid{font-size:110px;margin-top:8px;animation:sgx-wave 2s infinite}
+.sgx-text{margin-top:18px;font-size:26px;font-weight:900;color:#012032}
+
+@keyframes sgx-rise{
+  from{transform:translateY(220px)}
+  to{transform:translateY(0)}
+}
+@keyframes sgx-wave{
+  0%{transform:rotate(0)}
+  25%{transform:rotate(15deg)}
+  50%{transform:rotate(-10deg)}
+  75%{transform:rotate(15deg)}
+  100%{transform:rotate(0)}
+}
+</style>
+
+<script>
+(function(){
+  try{
+    const KEY = "sgx_once_" + new Date().toDateString();
+    if(localStorage.getItem(KEY)) return;
+    localStorage.setItem(KEY,"1");
+
+    const wrap = document.getElementById("sgx-wrap");
+    const sun  = document.getElementById("sgx-sun");
+    const moon = document.getElementById("sgx-moon");
+    const kid  = document.getElementById("sgx-kid");
+    const txt  = document.getElementById("sgx-text");
+
+    kid.textContent = Math.random() > 0.5 ? "👧" : "👦";
+
+    const h = new Date().getHours();
+    let msg="", speak="";
+
+    if(h>=5 && h<12){
+      msg="🌞 Good Morning Students!<br>आज की मेहनत कल की सफलता है 📚✨";
+      speak="Good Morning Students. Aaj ki mehnat kal ki safalta hai.";
+    }else if(h<17){
+      msg="☀️ Good Afternoon Students!<br>खुद पर विश्वास रखो 💪";
+      speak="Good Afternoon Students. Khud par vishwas rakho.";
+    }else if(h<21){
+      msg="🌇 Good Evening Students!<br>हर दिन थोड़ा बेहतर बनो 🚀";
+      speak="Good Evening Students. Har din thoda behtar bano.";
+    }else{
+      msg="🌙 Good Night Students!<br>कल फिर नई शुरुआत होगी 😴";
+      speak="Good Night Students. Kal phir nayi shuruaat hogi.";
+      sun.style.display="none";
+      moon.style.display="block";
+      wrap.style.background="linear-gradient(#020024,#090979,#000)";
+      txt.style.color="#fff";
+    }
+
+    txt.innerHTML = msg;
+    wrap.hidden = false;
+
+    if("speechSynthesis" in window){
+      const u = new SpeechSynthesisUtterance(speak);
+      u.lang="hi-IN";
+      u.rate=0.95;
+      speechSynthesis.speak(u);
+    }
+
+    setTimeout(()=>{ wrap.hidden = true; }, 8500);
+  }catch(e){
+    console.warn("Greeting skipped:", e);
+  }
+})();
+</script>
+<!-- ========= END SAFE ADD-ON ========= -->
+
 <!-- =====================================================
-  STUDENT TIME BASED 3D GREETING (EXTRA ADD-ON)
-  ❌ Existing code untouched
+  STUDENT TIME BASED 3D GREETING SYSTEM (EXTRA ADD-ON)
+  ✔ Existing index.html unchanged
+  ✔ Paste before </body>
 ===================================================== -->
 
-<div id="studentGreeting" class="sg-box sg-hide">
+<div id="studentGreetingBox" class="sg-hidden">
   <div class="sg-scene">
-    <div id="sgSky" class="sg-sky"></div>
-
     <div id="sgSun" class="sg-sun">🌞</div>
     <div id="sgMoon" class="sg-moon">🌙</div>
 
     <div id="sgCartoon" class="sg-cartoon">👦</div>
 
-    <div id="sgText" class="sg-text"></div>
+    <div id="sgMessage" class="sg-message"></div>
   </div>
 </div>
 
 <style>
-.sg-box{
-  position:fixed; inset:0;
-  z-index:1000000;
+/* ===== Greeting Overlay ===== */
+#studentGreetingBox{
+  position:fixed;
+  inset:0;
+  z-index:999999;
   display:flex;
-  justify-content:center;
   align-items:center;
-  background:#87ceeb;
-  animation:sgFade 1s ease;
+  justify-content:center;
+  background:linear-gradient(#87ceeb,#e0f6ff);
+  animation:sgFadeIn 1s ease;
 }
-.sg-hide{display:none}
+.sg-hidden{display:none}
 
-.sg-scene{text-align:center}
+.sg-scene{
+  text-align:center;
+  perspective:1200px;
+}
 
+/* Sun & Moon */
 .sg-sun{
   font-size:160px;
   animation:sunRise 4s ease forwards;
@@ -1834,36 +1934,40 @@ html, body { max-width: 100%; overflow-x: hidden; }
   display:none;
 }
 
+/* Cartoon Student */
 .sg-cartoon{
   font-size:120px;
   margin-top:10px;
-  animation:wave 2s infinite;
+  animation:waveHand 2s infinite;
+  transform-origin:70% 70%;
 }
 
-.sg-text{
+/* Message */
+.sg-message{
   margin-top:20px;
   font-size:28px;
   font-weight:900;
   color:#012032;
-  animation:pop 1.6s infinite;
+  animation:popText 1.6s infinite;
 }
 
+/* Animations */
 @keyframes sunRise{
   from{transform:translateY(220px)}
   to{transform:translateY(0)}
 }
-@keyframes wave{
+@keyframes waveHand{
   0%{transform:rotate(0deg)}
-  25%{transform:rotate(14deg)}
+  25%{transform:rotate(15deg)}
   50%{transform:rotate(-10deg)}
-  75%{transform:rotate(14deg)}
+  75%{transform:rotate(15deg)}
   100%{transform:rotate(0)}
 }
-@keyframes pop{
+@keyframes popText{
   0%{transform:scale(1)}
   50%{transform:scale(1.08)}
 }
-@keyframes sgFade{
+@keyframes sgFadeIn{
   from{opacity:0}
   to{opacity:1}
 }
@@ -1873,61 +1977,65 @@ html, body { max-width: 100%; overflow-x: hidden; }
 (function(){
 
   /* 🔁 Day में सिर्फ 1 बार */
-  const key = "studentGreeting_" + new Date().toDateString();
-  if(localStorage.getItem(key)) return;
-  localStorage.setItem(key,"1");
+  const todayKey = "studentGreetingShown_" + new Date().toDateString();
+  if(localStorage.getItem(todayKey)) return;
+  localStorage.setItem(todayKey,"yes");
 
-  const box   = document.getElementById("studentGreeting");
-  const sun   = document.getElementById("sgSun");
-  const moon  = document.getElementById("sgMoon");
-  const text  = document.getElementById("sgText");
-  const emoji = document.getElementById("sgCartoon");
+  const box     = document.getElementById("studentGreetingBox");
+  const sun     = document.getElementById("sgSun");
+  const moon    = document.getElementById("sgMoon");
+  const cartoon = document.getElementById("sgCartoon");
+  const msgBox  = document.getElementById("sgMessage");
 
-  /* 👦👧 Random Student */
-  emoji.textContent = Math.random() > 0.5 ? "👧" : "👦";
+  /* 👦👧 Random Cartoon Boy / Girl */
+  cartoon.textContent = Math.random() > 0.5 ? "👧" : "👦";
 
-  const h = new Date().getHours();
-  let msg="", voice="";
+  const hour = new Date().getHours();
+  let message = "";
+  let voiceText = "";
 
-  if(h>=5 && h<12){
-    msg = "🌞 Good Morning Students!<br>आज मेहनत करोगे तो कल सफलता जरूर मिलेगी 📚✨";
-    voice = "Good Morning Students. Aaj mehnat karoge to kal safalta jarur milegi.";
+  if(hour >= 5 && hour < 12){
+    message = "🌞 Good Morning Students!<br>आज मेहनत करोगे तो कल सफलता जरूर मिलेगी 📚✨";
+    voiceText = "Good Morning Students. Aaj mehnat karoge to kal safalta jarur milegi.";
   }
-  else if(h>=12 && h<17){
-    msg = "☀️ Good Afternoon Students!<br>खुद पर भरोसा रखो, तुम बहुत कुछ कर सकते हो 💪🌟";
-    voice = "Good Afternoon Students. Khud par bharosa rakho, tum bahut kuch kar sakte ho.";
+  else if(hour >= 12 && hour < 17){
+    message = "☀️ Good Afternoon Students!<br>खुद पर भरोसा रखो, तुम बहुत कुछ कर सकते हो 💪🌟";
+    voiceText = "Good Afternoon Students. Khud par bharosa rakho, tum bahut kuch kar sakte ho.";
   }
-  else if(h>=17 && h<21){
-    msg = "🌇 Good Evening Students!<br>हर दिन थोड़ा आगे बढ़ना ही सच्ची जीत है 🚀📖";
-    voice = "Good Evening Students. Har din thoda aage badhna hi sachi jeet hai.";
+  else if(hour >= 17 && hour < 21){
+    message = "🌇 Good Evening Students!<br>हर दिन थोड़ा आगे बढ़ना ही सच्ची जीत है 🚀📖";
+    voiceText = "Good Evening Students. Har din thoda aage badhna hi sachi jeet hai.";
   }
   else{
-    msg = "🌙 Good Night Students!<br>आज का प्रयास कल की सफलता बनेगा 😴🌙";
-    voice = "Good Night Students. Aaj ka prayas kal ki safalta banega.";
-    sun.style.display="none";
-    moon.style.display="block";
-    box.style.background="linear-gradient(#020024,#090979,#000)";
-    text.style.color="#fff";
+    message = "🌙 Good Night Students!<br>आज का प्रयास कल की सफलता बनेगा 😴🌙";
+    voiceText = "Good Night Students. Aaj ka prayas kal ki safalta banega.";
+    sun.style.display = "none";
+    moon.style.display = "block";
+    box.style.background = "linear-gradient(#020024,#090979,#000)";
+    msgBox.style.color = "#ffffff";
   }
 
-  text.innerHTML = msg;
-  box.classList.remove("sg-hide");
+  msgBox.innerHTML = message;
+  box.classList.remove("sg-hidden");
 
-  /* 🔊 Voice (Best possible browser voice) */
+  /* 🔊 Voice (Browser best possible) */
   if("speechSynthesis" in window){
-    const u = new SpeechSynthesisUtterance(voice);
-    u.lang = "hi-IN";
-    u.rate = 0.95;
-    speechSynthesis.speak(u);
+    const utter = new SpeechSynthesisUtterance(voiceText);
+    utter.lang = "hi-IN";
+    utter.rate = 0.95;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utter);
   }
 
-  /* ⏳ Auto close */
-  setTimeout(()=>box.classList.add("sg-hide"),9000);
+  /* ⏳ Auto close after 9 sec */
+  setTimeout(()=>{
+    box.classList.add("sg-hidden");
+  },9000);
 
 })();
 </script>
 
-<!-- =============== END STUDENT GREETING ADD-ON =============== -->
+<!-- =============== END STUDENT GREETING SYSTEM =============== -->
 
 </body>
 </html>
