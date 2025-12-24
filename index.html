@@ -2150,186 +2150,161 @@ setTimeout(()=>{
 </script>
 <!-- ========== END ========== -->
 
-<!-- ========== FINAL SMART GREETING + URGENT ALERT SYSTEM ========== -->
+<!-- ========== FINAL SMART WEATHER ADVISORY SYSTEM ========== -->
 <style>
 #smartGreeting{
   position:fixed; inset:0;
   z-index:9999999;
-  overflow:hidden;
+  background:linear-gradient(to top,#4facfe,#00f2fe);
   display:flex;
   align-items:center;
   justify-content:center;
   font-family:Arial,Helvetica,sans-serif;
 }
-.sky{position:absolute;inset:0;background:#4facfe}
-
-/* 🌞 SUN */
-.sun{
-  position:absolute; left:50%; transform:translateX(-50%);
-  width:220px; height:220px; border-radius:50%;
-  background:radial-gradient(circle,#fff9c4,#ff9800);
+.content{
+  text-align:center;
+  color:#fff;
+  padding:20px;
+  text-shadow:0 4px 15px rgba(0,0,0,.4);
 }
+.content h1{font-size:36px;font-weight:900}
+.content p{font-size:20px;line-height:1.6}
 
-/* ☁️ CLOUDS */
-.cloud{position:absolute;top:15%;font-size:160px;opacity:.6;animation:cloudMove 50s linear infinite}
-.cloud.c2{top:35%;font-size:110px;animation-duration:70s}
+/* ☁️ Clouds */
+.cloud{
+  position:absolute; top:15%;
+  font-size:140px; opacity:.6;
+  animation:cloudMove 40s linear infinite;
+}
 @keyframes cloudMove{from{left:-40%}to{left:120%}}
 
-/* 🐦 BIRDS */
-.bird{position:absolute;top:25%;font-size:42px;animation:birdFly 18s linear infinite}
+/* 🐦 Bird */
+.bird{
+  position:absolute; top:28%;
+  font-size:36px;
+  animation:birdFly 18s linear infinite;
+}
 @keyframes birdFly{from{left:-10%}to{left:110%}}
 
-/* 🌧️ RAIN */
+/* 🌧️ Rain */
 .rain{
   position:absolute; inset:0; pointer-events:none;
   background-image:repeating-linear-gradient(
-    -45deg,rgba(255,255,255,.3) 0px,rgba(255,255,255,.3) 1px,
-    transparent 1px,transparent 8px);
+    -45deg,
+    rgba(255,255,255,.3) 0px,
+    rgba(255,255,255,.3) 1px,
+    transparent 1px,
+    transparent 8px
+  );
   animation:rainFall .4s linear infinite;
 }
 @keyframes rainFall{to{background-position:-20px 40px}}
-
-/* 🎭 CARTOON */
-.student{
-  position:absolute; bottom:25px; left:50%;
-  transform:translateX(-50%);
-  font-size:110px;
-}
-
-/* 📢 URGENT ALERT */
-.alert{
-  position:absolute;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#c62828;
-  color:#fff;
-  padding:12px 20px;
-  border-radius:12px;
-  font-weight:900;
-  font-size:18px;
-  box-shadow:0 0 20px rgba(255,0,0,.8);
-  animation:blink 1s infinite;
-}
-@keyframes blink{50%{opacity:.6}}
-
-.content{
-  position:relative; z-index:5;
-  text-align:center; color:#fff;
-  text-shadow:0 6px 18px rgba(0,0,0,.45);
-}
-.content h1{font-size:36px;font-weight:900}
-.content p{font-size:20px;line-height:1.5}
 </style>
 
 <script>
 (async function(){
 
+/* 🔒 Stop any previous speech */
 if("speechSynthesis" in window) speechSynthesis.cancel();
 
-const API_KEY="ec205c82afed56e514e32b2eaafa1079";
+/* 🔑 WEATHER API KEY */
+const API_KEY = "ec205c82afed56e514e32b2eaafa1079";
 
-/* 🔔 NOTIFICATION PERMISSION */
-if("Notification" in window && Notification.permission!=="granted"){
-  Notification.requestPermission();
-}
-
-/* LOCATION */
+/* 📍 LOCATION */
 function getLocation(){
   return new Promise((res,rej)=>{
-    navigator.geolocation.getCurrentPosition(p=>res(p.coords),e=>rej(e));
+    navigator.geolocation.getCurrentPosition(
+      p=>res(p.coords),
+      e=>rej(e)
+    );
   });
 }
 
-/* WEATHER */
+/* 🌦️ WEATHER */
 async function getWeather(lat,lon){
-  const url=`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
-  const r=await fetch(url); return r.json();
+  const url =
+    "https://api.openweathermap.org/data/2.5/weather"+
+    "?lat="+lat+"&lon="+lon+
+    "&appid="+API_KEY+"&units=metric";
+  const r = await fetch(url);
+  return r.json();
 }
 
-let city="आपके शहर",temp=0,weather="Clear";
-try{
-  const c=await getLocation();
-  const d=await getWeather(c.latitude,c.longitude);
-  city=d.name;
-  temp=Math.round(d.main.temp);
-  weather=d.weather[0].main;
-}catch(e){}
+/* DEFAULT VALUES */
+let city="आपके शहर";
+let temp=0;
+let weather="Clear";
 
-/* 🧠 WEATHER ADVICE + URGENT ALERT */
-let adviceText="",adviceVoice="";
-let urgentText="",urgentVoice="";
+/* TRY REAL WEATHER */
+try{
+  const c = await getLocation();
+  const d = await getWeather(c.latitude,c.longitude);
+  city = d.name || city;
+  temp = Math.round(d.main.temp);
+  weather = d.weather[0].main;
+}catch(e){
+  console.log("Weather fallback mode");
+}
+
+/* 🧠 WEATHER ADVICE (TEXT + VOICE) */
+let adviceText="", adviceVoice="";
 let showRain=false;
 
-if(weather==="Rain"||weather==="Thunderstorm"){
-  adviceText="🌧️ वर्षा हो रही है, छाता लेकर चलें।";
-  adviceVoice="आज वर्षा हो रही है। छाता लेकर चलें।";
-  showRain=true;
-
-  urgentText="⚠️ तेज़ वर्षा अलर्ट! सावधानी बरतें";
-  urgentVoice="अत्यंत आवश्यक सूचना। तेज़ वर्षा हो रही है। सावधानी बरतें।";
+if(weather==="Rain" || weather==="Thunderstorm"){
+  adviceText = "🌧️ वर्षा हो रही है, छाता लेकर चलें और गीले कपड़ों से बचें।";
+  adviceVoice = "आज वर्षा हो रही है। विद्यार्थी छाता लेकर चलें और गीले कपड़ों से बचें।";
+  showRain = true;
 }
-else if(temp<=8){
-  adviceText="❄️ बहुत ठंड है, गर्म कपड़े पहनें।";
-  adviceVoice="आज बहुत ठंड है। गर्म कपड़े पहनें।";
-
-  urgentText="⚠️ अत्यधिक ठंड अलर्ट!";
-  urgentVoice="अत्यंत आवश्यक सूचना। बहुत ठंड है। गर्म कपड़े पहनें।";
+else if(temp <= 15){
+  adviceText = "❄️ ठंड है, गर्म कपड़े पहनें और ठंडा पानी पीने से बचें।";
+  adviceVoice = "आज ठंड अधिक है। विद्यार्थी गर्म कपड़े पहनें और ठंडा पानी पीने से बचें।";
 }
-else if(temp>=38){
-  adviceText="☀️ बहुत गर्मी है, पानी पिएँ।";
-  adviceVoice="आज बहुत गर्मी है। पर्याप्त पानी पिएँ।";
-
-  urgentText="⚠️ अत्यधिक गर्मी अलर्ट!";
-  urgentVoice="अत्यंत आवश्यक सूचना। बहुत गर्मी है। पानी पिएँ और धूप से बचें।";
+else if(temp >= 35){
+  adviceText = "☀️ गर्मी अधिक है, पानी पिएँ और तेज धूप से बचें।";
+  adviceVoice = "आज गर्मी अधिक है। विद्यार्थी पर्याप्त पानी पिएँ और तेज धूप से बचें।";
 }
 else{
-  adviceText="🙂 मौसम सामान्य है।";
-  adviceVoice="आज मौसम सामान्य है।";
+  adviceText = "🙂 मौसम सामान्य है, स्वस्थ रहें और पढ़ाई पर ध्यान दें।";
+  adviceVoice = "आज मौसम सामान्य है। स्वस्थ रहें और पढ़ाई पर ध्यान दें।";
 }
 
-/* 📢 BROWSER NOTIFICATION */
-if(urgentText && "Notification" in window && Notification.permission==="granted"){
-  new Notification("School Weather Alert",{
-    body: urgentText,
-    icon: "https://cdn-icons-png.flaticon.com/512/1146/1146869.png"
-  });
-}
-
-/* UI */
-const g=document.createElement("div");
-g.id="smartGreeting";
-g.innerHTML=`
-  <div class="sky"></div>
-  ${showRain?`<div class="rain"></div>`:""}
+/* 🧩 UI */
+const g = document.createElement("div");
+g.id = "smartGreeting";
+g.innerHTML = `
+  ${showRain ? `<div class="rain"></div>` : ``}
   <div class="cloud">☁️</div>
-  <div class="cloud c2">☁️</div>
   <div class="bird">🐦</div>
-  <div class="student">🧒</div>
-
-  ${urgentText?`<div class="alert">${urgentText}</div>`:""}
 
   <div class="content">
     <h1>नमस्ते विद्यार्थी 👋</h1>
-    <p>${city} में तापमान ${temp}°C है<br>${adviceText}</p>
+    <p>
+      ${city} में तापमान ${temp}°C है<br>
+      <strong>${adviceText}</strong>
+    </p>
   </div>
 `;
 document.body.appendChild(g);
 
-/* 🔊 VOICE (Normal + Urgent) */
-setTimeout(()=>{
-  speechSynthesis.cancel();
-  let finalVoice = `नमस्ते विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। ${adviceVoice}`;
-  if(urgentVoice) finalVoice = urgentVoice + " " + finalVoice;
+/* 🔊 FINAL VOICE (Advice ALWAYS included) */
+let finalVoice =
+  `नमस्ते विद्यार्थी। ${city} में तापमान ${temp} डिग्री सेल्सियस है। ` +
+  adviceVoice;
 
-  const u=new SpeechSynthesisUtterance(finalVoice);
-  u.lang="hi-IN";
-  u.rate=0.95;
-  speechSynthesis.speak(u);
+setTimeout(()=>{
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(finalVoice);
+    utter.lang = "hi-IN";
+    utter.rate = 0.95;
+    speechSynthesis.speak(utter);
+  }
 },800);
 
-/* AUTO CLOSE */
-setTimeout(()=>g.remove(),9000);
+/* ⏱️ AUTO CLOSE */
+setTimeout(()=>{
+  g.remove();
+},7000);
 
 })();
 </script>
