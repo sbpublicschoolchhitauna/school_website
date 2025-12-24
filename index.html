@@ -748,6 +748,9 @@ async function searchStudent(){
       out.innerHTML = "<div style='padding:12px;background:#fff;border-radius:8px;border:1px solid #f1f7ff'>No details found for this Admission Number.</div>";
       return;
     }
+
+runGreeting();
+
 // 🔴 DIRECT CONFIRM (NO EXTRA FILE)
 const studentName =
   rec["Student Name"] || rec["Name"] || rec["StudentName"];
@@ -1792,20 +1795,9 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .footer *{
   color:#ffffff !important;
 }
-<!-- STUDENT GREETING SYSTEM -->
-<link rel="stylesheet" href="greeting/greeting.css">
 
+<link rel="stylesheet" href="greeting/greeting.css">
 <script src="greeting/greeting.js"></script>
-<script src="greeting/festival.js"></script>
-<script src="greeting/birthday.js"></script>
-<script src="greeting/weather.js"></script>
-
-<link rel="stylesheet" href="greeting/greeting.css">
-
-<script src="greeting/greeting-voice.js"></script>
-<script src="greeting/weather-sky.js"></script>
-<script src="greeting/greeting-core.js"></script>
-<script src="greeting/greeting-trigger.js"></script>
 
 </body>
 </html>

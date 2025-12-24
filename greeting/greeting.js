@@ -1,18 +1,35 @@
 
 (function(){
-const today=new Date().toDateString();
-if(localStorage.greetDone===today)return;
-const name=localStorage.studentName||"Students";
-const h=new Date().getHours();
-let title,msg;
-if(h>=5&&h<12){title=`🌞 Good Morning ${name}`;msg="आज का दिन सीखने का है";}
-else if(h<16){title=`☀️ Good Afternoon ${name}`;msg="मेहनत करते रहो";}
-else if(h<20){title=`🌸 Good Evening ${name}`;msg="आपने अच्छा किया";}
-else{title=`🌙 Good Night ${name}`;msg="अच्छी नींद लें";}
-const box=document.createElement("div");
-box.id="greet3d";
-box.innerHTML=`<div class=lottie-box></div><div class=greet-title>${title}</div><div class=greet-msg id=greetMsg>${msg}</div>`;
-document.body.appendChild(box);box.classList.add("show");
-speechSynthesis.speak(new SpeechSynthesisUtterance(title+" "+msg));
-setTimeout(()=>{box.remove();localStorage.greetDone=today},8000);
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='hi-IN';u.rate=0.9;
+    speechSynthesis.speak(u);
+  }
+  function runGreeting(){
+    const h=new Date().getHours();
+    let mode='';
+    if(h>=5&&h<12) mode='morning';
+    else if(h>=16&&h<20) mode='evening';
+    else return;
+    const key='greet_done_'+mode;
+    if(localStorage.getItem(key)) return;
+    localStorage.setItem(key,'1');
+    const name=localStorage.studentName||'Students';
+    const text=mode==='morning'?'Good Morning '+name:'Good Evening '+name;
+    const box=document.createElement('div');
+    box.id='greetScene';box.className=mode;
+    box.innerHTML=`
+      <div class="sun"></div>
+      <div class="cloud" style="top:90px"></div>
+      <div class="cloud" style="top:140px;animation-delay:5s"></div>
+      <div class="birds">🐦 🐦</div>
+      <div class="cartoon">🙋‍♂️</div>
+      <div class="greetText">${text}</div>`;
+    document.body.appendChild(box);
+    speak(text);
+    setTimeout(()=>box.remove(),9000);
+  }
+  window.runGreeting=runGreeting;
+  window.addEventListener('load',runGreeting);
 })();
