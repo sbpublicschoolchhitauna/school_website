@@ -3157,6 +3157,69 @@ document.addEventListener("DOMContentLoaded", function(){
   --popup-count-size: 20px;   /* 🔹 Countdown size */
 }
 </style>
+<!-- 🔔 FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+<script>
+  // 🔥 Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5vKP3huufopaFif_4KzMjVl_xJyCO4h0",
+    authDomain: "sb-public-school-notification.firebaseapp.com",
+    projectId: "sb-public-school-notification",
+    messagingSenderId: "92374733560",
+    appId: "1:92374733560:web:f90f2b6d1f4f482f24a10d"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  // ✅ ROOT Service Worker register
+  navigator.serviceWorker.register("/firebase-messaging-sw.js")
+    .then(reg => {
+      console.log("Service Worker Registered");
+      messaging.useServiceWorker(reg);
+    })
+    .catch(err => console.error("SW error", err));
+
+  // 🔔 TOKEN FUNCTION
+  async function enableNotification() {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        alert("Notification Allow करना ज़रूरी है");
+        return;
+      }
+
+      const token = await messaging.getToken({
+        vapidKey: "BJWiT7Q-6UwaZPE-YQoEUbB8oEZ0qSrTB8fLECRjDtZe7vt5Ftkm6GQyAYAXVN0rjOGGZIi1jkx81SDag6y0tlk"
+      });
+
+      alert("✅ FCM TOKEN (कॉपी करें):\n\n" + token);
+      console.log("FCM TOKEN:", token);
+
+    } catch (e) {
+      alert("Error: " + e.message);
+      console.error(e);
+    }
+  }
+</script>
+
+<!-- 🔘 BUTTON -->
+<button onclick="enableNotification()" style="
+position:fixed;
+bottom:20px;
+right:20px;
+z-index:999999;
+padding:14px 18px;
+font-size:15px;
+border-radius:12px;
+border:none;
+background:#0b5fa8;
+color:white;
+cursor:pointer;">
+🔔 Enable Notification
+</button>
 
 
 </body>
