@@ -3337,5 +3337,44 @@ setTimeout(() => {
 }, 17000);
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const music = document.getElementById("festivalMusic");
+  if (!music) return;
+
+  const hour = new Date().getHours();
+
+  // 🎚️ बहुत हल्की आवाज
+  music.volume = 0.15;   // 0.0 – 1.0 (0.15 = बहुत soft)
+
+  // 🌅 सुबह 5 से 10
+  const isMorning = hour >= 5 && hour < 10;
+
+  // 🌆 शाम 6 से 8
+  const isEvening = hour >= 18 && hour < 20;
+
+  if (isMorning || isEvening) {
+    // Browser policy के लिए user interaction safe play
+    setTimeout(() => {
+      music.play().catch(() => {
+        console.log("Autoplay blocked until user interaction");
+      });
+    }, 3000);
+  } else {
+    music.pause();
+    music.currentTime = 0;
+  }
+
+  // 🔕 Tab change होने पर अपने आप बंद
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      music.pause();
+    } else if (isMorning || isEvening) {
+      music.play().catch(()=>{});
+    }
+  });
+});
+</script>
+
 </body>
 </html>
