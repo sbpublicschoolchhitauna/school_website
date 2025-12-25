@@ -3194,6 +3194,55 @@ document.addEventListener("DOMContentLoaded", function(){
   window.addEventListener("load", askNotificationPermission);
 </script>
 
+<!-- 🔔 FCM TOKEN GENERATOR -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5vKP3huufopaFif_4KzMjVl_xJyCO4h0",
+    authDomain: "sb-public-school-notification.firebaseapp.com",
+    projectId: "sb-public-school-notification",
+    messagingSenderId: "92374733560",
+    appId: "1:92374733560:web:f90f2b6d1f4f482f24a10d"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  navigator.serviceWorker.register("firebase-messaging-sw.js");
+
+  function getFCMToken(){
+    Notification.requestPermission().then(permission=>{
+      if(permission==="granted"){
+        messaging.getToken({
+          vapidKey:"BJWiT7Q-6UwaZPE-YQoEUbB8oEZ0qSrTB8fLECRjDtZe7vt5Ftkm6GQyAYAXVN0rjOGGZIi1jkx81SDag6y0tlk"
+        }).then(token=>{
+          alert("FCM TOKEN:\n\n"+token);
+          console.log("FCM TOKEN:",token);
+        });
+      }else{
+        alert("Notification Allow करना ज़रूरी है");
+      }
+    });
+  }
+</script>
+
+<!-- 🔘 TOKEN BUTTON -->
+<button onclick="getFCMToken()" style="
+position:fixed;
+bottom:20px;
+right:20px;
+z-index:9999;
+padding:12px 16px;
+border-radius:12px;
+border:none;
+font-weight:bold;
+background:#0b5fa8;
+color:#fff;">
+🔔 Enable Notification
+</button>
+
 </body>
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
