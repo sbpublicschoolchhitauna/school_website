@@ -3371,53 +3371,6 @@ setTimeout(() => {
   }
 }, 15000);
 </script>
-<script>
-/* 🔒 HARD LOCK + DELAYED SHOW */
-(function(){
-
-  const overlay = document.getElementById("popupOverlay");
-  if(!overlay) return;
-
-  // 🔒 always force hide on load
-  overlay.style.display = "none";
-
-  // 👁️ watch if any script tries to show it early
-  const observer = new MutationObserver(() => {
-    if(!overlay.dataset.allowShow){
-      overlay.style.display = "none";
-    }
-  });
-
-  observer.observe(overlay, {
-    attributes:true,
-    attributeFilter:["style"]
-  });
-
-  // ⏱️ allow show ONLY after 15 seconds
-  setTimeout(() => {
-    overlay.dataset.allowShow = "yes";
-    overlay.style.display = "flex";
-
-    // 🎤 Voice (safe)
-    const txt = document.getElementById("popupText");
-    if(txt && window.speechSynthesis){
-      const u = new SpeechSynthesisUtterance(txt.innerText);
-      u.lang = "hi-IN";
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    }
-
-  }, 15000);
-
-})();
-</script>
 
 </body>
-<style>
-/* 🔒 FORCE HIDE FESTIVAL POPUP */
-#popupOverlay{
-  display:none !important;
-}
-</style>
-
 </html>
