@@ -3337,5 +3337,94 @@ setTimeout(() => {
 }, 17000);
 </script>
 
+<script>
+/* ================= QUEUE POPUP SYSTEM ================= */
+
+const popupQueue = [
+  {
+    delay: 5000,   // ⏱️ 5 sec
+    duration: 6000,
+    text: "🌤️ मौसम जानकारी:\nआज मौसम सामान्य है।",
+    voice: "आज मौसम सामान्य है। पढ़ाई पर ध्यान दें।"
+  },
+  {
+    delay: 10000,  // ⏱️ 10 sec
+    duration: 6000,
+    text: "📢 स्मार्ट सलाह:\nछाता या पानी साथ रखें।",
+    voice: "छात्र ध्यान दें, मौसम के अनुसार तैयारी रखें।"
+  },
+  {
+    delay: 15000,  // ⏱️ 15 sec
+    duration: 6000,
+    text: "🎯 मोटिवेशन:\nआज का दिन सीखने का अवसर है।",
+    voice: "आज का दिन सीखने और आगे बढ़ने का अवसर है।"
+  }
+];
+
+let currentIndex = 0;
+
+/* 🔊 Speak Function */
+function speak(text){
+  if (!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "hi-IN";
+  u.rate = 0.95;
+  speechSynthesis.speak(u);
+}
+
+/* 📦 Popup Show */
+function showPopup(item, next){
+  const div = document.createElement("div");
+  div.style.cssText = `
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+    font-family:Arial;
+  `;
+
+  div.innerHTML = `
+    <div style="
+      background:#0b5fa8;
+      color:white;
+      padding:30px;
+      border-radius:20px;
+      font-size:22px;
+      text-align:center;
+      max-width:500px;
+      box-shadow:0 20px 50px rgba(0,0,0,.4)">
+      ${item.text.replace(/\n/g,"<br>")}
+    </div>
+  `;
+
+  document.body.appendChild(div);
+  speak(item.voice);
+
+  setTimeout(()=>{
+    div.remove();
+    if(next) next();
+  }, item.duration);
+}
+
+/* 🚀 Queue Runner */
+function runQueue(){
+  if(currentIndex >= popupQueue.length) return;
+
+  const item = popupQueue[currentIndex];
+  setTimeout(()=>{
+    showPopup(item, ()=>{
+      currentIndex++;
+      runQueue();
+    });
+  }, item.delay);
+}
+
+/* ▶️ Start */
+document.addEventListener("DOMContentLoaded", runQueue);
+</script>
+
 </body>
 </html>
