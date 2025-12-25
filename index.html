@@ -3376,5 +3376,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const music = document.getElementById("festivalMusic");
+  if (!music) return;
+
+  // 🎚️ हल्की आवाज
+  music.volume = 0.15;
+
+  // ⏳ 2 सेकंड बाद music start
+  setTimeout(() => {
+    music.play().catch(() => {
+      console.log("Autoplay blocked, user interaction needed");
+    });
+  }, 30000);
+});
+</script>
+
 </body>
 </html>
