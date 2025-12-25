@@ -3158,6 +3158,73 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+<script>
+/* ===== FINAL POPUP SEQUENCE FOR YOUR EXISTING popupOverlay ===== */
+
+window.addEventListener("load", () => {
+
+  const overlay = document.getElementById("popupOverlay");
+  const titleEl = document.getElementById("popupTitle");
+  const textEl = document.getElementById("popupText");
+  const countdownEl = document.getElementById("popupCountdown");
+
+  if (!overlay) return;
+
+  // 🔹 popup sequence (time in ms)
+  const sequence = [
+    {
+      title: "🌤️ Weather & Motivation",
+      text: "मौसम और प्रेरणादायक संदेश प्रस्तुत किया जा रहा है।",
+      duration: 5000
+    },
+    {
+      title: "🌦️ Smart Weather Advisory",
+      text: "अब स्मार्ट मौसम सलाह प्रणाली शुरू हो रही है।",
+      duration: 10000
+    },
+    {
+      title: "📢 Important Message",
+      text: "आज का विशेष संदेश अब प्रस्तुत किया जा रहा है।",
+      duration: 15000
+    }
+  ];
+
+  let index = 0;
+
+  function showNextPopup() {
+    if (index >= sequence.length) {
+      overlay.style.display = "none";
+      return;
+    }
+
+    const item = sequence[index];
+
+    titleEl.innerText = item.title;
+    textEl.innerText = item.text;
+
+    overlay.style.display = "flex";
+
+    let remaining = item.duration / 1000;
+    countdownEl.innerText = `⏳ ${remaining} सेकंड`;
+
+    const timer = setInterval(() => {
+      remaining--;
+      countdownEl.innerText = `⏳ ${remaining} सेकंड`;
+      if (remaining <= 0) clearInterval(timer);
+    }, 1000);
+
+    setTimeout(() => {
+      overlay.style.display = "none";
+      index++;
+      setTimeout(showNextPopup, 600); // छोटा gap
+    }, item.duration);
+  }
+
+  // 🚀 start sequence
+  setTimeout(showNextPopup, 800);
+
+});
+</script>
 
 </body>
 </html>
