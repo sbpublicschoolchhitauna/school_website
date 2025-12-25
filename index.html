@@ -3158,6 +3158,16 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "20ed0343-493f-4f8e-aa7d-58dc1aeb4577",
+    });
+  });
+</script>
+
 
 </body>
 </html>
