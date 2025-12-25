@@ -3158,50 +3158,6 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "20ed0343-493f-4f8e-aa7d-58dc1aeb4577",
-    });
-  });
-</script>
-
-<!-- ================= ONE SIGNAL FINAL FIX ================= -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(function (OneSignal) {
-    OneSignal.init({
-      appId: "20ed0343-493f-4f8e-aa7d-58dc1aeb4577",
-
-      /* 🔴 MOST IMPORTANT (GitHub subfolder fix) */
-      path: "/school_website/",
-      serviceWorkerPath: "/school_website/OneSignalSDKWorker.js",
-      serviceWorkerUpdaterPath: "/school_website/OneSignalSDKUpdaterWorker.js",
-
-      /* 🔔 Auto permission popup */
-      promptOptions: {
-        slidedown: {
-          enabled: true,
-          actionMessage: "S.B. PUBLIC SCHOOL से सभी जरूरी सूचनाएँ पाने के लिए अनुमति दें",
-          acceptButtonText: "ALLOW",
-          cancelButtonText: "NO THANKS"
-        }
-      },
-
-      /* 🔔 Bell button */
-      notifyButton: {
-        enable: true,
-        position: 'bottom-right'
-      }
-    });
-  });
-</script>
-<!-- ================= END FIX ================= -->
-
 
 </body>
 </html>
