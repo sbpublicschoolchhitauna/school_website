@@ -685,18 +685,7 @@ font-family:Arial;
     <div id="birthdayScrollInner" class="birthday-scroll-inner"></div>
   </div>
 </div>
-
-<!-- 🎵 Footer Music Box -->
-<div id="footerMusicBox">
-  <div class="music-title">🎶 School Theme Music</div>
-
-  <button id="musicToggleBtn">▶ Play Music</button>
-
-  <audio id="festivalMusic">
-    <source src="festival-music.mp3" type="audio/mpeg">
-  </audio>
-</div>
-
+ 
         </div>
       </div>
     </div>
@@ -3346,65 +3335,6 @@ setTimeout(() => {
     speechSynthesis.speak(u);
   }
 }, 17000);
-</script>
-
-/* 🎵 Footer Music Theme Box */
-#footerMusicBox{
-  max-width:420px;
-  margin:20px auto;
-  padding:14px 20px;
-  border-radius:18px;
-  text-align:center;
-
-  background:linear-gradient(135deg,#eaf4ff,#ffffff);
-  border:3px solid #0b5fa8;
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.15),
-    inset 0 0 20px rgba(11,95,168,0.15);
-}
-
-#footerMusicBox .music-title{
-  font-size:16px;
-  font-weight:800;
-  color:#0b5fa8;
-  margin-bottom:10px;
-  letter-spacing:.5px;
-}
-
-#musicToggleBtn{
-  padding:10px 20px;
-  border-radius:30px;
-  border:none;
-  cursor:pointer;
-
-  background:linear-gradient(135deg,#0b5fa8,#1167b1);
-  color:#fff;
-  font-size:14px;
-  font-weight:700;
-
-  box-shadow:0 6px 18px rgba(0,0,0,0.25);
-}
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const music = document.getElementById("festivalMusic");
-  const btn = document.getElementById("musicToggleBtn");
-
-  if (!music || !btn) return;
-
-  music.volume = 0.15; // हल्की आवाज
-
-  btn.addEventListener("click", () => {
-    if (music.paused) {
-      music.play();
-      btn.textContent = "⏸ Pause Music";
-    } else {
-      music.pause();
-      btn.textContent = "▶ Play Music";
-    }
-  });
-});
 </script>
 
 </body>
