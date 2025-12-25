@@ -3158,5 +3158,42 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+<script>
+/* ===== GLOBAL POPUP AUTO CLOSE TIMER ===== */
+
+/*
+  popupId : कितने सेकंड बाद बंद होगा
+  1000 ms = 1 second
+*/
+
+const POPUP_TIME_TABLE = {
+  weatherMotivationPopup: 5000,   // ⏱️ 5 sec
+  weatherAdvisoryPopup: 10000,    // ⏱️ 10 sec
+  finalMessagePopup: 15000        // ⏱️ 15 sec
+};
+
+// popup खुलते ही auto-close timer लगाओ
+function applyPopupTimers() {
+  Object.keys(POPUP_TIME_TABLE).forEach(id => {
+    const pop = document.getElementById(id);
+    if (!pop) return;
+
+    // observer: जैसे ही popup display:flex हो
+    const obs = new MutationObserver(() => {
+      if (getComputedStyle(pop).display !== "none") {
+        setTimeout(() => {
+          pop.style.display = "none";
+        }, POPUP_TIME_TABLE[id]);
+      }
+    });
+
+    obs.observe(pop, { attributes: true, attributeFilter: ["style"] });
+  });
+}
+
+// page load के बाद activate
+window.addEventListener("load", applyPopupTimers);
+</script>
+
 </body>
 </html>
