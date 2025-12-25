@@ -182,50 +182,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </head>
 
 <body>
-<script>
-/* ================= VOICE + POPUP QUEUE SYSTEM ================= */
-
-let voiceQueue = [];
-let isSpeaking = false;
-
-function speakWithPopup({ text, popupId, delayAfter = 1200 }) {
-  voiceQueue.push({ text, popupId, delayAfter });
-  runVoiceQueue();
-}
-
-function runVoiceQueue() {
-  if (isSpeaking || voiceQueue.length === 0) return;
-
-  isSpeaking = true;
-  const item = voiceQueue.shift();
-
-  // 🔔 Popup show
-  if (item.popupId) {
-    document.getElementById(item.popupId).style.display = "flex";
-  }
-
-  // 🔊 Voice
-  const utter = new SpeechSynthesisUtterance(item.text);
-  utter.lang = "hi-IN";
-  utter.rate = 0.95;
-
-  utter.onend = () => {
-    // ❌ Popup hide
-    if (item.popupId) {
-      document.getElementById(item.popupId).style.display = "none";
-    }
-
-    setTimeout(() => {
-      isSpeaking = false;
-      runVoiceQueue(); // 🔁 next voice
-    }, item.delayAfter);
-  };
-
-  speechSynthesis.cancel(); // safety
-  speechSynthesis.speak(utter);
-}
-</script>
-
   <!-- CENTERED HEADER -->
   <div class="header" role="banner" aria-label="School header">
     <h1>S.B. PUBLIC SCHOOL</h1>
