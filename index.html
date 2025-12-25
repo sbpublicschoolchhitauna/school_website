@@ -1916,42 +1916,6 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 </style>
 
-<script>
-(function(){
-  // Create container
-  const g = document.createElement("div");
-  g.id = "safeGreeting";
-
-  // Content
-  g.innerHTML = `
-    <div class="box">
-      <div class="sun"></div>
-      <h1>Good Morning 🌞</h1>
-      <p>वेबसाइट खोलने के लिए धन्यवाद</p>
-    </div>
-  `;
-
-  // Add to page
-  document.body.appendChild(g);
-
-  // Voice (Hindi)
-  if ("speechSynthesis" in window) {
-    const sp = new SpeechSynthesisUtterance(
-      "वेबसाइट खोलने के लिए धन्यवाद आप का दिन शुभ हो ।"
-    );
-    sp.lang = "hi-IN";
-    sp.rate = 0.95;
-    speechSynthesis.speak(sp);
-  }
-
-  // Auto close after 5 sec
-  setTimeout(()=>{
-    g.remove();
-  },5000);
-})();
-</script>
-<!-- ================= END GREETING ================= -->
-
 <!-- ========== FINAL WEATHER + MOTIVATION + SUN LIGHT SYSTEM ========== -->
 <style>
 #weatherGreeting{
