@@ -3352,11 +3352,11 @@ document.addEventListener("DOMContentLoaded", function(){
 </style>
 
 <script>
-/* 🛑 ENSURE POPUP NEVER AUTO-SHOW */
+/* 🛑 ENSURE POPUP NEVER AUTO-SHOW festivals VOICE */
 const _popup = document.getElementById("popupOverlay");
 if (_popup) _popup.style.display = "none";
 
-/* ⏱️ SHOW AFTER 15 SECONDS */
+/* ⏱️ SHOW AFTER 17 SECONDS */
 setTimeout(() => {
   if (!_popup) return;
 
@@ -3370,7 +3370,7 @@ setTimeout(() => {
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
   }
-}, 15000);
+}, 17000);
 </script>
 
 </body>
