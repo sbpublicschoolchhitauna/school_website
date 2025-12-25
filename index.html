@@ -180,27 +180,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </style>
 
 </head>
-<button id="testBtn" style="
-position:fixed;
-bottom:20px;
-right:20px;
-z-index:999999;
-padding:15px 20px;
-font-size:16px;
-border-radius:12px;
-border:none;
-background:red;
-color:white;
-cursor:pointer;"
->
-TEST CLICK
-</button>
-
-<script>
-document.getElementById("testBtn").addEventListener("click", function(){
-  alert("✅ Button Click Working");
-});
-</script>
 
 <body>
   <!-- CENTERED HEADER -->
@@ -3179,47 +3158,12 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyC5vKP3huufopaFif_4KzMjVl_xJyCO4h0",
-    authDomain: "sb-public-school-notification.firebaseapp.com",
-    projectId: "sb-public-school-notification",
-    messagingSenderId: "92374733560",
-    appId: "1:92374733560:web:f90f2b6d1f4f482f24a10d"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const messaging = firebase.messaging();
-
-  navigator.serviceWorker.register("firebase-messaging-sw.js")
-    .then(registration => {
-      messaging.useServiceWorker(registration);
-    });
-
-  // Permission + Token
-  function askNotificationPermission() {
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-        messaging.getToken({
-          vapidKey: "BJWiT7Q-6UwaZPE-YQoEUbB8oEZ0qSrTB8fLECRjDtZe7vt5Ftkm6GQyAYAXVN0rjOGGZIi1jkx81SDag6y0tlk"
-        }).then(token => {
-          if (token) {
-            console.log("✅ FCM TOKEN:", token);
-            localStorage.setItem("fcmToken", token);
-          }
-        });
-      }
-    });
-  }
-
-  window.addEventListener("load", askNotificationPermission);
-</script>
-
-<!-- 🔔 FCM TOKEN GENERATOR -->
+<!-- 🔔 Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 
 <script>
+  // 🔥 Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyC5vKP3huufopaFif_4KzMjVl_xJyCO4h0",
     authDomain: "sb-public-school-notification.firebaseapp.com",
@@ -3231,38 +3175,60 @@ document.addEventListener("DOMContentLoaded", function(){
   firebase.initializeApp(firebaseConfig);
   const messaging = firebase.messaging();
 
-  navigator.serviceWorker.register("firebase-messaging-sw.js");
-
-  function getFCMToken(){
-    Notification.requestPermission().then(permission=>{
-      if(permission==="granted"){
-        messaging.getToken({
-          vapidKey:"BJWiT7Q-6UwaZPE-YQoEUbB8oEZ0qSrTB8fLECRjDtZe7vt5Ftkm6GQyAYAXVN0rjOGGZIi1jkx81SDag6y0tlk"
-        }).then(token=>{
-          alert("FCM TOKEN:\n\n"+token);
-          console.log("FCM TOKEN:",token);
-        });
-      }else{
-        alert("Notification Allow करना ज़रूरी है");
-      }
-    });
-  }
+  // 🔧 Service Worker register
+  navigator.serviceWorker.register("firebase-messaging-sw.js")
+    .then(reg => {
+      messaging.useServiceWorker(reg);
+    })
+    .catch(err => console.error("SW error:", err));
 </script>
 
-<!-- 🔘 TOKEN BUTTON -->
-<button onclick="getFCMToken()" style="
+<!-- 🔘 Notification Button -->
+<button id="notifyBtn" style="
 position:fixed;
 bottom:20px;
 right:20px;
-z-index:9999;
-padding:12px 16px;
+z-index:999999;
+padding:15px 20px;
+font-size:16px;
 border-radius:12px;
 border:none;
-font-weight:bold;
 background:#0b5fa8;
-color:#fff;">
+color:white;
+cursor:pointer;">
 🔔 Enable Notification
 </button>
+
+<script>
+document.getElementById("notifyBtn").addEventListener("click", async function () {
+  try {
+    // 1️⃣ Permission
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      alert("❌ Notification Allow नहीं किया");
+      return;
+    }
+
+    // 2️⃣ Get Token
+    const token = await messaging.getToken({
+      vapidKey: "BJWiT7Q-6UwaZPE-YQoEUbB8oEZ0qSrTB8fLECRjDtZe7vt5Ftkm6GQyAYAXVN0rjOGGZIi1jkx81SDag6y0tlk"
+    });
+
+    if (!token) {
+      alert("❌ Token नहीं मिला");
+      return;
+    }
+
+    // 3️⃣ Show Token
+    alert("✅ FCM TOKEN (कॉपी कर लें):\n\n" + token);
+    console.log("FCM TOKEN:", token);
+
+  } catch (e) {
+    alert("❌ Error: " + e.message);
+    console.error(e);
+  }
+});
+</script>
 
 </body>
 <!-- Firebase SDK -->
