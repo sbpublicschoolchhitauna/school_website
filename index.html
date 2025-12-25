@@ -3158,68 +3158,126 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
-<!-- ================= LIVE DIRECT NOTIFICATION ================= -->
-<div id="liveNotify" style="
-display:none;
-position:fixed;
-top:20px;
-right:20px;
-max-width:340px;
-background:#0b5fa8;
-color:#fff;
-padding:18px;
-border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,.35);
-z-index:99999;
-font-family:Arial;
-animation: slideIn .6s ease;
-">
-  <strong id="notifyTitle"></strong>
-  <div id="notifyMsg" style="margin-top:8px;font-size:15px;line-height:1.4"></div>
-  <button onclick="closeNotify()" style="
-    margin-top:12px;
-    background:#fff;
-    color:#0b5fa8;
-    border:none;
-    padding:7px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-  ">OK</button>
+<!-- ================= ADVANCED LIVE NOTICE SYSTEM ================= -->
+
+<!-- 🔔 Bottom Banner -->
+<div id="noticeBanner" class="notice-banner">
+  <div class="notice-inner">
+    <div class="notice-header">
+      📢 S.B. PUBLIC SCHOOL — IMPORTANT NOTICE
+      <span onclick="closeBanner()" class="notice-close">✖</span>
+    </div>
+
+    <ul id="noticeList" class="notice-list"></ul>
+  </div>
 </div>
 
 <style>
-@keyframes slideIn{
-  from{transform:translateX(120%);opacity:0}
-  to{transform:translateX(0);opacity:1}
+.notice-banner{
+  position:fixed;
+  bottom:-100%;
+  left:0;
+  width:100%;
+  background:linear-gradient(135deg,#0b5fa8,#0a3f6e);
+  color:#fff;
+  z-index:99999;
+  font-family:'Segoe UI',Arial;
+  box-shadow:0 -10px 30px rgba(0,0,0,.4);
+  animation: slideUp 1s forwards;
+}
+
+.notice-inner{
+  max-width:1100px;
+  margin:auto;
+  padding:18px 20px 20px;
+}
+
+.notice-header{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  text-shadow:0 3px 8px rgba(0,0,0,.4);
+}
+
+.notice-close{
+  cursor:pointer;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.notice-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.notice-list li{
+  background:rgba(255,255,255,.15);
+  padding:12px 14px;
+  border-radius:10px;
+  margin-bottom:10px;
+  font-size:16px;
+  line-height:1.5;
+  box-shadow:inset 0 0 12px rgba(0,0,0,.25);
+  animation: pop3d .6s ease;
+}
+
+/* 3D Animation */
+@keyframes slideUp{
+  from{bottom:-100%;}
+  to{bottom:0;}
+}
+
+@keyframes pop3d{
+  0%{transform:scale(.9) rotateX(20deg);opacity:0}
+  100%{transform:scale(1) rotateX(0);opacity:1}
 }
 </style>
 
 <script>
-/* ========= 🔴 DIRECT CONTROL AREA (यहीं बदलना है) ========= */
-const NOTIFICATION = {
-  id: "notice_2025_01",          // हर नई सूचना पर बदलें
-  title: "📢 S.B. PUBLIC SCHOOL",
-  message: "रिज़ल्ट जल्द ही वेबसाइट पर अपडेट किया जाएगा।"
-};
-/* ========================================================== */
+/* ================= 🔴 DIRECT CONTROL PANEL ================= */
 
-function closeNotify(){
-  document.getElementById("liveNotify").style.display = "none";
+/* 👉 नई सूचना डालने के लिए सिर्फ यहीं बदलें */
+const NOTICE_DATA = {
+  id: "notice_2025_01",   // 🔴 हर update पर ID बदलें
+  autoHide: true,         // true = 5 sec बाद खुद बंद
+  notices: [
+    "📄 रिज़ल्ट जल्द ही वेबसाइट पर अपडेट किया जाएगा।",
+    "🏫 कल स्कूल समयानुसार खुलेगा।",
+    "📢 Admission संबंधित सूचना जल्द जारी होगी।"
+  ]
+};
+
+/* =========================================================== */
+
+function closeBanner(){
+  document.getElementById("noticeBanner").style.display="none";
 }
 
-(function showNotification(){
+(function showNotice(){
   const lastSeen = localStorage.getItem("lastNoticeId");
-  if(lastSeen === NOTIFICATION.id) return;
+  if(lastSeen === NOTICE_DATA.id) return;
 
-  document.getElementById("notifyTitle").innerText = NOTIFICATION.title;
-  document.getElementById("notifyMsg").innerText = NOTIFICATION.message;
-  document.getElementById("liveNotify").style.display = "block";
+  const list = document.getElementById("noticeList");
+  NOTICE_DATA.notices.forEach(text=>{
+    const li=document.createElement("li");
+    li.innerText=text;
+    list.appendChild(li);
+  });
 
-  localStorage.setItem("lastNoticeId", NOTIFICATION.id);
+  document.getElementById("noticeBanner").style.display="block";
+  localStorage.setItem("lastNoticeId", NOTICE_DATA.id);
+
+  if(NOTICE_DATA.autoHide){
+    setTimeout(closeBanner,5000);
+  }
 })();
 </script>
-<!-- ================= END LIVE NOTIFICATION ================= -->
+
+<!-- ================= END ADVANCED NOTICE ================= -->
 
 
 </body>
