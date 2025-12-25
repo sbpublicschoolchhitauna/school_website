@@ -3337,5 +3337,69 @@ setTimeout(() => {
 }, 17000);
 </script>
 
+<script>
+/* ===============================
+   🔥 POPUP + VOICE QUEUE SYSTEM
+   =============================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* 🔢 POPUP QUEUE */
+  const popupQueue = [
+    {
+      id: "popupOverlay",
+      delay: 5000,   // ⏱️ 5 sec
+      voice: window.todayFestivalVoice || "आज का त्योहार शुभ हो"
+    },
+    {
+      id: "weatherPopup",
+      delay: 10000,  // ⏱️ 10 sec
+      voice: window.weatherVoice || "आज का मौसम विद्यार्थियों के लिए अनुकूल है"
+    },
+    {
+      id: "motivationPopup",
+      delay: 15000,  // ⏱️ 15 sec
+      voice: window.motivationVoice || "मेहनत करने वाले कभी हारते नहीं"
+    }
+  ];
+
+  let index = 0;
+
+  function playNextPopup() {
+    if (index >= popupQueue.length) return;
+
+    const item = popupQueue[index];
+    const popup = document.getElementById(item.id);
+
+    setTimeout(() => {
+
+      /* 🔔 SHOW POPUP */
+      if (popup) popup.style.display = "flex";
+
+      /* 🎤 VOICE */
+      if (window.speechSynthesis && item.voice) {
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(item.voice);
+        u.lang = "hi-IN";
+        u.onend = () => {
+          /* ❌ CLOSE CURRENT POPUP */
+          if (popup) popup.style.display = "none";
+          index++;
+          playNextPopup(); // ▶️ NEXT POPUP
+        };
+        speechSynthesis.speak(u);
+      } else {
+        index++;
+        playNextPopup();
+      }
+
+    }, item.delay);
+  }
+
+  /* 🚀 START QUEUE */
+  playNextPopup();
+});
+</script>
+
 </body>
 </html>
