@@ -995,6 +995,30 @@ loadNotifications();
 loadFeeAndMarks();
 </script>
 
+<script>
+/* ⏱️ FESTIVAL POPUP 15 सेकंड DELAY */
+document.addEventListener("DOMContentLoaded", () => {
+
+  setTimeout(() => {
+
+    const overlay = document.getElementById("popupOverlay");
+    if (!overlay) return;
+
+    // popup show
+    overlay.style.display = "flex";
+
+    // 🎤 Voice (अगर voice function मौजूद है)
+    if (window.speechSynthesis && window.todayFestivalVoice) {
+      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      u.lang = "hi-IN";
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+
+  }, 15000); // ✅ 15 seconds
+});
+</script>
+
 <!-- ====== Admission ticker JS (placed at end to ensure DOM exists) ====== -->
 <script>
 (function(){
