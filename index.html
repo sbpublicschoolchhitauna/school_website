@@ -3158,6 +3158,69 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+<!-- ================= LIVE DIRECT NOTIFICATION ================= -->
+<div id="liveNotify" style="
+display:none;
+position:fixed;
+top:20px;
+right:20px;
+max-width:340px;
+background:#0b5fa8;
+color:#fff;
+padding:18px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+z-index:99999;
+font-family:Arial;
+animation: slideIn .6s ease;
+">
+  <strong id="notifyTitle"></strong>
+  <div id="notifyMsg" style="margin-top:8px;font-size:15px;line-height:1.4"></div>
+  <button onclick="closeNotify()" style="
+    margin-top:12px;
+    background:#fff;
+    color:#0b5fa8;
+    border:none;
+    padding:7px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+  ">OK</button>
+</div>
+
+<style>
+@keyframes slideIn{
+  from{transform:translateX(120%);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+</style>
+
+<script>
+/* ========= 🔴 DIRECT CONTROL AREA (यहीं बदलना है) ========= */
+const NOTIFICATION = {
+  id: "notice_2025_01",          // हर नई सूचना पर बदलें
+  title: "📢 S.B. PUBLIC SCHOOL",
+  message: "रिज़ल्ट जल्द ही वेबसाइट पर अपडेट किया जाएगा।"
+};
+/* ========================================================== */
+
+function closeNotify(){
+  document.getElementById("liveNotify").style.display = "none";
+}
+
+(function showNotification(){
+  const lastSeen = localStorage.getItem("lastNoticeId");
+  if(lastSeen === NOTIFICATION.id) return;
+
+  document.getElementById("notifyTitle").innerText = NOTIFICATION.title;
+  document.getElementById("notifyMsg").innerText = NOTIFICATION.message;
+  document.getElementById("liveNotify").style.display = "block";
+
+  localStorage.setItem("lastNoticeId", NOTIFICATION.id);
+})();
+</script>
+<!-- ================= END LIVE NOTIFICATION ================= -->
+
 
 </body>
 </html>
