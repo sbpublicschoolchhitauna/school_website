@@ -180,6 +180,27 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 </style>
 
 </head>
+<button id="testBtn" style="
+position:fixed;
+bottom:20px;
+right:20px;
+z-index:999999;
+padding:15px 20px;
+font-size:16px;
+border-radius:12px;
+border:none;
+background:red;
+color:white;
+cursor:pointer;"
+>
+TEST CLICK
+</button>
+
+<script>
+document.getElementById("testBtn").addEventListener("click", function(){
+  alert("✅ Button Click Working");
+});
+</script>
 
 <body>
   <!-- CENTERED HEADER -->
