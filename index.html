@@ -3158,5 +3158,66 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+<script>
+/* ========= SAFE VOICE + POPUP QUEUE (NO DELETE NEEDED) ========= */
+
+// original speak backup
+const __originalSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+
+let __voiceQueue = [];
+let __isSpeaking = false;
+
+// override speak
+window.speechSynthesis.speak = function (utterance) {
+  __voiceQueue.push(utterance);
+  __runQueue();
+};
+
+function __runQueue() {
+  if (__isSpeaking || __voiceQueue.length === 0) return;
+
+  __isSpeaking = true;
+  const utter = __voiceQueue.shift();
+
+  // detect popup from custom flag
+  if (utter.popupId) {
+    const pop = document.getElementById(utter.popupId);
+    if (pop) pop.style.display = "flex";
+  }
+
+  utter.onend = () => {
+    if (utter.popupId) {
+      const pop = document.getElementById(utter.popupId);
+      if (pop) pop.style.display = "none";
+    }
+
+    setTimeout(() => {
+      __isSpeaking = false;
+      __runQueue();
+    }, utter.delayAfter || 1200);
+  };
+
+  __originalSpeak(utter);
+};
+
+// helper (optional use)
+function speakQueued(text, popupId, popupDuration = 0, delayAfter = 1200) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "hi-IN";
+  u.rate = 0.95;
+  u.popupId = popupId;
+  u.delayAfter = delayAfter;
+
+  if (popupId && popupDuration > 0) {
+    setTimeout(() => {
+      const pop = document.getElementById(popupId);
+      if (pop) pop.style.display = "none";
+    }, popupDuration);
+  }
+
+  speechSynthesis.speak(u);
+}
+</script>
+
 </body>
 </html>
