@@ -196,42 +196,42 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
     </div>
   </div>
 
-<!-- ===== FINAL BLUE FESTIVAL POPUP ===== -->
-<div id="popupOverlay" style="
-display:none;
-position:fixed;
-top:0;left:0;right:0;bottom:0;
-background:rgba(0,0,0,0.65);
-z-index:999999;
-align-items:center;
-justify-content:center;
-font-family:Arial;
-">
+<script>
+/* 🚫 HARD BLOCK FESTIVAL POPUP IF NO FESTIVAL */
+document.addEventListener("DOMContentLoaded", () => {
 
-  <div id="popupBox" style="
-  background:#0b5fa8; /* PURE BLUE */
-  width:96%;
-  max-width:880px;
-  min-height:380px;
-  border-radius:30px;
-  padding:42px;
-  text-align:center;
+  const overlay = document.getElementById("popupOverlay");
+  if (!overlay) return;
 
-  box-shadow:
-    0 30px 70px rgba(0,0,0,0.45),
-    inset 0 4px 8px rgba(255,255,255,0.15);
+  // 🛑 Default: popup कभी नहीं दिखे
+  overlay.style.display = "none";
 
-  transform:perspective(1200px) rotateX(4deg);
-  ">
+  // ❌ Festival data ही नहीं है
+  if (
+    typeof window.todayFestivalTitle === "undefined" ||
+    window.todayFestivalTitle === "" ||
+    window.todayFestivalText === ""
+  ) {
+    console.log("✅ No festival today — popup fully disabled");
+    return; // ⛔ STOP EVERYTHING
+  }
 
-    <h2 id="popupTitle"></h2>
+  // ✅ Festival है → 15 सेकंड बाद दिखे
+  setTimeout(() => {
 
-    <p id="popupText"></p>
+    overlay.style.display = "flex";
 
-    <p id="popupCountdown"></p>
+    // 🎤 Voice
+    if (window.speechSynthesis && window.todayFestivalVoice) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      u.lang = "hi-IN";
+      speechSynthesis.speak(u);
+    }
 
-  </div>
-</div>
+  }, 15000);
+});
+</script>
 
 
 <audio id="festivalMusic" loop>
@@ -3315,6 +3315,27 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+<script>
+/* 🛑 ENSURE POPUP NEVER AUTO-SHOW festivals VOICE */
+const _popup = document.getElementById("popupOverlay");
+if (_popup) _popup.style.display = "none";
+
+/* ⏱️ SHOW AFTER 17 SECONDS */
+setTimeout(() => {
+  if (!_popup) return;
+
+  _popup.style.display = "flex";
+
+  // 🎤 Voice
+  const txt = document.getElementById("popupText");
+  if (txt && window.speechSynthesis) {
+    const u = new SpeechSynthesisUtterance(txt.innerText);
+    u.lang = "hi-IN";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+}, 17000);
+</script>
 
 </body>
 </html>
