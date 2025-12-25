@@ -2146,7 +2146,7 @@ else if(h>=16&&h<20){
   title="Good Evening 🌇";
   msg=`${city} में तापमान ${temp}°C है।<br>
   आज की मेहनत कल चमकेगी, आत्मविश्वास बनाए रखो।`;
-  voice=`गुड ईवनिंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। आज की मेहनत कल चमकेगी , आत्मविश्वास बनाए रखो।`;
+  voice=`गुड ईवनिंग विद्यार्थी। ${city} में तापमान ${temp} डिग्री है। आज की मेहनत कल चमकेगी ,  आत्मविश्वास बनाए रखो।`;
   sunClass="sunset";
 }
 else if(h>=12&&h<16){
@@ -3157,87 +3157,6 @@ document.addEventListener("DOMContentLoaded", function(){
   --popup-count-size: 20px;   /* 🔹 Countdown size */
 }
 </style>
-
-<script>
-/* ===== GLOBAL SPEAK LOCK ===== */
-window.__ALLOW_SPEAK = false;
-
-// page पूरी load होने के बाद ही allow करेंगे
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    window.__ALLOW_SPEAK = true;
-  }, 500); // safety delay
-});
-</script>
-
-<script>
-/* ===== HARD SPEECH FILTER (NO DELETE) ===== */
-
-const _realSpeak = speechSynthesis.speak.bind(speechSynthesis);
-
-speechSynthesis.speak = function (utter) {
-  // जब तक हम allow न करें, कोई भी नहीं बोलेगा
-  if (!window.__ALLOW_SPEAK) {
-    console.warn("Speech blocked:", utter.text);
-    return;
-  }
-  _realSpeak(utter);
-};
-</script>
-
-<script>
-/* ===== FINAL SEQUENTIAL CONTROLLER ===== */
-
-function speakSequential(list, index = 0) {
-  if (index >= list.length) return;
-
-  const item = list[index];
-  const utter = new SpeechSynthesisUtterance(item.text);
-  utter.lang = "hi-IN";
-  utter.rate = 0.95;
-
-  // popup show
-  if (item.popupId) {
-    const pop = document.getElementById(item.popupId);
-    if (pop) pop.style.display = "flex";
-  }
-
-  utter.onend = () => {
-    if (item.popupId) {
-      const pop = document.getElementById(item.popupId);
-      if (pop) pop.style.display = "none";
-    }
-    setTimeout(() => {
-      speakSequential(list, index + 1);
-    }, item.delayAfter || 1500);
-  };
-
-  speechSynthesis.speak(utter);
-}
-
-// 🔥 START SEQUENCE (ONLY ONCE)
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    speakSequential([
-      {
-        text: "मौसम और प्रेरणादायक संदेश प्रस्तुत किया जा रहा है।",
-        popupId: "weatherMotivationPopup",
-        delayAfter: 2000
-      },
-      {
-        text: "अब स्मार्ट मौसम सलाह प्रणाली शुरू हो रही है।",
-        popupId: "weatherAdvisoryPopup",
-        delayAfter: 1500
-      },
-      {
-        text: "आज का विशेष संदेश अब प्रस्तुत किया जा रहा है।",
-        popupId: "finalMessagePopup",
-        delayAfter: 2500
-      }
-    ]);
-  }, 1200);
-});
-</script>
 
 </body>
 </html>
