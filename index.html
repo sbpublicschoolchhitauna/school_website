@@ -3229,6 +3229,14 @@ document.getElementById("notifyBtn").addEventListener("click", async function ()
   }
 });
 </script>
+<script>
+  navigator.serviceWorker.register("/firebase-messaging-sw.js")
+    .then(reg => {
+      console.log("✅ Service Worker Registered");
+      messaging.useServiceWorker(reg);
+    })
+    .catch(err => console.error("❌ SW Register Error:", err));
+</script>
 
 </body>
 <!-- Firebase SDK -->
