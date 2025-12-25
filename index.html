@@ -996,28 +996,18 @@ loadFeeAndMarks();
 </script>
 
 <script>
-/* 🎉 FESTIVAL POPUP — Only when festival exists */
+/* ⏱️ FESTIVAL POPUP 15 सेकंड DELAY */
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ✅ CHECK: आज कोई festival है या नहीं
-  if (
-    !window.todayFestivalTitle ||
-    !window.todayFestivalText
-  ) {
-    console.log("❌ Today no festival — popup skipped");
-    return; // ⛔ popup नहीं दिखेगा
-  }
-
-  // ⏱️ 15 सेकंड बाद ही दिखे
   setTimeout(() => {
 
     const overlay = document.getElementById("popupOverlay");
     if (!overlay) return;
 
-    // ✅ popup show
+    // popup show
     overlay.style.display = "flex";
 
-    // 🎤 Voice (अगर available है)
+    // 🎤 Voice (अगर voice function मौजूद है)
     if (window.speechSynthesis && window.todayFestivalVoice) {
       const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
       u.lang = "hi-IN";
@@ -1025,7 +1015,7 @@ document.addEventListener("DOMContentLoaded", () => {
       speechSynthesis.speak(u);
     }
 
-  }, 15000); // 15 seconds delay
+  }, 15000); // ✅ 15 seconds
 });
 </script>
 
@@ -3325,27 +3315,6 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
-<script>
-/* 🛑 ENSURE POPUP NEVER AUTO-SHOW festivals VOICE */
-const _popup = document.getElementById("popupOverlay");
-if (_popup) _popup.style.display = "none";
-
-/* ⏱️ SHOW AFTER 17 SECONDS */
-setTimeout(() => {
-  if (!_popup) return;
-
-  _popup.style.display = "flex";
-
-  // 🎤 Voice
-  const txt = document.getElementById("popupText");
-  if (txt && window.speechSynthesis) {
-    const u = new SpeechSynthesisUtterance(txt.innerText);
-    u.lang = "hi-IN";
-    speechSynthesis.cancel();
-    speechSynthesis.speak(u);
-  }
-}, 17000);
-</script>
 
 </body>
 </html>
