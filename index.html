@@ -234,11 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- 🌦️ WEATHER EFFECT LAYER -->
-<div id="weatherEffect"></div>
-
-<button id="weatherToggle">🌦️ Weather ON</button>
-
 
 <audio id="festivalMusic" loop>
   <source src="festival-music.mp3" type="audio/mpeg">
@@ -3318,35 +3313,52 @@ setTimeout(() => {
     speechSynthesis.speak(u);
   }
 }, 17000);
+</script>
 
-/* ===== WEATHER EFFECT SYSTEM ===== */
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Weather Effect System</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  font-family:Arial, sans-serif;
+  background:#eaf4ff;
+}
+
+/* WEATHER LAYER */
 #weatherEffect{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:999;
+  z-index:5;
   overflow:hidden;
 }
 
-/* ❄️ Snow */
+/* SNOW */
 .snowflake{
   position:absolute;
-  top:-10px;
+  top:-20px;
   color:white;
-  font-size:12px;
-  animation:snowFall linear infinite;
+  font-size:14px;
   opacity:0.8;
+  animation:snowFall linear infinite;
 }
 @keyframes snowFall{
   to{ transform:translateY(110vh); }
 }
 
-/* 🌧️ Rain */
+/* RAIN */
 .raindrop{
   position:absolute;
-  top:-20px;
+  top:-30px;
   width:2px;
-  height:18px;
+  height:20px;
   background:rgba(173,216,230,.8);
   animation:rainFall linear infinite;
 }
@@ -3354,11 +3366,19 @@ setTimeout(() => {
   to{ transform:translateY(110vh); }
 }
 
-/* 🔥 Summer heat */
+/* FOG */
+.fog{
+  position:absolute;
+  inset:0;
+  background:rgba(220,220,220,0.4);
+  backdrop-filter:blur(6px);
+}
+
+/* SUMMER */
 .heat{
   position:absolute;
   inset:0;
-  background:radial-gradient(circle at top,#ffe08a33,#ff980000);
+  background:radial-gradient(circle at top,#ffd16655,#ff980000);
   animation:heatPulse 4s infinite;
 }
 @keyframes heatPulse{
@@ -3367,93 +3387,169 @@ setTimeout(() => {
   100%{opacity:.2}
 }
 
-/* Toggle button */
+/* HEADER DEMO */
+.header{
+  position:relative;
+  z-index:10;
+  padding:20px;
+  text-align:center;
+  background:#0b5fa8;
+  color:#fff;
+}
+
+/* TOGGLE */
 #weatherToggle{
   position:fixed;
   bottom:20px;
   left:20px;
-  z-index:10000;
-  padding:10px 14px;
-  border-radius:12px;
+  z-index:20;
+  padding:10px 16px;
+  border-radius:14px;
   border:none;
-  font-weight:700;
   background:#0b5fa8;
   color:#fff;
+  font-weight:700;
   cursor:pointer;
 }
-</script>
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>S.B. PUBLIC SCHOOL</h1>
+  <p id="cityName">🌍 Detecting city...</p>
+</div>
+
+<div id="weatherEffect"></div>
+<button id="weatherToggle">🌦️ Weather ON</button>
 
 <script>
-let weatherOn = true;
+/* ================= CONFIG ================= */
+const API_KEY = "d8418db7ef0e7570b33152730184776e";
 const layer = document.getElementById("weatherEffect");
 const toggle = document.getElementById("weatherToggle");
+const cityLabel = document.getElementById("cityName");
 
-/* TOGGLE */
+let weatherOn = true;
+let currentCity = "";
+
+/* ================= TOGGLE ================= */
 toggle.onclick = ()=>{
   weatherOn = !weatherOn;
   layer.innerHTML = "";
   toggle.innerText = weatherOn ? "🌦️ Weather ON" : "🌦️ Weather OFF";
-  if(weatherOn) detectWeather();
+  if(weatherOn) loadWeather();
 };
 
-/* WEATHER API */
-async function detectWeather(){
-  try{
-    const res = await fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=26.76&longitude=83.37&current_weather=true"
-    );
+/* ================= AUTO CITY ================= */
+function detectCity(){
+  if(!navigator.geolocation){
+    cityLabel.innerText = "📍 Location not supported";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    const url =
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+
+    const res = await fetch(url);
     const data = await res.json();
-    const code = data.current_weather.weathercode;
 
-    layer.innerHTML = "";
+    currentCity = data.name || "Your Area";
+    cityLabel.innerText = "📍 " + currentCity;
 
-    if(code >= 71 && code <= 77){
-      snowEffect();
-    }
-    else if(code >= 61 && code <= 65){
-      rainEffect();
-    }
-    else{
-      summerEffect();
-    }
-  }catch(e){
-    console.log("Weather error",e);
+    applyWeather(data);
+
+  },()=>{
+    cityLabel.innerText = "📍 Location denied";
+  });
+}
+
+/* ================= LOAD WEATHER ================= */
+async function loadWeather(){
+  if(!currentCity){
+    detectCity();
+    return;
+  }
+
+  const url =
+    `https://api.openweathermap.org/data/2.5/weather?q=${currentCity}&appid=${API_KEY}&units=metric`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+  applyWeather(data);
+}
+
+/* ================= APPLY WEATHER ================= */
+function applyWeather(data){
+  if(!data.weather) return;
+
+  const type = data.weather[0].main.toLowerCase();
+  layer.innerHTML = "";
+
+  if(type.includes("snow")){
+    snowEffect();
+  }
+  else if(type.includes("rain") || type.includes("drizzle")){
+    rainEffect();
+  }
+  else if(type.includes("fog") || type.includes("mist")){
+    fogEffect();
+  }
+  else{
+    summerEffect();
   }
 }
 
-/* ❄️ Snow */
+/* ================= EFFECTS ================= */
 function snowEffect(){
   for(let i=0;i<80;i++){
-    const s = document.createElement("div");
+    const s=document.createElement("div");
     s.className="snowflake";
     s.innerText="❄";
     s.style.left=Math.random()*100+"%";
-    s.style.animationDuration=5+Math.random()*5+"s";
+    s.style.animationDuration=4+Math.random()*6+"s";
     layer.appendChild(s);
   }
 }
 
-/* 🌧️ Rain */
 function rainEffect(){
   for(let i=0;i<120;i++){
     const r=document.createElement("div");
     r.className="raindrop";
     r.style.left=Math.random()*100+"%";
-    r.style.animationDuration=1+Math.random()*1+"s";
+    r.style.animationDuration=0.8+Math.random()*1.2+"s";
     layer.appendChild(r);
   }
 }
 
-/* 🔥 Summer */
+function fogEffect(){
+  const f=document.createElement("div");
+  f.className="fog";
+  layer.appendChild(f);
+}
+
 function summerEffect(){
   const h=document.createElement("div");
   h.className="heat";
   layer.appendChild(h);
 }
 
-/* INIT */
-detectWeather();
+/* ================= AUTO REFRESH (10 MIN) ================= */
+setInterval(()=>{
+  if(weatherOn) loadWeather();
+}, 10 * 60 * 1000);
+
+/* ================= INIT ================= */
+detectCity();
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
