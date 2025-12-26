@@ -3322,6 +3322,95 @@ setTimeout(() => {
 </script>
 
 <script src="weather.js"></script>
+/* ================= WEATHER EFFECT SYSTEM ================= */
+
+#weatherEffect{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;      /* click allow */
+  z-index: 999999;           /* 👈 सबसे ऊपर */
+  overflow: hidden;
+}
+
+/* Weather Toggle Button */
+#weatherToggle{
+  position: fixed;
+  right: 18px;
+  bottom: 140px;
+  z-index: 1000000;
+  background: linear-gradient(135deg,#0b5fa8,#00f5d4);
+  color: #fff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* Temp + Time Box */
+#weatherInfo{
+  position: fixed;
+  right: 18px;
+  bottom: 90px;
+  z-index: 1000000;
+  background: rgba(255,255,255,.95);
+  color: #0b5fa8;
+  padding: 14px 20px;
+  border-radius: 18px;
+  font-size: 22px;           /* 👈 बड़ा */
+  font-weight: 900;
+  letter-spacing: .6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* ❄️ SNOW (ऊपर से गिरे) */
+.snow{
+  position: absolute;
+  top: -30px;
+  color: white;
+  opacity: .85;
+  animation: snowFall linear infinite;
+}
+@keyframes snowFall{
+  to{ transform: translateY(120vh); }
+}
+
+/* 🌧️ RAIN (ऊपर से गिरे) */
+.rain{
+  position: absolute;
+  top: -40px;
+  width: 2px;
+  height: 22px;
+  background: rgba(180,220,255,.7);
+  animation: rainFall linear infinite;
+}
+@keyframes rainFall{
+  to{ transform: translateY(120vh); }
+}
+
+/* 🌫️ FOG (full screen overlay) */
+.fog{
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.35);
+  backdrop-filter: blur(6px);
+}
+
+/* ⚡ THUNDER FLASH */
+.thunder{
+  position: fixed;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  animation: flash 6s infinite;
+}
+@keyframes flash{
+  0%,95%,100%{opacity:0}
+  96%{opacity:.85}
+  97%{opacity:0}
+}
 
 </body>
 </html>
