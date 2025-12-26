@@ -234,6 +234,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<!-- 🌦️ WEATHER EFFECT LAYER -->
+<div id="weatherEffect"></div>
+
+<button id="weatherToggle">🌦️ Weather ON</button>
+
 
 <audio id="festivalMusic" loop>
   <source src="festival-music.mp3" type="audio/mpeg">
@@ -3313,6 +3318,140 @@ setTimeout(() => {
     speechSynthesis.speak(u);
   }
 }, 17000);
+</script>
+/* ===== WEATHER EFFECT SYSTEM ===== */
+#weatherEffect{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+  overflow:hidden;
+}
+
+/* ❄️ Snow */
+.snowflake{
+  position:absolute;
+  top:-10px;
+  color:white;
+  font-size:12px;
+  animation:snowFall linear infinite;
+  opacity:0.8;
+}
+@keyframes snowFall{
+  to{ transform:translateY(110vh); }
+}
+
+/* 🌧️ Rain */
+.raindrop{
+  position:absolute;
+  top:-20px;
+  width:2px;
+  height:18px;
+  background:rgba(173,216,230,.8);
+  animation:rainFall linear infinite;
+}
+@keyframes rainFall{
+  to{ transform:translateY(110vh); }
+}
+
+/* 🔥 Summer heat */
+.heat{
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at top,#ffe08a33,#ff980000);
+  animation:heatPulse 4s infinite;
+}
+@keyframes heatPulse{
+  0%{opacity:.2}
+  50%{opacity:.5}
+  100%{opacity:.2}
+}
+
+/* Toggle button */
+#weatherToggle{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  z-index:10000;
+  padding:10px 14px;
+  border-radius:12px;
+  border:none;
+  font-weight:700;
+  background:#0b5fa8;
+  color:#fff;
+  cursor:pointer;
+}
+
+<script>
+let weatherOn = true;
+const layer = document.getElementById("weatherEffect");
+const toggle = document.getElementById("weatherToggle");
+
+/* TOGGLE */
+toggle.onclick = ()=>{
+  weatherOn = !weatherOn;
+  layer.innerHTML = "";
+  toggle.innerText = weatherOn ? "🌦️ Weather ON" : "🌦️ Weather OFF";
+  if(weatherOn) detectWeather();
+};
+
+/* WEATHER API */
+async function detectWeather(){
+  try{
+    const res = await fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=26.76&longitude=83.37&current_weather=true"
+    );
+    const data = await res.json();
+    const code = data.current_weather.weathercode;
+
+    layer.innerHTML = "";
+
+    if(code >= 71 && code <= 77){
+      snowEffect();
+    }
+    else if(code >= 61 && code <= 65){
+      rainEffect();
+    }
+    else{
+      summerEffect();
+    }
+  }catch(e){
+    console.log("Weather error",e);
+  }
+}
+
+/* ❄️ Snow */
+function snowEffect(){
+  for(let i=0;i<80;i++){
+    const s = document.createElement("div");
+    s.className="snowflake";
+    s.innerText="❄";
+    s.style.left=Math.random()*100+"%";
+    s.style.animationDuration=5+Math.random()*5+"s";
+    layer.appendChild(s);
+  }
+}
+
+/* 🌧️ Rain */
+function rainEffect(){
+  for(let i=0;i<120;i++){
+    const r=document.createElement("div");
+    r.className="raindrop";
+    r.style.left=Math.random()*100+"%";
+    r.style.animationDuration=1+Math.random()*1+"s";
+    layer.appendChild(r);
+  }
+}
+
+/* 🔥 Summer */
+function summerEffect(){
+  const h=document.createElement("div");
+  h.className="heat";
+  layer.appendChild(h);
+}
+
+/* INIT */
+detectWeather();
 </script>
 
 </body>
