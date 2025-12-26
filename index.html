@@ -3315,5 +3315,64 @@ setTimeout(() => {
 }, 17000);
 </script>
 
+/* 🌦️ FULL SCREEN WEATHER LAYER */
+#weatherEffect{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9998;
+  overflow:hidden;
+}
+
+/* ❄️ Snow */
+.snow{
+  position:absolute;
+  top:-10px;
+  color:white;
+  opacity:0.8;
+  animation: snowFall linear infinite;
+}
+
+@keyframes snowFall{
+  to{
+    transform: translateY(110vh);
+  }
+}
+
+/* 🌧️ Rain */
+.rain{
+  position:absolute;
+  width:2px;
+  height:20px;
+  background:rgba(173,216,230,.6);
+  animation: rainFall linear infinite;
+}
+
+@keyframes rainFall{
+  to{
+    transform: translateY(110vh);
+  }
+}
+
+/* ☀️ Heat */
+.heat{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:rgba(255,200,0,.4);
+  border-radius:50%;
+  animation: heatFloat ease-in-out infinite;
+}
+
+@keyframes heatFloat{
+  0%{ transform:translateY(0); opacity:.3 }
+  50%{ transform:translateY(-20px); opacity:.6 }
+  100%{ transform:translateY(0); opacity:.3 }
+}
+
+
+<!-- 🌦️ Weather Effect Layer -->
+<div id="weatherEffect"></div>
+
 </body>
 </html>
