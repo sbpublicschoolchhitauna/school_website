@@ -3370,6 +3370,74 @@ setTimeout(() => {
   100%{ transform:translateY(0); opacity:.3 }
 }
 
+<script>
+(function(){
+
+  const layer = document.getElementById("weatherEffect");
+  if(!layer) return;
+
+  const month = new Date().getMonth() + 1;
+
+  function clearLayer(){
+    layer.innerHTML = "";
+  }
+
+  /* ❄️ WINTER : Dec–Jan */
+  function snow(){
+    clearLayer();
+    for(let i=0;i<80;i++){
+      const s = document.createElement("div");
+      s.className = "snow";
+      s.innerText = "❄";
+      s.style.left = Math.random()*100 + "vw";
+      s.style.fontSize = (10 + Math.random()*10) + "px";
+      s.style.animationDuration = (6 + Math.random()*6) + "s";
+      layer.appendChild(s);
+    }
+  }
+
+  /* 🌧️ RAIN : Jul–Sep */
+  function rain(){
+    clearLayer();
+    for(let i=0;i<120;i++){
+      const r = document.createElement("div");
+      r.className = "rain";
+      r.style.left = Math.random()*100 + "vw";
+      r.style.animationDuration = (0.8 + Math.random()) + "s";
+      layer.appendChild(r);
+    }
+  }
+
+  /* ☀️ SUMMER : Apr–Jun */
+  function heat(){
+    clearLayer();
+    for(let i=0;i<60;i++){
+      const h = document.createElement("div");
+      h.className = "heat";
+      h.style.left = Math.random()*100 + "vw";
+      h.style.top = Math.random()*100 + "vh";
+      h.style.animationDuration = (2 + Math.random()*3) + "s";
+      layer.appendChild(h);
+    }
+  }
+
+  /* 🌦️ AUTO WEATHER LOGIC */
+  if(month === 12 || month === 1){
+    snow();        // ❄️ सर्दी
+  }
+  else if(month >= 7 && month <= 9){
+    rain();        // 🌧️ बरसात
+  }
+  else if(month >= 4 && month <= 6){
+    heat();        // ☀️ गर्मी
+  }
+  else{
+    clearLayer();  // 🌤️ Normal weather
+  }
+
+})();
+</script>
+
 
 <!-- 🌦️ Weather Effect Layer -->
 <div id="weatherEffect"></div>
