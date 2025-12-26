@@ -3298,30 +3298,6 @@ document.addEventListener("DOMContentLoaded", function(){
   --popup-count-size: 20px;   /* 🔹 Countdown size */
 }
 </style>
-
-<script>
-/* 🛑 ENSURE POPUP NEVER AUTO-SHOW festivals VOICE */
-const _popup = document.getElementById("popupOverlay");
-if (_popup) _popup.style.display = "none";
-
-/* ⏱️ SHOW AFTER 17 SECONDS */
-setTimeout(() => {
-  if (!_popup) return;
-
-  _popup.style.display = "flex";
-
-  // 🎤 Voice
-  const txt = document.getElementById("popupText");
-  if (txt && window.speechSynthesis) {
-    const u = new SpeechSynthesisUtterance(txt.innerText);
-    u.lang = "hi-IN";
-    speechSynthesis.cancel();
-    speechSynthesis.speak(u);
-  }
-}, 17000);
-</script>
-
-<script src="weather.js"></script>
 /* ================= WEATHER EFFECT SYSTEM ================= */
 
 #weatherEffect{
@@ -3411,6 +3387,30 @@ setTimeout(() => {
   96%{opacity:.85}
   97%{opacity:0}
 }
+
+<script>
+/* 🛑 ENSURE POPUP NEVER AUTO-SHOW festivals VOICE */
+const _popup = document.getElementById("popupOverlay");
+if (_popup) _popup.style.display = "none";
+
+/* ⏱️ SHOW AFTER 17 SECONDS */
+setTimeout(() => {
+  if (!_popup) return;
+
+  _popup.style.display = "flex";
+
+  // 🎤 Voice
+  const txt = document.getElementById("popupText");
+  if (txt && window.speechSynthesis) {
+    const u = new SpeechSynthesisUtterance(txt.innerText);
+    u.lang = "hi-IN";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+}, 17000);
+</script>
+
+<script src="weather.js"></script>
 
 </body>
 </html>
