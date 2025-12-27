@@ -3456,140 +3456,93 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 });
 </script>
 
-<div id="paymentBox"
-style="display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.6);z-index:99999;
-align-items:center;justify-content:center">
+<button id="openPayment">💳 Online Payment</button>
 
-<div style="background:#fff;width:380px;max-width:95%;
-padding:16px;border-radius:14px">
+<div id="paymentBox" style="display:none;position:fixed;inset:0;background:#0009;z-index:99999;align-items:center;justify-content:center">
+<div style="background:#fff;width:380px;padding:16px;border-radius:12px">
 
-<h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
+<h3>💳 Online Fee Payment</h3>
 
-<img id="upiQR" src="images/upi_qr.jpeg"
-style="width:100%;border-radius:10px;margin-bottom:10px">
+<img src="images/upi_qr.jpeg" style="width:100%">
 
-<!-- 🔁 UPI REDIRECT BUTTONS -->
-<div style="display:flex;gap:10px;margin-bottom:12px">
-  <button onclick="payUPI()" type="button"
-  style="flex:1;background:#5f259f;color:#fff;
-  border:0;padding:10px;border-radius:10px;font-weight:800">
-  PhonePe
-  </button>
-
-  <button onclick="payUPI()" type="button"
-  style="flex:1;background:#1a73e8;color:#fff;
-  border:0;padding:10px;border-radius:10px;font-weight:800">
-  GPay
-  </button>
-
-  <button onclick="payUPI()" type="button"
-  style="flex:1;background:#00baf2;color:#fff;
-  border:0;padding:10px;border-radius:10px;font-weight:800">
-  Paytm
-  </button>
+<div style="display:flex;gap:8px;margin:10px 0">
+  <button onclick="payUPI()">PhonePe</button>
+  <button onclick="payUPI()">GPay</button>
+  <button onclick="payUPI()">Paytm</button>
 </div>
 
 <form id="paymentForm">
-
-<input name="studentName" placeholder="Student Name" required style="width:100%;margin-bottom:6px">
-<input name="fatherName" placeholder="Father Name" required style="width:100%;margin-bottom:6px">
-<input name="mobile" placeholder="Mobile Number" required style="width:100%;margin-bottom:6px">
-<input id="payDate" name="month" readonly style="width:100%;margin-bottom:6px">
-<textarea name="address" placeholder="Address" required style="width:100%;margin-bottom:6px"></textarea>
-<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;margin-bottom:6px">
-<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
-<textarea name="feedback" placeholder="Feedback" style="width:100%"></textarea>
-
-<button type="submit"
-style="margin-top:10px;width:100%;
-background:#0b5fa8;color:#fff;
-padding:10px;border-radius:8px;border:0;font-weight:800">
-Submit Payment
-</button>
-
+<input name="studentName" placeholder="Student Name" required>
+<input name="fatherName" placeholder="Father Name" required>
+<input name="mobile" placeholder="Mobile" required>
+<input id="payDate" name="month" readonly>
+<textarea name="address" placeholder="Address" required></textarea>
+<input name="upiTxn" placeholder="UPI Transaction ID" required>
+<input type="file" id="payScreenshot" accept="image/*" required>
+<textarea name="feedback" placeholder="Feedback"></textarea>
+<button type="submit">Submit Payment</button>
 </form>
 
-<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
+<p id="payMsg"></p>
 
-<button onclick="closePay()" style="width:100%">Close</button>
+<div id="receiptBtns" style="display:none">
+  <button onclick="downloadReceiptPDF()">📄 Download PDF</button>
+  <button onclick="printReceipt()">🖨️ Print</button>
+</div>
 
+<button onclick="closePay()">Close</button>
 </div>
 </div>
 
-<div id="paymentLoading"
-style="display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.6);z-index:999999;
-align-items:center;justify-content:center;
-flex-direction:column;color:#fff;font-size:18px;font-weight:800">
-⏳ Processing Payment, कृपया प्रतीक्षा करें…
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
 
-openPayment.onclick = () => {
-  paymentBox.style.display = "flex";
-  const d = new Date();
-  payDate.value =
-    String(d.getDate()).padStart(2,'0')+"/"+
-    String(d.getMonth()+1).padStart(2,'0')+"/"+
-    d.getFullYear();
+openPayment.onclick = ()=>{
+  paymentBox.style.display="flex";
+  const d=new Date();
+  payDate.value=d.toLocaleDateString("en-IN");
 };
 
-function closePay(){
-  paymentBox.style.display="none";
-}
+function closePay(){paymentBox.style.display="none";}
 
 function payUPI(){
-  const upiID = "6389259@ybl";
-  const name = "S.B. Public School";
-  const amount = "500";
-
-  const url =
-    "upi://pay?pa="+encodeURIComponent(upiID)+
-    "&pn="+encodeURIComponent(name)+
-    "&am="+amount+
-    "&cu=INR"+
-    "&tn=School%20Fee";
-
-  if(/Android/i.test(navigator.userAgent)){
-    location.href = url;
-  }else{
-    alert("UPI Payment केवल Mobile Phone पर काम करता है.\nDesktop पर QR scan करें.");
-  }
+  const url="upi://pay?pa=6389259@ybl&pn=S.B.%20Public%20School&am=500&cu=INR&tn=School%20Fee";
+  if(/Android/i.test(navigator.userAgent)) window.open(url,"_self");
+  else alert("Desktop पर QR Scan करें");
 }
 
-paymentForm.addEventListener("submit", e=>{
+paymentForm.onsubmit=e=>{
   e.preventDefault();
-  paymentLoading.style.display="flex";
 
-  const reader = new FileReader();
-  const file = payScreenshot.files[0];
-  const data = Object.fromEntries(new FormData(paymentForm).entries());
-
-  reader.onload = ()=>{
-    const p = new URLSearchParams();
+  const data=Object.fromEntries(new FormData(paymentForm).entries());
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const p=new URLSearchParams();
     p.append("data",JSON.stringify(data));
     p.append("file",reader.result.split(",")[1]);
-    p.append("mimeType",file.type);
+    p.append("mimeType",payScreenshot.files[0].type);
 
     fetch(PAY_API,{method:"POST",body:p})
-    .then(r=>r.json())
-    .then(res=>{
-      paymentLoading.style.display="none";
-      if(res.status==="success"){
-        payMsg.innerHTML =
-        "✅ Payment सफल<br>Admission No: <b>"+res.admissionNo+"</b>";
-        paymentForm.reset();
-      }else{
-        payMsg.innerHTML="❌ Error";
-      }
-    })
-    .catch(()=>paymentLoading.style.display="none");
+    .then(r=>r.json()).then(res=>{
+      payMsg.innerHTML=
+      `नाम: ${data.studentName}<br>
+       Admission No: ${res.admissionNo}<br>
+       दिनांक: ${res.date}<br>
+       समय: ${res.time}`;
+
+      window.receiptData={name:data.studentName,admission:res.admissionNo,date:res.date,time:res.time};
+      receiptBtns.style.display="block";
+
+      const u=new SpeechSynthesisUtterance(
+        `${data.studentName}, S.B. Public School में फीस जमा करने के लिए धन्यवाद`
+      );
+      u.lang="hi-IN"; speechSynthesis.speak(u);
+    });
   };
-  reader.readAsDataURL(file);
-});
+  reader.readAsDataURL(payScreenshot.files[0]);
+};
 </script>
 
 </body>
