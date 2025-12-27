@@ -3473,28 +3473,33 @@ padding:16px;border-radius:14px">
 <input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
 <input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
 
-<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
+<!-- Payment Date auto -->
+<input id="payDate" name="month" readonly
+  style="width:100%;padding:8px;margin-bottom:6px">
 
-<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+<textarea name="address" placeholder="Address" required
+  style="width:100%;padding:8px;margin-bottom:6px"></textarea>
 
-<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="upiTxn" placeholder="UPI Transaction ID" required
+  style="width:100%;padding:8px;margin-bottom:6px">
 
-<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
+<input type="file" id="payScreenshot" accept="image/*" required
+  style="width:100%;margin-bottom:6px">
 
-<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
+<textarea name="feedback" placeholder="FeedBack / Remark"
+  style="width:100%;padding:8px"></textarea>
 
-<button type="submit" style="margin-top:10px;width:100%;
-background:#0b5fa8;color:#fff;
-padding:10px;border-radius:8px;border:0;font-weight:700">
-Submit Payment
+<button type="submit"
+  style="margin-top:10px;width:100%;
+  background:#0b5fa8;color:#fff;
+  padding:10px;border-radius:8px;border:0;font-weight:700">
+  Submit Payment
 </button>
 
+<!-- 🔄 LOADING -->
 <div id="payLoading"
-     style="display:none;
-     text-align:center;
-     font-weight:700;
-     color:#0b5fa8;
-     margin-top:8px;">
+  style="display:none;text-align:center;
+  font-weight:700;color:#0b5fa8;margin-top:8px;">
   ⏳ Processing Payment, कृपया प्रतीक्षा करें...
 </div>
 
