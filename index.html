@@ -3548,7 +3548,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.style.display="none";
         if(res.status==="success"){
           const speech=data.studentName+
-          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।";
+          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।आप का दिन शुभ हो";
           payMsg.innerHTML=`✅ ${speech}<br>Admission No: <b>${res.admissionNo}</b>
           <br>Date: ${res.date} | Time: ${res.time}
           <br><a href="${res.screenshot}" target="_blank">📸 Screenshot देखें</a>`;
