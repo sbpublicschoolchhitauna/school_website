@@ -3548,7 +3548,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.style.display="none";
         if(res.status==="success"){
           const speech=data.studentName+
-          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।आप का दिन शुभ हो";
+          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।आप का दिन शुभ हो|";
           payMsg.innerHTML=`✅ ${speech}<br>Admission No: <b>${res.admissionNo}</b>
           <br>Date: ${res.date} | Time: ${res.time}
           <br><a href="${res.screenshot}" target="_blank">📸 Screenshot देखें</a>`;
@@ -3559,6 +3559,33 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     reader.readAsDataURL(file);
   });
+
+});
+</script>
+
+<script>
+document.getElementById("openPayment").addEventListener("click", function () {
+
+  // 🔴 REQUIRED DETAILS
+  const upiId = "6389259@ybl";              // आपका UPI ID
+  const name  = "S.B. PUBLIC SCHOOL";       // Receiver Name
+  const amount = prompt("Amount दर्ज करें (₹)");
+
+  if (!amount || isNaN(amount)) {
+    alert("कृपया सही Amount डालें");
+    return;
+  }
+
+  // ✅ UPI DEEP LINK (MOST IMPORTANT)
+  const upiURL =
+    "upi://pay" +
+    "?pa=" + encodeURIComponent(upiId) +
+    "&pn=" + encodeURIComponent(name) +
+    "&am=" + encodeURIComponent(amount) +
+    "&cu=INR";
+
+  // 📱 MOBILE SAFETY
+  window.location.href = upiURL;
 
 });
 </script>
