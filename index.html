@@ -3460,62 +3460,48 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 background:rgba(0,0,0,.55);z-index:100000;
 align-items:center;justify-content:center">
 
-  <div style="background:#fff;width:380px;max-width:95%;
-  padding:16px;border-radius:14px">
+<div style="background:#fff;width:380px;max-width:95%;
+padding:16px;border-radius:14px">
 
-    <h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
+<h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
 
-    <!-- QR IMAGE (JS से जुड़ेगी) -->
-    <img id="upiQR"
-      style="width:100%;border-radius:10px;margin-bottom:10px"
-      alt="UPI QR Code">
+<img id="upiQR" style="width:100%;border-radius:10px;margin-bottom:10px">
 
-    <form id="paymentForm">
+<form id="paymentForm">
 
-      <input name="studentName" placeholder="Student Name" required
-        style="width:100%;padding:8px;margin-bottom:6px">
+<input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
 
-      <input name="fatherName" placeholder="Father Name" required
-        style="width:100%;padding:8px;margin-bottom:6px">
+<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
 
-      <input name="mobile" placeholder="Mobile Number" required
-        style="width:100%;padding:8px;margin-bottom:6px">
+<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
 
-      <!-- 📅 Payment Date (Auto) -->
-      <input id="payDate" name="month" readonly
-        style="width:100%;padding:8px;margin-bottom:6px">
+<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
 
-      <textarea name="address" placeholder="Address" required
-        style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
 
-      <input name="upiTxn" placeholder="UPI Transaction ID" required
-        style="width:100%;padding:8px;margin-bottom:6px">
+<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
 
-      <textarea name="feedback" placeholder="FeedBack / Remark"
-        style="width:100%;padding:8px"></textarea>
+<button type="submit" style="margin-top:10px;width:100%;
+background:#0b5fa8;color:#fff;
+padding:10px;border-radius:8px;border:0;font-weight:700">
+Submit Payment
+</button>
 
-      <button type="submit"
-        style="margin-top:10px;width:100%;
-        background:#0b5fa8;color:#fff;
-        padding:10px;border-radius:8px;
-        border:0;font-weight:700">
-        Submit Payment
-      </button>
+</form>
 
-    </form>
+<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
+<button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
 
-    <p id="payMsg" style="font-weight:800;margin-top:8px"></p>
-
-    <button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
-
-  </div>
+</div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const PAY_API = "https://script.google.com/macros/s/AKfycbys0ul3GrdkdEltl_1ghChiboeyLy_9AWCh0yTGV-tFdloOgPd7Tl3Ka7FhwlUOjYvkDA/exec";
-  const QR_IMAGE_PATH = "images/upi_qr.jpeg";
+  const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
+  const QR_IMAGE = "images/upi_qr.jpeg";
 
   const openBtn = document.getElementById("openPayment");
   const box = document.getElementById("paymentBox");
@@ -3523,64 +3509,61 @@ document.addEventListener("DOMContentLoaded", () => {
   const dateInput = document.getElementById("payDate");
   const form = document.getElementById("paymentForm");
 
-  // Open popup
   openBtn.onclick = () => {
     box.style.display = "flex";
-    qrImg.src = QR_IMAGE_PATH;
+    qrImg.src = QR_IMAGE;
 
-    // 📅 Auto Date DD/MM/YYYY
-    const now = new Date();
-    const dd = String(now.getDate()).padStart(2,'0');
-    const mm = String(now.getMonth()+1).padStart(2,'0');
-    const yyyy = now.getFullYear();
-    dateInput.value = dd + "/" + mm + "/" + yyyy;
+    const d = new Date();
+    dateInput.value =
+      String(d.getDate()).padStart(2,'0') + "/" +
+      String(d.getMonth()+1).padStart(2,'0') + "/" +
+      d.getFullYear();
   };
 
-  window.closePay = function(){
+  window.closePay = () => {
     box.style.display = "none";
     qrImg.src = "";
   };
 
-  // Submit
   form.addEventListener("submit", function(e){
     e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(this).entries());
+    const reader = new FileReader();
+    const file = document.getElementById("payScreenshot").files[0];
+    const data = Object.fromEntries(new FormData(form).entries());
 
-    fetch(PAY_API,{
-      method:"POST",
-      body: JSON.stringify(data)
-    })
-    .then(r=>r.json())
-    .then(res=>{
-      if(res.status==="success"){
+    reader.onload = function(){
+      const payload = new URLSearchParams();
+      payload.append("data", JSON.stringify(data));
+      payload.append("file", reader.result.split(",")[1]);
+      payload.append("mimeType", file.type);
 
-        const name = data.studentName;
+      fetch(PAY_API,{method:"POST",body:payload})
+      .then(r=>r.json())
+      .then(res=>{
+        if(res.status==="success"){
 
-        // 🎤 EXACT 15 WORDS SPEECH
-        const speechText =
-          name +
-          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।";
+          const speech =
+            data.studentName +
+            ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।";
 
-        document.getElementById("payMsg").innerHTML =
-          "✅ <b>"+speechText+"</b><br>Admission No: <b>"
-          + res.admissionNo + "</b><br>Date: "+res.date+" | Time: "+res.time;
+          document.getElementById("payMsg").innerHTML =
+            "✅ "+speech+"<br>Admission No: <b>"+res.admissionNo+
+            "</b><br>Date: "+res.date+" | Time: "+res.time+
+            "<br><a href='"+res.screenshot+"' target='_blank'>📸 Screenshot देखें</a>";
 
-        // Hindi Voice
-        if ("speechSynthesis" in window) {
-          speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(speechText);
-          u.lang = "hi-IN";
-          u.rate = 0.9;
-          speechSynthesis.speak(u);
+          if("speechSynthesis" in window){
+            const u = new SpeechSynthesisUtterance(speech);
+            u.lang="hi-IN"; u.rate=0.9;
+            speechSynthesis.speak(u);
+          }
+
+          form.reset();
         }
+      });
+    };
 
-        form.reset();
-      } else {
-        document.getElementById("payMsg").innerHTML =
-          "❌ कुछ समस्या आई, कृपया पुनः प्रयास करें";
-      }
-    });
+    reader.readAsDataURL(file);
   });
 
 });
