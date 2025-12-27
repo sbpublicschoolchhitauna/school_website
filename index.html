@@ -548,15 +548,38 @@ document.addEventListener("DOMContentLoaded", () => {
 </button>
 
 
-<button
-  id="openPayment"
-  class="qp-3d fee-3d idle"
-  type="button">
-  <span class="face">
-    <span class="ico">💳</span>
-    Online Payment
-  </span>
-</button>
+<button id="openPaymentBtn">💳 Online Payment</button>
+
+<div id="paymentPopup" style="display:none;position:fixed;inset:0;background:#0009;z-index:99999;align-items:center;justify-content:center">
+<div style="background:#fff;width:360px;padding:16px;border-radius:14px">
+
+<h3>💳 Online Fee Payment</h3>
+
+<img src="images/upi_qr.jpeg" style="width:100%">
+
+<div style="display:flex;gap:8px;margin:10px 0">
+  <button onclick="payUPI()">PhonePe</button>
+  <button onclick="payUPI()">GPay</button>
+  <button onclick="payUPI()">Paytm</button>
+</div>
+
+<form id="paymentForm">
+<input name="studentName" placeholder="Student Name" required>
+<input name="fatherName" placeholder="Father Name" required>
+<input name="mobile" placeholder="Mobile" required>
+<input id="payDate" name="month" readonly>
+<textarea name="address" placeholder="Address" required></textarea>
+<input name="upiTxn" placeholder="UPI Transaction ID" required>
+<input type="file" id="payScreenshot" accept="image/*" required>
+<textarea name="feedback" placeholder="Feedback"></textarea>
+<button type="submit">Submit Payment</button>
+</form>
+
+<p id="payMsg"></p>
+<button onclick="closePopup()">Close</button>
+
+</div>
+</div>
 
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
@@ -3456,217 +3479,53 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 });
 </script>
 
-<!-- ================= FINAL PAYMENT POPUP SYSTEM (WORKING) ================= -->
-
-<!-- 🔘 OPEN PAYMENT BUTTON -->
-<button id="openPaymentBtn"
-style="
-padding:14px 22px;
-border-radius:14px;
-background:#0b5fa8;
-color:#fff;
-font-weight:800;
-border:0;
-cursor:pointer;">
-💳 Online Payment
-</button>
-
-<!-- ================= PAYMENT POPUP ================= -->
-<div id="paymentPopup"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.65);
-z-index:99999;
-align-items:center;
-justify-content:center;
-">
-
-  <div style="
-  background:#fff;
-  width:360px;
-  max-width:95%;
-  padding:16px;
-  border-radius:16px;
-  ">
-
-    <h3 style="color:#0b5fa8;text-align:center">
-      💳 Online Fee Payment
-    </h3>
-
-    <!-- QR IMAGE -->
-    <img src="images/upi_qr.jpeg"
-    style="width:100%;border-radius:10px;margin-bottom:10px">
-
-    <!-- UPI REDIRECT BUTTONS -->
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <button onclick="payUPI()" type="button"
-      style="flex:1;background:#5f259f;color:#fff;border:0;padding:8px;border-radius:10px;font-weight:800">
-      PhonePe
-      </button>
-      <button onclick="payUPI()" type="button"
-      style="flex:1;background:#1a73e8;color:#fff;border:0;padding:8px;border-radius:10px;font-weight:800">
-      GPay
-      </button>
-      <button onclick="payUPI()" type="button"
-      style="flex:1;background:#00baf2;color:#fff;border:0;padding:8px;border-radius:10px;font-weight:800">
-      Paytm
-      </button>
-    </div>
-
-    <!-- PAYMENT FORM -->
-    <form id="paymentForm">
-      <input name="studentName" placeholder="Student Name" required style="width:100%;margin-bottom:6px">
-      <input name="fatherName" placeholder="Father Name" required style="width:100%;margin-bottom:6px">
-      <input name="mobile" placeholder="Mobile Number" required style="width:100%;margin-bottom:6px">
-
-      <input id="payDate" name="month" readonly style="width:100%;margin-bottom:6px">
-
-      <textarea name="address" placeholder="Address" required style="width:100%;margin-bottom:6px"></textarea>
-
-      <input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;margin-bottom:6px">
-
-      <input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
-
-      <textarea name="feedback" placeholder="Feedback" style="width:100%;margin-bottom:6px"></textarea>
-
-      <button type="submit"
-      style="width:100%;padding:10px;background:#0b5fa8;color:#fff;border:0;border-radius:10px;font-weight:800">
-      Submit Payment
-      </button>
-    </form>
-
-    <p id="payMsg" style="font-weight:800;margin-top:8px;text-align:center"></p>
-
-    <div id="receiptBtns" style="display:none;text-align:center;margin-top:8px">
-      <button onclick="downloadReceiptPDF()">📄 Download PDF</button>
-      <button onclick="printReceipt()">🖨️ Print</button>
-    </div>
-
-    <button onclick="closePopup()" style="margin-top:10px;width:100%">Close</button>
-
-  </div>
-</div>
-
-<!-- ================= LOADING OVERLAY ================= -->
-<div id="paymentLoading"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
-z-index:100000;
-align-items:center;
-justify-content:center;
-color:#fff;
-font-size:18px;
-font-weight:800;">
-⏳ Processing Payment, कृपया प्रतीक्षा करें…
-</div>
-
-<!-- ================= JS ================= -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
+const PAY_API = "PASTE_YOUR_WEB_APP_URL_HERE";
 
-document.getElementById("openPaymentBtn").onclick = () => {
-  document.getElementById("paymentPopup").style.display = "flex";
-  const d = new Date();
-  document.getElementById("payDate").value =
-    String(d.getDate()).padStart(2,'0') + "/" +
-    String(d.getMonth()+1).padStart(2,'0') + "/" +
-    d.getFullYear();
+openPaymentBtn.onclick = ()=>{
+  paymentPopup.style.display="flex";
+  payDate.value = new Date().toLocaleDateString("en-IN");
 };
 
 function closePopup(){
-  document.getElementById("paymentPopup").style.display = "none";
+  paymentPopup.style.display="none";
 }
 
 function payUPI(){
-  const upiURL =
-    "upi://pay?pa=6389259@ybl&pn=S.B.%20Public%20School&am=500&cu=INR&tn=School%20Fee";
-  if(/Android/i.test(navigator.userAgent)){
-    window.open(upiURL,"_self");
-  }else{
-    alert("Desktop पर QR Code scan करें");
-  }
+  const url="upi://pay?pa=6389259@ybl&pn=S.B.%20Public%20School&am=500&cu=INR&tn=School%20Fee";
+  if(/Android/i.test(navigator.userAgent)) window.open(url,"_self");
+  else alert("Desktop पर QR scan करें");
 }
 
-paymentForm.onsubmit = e => {
+paymentForm.onsubmit = e=>{
   e.preventDefault();
-  paymentLoading.style.display = "flex";
 
-  const data = Object.fromEntries(new FormData(paymentForm).entries());
-  const reader = new FileReader();
+  const data=Object.fromEntries(new FormData(paymentForm).entries());
+  const reader=new FileReader();
 
-  reader.onload = () => {
-    const p = new URLSearchParams();
-    p.append("data", JSON.stringify(data));
-    p.append("file", reader.result.split(",")[1]);
-    p.append("mimeType", payScreenshot.files[0].type);
+  reader.onload=()=>{
+    const p=new URLSearchParams();
+    p.append("data",JSON.stringify(data));
+    p.append("file",reader.result.split(",")[1]);
+    p.append("mimeType",payScreenshot.files[0].type);
 
     fetch(PAY_API,{method:"POST",body:p})
-    .then(r=>r.json())
-    .then(res=>{
-      paymentLoading.style.display = "none";
+    .then(r=>r.json()).then(res=>{
+      payMsg.innerHTML=
+      `नाम: ${data.studentName}<br>
+       Admission No: ${res.admissionNo}<br>
+       दिनांक: ${res.date}<br>
+       समय: ${res.time}`;
 
-      const now = new Date();
-      const dateStr = now.toLocaleDateString("en-IN");
-      const timeStr = now.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
-
-      payMsg.innerHTML =
-        "नाम: "+data.studentName+"<br>"+
-        "Admission No: "+res.admissionNo+"<br>"+
-        "दिनांक: "+dateStr+"<br>"+
-        "समय: "+timeStr;
-
-      window.receiptData = {
-        name:data.studentName,
-        admission:res.admissionNo,
-        date:dateStr,
-        time:timeStr
-      };
-
-      receiptBtns.style.display="block";
-
-      const u = new SpeechSynthesisUtterance(
-        data.studentName + ", S.B. Public School में फीस जमा करने के लिए धन्यवाद।"
+      const u=new SpeechSynthesisUtterance(
+        `${data.studentName}, S.B. Public School में फीस जमा करने के लिए धन्यवाद`
       );
       u.lang="hi-IN";
       speechSynthesis.speak(u);
-
-      paymentForm.reset();
     });
   };
   reader.readAsDataURL(payScreenshot.files[0]);
 };
-
-function downloadReceiptPDF(){
-  const {jsPDF}=window.jspdf;
-  const r=window.receiptData;
-  const doc=new jsPDF();
-  doc.text("S.B. PUBLIC SCHOOL",105,20,{align:"center"});
-  doc.text(`Name: ${r.name}`,20,40);
-  doc.text(`Admission No: ${r.admission}`,20,50);
-  doc.text(`Date: ${r.date}`,20,60);
-  doc.text(`Time: ${r.time}`,20,70);
-  doc.save("Fee_Receipt.pdf");
-}
-
-function printReceipt(){
-  const r=window.receiptData;
-  const w=window.open();
-  w.document.write(`
-    <h2>S.B. PUBLIC SCHOOL</h2>
-    <p>Name: ${r.name}</p>
-    <p>Admission No: ${r.admission}</p>
-    <p>Date: ${r.date}</p>
-    <p>Time: ${r.time}</p>
-    <script>window.print()</script>
-  `);
-}
 </script>
 
 </body>
