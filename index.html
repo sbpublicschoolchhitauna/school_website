@@ -3367,5 +3367,39 @@ background:rgba(0,0,0,.55);z-index:100000;align-items:center;justify-content:cen
   </div>
 </div>
 
+<script>
+const HELP_API =
+"https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec"; // ← अपना Apps Script URL
+
+document.getElementById("helpLineBtn").onclick = () => {
+  document.getElementById("helpModal").style.display = "flex";
+};
+
+function closeHelp(){
+  document.getElementById("helpModal").style.display = "none";
+}
+
+document.getElementById("helpForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const data = Object.fromEntries(new FormData(this).entries());
+
+  fetch(HELP_API,{
+    method:"POST",
+    body: JSON.stringify(data)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.status==="success"){
+      document.getElementById("helpResult").innerHTML =
+        "✅ Form Submitted Successfully<br>Admission No: <b>"+res.admissionNo+"</b>";
+      this.reset();
+    }else{
+      document.getElementById("helpResult").innerHTML="❌ Error! Try again";
+    }
+  });
+});
+</script>
+
 </body>
 </html>
