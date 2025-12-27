@@ -3315,5 +3315,45 @@ setTimeout(() => {
 }, 17000);
 </script>
 
+<h2>📞 S.B. PUBLIC SCHOOL – Help Line</h2>
+
+<form id="helpForm">
+  <input type="text" name="studentName" placeholder="Student Name" required>
+  <input type="text" name="fatherName" placeholder="Father Name" required>
+  <input type="text" name="motherName" placeholder="Mother Name" required>
+  <input type="tel" name="mobile" placeholder="Mobile Number" required>
+  <input type="date" name="dob" required>
+  <input type="text" name="className" placeholder="Class" required>
+  <textarea name="address" placeholder="Address" required></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+document.getElementById("helpForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const formData = new FormData(this);
+  const data = Object.fromEntries(formData.entries());
+
+  fetch("https://script.google.com/macros/s/AKfycby34dtlRvE53pLkA8IngsgEuIX_shlMuLNAN8c4umA7naCo3NacAKLdQNUFADLK7joHEQ/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(result => {
+    if(result.status === "success"){
+      document.getElementById("result").innerHTML =
+        "✅ Form Submitted<br>Admission No: " + result.admissionNo;
+      this.reset();
+    } else {
+      document.getElementById("result").innerHTML = "❌ Error!";
+    }
+  });
+});
+</script>
+
 </body>
 </html>
