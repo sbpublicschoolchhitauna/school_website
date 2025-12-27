@@ -3545,5 +3545,30 @@ paymentForm.onsubmit=e=>{
 };
 </script>
 
+<script>
+function downloadReceiptPDF(){
+  const {jsPDF}=window.jspdf;
+  const d=window.receiptData;
+  const doc=new jsPDF();
+  doc.text("S.B. PUBLIC SCHOOL",105,20,{align:"center"});
+  doc.text(`Name: ${d.name}`,20,40);
+  doc.text(`Admission No: ${d.admission}`,20,50);
+  doc.text(`Date: ${d.date}`,20,60);
+  doc.text(`Time: ${d.time}`,20,70);
+  doc.save("Fee_Receipt.pdf");
+}
+
+function printReceipt(){
+  const d=window.receiptData;
+  const w=window.open();
+  w.document.write(`<h2>S.B. PUBLIC SCHOOL</h2>
+  <p>Name: ${d.name}</p>
+  <p>Admission No: ${d.admission}</p>
+  <p>Date: ${d.date}</p>
+  <p>Time: ${d.time}</p>
+  <script>window.print()</script>`);
+}
+</script>
+
 </body>
 </html>
