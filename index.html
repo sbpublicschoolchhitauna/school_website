@@ -3473,35 +3473,21 @@ padding:16px;border-radius:14px">
 <input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
 <input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
 
-<!-- Payment Date auto -->
-<input id="payDate" name="month" readonly
-  style="width:100%;padding:8px;margin-bottom:6px">
+<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
 
-<textarea name="address" placeholder="Address" required
-  style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
 
-<input name="upiTxn" placeholder="UPI Transaction ID" required
-  style="width:100%;padding:8px;margin-bottom:6px">
+<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
 
-<input type="file" id="payScreenshot" accept="image/*" required
-  style="width:100%;margin-bottom:6px">
+<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
 
-<textarea name="feedback" placeholder="FeedBack / Remark"
-  style="width:100%;padding:8px"></textarea>
+<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
 
-<button type="submit"
-  style="margin-top:10px;width:100%;
-  background:#0b5fa8;color:#fff;
-  padding:10px;border-radius:8px;border:0;font-weight:700">
-  Submit Payment
+<button type="submit" style="margin-top:10px;width:100%;
+background:#0b5fa8;color:#fff;
+padding:10px;border-radius:8px;border:0;font-weight:700">
+Submit Payment
 </button>
-
-<!-- 🔄 LOADING -->
-<div id="payLoading"
-  style="display:none;text-align:center;
-  font-weight:700;color:#0b5fa8;margin-top:8px;">
-  ⏳ Processing Payment, कृपया प्रतीक्षा करें...
-</div>
 
 </form>
 
@@ -3511,30 +3497,106 @@ padding:16px;border-radius:14px">
 </div>
 </div>
 
+<!-- QUICK PORTALS STYLE BUTTON -->
+<button id="openPayment" class="qp-3d fee-3d idle" type="button">
+  <span class="face">
+    <span class="ico">💳</span>
+    Online Payment
+  </span>
+</button>
+
+<!-- PAYMENT POPUP -->
+<div id="paymentBox" style="display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.55);z-index:99999;
+align-items:center;justify-content:center">
+
+<div style="background:#fff;width:380px;max-width:95%;
+padding:16px;border-radius:14px">
+
+<h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
+
+<img id="upiQR" style="width:100%;border-radius:10px;margin-bottom:10px">
+
+<form id="paymentForm">
+
+<input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
+
+<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
+
+<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+
+<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
+
+<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
+
+<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
+
+<button type="submit" id="submitPaymentBtn"
+style="margin-top:10px;width:100%;
+background:#0b5fa8;color:#fff;
+padding:10px;border-radius:8px;border:0;font-weight:700">
+Submit Payment
+</button>
+
+</form>
+
+<!-- LOADING -->
+<div id="payLoading" style="display:none;text-align:center;
+font-weight:700;color:#0b5fa8;margin-top:8px;">
+⏳ Processing Payment, कृपया प्रतीक्षा करें...
+</div>
+
+<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
+<button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
+
+</div>
+</div>
+
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function(){
 
   const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
+  const QR_IMAGE = "images/upi_qr.jpeg";
 
+  const openBtn = document.getElementById("openPayment");
+  const box = document.getElementById("paymentBox");
+  const qrImg = document.getElementById("upiQR");
+  const dateInput = document.getElementById("payDate");
   const form = document.getElementById("paymentForm");
   const loading = document.getElementById("payLoading");
   const msg = document.getElementById("payMsg");
   const submitBtn = document.getElementById("submitPaymentBtn");
 
+  openBtn.onclick = () => {
+    box.style.display = "flex";
+    qrImg.src = QR_IMAGE;
+
+    const d = new Date();
+    dateInput.value =
+      String(d.getDate()).padStart(2,'0') + "/" +
+      String(d.getMonth()+1).padStart(2,'0') + "/" +
+      d.getFullYear();
+  };
+
+  window.closePay = () => {
+    box.style.display = "none";
+    qrImg.src = "";
+  };
+
   form.addEventListener("submit", function(e){
     e.preventDefault();
 
-    // ✅ SHOW LOADING (पहले!)
     loading.style.display = "block";
     submitBtn.disabled = true;
     submitBtn.innerText = "Processing...";
     msg.innerHTML = "";
 
-    // 👇 Browser को repaint का मौका दें
     setTimeout(() => {
 
-      const reader = new FileReader();
       const file = document.getElementById("payScreenshot").files[0];
+      const reader = new FileReader();
       const data = Object.fromEntries(new FormData(form).entries());
 
       reader.onload = function(){
@@ -3544,16 +3606,14 @@ document.addEventListener("DOMContentLoaded", () => {
         payload.append("file", reader.result.split(",")[1]);
         payload.append("mimeType", file.type);
 
-        fetch(PAY_API,{ method:"POST", body:payload })
+        fetch(PAY_API,{method:"POST",body:payload})
         .then(r=>r.json())
         .then(res=>{
-
           loading.style.display = "none";
           submitBtn.disabled = false;
           submitBtn.innerText = "Submit Payment";
 
           if(res.status==="success"){
-
             const speech =
               data.studentName +
               ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।";
@@ -3565,30 +3625,27 @@ document.addEventListener("DOMContentLoaded", () => {
               "<br><a href='"+res.screenshot+"' target='_blank'>📸 Screenshot देखें</a>";
 
             if("speechSynthesis" in window){
-              speechSynthesis.cancel();
               const u = new SpeechSynthesisUtterance(speech);
-              u.lang="hi-IN";
-              u.rate=0.9;
+              u.lang="hi-IN"; u.rate=0.9;
               speechSynthesis.speak(u);
             }
 
             form.reset();
-
           } else {
-            msg.innerHTML = "❌ Payment submit नहीं हो पाया, पुनः प्रयास करें।";
+            msg.innerHTML = "❌ Error, पुनः प्रयास करें";
           }
         })
         .catch(()=>{
           loading.style.display = "none";
           submitBtn.disabled = false;
           submitBtn.innerText = "Submit Payment";
-          msg.innerHTML = "❌ Network error, बाद में प्रयास करें।";
+          msg.innerHTML = "❌ Network error";
         });
       };
 
       reader.readAsDataURL(file);
 
-    }, 50); // 🔑 यही line loading दिखाने की कुंजी है
+    }, 50);
   });
 
 });
