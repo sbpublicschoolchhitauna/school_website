@@ -547,6 +547,50 @@ document.addEventListener("DOMContentLoaded", () => {
   </span>
 </button>
 
+<button id="openPayment" class="btn">💳 Online Payment</button>
+
+<div id="paymentBox" style="display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.55);z-index:99999;
+align-items:center;justify-content:center">
+
+<div style="background:#fff;width:380px;max-width:95%;
+padding:16px;border-radius:14px">
+
+<h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
+
+<!-- QR IMAGE -->
+<img id="upiQR" style="width:100%;border-radius:10px;margin-bottom:10px">
+
+<form id="paymentForm">
+
+<input name="admissionNo" placeholder="Admission No." required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
+
+<input name="month" placeholder="Payment Of Month (e.g. April)" required style="width:100%;padding:8px;margin-bottom:6px">
+
+<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+
+<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
+
+<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
+
+<button type="submit"
+style="margin-top:10px;width:100%;
+background:#0b5fa8;color:#fff;
+padding:10px;border-radius:8px;border:0;font-weight:700">
+Submit Payment
+</button>
+</form>
+
+<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
+
+<button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
+
+</div>
+</div>
+
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -3440,6 +3484,44 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
     } else {
       document.getElementById("helpResult").innerHTML =
         "❌ कुछ समस्या आई, कृपया पुनः प्रयास करें।";
+    }
+  });
+});
+</script>
+
+<script>
+const PAY_API = "https://script.google.com/macros/s/AKfycbyEn21OV1YaHHynlvrMIwuDNc1VfRYGZJFik9hA8v873cNvPRyAxkRxlkHzZw4TTT4Z4g/exec";
+const QR_IMAGE = "images/upi_qr.png";
+
+// open popup
+document.getElementById("openPayment").onclick = ()=>{
+  document.getElementById("paymentBox").style.display="flex";
+  document.getElementById("upiQR").src = QR_IMAGE;
+};
+
+// close popup
+function closePay(){
+  document.getElementById("paymentBox").style.display="none";
+}
+
+// submit
+document.getElementById("paymentForm").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  const data = Object.fromEntries(new FormData(this).entries());
+
+  fetch(PAY_API,{
+    method:"POST",
+    body: JSON.stringify(data)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.status==="success"){
+      document.getElementById("payMsg").innerHTML =
+        "✅ Payment Details Submitted Successfully<br>Thank You!";
+      this.reset();
+    }else{
+      document.getElementById("payMsg").innerHTML="❌ Error!";
     }
   });
 });
