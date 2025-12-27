@@ -3464,9 +3464,8 @@ align-items:center;justify-content:center">
 
     <h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
 
-    <!-- QR IMAGE -->
+    <!-- QR IMAGE (JS से जुड़ेगी) -->
     <img id="upiQR"
-      src="images/upi_qr.jpeg"
       style="width:100%;border-radius:10px;margin-bottom:10px"
       alt="UPI QR Code">
 
@@ -3481,22 +3480,14 @@ align-items:center;justify-content:center">
       <input name="mobile" placeholder="Mobile Number" required
         style="width:100%;padding:8px;margin-bottom:6px">
 
-      <!-- 📅 MONTH SELECT (AUTO SELECT CURRENT MONTH) -->
+      <!-- 📅 Month auto-select (calendar wise) -->
       <select id="payMonth" name="month" required
         style="width:100%;padding:8px;margin-bottom:6px">
         <option value="">Payment Of Month चुनें</option>
-        <option>January</option>
-        <option>February</option>
-        <option>March</option>
-        <option>April</option>
-        <option>May</option>
-        <option>June</option>
-        <option>July</option>
-        <option>August</option>
-        <option>September</option>
-        <option>October</option>
-        <option>November</option>
-        <option>December</option>
+        <option>January</option><option>February</option><option>March</option>
+        <option>April</option><option>May</option><option>June</option>
+        <option>July</option><option>August</option><option>September</option>
+        <option>October</option><option>November</option><option>December</option>
       </select>
 
       <textarea name="address" placeholder="Address" required
@@ -3520,39 +3511,42 @@ align-items:center;justify-content:center">
 
     <p id="payMsg" style="font-weight:800;margin-top:8px"></p>
 
-    <button onclick="closePay()"
-      style="margin-top:6px;width:100%">Close</button>
-
+    <button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
   </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const PAY_API = "https://script.google.com/macros/s/AKfycbx1GZVKnItMAsSVO5KjnXG-RTPdWg8ToCQnJwb6NmPQ7Yd95c4tCvDoqBIJOfuv6NexeA/exec";
+  const PAY_API = "PASTE_YOUR_WEB_APP_URL_HERE";
+  const QR_IMAGE_PATH = "images/upi_qr.jpeg";
 
   const openBtn = document.getElementById("openPayment");
   const box = document.getElementById("paymentBox");
+  const qrImg = document.getElementById("upiQR");
+  const monthSelect = document.getElementById("payMonth");
+  const form = document.getElementById("paymentForm");
 
-  if(openBtn){
-    openBtn.onclick = () => {
-      box.style.display = "flex";
+  // Open popup
+  openBtn.onclick = () => {
+    box.style.display = "flex";
 
-      // 📅 Auto select current month
-      const monthSelect = document.getElementById("payMonth");
-      if(monthSelect){
-        const currentMonth =
-          new Date().toLocaleString("en-US",{month:"long"});
-        monthSelect.value = currentMonth;
-      }
-    };
-  }
+    // QR image JS से
+    qrImg.src = QR_IMAGE_PATH;
+
+    // 📅 Calendar के अनुसार current month auto-select
+    const now = new Date();
+    const currentMonth =
+      now.toLocaleString("en-US",{month:"long"});
+    monthSelect.value = currentMonth;
+  };
 
   window.closePay = function(){
     box.style.display = "none";
+    qrImg.src = "";
   };
 
-  const form = document.getElementById("paymentForm");
+  // Submit
   form.addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -3565,11 +3559,33 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(r=>r.json())
     .then(res=>{
       if(res.status==="success"){
+
+        const name = data.studentName;
+
+        // ⏰ Current time
+        const timeStr =
+          new Date().toLocaleTimeString("hi-IN",{hour:'2-digit',minute:'2-digit'});
+
+        // 🎤 EXACT 15 WORDS SPEECH
+        const speechText =
+          name +
+          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।";
+
         document.getElementById("payMsg").innerHTML =
-          "✅ Payment Submitted Successfully<br>Admission No: <b>"
-          + res.admissionNo + "</b>";
+          "✅ <b>"+speechText+"</b><br>Admission No: <b>"
+          + res.admissionNo + "</b><br>समय: "+timeStr;
+
+        // Hindi Voice
+        if ("speechSynthesis" in window) {
+          speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(speechText);
+          u.lang = "hi-IN";
+          u.rate = 0.9;
+          speechSynthesis.speak(u);
+        }
+
         form.reset();
-      }else{
+      } else {
         document.getElementById("payMsg").innerHTML =
           "❌ कुछ समस्या आई, कृपया पुनः प्रयास करें";
       }
