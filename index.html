@@ -3327,38 +3327,48 @@ setTimeout(() => {
 
 <!-- 📞 HELP LINE MODAL -->
 <div id="helpModal" style="display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.55);z-index:100000;align-items:center;justify-content:center">
+background:rgba(0,0,0,.55);z-index:100000;
+align-items:center;justify-content:center">
 
   <div style="background:#fff;width:360px;max-width:94%;
-  border-radius:14px;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.35)">
+  border-radius:14px;padding:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35)">
 
     <h3 style="margin:0 0 10px;color:#0b5fa8">📞 Help Line Form</h3>
 
     <form id="helpForm">
-      <input required name="studentName" placeholder="Student Name"
+      <input name="studentName" required placeholder="Student Name"
         style="width:100%;padding:8px;margin-bottom:6px">
-      <input required name="fatherName" placeholder="Father Name"
+
+      <input name="fatherName" required placeholder="Father Name"
         style="width:100%;padding:8px;margin-bottom:6px">
-      <input required name="motherName" placeholder="Mother Name"
+
+      <input name="motherName" required placeholder="Mother Name"
         style="width:100%;padding:8px;margin-bottom:6px">
-      <input required name="mobile" placeholder="Mobile Number"
+
+      <input name="mobile" required placeholder="Mobile Number"
         style="width:100%;padding:8px;margin-bottom:6px">
-      <input required type="date" name="dob"
+
+      <input type="date" name="dob" required
         style="width:100%;padding:8px;margin-bottom:6px">
-      <input required name="className" placeholder="Class"
+
+      <input name="className" required placeholder="Class"
         style="width:100%;padding:8px;margin-bottom:6px">
-      <textarea required name="address" placeholder="Address"
+
+      <textarea name="address" required placeholder="Address"
         style="width:100%;padding:8px"></textarea>
 
       <button type="submit"
         style="margin-top:10px;width:100%;
         background:#0b5fa8;color:#fff;
-        padding:10px;border:0;border-radius:8px;font-weight:700">
+        padding:10px;border:0;border-radius:8px;
+        font-weight:700">
         Submit
       </button>
     </form>
 
-    <p id="helpResult" style="margin-top:8px;font-weight:700"></p>
+    <p id="helpResult"
+       style="margin-top:10px;font-weight:800;color:#0b5fa8"></p>
 
     <button onclick="closeHelp()"
       style="margin-top:6px;width:100%;padding:6px">
@@ -3369,16 +3379,20 @@ background:rgba(0,0,0,.55);z-index:100000;align-items:center;justify-content:cen
 
 <script>
 const HELP_API =
-"https://script.google.com/macros/s/AKfycby34dtlRvE53pLkA8IngsgEuIX_shlMuLNAN8c4umA7naCo3NacAKLdQNUFADLK7joHEQ/exec"; // ← अपना Apps Script URL
+"https://script.google.com/macros/s/AKfycby34dtlRvE53pLkA8IngsgEuIX_shlMuLNAN8c4umA7naCo3NacAKLdQNUFADLK7joHEQ/exec"; 
+// ⬆️ यहाँ अपना Apps Script Web App URL डालें
 
+// Open popup
 document.getElementById("helpLineBtn").onclick = () => {
   document.getElementById("helpModal").style.display = "flex";
 };
 
+// Close popup
 function closeHelp(){
   document.getElementById("helpModal").style.display = "none";
 }
 
+// Submit form
 document.getElementById("helpForm").addEventListener("submit", function(e){
   e.preventDefault();
 
@@ -3388,14 +3402,37 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
     method:"POST",
     body: JSON.stringify(data)
   })
-  .then(r=>r.json())
-  .then(res=>{
-    if(res.status==="success"){
+  .then(res => res.json())
+  .then(res => {
+    if(res.status === "success"){
+
+      const name = data.studentName;
+
+      const message =
+        name +
+        " , आपकी समस्या का समाधान बहुत जल्द किया जाएगा। " +
+        "हमारी टीम बहुत जल्द आप से सम्पर्क करेगी। " +
+        "अपनी समस्या बताने के लिए धन्यवाद।";
+
+      // ✅ Text message
       document.getElementById("helpResult").innerHTML =
-        "✅ Form Submitted Successfully<br>Admission No: <b>"+res.admissionNo+"</b>";
+        "✅ " + message +
+        "<br>Admission No: <b>" + res.admissionNo + "</b>";
+
+      // ✅ Hindi Voice
+      if ("speechSynthesis" in window) {
+        speechSynthesis.cancel();
+        const voice = new SpeechSynthesisUtterance(message);
+        voice.lang = "hi-IN";
+        voice.rate = 0.9;
+        voice.pitch = 1;
+        speechSynthesis.speak(voice);
+      }
+
       this.reset();
-    }else{
-      document.getElementById("helpResult").innerHTML="❌ Error! Try again";
+    } else {
+      document.getElementById("helpResult").innerHTML =
+        "❌ कुछ समस्या आई, कृपया पुनः प्रयास करें।";
     }
   });
 });
