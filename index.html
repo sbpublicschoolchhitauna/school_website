@@ -3480,15 +3480,9 @@ align-items:center;justify-content:center">
       <input name="mobile" placeholder="Mobile Number" required
         style="width:100%;padding:8px;margin-bottom:6px">
 
-      <!-- 📅 Month auto-select (calendar wise) -->
-      <select id="payMonth" name="month" required
+      <!-- 📅 Payment Date (Auto) -->
+      <input id="payDate" name="month" readonly
         style="width:100%;padding:8px;margin-bottom:6px">
-        <option value="">Payment Of Month चुनें</option>
-        <option>January</option><option>February</option><option>March</option>
-        <option>April</option><option>May</option><option>June</option>
-        <option>July</option><option>August</option><option>September</option>
-        <option>October</option><option>November</option><option>December</option>
-      </select>
 
       <textarea name="address" placeholder="Address" required
         style="width:100%;padding:8px;margin-bottom:6px"></textarea>
@@ -3512,33 +3506,33 @@ align-items:center;justify-content:center">
     <p id="payMsg" style="font-weight:800;margin-top:8px"></p>
 
     <button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
+
   </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const PAY_API = "https://script.google.com/macros/s/AKfycbw8VZSuS3-ArLmkDGb9gmGNgu2xvSReHsswurIHH6tQ5yqNlTvSrV6wWNxwWwznqUPfJw/exec";
+  const PAY_API = "PASTE_YOUR_WEB_APP_URL_HERE";
   const QR_IMAGE_PATH = "images/upi_qr.jpeg";
 
   const openBtn = document.getElementById("openPayment");
   const box = document.getElementById("paymentBox");
   const qrImg = document.getElementById("upiQR");
-  const monthSelect = document.getElementById("payMonth");
+  const dateInput = document.getElementById("payDate");
   const form = document.getElementById("paymentForm");
 
   // Open popup
   openBtn.onclick = () => {
     box.style.display = "flex";
-
-    // QR image JS से
     qrImg.src = QR_IMAGE_PATH;
 
-    // 📅 Calendar के अनुसार current month auto-select
+    // 📅 Auto Date DD/MM/YYYY
     const now = new Date();
-    const currentMonth =
-      now.toLocaleString("en-US",{month:"long"});
-    monthSelect.value = currentMonth;
+    const dd = String(now.getDate()).padStart(2,'0');
+    const mm = String(now.getMonth()+1).padStart(2,'0');
+    const yyyy = now.getFullYear();
+    dateInput.value = dd + "/" + mm + "/" + yyyy;
   };
 
   window.closePay = function(){
@@ -3562,10 +3556,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const name = data.studentName;
 
-        // ⏰ Current time
-        const timeStr =
-          new Date().toLocaleTimeString("hi-IN",{hour:'2-digit',minute:'2-digit'});
-
         // 🎤 EXACT 15 WORDS SPEECH
         const speechText =
           name +
@@ -3573,7 +3563,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("payMsg").innerHTML =
           "✅ <b>"+speechText+"</b><br>Admission No: <b>"
-          + res.admissionNo + "</b><br>समय: "+timeStr;
+          + res.admissionNo + "</b><br>Date: "+res.date+" | Time: "+res.time;
 
         // Hindi Voice
         if ("speechSynthesis" in window) {
