@@ -3563,7 +3563,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- 🔔 LIVE IN-APP ALERT BAR (HEADER-LESS SHEET) -->
+<!-- 🔔 LIVE IN-APP ALERT BAR (ALL NOTIFICATIONS) -->
 <style>
 #liveAlertBar{
   position:fixed;
@@ -3601,12 +3601,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script>
 /* =====================================================
-   📢 GOOGLE SHEET (NO HEADER) LIVE ALERT + 🔊 HINDI VOICE
-   100% FINAL – INDEX.HTML ONLY
+   📢 GOOGLE SHEET – ALL NOTIFICATIONS QUEUE SYSTEM
+   🔊 HINDI VOICE + ⏱️ AUTO CLOSE
+   INDEX.HTML ONLY – FINAL VERSION
    ===================================================== */
 
 const SHEET_URL =
  "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
+
+const AUTO_CLOSE_TIME = 10000; // ⏱️ 10 सेकंड
+let alertQueue = [];
+let isShowing = false;
+let autoTimer = null;
 
 // 🔊 Hindi voice
 function speakHindi(text){
@@ -3619,23 +3625,45 @@ function speakHindi(text){
   speechSynthesis.speak(u);
 }
 
-// 🔔 Show alert bar
+// 🔔 Show alert
 function showLiveAlert(title, msg){
-  document.getElementById("liveAlertTitle").innerText = title || "S.B. PUBLIC SCHOOL";
-  document.getElementById("liveAlertMsg").innerText   = msg || "";
+  isShowing = true;
+
+  document.getElementById("liveAlertTitle").innerText =
+    title || "S.B. PUBLIC SCHOOL";
+  document.getElementById("liveAlertMsg").innerText = msg || "";
   document.getElementById("liveAlertBar").style.display = "block";
 
-  // 🔊 Voice बोलेगी (block नहीं होगी)
   if(msg) speakHindi(msg);
+
+  // ⏱️ auto close
+  autoTimer = setTimeout(() => {
+    closeLiveAlert();
+  }, AUTO_CLOSE_TIME);
 }
 
 // ❌ Close alert
 function closeLiveAlert(){
   document.getElementById("liveAlertBar").style.display = "none";
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  clearTimeout(autoTimer);
+  isShowing = false;
+
+  // 👉 next alert
+  setTimeout(showNextAlert, 1000);
 }
 
-// 🔁 Check Google Sheet
-async function checkSheet(){
+// 👉 Show next alert from queue
+function showNextAlert(){
+  if(isShowing) return;
+  if(alertQueue.length === 0) return;
+
+  const next = alertQueue.shift();
+  showLiveAlert(next.title, next.msg);
+}
+
+// 🔁 Load all alerts from sheet
+async function loadAlerts(){
   try{
     const res = await fetch(SHEET_URL);
     const raw = await res.text();
@@ -3643,31 +3671,35 @@ async function checkSheet(){
     const rows = json.table.rows;
     if(!rows || rows.length === 0) return;
 
-    // 👉 LAST ROW = latest alert
-    const last = rows[rows.length - 1].c;
+    rows.forEach(r=>{
+      const title = r.c[0]?.v || "S.B. PUBLIC SCHOOL";
+      const msg   = r.c[1]?.v || "";
+      if(!msg) return;
 
-    // 👉 NO HEADER → direct column index
-    const title = last[0] && last[0].v ? String(last[0].v) : "S.B. PUBLIC SCHOOL";
-    const msg   = last[1] && last[1].v ? String(last[1].v) : "";
+      const key = title + "||" + msg;
 
-    if(!msg) return;
+      // ❌ already shown
+      if(localStorage.getItem("SBPS_SHOWN_" + key)) return;
 
-    const key = title + "||" + msg;
-    if(localStorage.SBPS_LAST_INAPP === key) return;
+      alertQueue.push({title, msg});
+      localStorage.setItem("SBPS_SHOWN_" + key, "yes");
+    });
 
-    showLiveAlert(title, msg);
-    localStorage.SBPS_LAST_INAPP = key;
+    // ▶️ start queue
+    if(!isShowing){
+      showNextAlert();
+    }
 
   }catch(e){
-    console.log("Live alert error:", e);
+    console.log("Alert load error:", e);
   }
 }
 
-// ⏱️ हर 20 सेकंड check
-setInterval(checkSheet, 20000);
-
 // 🔄 First load
-setTimeout(checkSheet, 4000);
+setTimeout(loadAlerts, 3000);
+
+// 🔁 Check every 1 minute (new rows के लिए)
+setInterval(loadAlerts, 60000);
 </script>
 
 </body>
