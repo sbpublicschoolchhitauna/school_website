@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Push Admin Panel</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<h2>🔐 Admin Login</h2>
+<input id="pw" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<div id="dash" style="display:none">
+  <h3>📢 Schedule Notification</h3>
+  <select id="site">
+    <option value="ALL">All Websites</option>
+    <option value="sbpublicschoolchhitauna.github.io">S.B. Public School</option>
+  </select><br><br>
+
+  <input id="title" placeholder="Title"><br>
+  <textarea id="body" placeholder="Message"></textarea><br>
+  <input id="image" placeholder="Image URL (optional)"><br>
+  <input id="url" placeholder="Click URL"><br>
+  <input id="time" type="datetime-local"><br><br>
+
+  <button onclick="send()">⏰ Schedule Push</button>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

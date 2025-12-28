@@ -1,8 +1,10 @@
 self.addEventListener("push",e=>{
  const d=e.data.json();
  self.registration.showNotification(d.title,{
- body:d.body,image:d.image,icon:"/school_website/logo.jpg",
- data:{url:d.url}
+  body:d.body,
+  image:d.image,
+  icon:"/school_website/logo.jpg",
+  data:{url:d.url}
  });
 });
 self.addEventListener("notificationclick",e=>{
