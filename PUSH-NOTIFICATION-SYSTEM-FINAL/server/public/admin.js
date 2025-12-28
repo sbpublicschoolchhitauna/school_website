@@ -1,38 +1,72 @@
-
 async function login(){
- const r=await fetch("/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw.value})});
- if(!r.ok) return alert("Wrong password");
- loginBox.style.display="none";
- dash.style.display="block";
- subscribeAdmin();
- loadPayments();
+  const r = await fetch("/login",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({password:pw.value})
+  });
+
+  if(!r.ok){
+    alert("Wrong password");
+    return;
+  }
+
+  loginBox.style.display="none";
+  dash.style.display="block";
+
+  loadPayments();
+  loadNotices();
 }
 
-async function subscribeAdmin(){
- const reg=await navigator.serviceWorker.register("sw.js");
- const perm=await Notification.requestPermission();
- if(perm!=="granted") return;
- const sub=await reg.pushManager.subscribe({
-  userVisibleOnly:true,
-  applicationServerKey:"BMEMHCd0QHTYQW3vgbwf3MeVCMn7pYZsjRVQi3nn1iADpzP32DqyKSp8qlxugYN9vuo0BTcWMaEDMSR4dQJ8IO8
-"
- });
- await fetch("/admin-subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(sub)});
-}
-
+/* =====================
+   STUDENT / PAYMENT DATA
+===================== */
 async function loadPayments(){
- const r=await fetch("/payments");
- const d=await r.json();
- rows.innerHTML="";
- d.forEach(p=>{
-  rows.innerHTML+=`<tr>
-  <td>${p.time}</td><td>${p.name}</td><td>${p.class}</td>
-  <td>₹${p.amount}</td><td><a href="/receipt/${p.id}" target="_blank">PDF</a></td></tr>`;
- });
+  const r = await fetch("/payments");
+  const data = await r.json();
+
+  rows.innerHTML = "";
+
+  if(data.length === 0){
+    rows.innerHTML = `<tr><td colspan="5">No records found</td></tr>`;
+    return;
+  }
+
+  data.forEach(p=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p.time || ""}</td>
+      <td>${p.name || ""}</td>
+      <td>${p.class || ""}</td>
+      <td>₹${p.amount || ""}</td>
+      <td>
+        <a href="/receipt/${p.id}" target="_blank">PDF</a>
+      </td>
+    `;
+    rows.appendChild(tr);
+  });
 }
 
+/* =====================
+   GOOGLE SHEET NOTIFICATIONS
+===================== */
 async function loadNotices(){
- const r=await fetch("/notifications");
- const d=await r.json();
- notices.textContent=JSON.stringify(d.table.rows,null,2);
+  const r = await fetch("/notifications");
+  const data = await r.json();
+
+  notices.innerHTML = "";
+
+  if(!data.table || data.table.rows.length === 0){
+    notices.innerHTML = "❌ No notifications found";
+    return;
+  }
+
+  data.table.rows.forEach(row=>{
+    const msg = row.c[0]?.v;
+    if(msg){
+      const div = document.createElement("div");
+      div.className = "notice-item";
+      div.innerText = msg;
+      notices.appendChild(div);
+    }
+  });
 }
