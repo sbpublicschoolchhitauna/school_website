@@ -558,21 +558,6 @@ document.addEventListener("DOMContentLoaded", () => {
   </span>
 </button>
 
-<button id="notifyTestBtn" style="
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  z-index:999999;
-  padding:14px 18px;
-  font-size:16px;
-  background:#0b5fa8;
-  color:#fff;
-  border:none;
-  border-radius:10px;
-">
-🔔 Enable Alert
-</button>
-
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -3578,84 +3563,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<script>
-/* =====================================================
-   🔓 USER INTERACTION UNLOCK + GOOGLE SHEET ALERT
-   100% DEBUG MODE
-   ===================================================== */
-
-const SHEET_URL =
- "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
-
-let unlocked = false;
-
-// 🔔 fire notification + voice
-function fire(title, msg){
-  console.log("FIRE:", title, msg);
-
-  // notification
-  if ("Notification" in window && Notification.permission === "granted") {
-    new Notification(title, { body: msg });
-  }
-
-  // voice
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(msg);
-    u.lang = "hi-IN";
-    speechSynthesis.speak(u);
-  }
-}
-
-// 🔓 unlock by click
-document.getElementById("notifyTestBtn").onclick = async () => {
-
-  console.log("UNLOCK CLICKED");
-
-  if ("Notification" in window) {
-    await Notification.requestPermission();
-  }
-
-  fire("🔓 Alerts Enabled", "अब सभी अलर्ट अपने आप आएँगे");
-
-  unlocked = true;
-
-  // start checking
-  checkSheet();
-  setInterval(checkSheet, 30000);
-};
-
-// 🔁 check google sheet
-async function checkSheet(){
-  if (!unlocked) return;
-
-  try{
-    const res = await fetch(SHEET_URL);
-    const txt = await res.text();
-
-    console.log("RAW:", txt.slice(0,80));
-
-    const json = JSON.parse(txt.replace(/^[^{]*/, "").replace(/\);$/, ""));
-    const rows = json.table.rows;
-    if (!rows || !rows.length) return;
-
-    const last = rows[rows.length-1].c;
-    const title = last[0]?.v || "School Alert";
-    const msg   = last[1]?.v || "";
-
-    if (!msg) return;
-
-    const key = title + msg;
-    if (localStorage.lastKey === key) return;
-
-    fire(title, msg);
-    localStorage.lastKey = key;
-
-  }catch(e){
-    console.error("ERROR:", e);
-  }
-}
-</script>
 
 </body>
 </html>
