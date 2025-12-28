@@ -3563,7 +3563,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- 🔔 FINAL LIVE IN-APP ANNOUNCEMENT SYSTEM -->
+<!-- 🔔 FINAL IN-APP ANNOUNCEMENT (DIRECT SHEET DATA) -->
 <style>
 #liveAlertBar{
   position:fixed;
@@ -3603,46 +3603,43 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =========================================================
    📢 FINAL SCHOOL ANNOUNCEMENT SYSTEM
    🔊 Hindi Voice → Voice End = Auto Close
-   Google Sheet (NO HEADER) – index.html ONLY
+   Google Sheet (NO HEADER, DIRECT DATA)
+   index.html ONLY
    ========================================================= */
 
 const SHEET_URL =
  "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
 
-let alertQueue = [];
-let isShowing = false;
+let queue = [];
+let showing = false;
 
-// 🔊 Hindi voice (detect end)
-function speakHindi(text, onFinish){
+// 🔊 Hindi voice (end detect)
+function speakHindi(text, onEnd){
   if(!("speechSynthesis" in window) || !text){
-    if(onFinish) onFinish();
+    if(onEnd) onEnd();
     return;
   }
-
   speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "hi-IN";
-  utter.rate = 0.95;
-  utter.pitch = 1;
-
-  utter.onend = () => { if(onFinish) onFinish(); };
-  utter.onerror = () => { if(onFinish) onFinish(); };
-
-  speechSynthesis.speak(utter);
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "hi-IN";
+  u.rate = 0.95;
+  u.pitch = 1;
+  u.onend = onEnd;
+  u.onerror = onEnd;
+  speechSynthesis.speak(u);
 }
 
 // 🔔 Show alert
-function showLiveAlert(title, msg){
-  isShowing = true;
+function showAlert(title, msg){
+  showing = true;
 
   document.getElementById("liveAlertTitle").innerText =
     title || "S.B. PUBLIC SCHOOL";
   document.getElementById("liveAlertMsg").innerText = msg || "";
   document.getElementById("liveAlertBar").style.display = "block";
 
-  // 🔊 Speak full text → then close
   speakHindi(msg, () => {
-    setTimeout(closeLiveAlert, 500);
+    setTimeout(closeLiveAlert, 400);
   });
 }
 
@@ -3650,29 +3647,26 @@ function showLiveAlert(title, msg){
 function closeLiveAlert(){
   document.getElementById("liveAlertBar").style.display = "none";
   if ("speechSynthesis" in window) speechSynthesis.cancel();
-  isShowing = false;
-
-  // next alert
-  setTimeout(showNextAlert, 800);
+  showing = false;
+  setTimeout(showNext, 600);
 }
 
-// ▶️ Next from queue
-function showNextAlert(){
-  if(isShowing) return;
-  if(alertQueue.length === 0) return;
-
-  const next = alertQueue.shift();
-  showLiveAlert(next.title, next.msg);
+// ▶️ Next alert
+function showNext(){
+  if(showing) return;
+  if(queue.length === 0) return;
+  const n = queue.shift();
+  showAlert(n.title, n.msg);
 }
 
-// 🔁 Load all alerts from Google Sheet
+// 🔁 Load alerts from sheet
 async function loadAlerts(){
   try{
     const res = await fetch(SHEET_URL);
     const raw = await res.text();
     const json = JSON.parse(raw.replace(/^[^{]*/, "").replace(/\);$/, ""));
     const rows = json.table.rows;
-    if(!rows || rows.length === 0) return;
+    if(!rows) return;
 
     rows.forEach(r=>{
       const title = r.c[0]?.v || "S.B. PUBLIC SCHOOL";
@@ -3680,27 +3674,21 @@ async function loadAlerts(){
       if(!msg) return;
 
       const key = title + "||" + msg;
+      if(localStorage.getItem("SBPS_DONE_" + key)) return;
 
-      // already shown?
-      if(localStorage.getItem("SBPS_SHOWN_" + key)) return;
-
-      alertQueue.push({title, msg});
-      localStorage.setItem("SBPS_SHOWN_" + key, "yes");
+      queue.push({title, msg});
+      localStorage.setItem("SBPS_DONE_" + key, "yes");
     });
 
-    if(!isShowing){
-      showNextAlert();
-    }
+    if(!showing) showNext();
 
   }catch(e){
     console.log("Announcement error:", e);
   }
 }
 
-// 🔄 First run
+// 🔄 Start
 setTimeout(loadAlerts, 3000);
-
-// 🔁 Check new announcements every 1 minute
 setInterval(loadAlerts, 60000);
 </script>
 
