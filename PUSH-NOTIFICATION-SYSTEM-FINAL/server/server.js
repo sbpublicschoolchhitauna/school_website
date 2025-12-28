@@ -20,10 +20,8 @@ const FEE_SHEET_ID = "1YZqeTdfu_SyXp4gRiZS3l3pwHAizuGnR-U-dwbUIkNE";
 const NOTICE_SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
 
 /* ===== VAPID KEYS (PASTE) ===== */
-const VAPID_PUBLIC_KEY = "BMEMHCd0QHTYQW3vgbwf3MeVCMn7pYZsjRVQi3nn1iADpzP32DqyKSp8qlxugYN9vuo0BTcWMaEDMSR4dQJ8IO8
-";
-const VAPID_PRIVATE_KEY = "yl5vrsMLGO66RGK5B4wDR01vF9SMCcnz6TSRLIB_IjM
-";
+const VAPID_PUBLIC_KEY = "BMEMHCd0QHTYQW3vgbwf3MeVCMn7pYZsjRVQi3nn1iADpzP32DqyKSp8qlxugYN9vuo0BTcWMaEDMSR4dQJ8IO8";
+const VAPID_PRIVATE_KEY = "yl5vrsMLGO66RGK5B4wDR01vF9SMCcnz6TSRLIB_IjM";
 
 webpush.setVapidDetails(
   "mailto:admin@sbpublicschool.com",
