@@ -3563,7 +3563,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- 🔔 LIVE IN-APP ALERT BAR -->
+<!-- 🔔 LIVE IN-APP ALERT BAR (HEADER-LESS SHEET) -->
 <style>
 #liveAlertBar{
   position:fixed;
@@ -3572,94 +3572,101 @@ document.addEventListener("DOMContentLoaded", () => {
   right:0;
   background:linear-gradient(90deg,#ff9800,#ff5722);
   color:#fff;
-  padding:14px 40px 14px 16px;
+  padding:14px 44px 14px 16px;
   font-size:16px;
   font-weight:700;
   z-index:999999;
   display:none;
   box-shadow:0 6px 20px rgba(0,0,0,.35);
 }
-#liveAlertBar span{
-  display:block;
-}
+#liveAlertBar .title{font-size:17px;margin-bottom:4px}
+#liveAlertBar .msg{font-size:15px;font-weight:600}
 #liveAlertBar button{
   position:absolute;
-  right:10px;
-  top:10px;
+  right:12px;
+  top:8px;
   background:none;
   border:none;
   color:#fff;
-  font-size:22px;
+  font-size:26px;
   cursor:pointer;
 }
 </style>
 
 <div id="liveAlertBar">
-  <button onclick="closeAlert()">×</button>
-  <span id="alertTitle"></span>
-  <span id="alertMessage"></span>
+  <button onclick="closeLiveAlert()">×</button>
+  <div class="title" id="liveAlertTitle"></div>
+  <div class="msg" id="liveAlertMsg"></div>
 </div>
 
 <script>
-/* ============================================
-   📢 GOOGLE SHEET LIVE ALERT + 🔊 HINDI VOICE
-   (NO PERMISSION, NO BLOCK)
-   ============================================ */
+/* =====================================================
+   📢 GOOGLE SHEET (NO HEADER) LIVE ALERT + 🔊 HINDI VOICE
+   100% FINAL – INDEX.HTML ONLY
+   ===================================================== */
 
 const SHEET_URL =
  "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
 
+// 🔊 Hindi voice
 function speakHindi(text){
   if(!("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "hi-IN";
   u.rate = 0.95;
+  u.pitch = 1;
   speechSynthesis.speak(u);
 }
 
-function showAlert(title, msg){
-  document.getElementById("alertTitle").innerText = title;
-  document.getElementById("alertMessage").innerText = msg;
+// 🔔 Show alert bar
+function showLiveAlert(title, msg){
+  document.getElementById("liveAlertTitle").innerText = title || "S.B. PUBLIC SCHOOL";
+  document.getElementById("liveAlertMsg").innerText   = msg || "";
   document.getElementById("liveAlertBar").style.display = "block";
 
-  // 🔊 Voice (यह block नहीं होती)
-  speakHindi(msg);
+  // 🔊 Voice बोलेगी (block नहीं होगी)
+  if(msg) speakHindi(msg);
 }
 
-function closeAlert(){
+// ❌ Close alert
+function closeLiveAlert(){
   document.getElementById("liveAlertBar").style.display = "none";
 }
 
+// 🔁 Check Google Sheet
 async function checkSheet(){
   try{
     const res = await fetch(SHEET_URL);
-    const txt = await res.text();
-    const json = JSON.parse(txt.replace(/^[^{]*/, "").replace(/\);$/, ""));
+    const raw = await res.text();
+    const json = JSON.parse(raw.replace(/^[^{]*/, "").replace(/\);$/, ""));
     const rows = json.table.rows;
-    if(!rows || !rows.length) return;
+    if(!rows || rows.length === 0) return;
 
-    const last = rows[rows.length-1].c;
-    const title = last[0]?.v || "School Alert";
-    const msg   = last[1]?.v || "";
+    // 👉 LAST ROW = latest alert
+    const last = rows[rows.length - 1].c;
+
+    // 👉 NO HEADER → direct column index
+    const title = last[0] && last[0].v ? String(last[0].v) : "S.B. PUBLIC SCHOOL";
+    const msg   = last[1] && last[1].v ? String(last[1].v) : "";
 
     if(!msg) return;
 
-    const key = title + msg;
-    if(localStorage.lastInAppAlert === key) return;
+    const key = title + "||" + msg;
+    if(localStorage.SBPS_LAST_INAPP === key) return;
 
-    showAlert(title, msg);
-    localStorage.lastInAppAlert = key;
+    showLiveAlert(title, msg);
+    localStorage.SBPS_LAST_INAPP = key;
 
   }catch(e){
-    console.log("Alert error", e);
+    console.log("Live alert error:", e);
   }
 }
 
 // ⏱️ हर 20 सेकंड check
 setInterval(checkSheet, 20000);
 
-// 🔄 First check
+// 🔄 First load
 setTimeout(checkSheet, 4000);
 </script>
 
