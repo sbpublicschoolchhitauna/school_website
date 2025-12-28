@@ -129,7 +129,7 @@ app.get("/receipt/:id",(req,res)=>{
 app.listen(PORT,()=>console.log("SBPS ALL-IN-ONE SYSTEM LIVE",PORT));
 
 /* ===== NOTIFICATIONS (SHEET) FOR ADMIN ===== */
-app.get("/api/notifications", async (req,res)=>{
+app.get("/api/Notification", async (req,res)=>{
   const url = `https://docs.google.com/spreadsheets/d/${NOTICE_SHEET_ID}/gviz/tq?tqx=out:json`;
   const r = await fetch(url);
   const t = await r.text();
