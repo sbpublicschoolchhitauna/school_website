@@ -51,21 +51,26 @@ async function loadPayments(){
 ===================== */
 async function loadNotices(){
   const r = await fetch("/api/notifications");
-  const data = await r.json();
+  const rows = await r.json();
 
   notices.innerHTML = "";
 
-  if(!data.table || data.table.rows.length === 0){
+  if(!Array.isArray(rows) || rows.length === 0){
     notices.innerHTML = "❌ No notifications found";
     return;
   }
 
-  data.table.rows.forEach(row=>{
-    const msg = row.c[0]?.v;
-    if(msg){
+  rows.forEach(row=>{
+    const colA = row.c[0]?.v || "";   // Column A
+    const colB = row.c[1]?.v || "";   // Column B (MAIN MESSAGE)
+
+    if(colA || colB){
       const div = document.createElement("div");
       div.className = "notice-item";
-      div.innerText = msg;
+      div.innerHTML = `
+        <strong>${colA}</strong><br>
+        ${colB}
+      `;
       notices.appendChild(div);
     }
   });
