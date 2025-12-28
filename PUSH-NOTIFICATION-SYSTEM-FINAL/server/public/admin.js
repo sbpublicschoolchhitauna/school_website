@@ -13,65 +13,57 @@ async function login(){
   loginBox.style.display="none";
   dash.style.display="block";
 
-  loadPayments();
+  subscribeAdmin();
+  loadFees();
   loadNotices();
 }
 
-/* =====================
-   STUDENT / PAYMENT DATA
-===================== */
-async function loadPayments(){
-  const r = await fetch("/payments");
-  const data = await r.json();
+/* ===== PUSH SUBSCRIBE ===== */
+async function subscribeAdmin(){
+  const reg = await navigator.serviceWorker.register("/sw.js");
+  const perm = await Notification.requestPermission();
+  if(perm!=="granted") return;
 
-  rows.innerHTML = "";
+  const sub = await reg.pushManager.subscribe({
+    userVisibleOnly:true,
+    applicationServerKey:
+      "BMEMHCd0QHTYQW3vgbwf3MeVCMn7pYZsjRVQi3nn1iADpzP32DqyKSp8qlxugYN9vuo0BTcWMaEDMSR4dQJ8IO8"
+  });
 
-  if(data.length === 0){
-    rows.innerHTML = `<tr><td colspan="5">No records found</td></tr>`;
-    return;
-  }
-
-  data.forEach(p=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${p.time || ""}</td>
-      <td>${p.name || ""}</td>
-      <td>${p.class || ""}</td>
-      <td>₹${p.amount || ""}</td>
-      <td>
-        <a href="/receipt/${p.id}" target="_blank">PDF</a>
-      </td>
-    `;
-    rows.appendChild(tr);
+  await fetch("/admin-subscribe",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify(sub)
   });
 }
 
-/* =====================
-   GOOGLE SHEET NOTIFICATIONS
-===================== */
+/* ===== FEES ===== */
+async function loadFees(){
+  const r = await fetch("/api/fees");
+  const rows = await r.json();
+  feeRows.innerHTML="";
+
+  rows.forEach(row=>{
+    feeRows.innerHTML+=`
+      <tr>
+        <td>${row.c[1]?.v||""}</td>
+        <td>${row.c[2]?.v||""}</td>
+        <td>${row.c[3]?.v||""}</td>
+      </tr>`;
+  });
+}
+
+/* ===== NOTIFICATIONS ===== */
 async function loadNotices(){
   const r = await fetch("/api/notifications");
   const rows = await r.json();
-
-  notices.innerHTML = "";
-
-  if(!Array.isArray(rows) || rows.length === 0){
-    notices.innerHTML = "❌ No notifications found";
-    return;
-  }
+  notices.innerHTML="";
 
   rows.forEach(row=>{
-    const colA = row.c[0]?.v || "";   // Column A
-    const colB = row.c[1]?.v || "";   // Column B (MAIN MESSAGE)
-
-    if(colA || colB){
-      const div = document.createElement("div");
-      div.className = "notice-item";
-      div.innerHTML = `
-        <strong>${colA}</strong><br>
-        ${colB}
-      `;
-      notices.appendChild(div);
-    }
+    notices.innerHTML+=`
+      <div class="notice-item">
+        <strong>${row.c[1]?.v||""}</strong><br>
+        <small>${row.c[0]?.v||""}</small>
+      </div>`;
   });
 }
