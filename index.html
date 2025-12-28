@@ -3563,6 +3563,68 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+/* ===============================
+   🔔 INDEX-ONLY LIVE NOTIFICATION
+   =============================== */
+
+const NOTIFICATION_SOURCE = "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
+
+let lastNotification = localStorage.getItem("lastNotificationText") || "";
+
+// 🔐 Ask permission
+if ("Notification" in window && Notification.permission !== "granted") {
+  Notification.requestPermission();
+}
+
+// 🔄 Fetch notification
+async function checkNewNotification() {
+  try {
+    const res = await fetch(NOTIFICATION_SOURCE);
+    const txt = await res.text();
+    const json = JSON.parse(txt.replace(/^[^{]*/, "").replace(/\);$/, ""));
+    const rows = json.table.rows;
+
+    if (!rows || !rows.length) return;
+
+    const latest =
+      rows[rows.length - 1].c
+        .map(c => c ? c.v : "")
+        .join(" - ")
+        .trim();
+
+    if (latest && latest !== lastNotification) {
+      lastNotification = latest;
+      localStorage.setItem("lastNotificationText", latest);
+
+      showBrowserNotification(latest);
+    }
+
+  } catch (e) {
+    console.log("Notification check error", e);
+  }
+}
+
+// 🔔 Show system notification
+function showBrowserNotification(text) {
+  if (Notification.permission === "granted") {
+    new Notification("📢 S.B. PUBLIC SCHOOL", {
+      body: text,
+      icon: "https://sbpublicschoolchhitauna.github.io/school_website/logo.png"
+    });
+  }
+
+  // 🔊 Optional sound
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+  audio.play().catch(()=>{});
+}
+
+// ⏱️ Auto check every 30 sec
+setInterval(checkNewNotification, 30000);
+
+// 🔁 First check
+checkNewNotification();
+</script>
 
 </body>
 </html>
