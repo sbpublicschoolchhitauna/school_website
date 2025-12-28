@@ -3,3 +3,4 @@ body{font-family:Arial;padding:20px;background:#f4f7fb}
 table{width:100%;border-collapse:collapse}
 th,td{border:1px solid #ddd;padding:8px}
 th{background:#0b5fa8;color:#fff}
+button{padding:8px;margin:5px}
