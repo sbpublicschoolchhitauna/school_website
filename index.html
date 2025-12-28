@@ -3564,66 +3564,75 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
-/* ===============================
-   🔔 INDEX-ONLY LIVE NOTIFICATION
-   =============================== */
+/* =====================================================
+   🔔 GOOGLE SHEET (Title + Message) + 🔊 HINDI VOICE
+   INDEX.HTML ONLY – FINAL SIMPLE VERSION
+   ===================================================== */
 
-const NOTIFICATION_SOURCE = "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
+const SHEET_URL =
+ "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
 
-let lastNotification = localStorage.getItem("lastNotificationText") || "";
-
-// 🔐 Ask permission
+// 🔐 Ask notification permission
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
 
-// 🔄 Fetch notification
-async function checkNewNotification() {
-  try {
-    const res = await fetch(NOTIFICATION_SOURCE);
-    const txt = await res.text();
-    const json = JSON.parse(txt.replace(/^[^{]*/, "").replace(/\);$/, ""));
-    const rows = json.table.rows;
+// 🔔 + 🔊 Show alert
+function showAlert(title, message) {
 
-    if (!rows || !rows.length) return;
-
-    const latest =
-      rows[rows.length - 1].c
-        .map(c => c ? c.v : "")
-        .join(" - ")
-        .trim();
-
-    if (latest && latest !== lastNotification) {
-      lastNotification = latest;
-      localStorage.setItem("lastNotificationText", latest);
-
-      showBrowserNotification(latest);
-    }
-
-  } catch (e) {
-    console.log("Notification check error", e);
-  }
-}
-
-// 🔔 Show system notification
-function showBrowserNotification(text) {
+  // 🔔 System notification
   if (Notification.permission === "granted") {
-    new Notification("📢 S.B. PUBLIC SCHOOL", {
-      body: text,
+    new Notification(title || "S.B. PUBLIC SCHOOL", {
+      body: message,
       icon: "https://sbpublicschoolchhitauna.github.io/school_website/logo.png"
     });
   }
 
-  // 🔊 Optional sound
-  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-  audio.play().catch(()=>{});
+  // 🔊 Hindi Voice (Message बोलेगा)
+  if ("speechSynthesis" in window && message) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(message);
+    u.lang = "hi-IN";
+    u.rate = 0.95;
+    u.pitch = 1;
+    speechSynthesis.speak(u);
+  }
 }
 
-// ⏱️ Auto check every 30 sec
-setInterval(checkNewNotification, 30000);
+// 🔁 Check sheet for new notification
+async function checkNotificationSheet() {
+  try {
+    const res = await fetch(SHEET_URL);
+    const raw = await res.text();
+    const json = JSON.parse(raw.replace(/^[^{]*/, "").replace(/\);$/, ""));
+    const rows = json.table.rows;
+    if (!rows || !rows.length) return;
 
-// 🔁 First check
-checkNewNotification();
+    // 👉 Last row = latest notification
+    const lastRow = rows[rows.length - 1];
+    const title = lastRow.c[0]?.v || "S.B. PUBLIC SCHOOL";
+    const message = lastRow.c[1]?.v || "";
+
+    if (!message) return;
+
+    const key = title + "_" + message;
+    if (localStorage.getItem("sbps_last_notify") === key) return;
+
+    showAlert(title, message);
+
+    // ✅ Save so it doesn't repeat
+    localStorage.setItem("sbps_last_notify", key);
+
+  } catch (e) {
+    console.log("Notification error:", e);
+  }
+}
+
+// ⏱️ हर 30 सेकंड check
+setInterval(checkNotificationSheet, 30000);
+
+// 🔄 First check
+setTimeout(checkNotificationSheet, 5000);
 </script>
 
 </body>
