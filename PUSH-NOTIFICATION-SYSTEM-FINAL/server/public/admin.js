@@ -14,7 +14,8 @@ async function subscribeAdmin(){
  if(perm!=="granted") return;
  const sub=await reg.pushManager.subscribe({
   userVisibleOnly:true,
-  applicationServerKey:"PASTE_PUBLIC_KEY"
+  applicationServerKey:"BMEMHCd0QHTYQW3vgbwf3MeVCMn7pYZsjRVQi3nn1iADpzP32DqyKSp8qlxugYN9vuo0BTcWMaEDMSR4dQJ8IO8
+"
  });
  await fetch("/admin-subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(sub)});
 }
