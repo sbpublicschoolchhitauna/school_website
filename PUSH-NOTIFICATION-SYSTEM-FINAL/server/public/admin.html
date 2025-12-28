@@ -1,18 +1,27 @@
 
 <!DOCTYPE html>
-<html>
-<head><title>Admin Dashboard</title></head>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>SBPS Admin Dashboard</title>
+<link rel="stylesheet" href="admin.css">
+</head>
 <body>
+
 <h2>🔐 Admin Login</h2>
-<input id="pw" type="password">
-<button onclick="login()">Login</button>
+<div id="loginBox">
+  <input id="pw" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
 
 <div id="dash" style="display:none">
-<h3>💳 Payments</h3>
-<table border="1" width="100%">
-<thead><tr><th>Time</th><th>Name</th><th>Class</th><th>Amount</th><th>PDF</th></tr></thead>
-<tbody id="rows"></tbody>
-</table>
+  <h3>💳 Online Payments</h3>
+  <table id="payTable">
+    <thead>
+      <tr><th>Date</th><th>Name</th><th>Class</th><th>Amount</th><th>Receipt</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </div>
 
 <script src="admin.js"></script>
