@@ -3563,6 +3563,105 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<!-- 🔔 LIVE IN-APP ALERT BAR -->
+<style>
+#liveAlertBar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:linear-gradient(90deg,#ff9800,#ff5722);
+  color:#fff;
+  padding:14px 40px 14px 16px;
+  font-size:16px;
+  font-weight:700;
+  z-index:999999;
+  display:none;
+  box-shadow:0 6px 20px rgba(0,0,0,.35);
+}
+#liveAlertBar span{
+  display:block;
+}
+#liveAlertBar button{
+  position:absolute;
+  right:10px;
+  top:10px;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+}
+</style>
+
+<div id="liveAlertBar">
+  <button onclick="closeAlert()">×</button>
+  <span id="alertTitle"></span>
+  <span id="alertMessage"></span>
+</div>
+
+<script>
+/* ============================================
+   📢 GOOGLE SHEET LIVE ALERT + 🔊 HINDI VOICE
+   (NO PERMISSION, NO BLOCK)
+   ============================================ */
+
+const SHEET_URL =
+ "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
+
+function speakHindi(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "hi-IN";
+  u.rate = 0.95;
+  speechSynthesis.speak(u);
+}
+
+function showAlert(title, msg){
+  document.getElementById("alertTitle").innerText = title;
+  document.getElementById("alertMessage").innerText = msg;
+  document.getElementById("liveAlertBar").style.display = "block";
+
+  // 🔊 Voice (यह block नहीं होती)
+  speakHindi(msg);
+}
+
+function closeAlert(){
+  document.getElementById("liveAlertBar").style.display = "none";
+}
+
+async function checkSheet(){
+  try{
+    const res = await fetch(SHEET_URL);
+    const txt = await res.text();
+    const json = JSON.parse(txt.replace(/^[^{]*/, "").replace(/\);$/, ""));
+    const rows = json.table.rows;
+    if(!rows || !rows.length) return;
+
+    const last = rows[rows.length-1].c;
+    const title = last[0]?.v || "School Alert";
+    const msg   = last[1]?.v || "";
+
+    if(!msg) return;
+
+    const key = title + msg;
+    if(localStorage.lastInAppAlert === key) return;
+
+    showAlert(title, msg);
+    localStorage.lastInAppAlert = key;
+
+  }catch(e){
+    console.log("Alert error", e);
+  }
+}
+
+// ⏱️ हर 20 सेकंड check
+setInterval(checkSheet, 20000);
+
+// 🔄 First check
+setTimeout(checkSheet, 4000);
+</script>
 
 </body>
 </html>
