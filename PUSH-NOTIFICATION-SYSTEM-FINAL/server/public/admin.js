@@ -50,7 +50,7 @@ async function loadPayments(){
    GOOGLE SHEET NOTIFICATIONS
 ===================== */
 async function loadNotices(){
-  const r = await fetch("/notifications");
+  const r = await fetch("/api/notifications");
   const data = await r.json();
 
   notices.innerHTML = "";
