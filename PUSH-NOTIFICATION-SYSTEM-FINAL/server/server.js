@@ -70,7 +70,7 @@ app.get("/fee-data", async (req,res)=>{
 });
 
 /* ===== NOTIFICATIONS (SHEET) ===== */
-app.get("/notifications", async (req,res)=>{
+app.get("/api/Notification", async (req,res)=>{
  const url=`https://docs.google.com/spreadsheets/d/${NOTICE_SHEET_ID}/gviz/tq?tqx=out:json`;
  const r=await fetch(url);
  const t=await r.text();
