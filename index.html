@@ -3563,7 +3563,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- 🔔 LIVE IN-APP ALERT BAR (ALL NOTIFICATIONS) -->
+<!-- 🔔 FINAL LIVE IN-APP ANNOUNCEMENT SYSTEM -->
 <style>
 #liveAlertBar{
   position:fixed;
@@ -3600,29 +3600,35 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <script>
-/* =====================================================
-   📢 GOOGLE SHEET – ALL NOTIFICATIONS QUEUE SYSTEM
-   🔊 HINDI VOICE + ⏱️ AUTO CLOSE
-   INDEX.HTML ONLY – FINAL VERSION
-   ===================================================== */
+/* =========================================================
+   📢 FINAL SCHOOL ANNOUNCEMENT SYSTEM
+   🔊 Hindi Voice → Voice End = Auto Close
+   Google Sheet (NO HEADER) – index.html ONLY
+   ========================================================= */
 
 const SHEET_URL =
  "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
 
-const AUTO_CLOSE_TIME = 10000; // ⏱️ 10 सेकंड
 let alertQueue = [];
 let isShowing = false;
-let autoTimer = null;
 
-// 🔊 Hindi voice
-function speakHindi(text){
-  if(!("speechSynthesis" in window)) return;
+// 🔊 Hindi voice (detect end)
+function speakHindi(text, onFinish){
+  if(!("speechSynthesis" in window) || !text){
+    if(onFinish) onFinish();
+    return;
+  }
+
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "hi-IN";
-  u.rate = 0.95;
-  u.pitch = 1;
-  speechSynthesis.speak(u);
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "hi-IN";
+  utter.rate = 0.95;
+  utter.pitch = 1;
+
+  utter.onend = () => { if(onFinish) onFinish(); };
+  utter.onerror = () => { if(onFinish) onFinish(); };
+
+  speechSynthesis.speak(utter);
 }
 
 // 🔔 Show alert
@@ -3634,26 +3640,23 @@ function showLiveAlert(title, msg){
   document.getElementById("liveAlertMsg").innerText = msg || "";
   document.getElementById("liveAlertBar").style.display = "block";
 
-  if(msg) speakHindi(msg);
-
-  // ⏱️ auto close
-  autoTimer = setTimeout(() => {
-    closeLiveAlert();
-  }, AUTO_CLOSE_TIME);
+  // 🔊 Speak full text → then close
+  speakHindi(msg, () => {
+    setTimeout(closeLiveAlert, 500);
+  });
 }
 
 // ❌ Close alert
 function closeLiveAlert(){
   document.getElementById("liveAlertBar").style.display = "none";
   if ("speechSynthesis" in window) speechSynthesis.cancel();
-  clearTimeout(autoTimer);
   isShowing = false;
 
-  // 👉 next alert
-  setTimeout(showNextAlert, 1000);
+  // next alert
+  setTimeout(showNextAlert, 800);
 }
 
-// 👉 Show next alert from queue
+// ▶️ Next from queue
 function showNextAlert(){
   if(isShowing) return;
   if(alertQueue.length === 0) return;
@@ -3662,7 +3665,7 @@ function showNextAlert(){
   showLiveAlert(next.title, next.msg);
 }
 
-// 🔁 Load all alerts from sheet
+// 🔁 Load all alerts from Google Sheet
 async function loadAlerts(){
   try{
     const res = await fetch(SHEET_URL);
@@ -3678,27 +3681,26 @@ async function loadAlerts(){
 
       const key = title + "||" + msg;
 
-      // ❌ already shown
+      // already shown?
       if(localStorage.getItem("SBPS_SHOWN_" + key)) return;
 
       alertQueue.push({title, msg});
       localStorage.setItem("SBPS_SHOWN_" + key, "yes");
     });
 
-    // ▶️ start queue
     if(!isShowing){
       showNextAlert();
     }
 
   }catch(e){
-    console.log("Alert load error:", e);
+    console.log("Announcement error:", e);
   }
 }
 
-// 🔄 First load
+// 🔄 First run
 setTimeout(loadAlerts, 3000);
 
-// 🔁 Check every 1 minute (new rows के लिए)
+// 🔁 Check new announcements every 1 minute
 setInterval(loadAlerts, 60000);
 </script>
 
