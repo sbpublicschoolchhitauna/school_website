@@ -558,6 +558,21 @@ document.addEventListener("DOMContentLoaded", () => {
   </span>
 </button>
 
+<button id="notifyTestBtn" style="
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:999999;
+  padding:14px 18px;
+  font-size:16px;
+  background:#0b5fa8;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+">
+🔔 Enable Alert
+</button>
+
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -3565,85 +3580,81 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script>
 /* =====================================================
-   🔔 GOOGLE SHEET (Title + Message) + 🔊 HINDI VOICE
-   FINAL DEBUGGED VERSION – 100% SAFE
+   🔓 USER INTERACTION UNLOCK + GOOGLE SHEET ALERT
+   100% DEBUG MODE
    ===================================================== */
 
 const SHEET_URL =
  "https://docs.google.com/spreadsheets/d/1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8/gviz/tq?sheet=Notification&tqx=out:json";
 
-// 🔐 Ask permission once
-document.addEventListener("DOMContentLoaded", () => {
-  if ("Notification" in window && Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
-});
+let unlocked = false;
 
-// 🔔 + 🔊 Alert
-function fireAlert(title, message) {
+// 🔔 fire notification + voice
+function fire(title, msg){
+  console.log("FIRE:", title, msg);
 
-  console.log("ALERT FIRED:", title, message);
-
-  // 🔔 System Notification
+  // notification
   if ("Notification" in window && Notification.permission === "granted") {
-    new Notification(title || "S.B. PUBLIC SCHOOL", {
-      body: message,
-      icon: "https://sbpublicschoolchhitauna.github.io/school_website/logo.png"
-    });
+    new Notification(title, { body: msg });
   }
 
-  // 🔊 Hindi Voice
-  if ("speechSynthesis" in window && message) {
+  // voice
+  if ("speechSynthesis" in window) {
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(message);
+    const u = new SpeechSynthesisUtterance(msg);
     u.lang = "hi-IN";
-    u.rate = 0.95;
-    u.pitch = 1;
     speechSynthesis.speak(u);
   }
 }
 
-// 🔁 Check Sheet
-async function checkSheet() {
-  try {
+// 🔓 unlock by click
+document.getElementById("notifyTestBtn").onclick = async () => {
+
+  console.log("UNLOCK CLICKED");
+
+  if ("Notification" in window) {
+    await Notification.requestPermission();
+  }
+
+  fire("🔓 Alerts Enabled", "अब सभी अलर्ट अपने आप आएँगे");
+
+  unlocked = true;
+
+  // start checking
+  checkSheet();
+  setInterval(checkSheet, 30000);
+};
+
+// 🔁 check google sheet
+async function checkSheet(){
+  if (!unlocked) return;
+
+  try{
     const res = await fetch(SHEET_URL);
-    const text = await res.text();
+    const txt = await res.text();
 
-    // 🔎 Debug
-    console.log("RAW SHEET RESPONSE:", text.slice(0, 100));
+    console.log("RAW:", txt.slice(0,80));
 
-    const json = JSON.parse(
-      text.replace(/^[^{]*/, "").replace(/\);$/, "")
-    );
-
+    const json = JSON.parse(txt.replace(/^[^{]*/, "").replace(/\);$/, ""));
     const rows = json.table.rows;
-    if (!rows || rows.length === 0) return;
+    if (!rows || !rows.length) return;
 
-    const last = rows[rows.length - 1].c;
+    const last = rows[rows.length-1].c;
+    const title = last[0]?.v || "School Alert";
+    const msg   = last[1]?.v || "";
 
-    const title = last[0] && last[0].v ? String(last[0].v) : "S.B. PUBLIC SCHOOL";
-    const message = last[1] && last[1].v ? String(last[1].v) : "";
+    if (!msg) return;
 
-    if (!message) return;
+    const key = title + msg;
+    if (localStorage.lastKey === key) return;
 
-    const key = title + "::" + message;
+    fire(title, msg);
+    localStorage.lastKey = key;
 
-    if (localStorage.getItem("SBPS_LAST_ALERT") === key) return;
-
-    fireAlert(title, message);
-
-    localStorage.setItem("SBPS_LAST_ALERT", key);
-
-  } catch (e) {
-    console.error("NOTIFICATION ERROR:", e);
+  }catch(e){
+    console.error("ERROR:", e);
   }
 }
-
-// ⏱️ हर 20 सेकंड check
-setInterval(checkSheet, 20000);
-
-// 🔄 First check
-setTimeout(checkSheet, 4000);
 </script>
 
 </body>
