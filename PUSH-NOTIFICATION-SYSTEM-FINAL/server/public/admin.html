@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -10,20 +9,23 @@
 
 <h2>🔐 Admin Login</h2>
 <div id="loginBox">
-<input id="pw" type="password">
-<button onclick="login()">Login</button>
+  <input id="pw" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
 </div>
 
 <div id="dash" style="display:none">
-<h3>💳 Online Payments</h3>
-<table>
-<thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Amount</th><th>PDF</th></tr></thead>
-<tbody id="rows"></tbody>
-</table>
 
-<h3>📢 Notifications (Sheet)</h3>
-<button onclick="loadNotices()">Load Notifications</button>
-<pre id="notices"></pre>
+  <h3>💳 Student Records</h3>
+  <table>
+    <thead>
+      <tr><th>Date</th><th>Name</th><th>Class</th><th>Amount</th><th>Receipt</th></tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <h3>📢 Notifications (Google Sheet)</h3>
+  <div id="notices"></div>
+
 </div>
 
 <script src="admin.js"></script>
