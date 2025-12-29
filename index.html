@@ -3692,52 +3692,51 @@ setTimeout(loadAlerts, 3000);
 setInterval(loadAlerts, 60000);
 </script>
 
-<!-- ================= FULL ADMIN PANEL ================= -->
-<div id="adminApp" style="display:none;position:fixed;inset:0;
+<!-- ================= ADMIN PANEL ================= -->
+<div id="adminPanelWrap" style="display:none;position:fixed;inset:0;
 background:#f4f7fb;z-index:999999;font-family:Arial">
 
   <!-- HEADER -->
   <div style="height:56px;background:#0b5fa8;color:#fff;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 16px">
-    <strong>🛠️ School Admin Panel</strong>
-    <div>
-      <button onclick="setLang('en')">EN</button>
-      <button onclick="setLang('hi')">हिंदी</button>
-      <button onclick="logoutAdmin()" style="margin-left:10px">Logout</button>
-    </div>
+    <strong>🛠️ Admin Panel | एडमिन पैनल</strong>
+    <button onclick="closeAdmin()" style="background:#fff;border:none;padding:6px 12px;border-radius:6px">
+      Logout
+    </button>
   </div>
 
   <div style="display:flex;height:calc(100% - 56px)">
 
     <!-- SIDEBAR -->
-    <div style="width:240px;background:#fff;border-right:1px solid #ddd">
-      <button class="adminBtn" onclick="openPage('dashboard')">📊 Dashboard</button>
-      <button class="adminBtn" onclick="openPage('payments')">💳 Online Payments</button>
-      <button class="adminBtn" onclick="openPage('fee')">💰 Fee Portal</button>
-      <button class="adminBtn" onclick="openPage('marks')">📄 Marksheet</button>
-      <button class="adminBtn" onclick="openPage('help')">📞 Help Line</button>
-      <button class="adminBtn" onclick="openPage('notify')">🔔 Notifications</button>
-      <button class="adminBtn" onclick="openPage('admit')">🖨️ Admit / Receipt</button>
+    <div style="width:230px;background:#fff;border-right:1px solid #ddd">
+      <button class="admBtn" onclick="openAdminPage('dashboard')">📊 Dashboard</button>
+      <button class="admBtn" onclick="openAdminPage('payments')">💳 Online Payments</button>
+      <button class="admBtn" onclick="openAdminPage('fee')">💰 Fee Portal</button>
+      <button class="admBtn" onclick="openAdminPage('marks')">📄 Marksheet</button>
+      <button class="admBtn" onclick="openAdminPage('help')">📞 Help Line</button>
+      <button class="admBtn" onclick="openAdminPage('notify')">🔔 Notifications</button>
+      <button class="admBtn" onclick="openAdminPage('admit')">🖨️ Admit / Receipt</button>
     </div>
 
     <!-- CONTENT -->
     <div id="adminContent" style="flex:1;padding:16px;overflow:auto">
       <h2>Welcome Admin</h2>
-      <p>Select a module from left menu</p>
+      <p>Left menu से module चुनें</p>
     </div>
 
   </div>
 </div>
 
 <style>
-.adminBtn{
-  width:100%;padding:12px;border:none;
-  background:#fff;text-align:left;
-  font-weight:700;cursor:pointer;
-  border-bottom:1px solid #eee
+.admBtn{
+  width:100%;padding:12px;
+  border:none;background:#fff;
+  border-bottom:1px solid #eee;
+  font-weight:700;text-align:left;
+  cursor:pointer
 }
-.adminBtn:hover{background:#f0f6ff}
+.admBtn:hover{background:#f0f6ff}
 </style>
 <!-- ================= END ADMIN PANEL ================= -->
 
@@ -3745,57 +3744,41 @@ background:#f4f7fb;z-index:999999;font-family:Arial">
 document.addEventListener("keydown",e=>{
   if(e.ctrlKey && e.altKey && e.key.toLowerCase()==="a"){
     e.preventDefault();
-    document.getElementById("adminApp").style.display="block";
+    document.getElementById("adminPanelWrap").style.display="block";
   }
 });
-
-function logoutAdmin(){
-  document.getElementById("adminApp").style.display="none";
+function closeAdmin(){
+  document.getElementById("adminPanelWrap").style.display="none";
 }
 </script>
 
 <script>
-function openPage(page){
-  const box=document.getElementById("adminContent");
+function openAdminPage(page){
+  const box = document.getElementById("adminContent");
 
   if(page==="dashboard"){
-    box.innerHTML=`<h2>📊 Dashboard</h2>
-    <ul>
-      <li>Total Students</li>
-      <li>Total Payments</li>
-      <li>Pending Fees</li>
-    </ul>`;
+    box.innerHTML = `
+      <h2>📊 Dashboard</h2>
+      <ul>
+        <li>Fee + Marksheet + Notifications का summary</li>
+      </ul>`;
   }
 
   if(page==="payments"){
-    box.innerHTML=`<h2>💳 Online Payments</h2>
-    <div id="payTable">Loading…</div>`;
-    loadPayments();
+    box.innerHTML = `<h2>💳 Online Payments</h2><div id="payData">Loading...</div>`;
+    loadSheetGviz("Fee Student Details").then(d=>{
+      document.getElementById("payData").innerText =
+        "Rows found: " + d.table.rows.length;
+    });
   }
 
   if(page==="notify"){
-    box.innerHTML=`<h2>🔔 Notifications</h2>
-    <textarea id="nEn" placeholder="English"></textarea>
-    <textarea id="nHi" placeholder="हिंदी"></textarea>
-    <button onclick="saveNotif()">Save</button>`;
+    box.innerHTML = `
+      <h2>🔔 Add Notification</h2>
+      <textarea placeholder="English"></textarea>
+      <textarea placeholder="हिंदी"></textarea>
+      <p>(Next step में Sheet में save होगा)</p>`;
   }
-}
-</script>
-
-<script>
-const SHEET="YOUR_SHEET_ID";
-
-async function loadPayments(){
- const url=`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?sheet=Payments&tqx=out:json`;
- const r=await fetch(url);
- const t=await r.text();
- const j=JSON.parse(t.substr(47).slice(0,-2));
- let html="<table border=1>";
- j.table.rows.forEach(r=>{
-   html+="<tr>"+r.c.map(c=>`<td>${c?c.v:""}</td>`).join("")+"</tr>";
- });
- html+="</table>";
- document.getElementById("payTable").innerHTML=html;
 }
 </script>
 
