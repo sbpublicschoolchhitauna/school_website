@@ -3692,5 +3692,118 @@ setTimeout(loadAlerts, 3000);
 setInterval(loadAlerts, 60000);
 </script>
 
+<!-- ================= ADMIN PANEL (HIDDEN) ================= -->
+<div id="adminOverlay" style="display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.65);z-index:999999;align-items:center;justify-content:center">
+
+  <!-- LOGIN BOX -->
+  <div id="adminLoginBox" style="background:#fff;width:360px;
+  max-width:95%;padding:20px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4)">
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 id="adminTitle">Admin Login</h3>
+      <button onclick="closeAdmin()" style="border:none;background:none;font-size:18px">✖</button>
+    </div>
+
+    <input id="adminPassword" type="password"
+      placeholder="Enter Password / पासवर्ड"
+      style="width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #ccc">
+
+    <button onclick="checkAdminLogin()"
+      style="width:100%;margin-top:12px;padding:10px;
+      border:none;border-radius:8px;
+      background:#0b5fa8;color:#fff;font-weight:700">
+      Login / लॉगिन
+    </button>
+
+    <div id="adminMsg" style="margin-top:10px;color:red;font-size:13px"></div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div id="adminPanel" style="display:none;background:#fff;width:95%;
+  height:90%;border-radius:14px;overflow:auto;padding:16px">
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Admin Panel | एडमिन पैनल</h2>
+      <button onclick="logoutAdmin()" class="btn">Logout</button>
+    </div>
+
+    <hr>
+
+    <h3>🔔 Notifications / सूचनाएँ</h3>
+    <textarea id="notifEn" placeholder="Notification (English)"
+      style="width:100%;height:60px"></textarea>
+    <textarea id="notifHi" placeholder="सूचना (हिंदी)"
+      style="width:100%;height:60px;margin-top:6px"></textarea>
+    <button onclick="saveNotification()" class="btn">Save Notification</button>
+
+    <hr>
+
+    <h3>💳 Online Payments</h3>
+    <div id="adminPayments">Loading payment data…</div>
+
+    <hr>
+
+    <h3>📞 Help Line Data</h3>
+    <div id="adminHelp">Loading help data…</div>
+
+    <hr>
+
+    <h3>🖨️ Admit Card / Receipt</h3>
+    <input id="admNo" placeholder="Admission No">
+    <button onclick="printReceipt()" class="btn">Print / PDF</button>
+
+  </div>
+</div>
+<!-- ================= END ADMIN PANEL ================= -->
+
+<script>
+const ADMIN_PASSWORD = "SBPSC@Admin2025"; // बाद में बदल सकते हैं
+let adminLogged = false;
+
+/* Ctrl + Alt + A */
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "a") {
+    e.preventDefault();
+    openAdmin();
+  }
+});
+
+function openAdmin(){
+  document.getElementById("adminOverlay").style.display = "flex";
+}
+
+function closeAdmin(){
+  document.getElementById("adminOverlay").style.display = "none";
+}
+
+function checkAdminLogin(){
+  const pw = document.getElementById("adminPassword").value;
+  if(pw === ADMIN_PASSWORD){
+    adminLogged = true;
+    document.getElementById("adminLoginBox").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+  }else{
+    document.getElementById("adminMsg").innerText =
+      "❌ Wrong Password / गलत पासवर्ड";
+  }
+}
+
+function logoutAdmin(){
+  adminLogged = false;
+  document.getElementById("adminPanel").style.display = "none";
+  document.getElementById("adminLoginBox").style.display = "block";
+  closeAdmin();
+}
+
+/* Placeholder functions (next step में sheet से जोड़ेंगे) */
+function saveNotification(){
+  alert("Notification Google Sheet में save होगी (next step)");
+}
+function printReceipt(){
+  alert("Admit Card / Receipt PDF बनेगा (next step)");
+}
+</script>
+
 </body>
 </html>
