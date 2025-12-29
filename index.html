@@ -3692,116 +3692,110 @@ setTimeout(loadAlerts, 3000);
 setInterval(loadAlerts, 60000);
 </script>
 
-<!-- ================= ADMIN PANEL (HIDDEN) ================= -->
-<div id="adminOverlay" style="display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.65);z-index:999999;align-items:center;justify-content:center">
+<!-- ================= FULL ADMIN PANEL ================= -->
+<div id="adminApp" style="display:none;position:fixed;inset:0;
+background:#f4f7fb;z-index:999999;font-family:Arial">
 
-  <!-- LOGIN BOX -->
-  <div id="adminLoginBox" style="background:#fff;width:360px;
-  max-width:95%;padding:20px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4)">
-
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="adminTitle">Admin Login</h3>
-      <button onclick="closeAdmin()" style="border:none;background:none;font-size:18px">✖</button>
+  <!-- HEADER -->
+  <div style="height:56px;background:#0b5fa8;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px">
+    <strong>🛠️ School Admin Panel</strong>
+    <div>
+      <button onclick="setLang('en')">EN</button>
+      <button onclick="setLang('hi')">हिंदी</button>
+      <button onclick="logoutAdmin()" style="margin-left:10px">Logout</button>
     </div>
-
-    <input id="adminPassword" type="password"
-      placeholder="Enter Password / पासवर्ड"
-      style="width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #ccc">
-
-    <button onclick="checkAdminLogin()"
-      style="width:100%;margin-top:12px;padding:10px;
-      border:none;border-radius:8px;
-      background:#0b5fa8;color:#fff;font-weight:700">
-      Login / लॉगिन
-    </button>
-
-    <div id="adminMsg" style="margin-top:10px;color:red;font-size:13px"></div>
   </div>
 
-  <!-- ADMIN DASHBOARD -->
-  <div id="adminPanel" style="display:none;background:#fff;width:95%;
-  height:90%;border-radius:14px;overflow:auto;padding:16px">
+  <div style="display:flex;height:calc(100% - 56px)">
 
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2>Admin Panel | एडमिन पैनल</h2>
-      <button onclick="logoutAdmin()" class="btn">Logout</button>
+    <!-- SIDEBAR -->
+    <div style="width:240px;background:#fff;border-right:1px solid #ddd">
+      <button class="adminBtn" onclick="openPage('dashboard')">📊 Dashboard</button>
+      <button class="adminBtn" onclick="openPage('payments')">💳 Online Payments</button>
+      <button class="adminBtn" onclick="openPage('fee')">💰 Fee Portal</button>
+      <button class="adminBtn" onclick="openPage('marks')">📄 Marksheet</button>
+      <button class="adminBtn" onclick="openPage('help')">📞 Help Line</button>
+      <button class="adminBtn" onclick="openPage('notify')">🔔 Notifications</button>
+      <button class="adminBtn" onclick="openPage('admit')">🖨️ Admit / Receipt</button>
     </div>
 
-    <hr>
-
-    <h3>🔔 Notifications / सूचनाएँ</h3>
-    <textarea id="notifEn" placeholder="Notification (English)"
-      style="width:100%;height:60px"></textarea>
-    <textarea id="notifHi" placeholder="सूचना (हिंदी)"
-      style="width:100%;height:60px;margin-top:6px"></textarea>
-    <button onclick="saveNotification()" class="btn">Save Notification</button>
-
-    <hr>
-
-    <h3>💳 Online Payments</h3>
-    <div id="adminPayments">Loading payment data…</div>
-
-    <hr>
-
-    <h3>📞 Help Line Data</h3>
-    <div id="adminHelp">Loading help data…</div>
-
-    <hr>
-
-    <h3>🖨️ Admit Card / Receipt</h3>
-    <input id="admNo" placeholder="Admission No">
-    <button onclick="printReceipt()" class="btn">Print / PDF</button>
+    <!-- CONTENT -->
+    <div id="adminContent" style="flex:1;padding:16px;overflow:auto">
+      <h2>Welcome Admin</h2>
+      <p>Select a module from left menu</p>
+    </div>
 
   </div>
 </div>
+
+<style>
+.adminBtn{
+  width:100%;padding:12px;border:none;
+  background:#fff;text-align:left;
+  font-weight:700;cursor:pointer;
+  border-bottom:1px solid #eee
+}
+.adminBtn:hover{background:#f0f6ff}
+</style>
 <!-- ================= END ADMIN PANEL ================= -->
 
 <script>
-const ADMIN_PASSWORD = "SBPSC@Admin2025"; // बाद में बदल सकते हैं
-let adminLogged = false;
-
-/* Ctrl + Alt + A */
-document.addEventListener("keydown", e => {
-  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "a") {
+document.addEventListener("keydown",e=>{
+  if(e.ctrlKey && e.altKey && e.key.toLowerCase()==="a"){
     e.preventDefault();
-    openAdmin();
+    document.getElementById("adminApp").style.display="block";
   }
 });
 
-function openAdmin(){
-  document.getElementById("adminOverlay").style.display = "flex";
+function logoutAdmin(){
+  document.getElementById("adminApp").style.display="none";
 }
+</script>
 
-function closeAdmin(){
-  document.getElementById("adminOverlay").style.display = "none";
-}
+<script>
+function openPage(page){
+  const box=document.getElementById("adminContent");
 
-function checkAdminLogin(){
-  const pw = document.getElementById("adminPassword").value;
-  if(pw === ADMIN_PASSWORD){
-    adminLogged = true;
-    document.getElementById("adminLoginBox").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
-  }else{
-    document.getElementById("adminMsg").innerText =
-      "❌ Wrong Password / गलत पासवर्ड";
+  if(page==="dashboard"){
+    box.innerHTML=`<h2>📊 Dashboard</h2>
+    <ul>
+      <li>Total Students</li>
+      <li>Total Payments</li>
+      <li>Pending Fees</li>
+    </ul>`;
+  }
+
+  if(page==="payments"){
+    box.innerHTML=`<h2>💳 Online Payments</h2>
+    <div id="payTable">Loading…</div>`;
+    loadPayments();
+  }
+
+  if(page==="notify"){
+    box.innerHTML=`<h2>🔔 Notifications</h2>
+    <textarea id="nEn" placeholder="English"></textarea>
+    <textarea id="nHi" placeholder="हिंदी"></textarea>
+    <button onclick="saveNotif()">Save</button>`;
   }
 }
+</script>
 
-function logoutAdmin(){
-  adminLogged = false;
-  document.getElementById("adminPanel").style.display = "none";
-  document.getElementById("adminLoginBox").style.display = "block";
-  closeAdmin();
-}
+<script>
+const SHEET="YOUR_SHEET_ID";
 
-/* Placeholder functions (next step में sheet से जोड़ेंगे) */
-function saveNotification(){
-  alert("Notification Google Sheet में save होगी (next step)");
-}
-function printReceipt(){
-  alert("Admit Card / Receipt PDF बनेगा (next step)");
+async function loadPayments(){
+ const url=`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?sheet=Payments&tqx=out:json`;
+ const r=await fetch(url);
+ const t=await r.text();
+ const j=JSON.parse(t.substr(47).slice(0,-2));
+ let html="<table border=1>";
+ j.table.rows.forEach(r=>{
+   html+="<tr>"+r.c.map(c=>`<td>${c?c.v:""}</td>`).join("")+"</tr>";
+ });
+ html+="</table>";
+ document.getElementById("payTable").innerHTML=html;
 }
 </script>
 
