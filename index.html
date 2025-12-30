@@ -3632,50 +3632,78 @@ document.addEventListener("DOMContentLoaded",()=>{
     location.href=url;
   };
 
-  /* SUBMIT */
-  paymentForm.addEventListener("submit",e=>{
-    e.preventDefault();
-    if(!payScreenshot.files[0]){
-      alert("Payment Screenshot आवश्यक है");
-      return;
-    }
+/* SUBMIT */
+paymentForm.addEventListener("submit", e => {
+  e.preventDefault();
 
-    overlay.style.display="flex";
-    const reader=new FileReader();
-    const file=payScreenshot.files[0];
-    const data=Object.fromEntries(new FormData(paymentForm).entries());
+  // 🔒 Screenshot validation
+  if (!payScreenshot.files || !payScreenshot.files[0]) {
+    alert("Payment Screenshot आवश्यक है");
+    return;
+  }
 
-    reader.onload=()=>{
-      const p=new URLSearchParams();
-      p.append("data",JSON.stringify(data));
-      p.append("file",reader.result.split(",")[1]);
-      p.append("mimeType",file.type);
+  // 🔒 Prevent double submit
+  overlay.style.display = "flex";
 
-      fetch(PAY_API,{method:"POST",body:p})
-      .then(r=>r.json())
-      .then(res=>{
-        overlay.style.display="none";
-        if(res.status==="success"){
-          const speech=data.studentName+
-          " जी, आपकी फीस सफलतापूर्वक जमा हो गई है।";
-          payMsg.innerHTML=
-          `✅ Payment Successful<br>
-           Admission No: <b>${res.admissionNo}</b><br>
-           Date: ${res.date} | Time: ${res.time}`;
-          speechSynthesis.speak(new SpeechSynthesisUtterance(speech));
+  const reader = new FileReader();
+  const file = payScreenshot.files[0];
+  const data = Object.fromEntries(new FormData(paymentForm).entries());
+
+  reader.onload = () => {
+    const p = new URLSearchParams();
+    p.append("data", JSON.stringify(data));
+    p.append("file", reader.result.split(",")[1]);
+    p.append("mimeType", file.type);
+
+    fetch(PAY_API, { method: "POST", body: p })
+      .then(r => {
+        if (!r.ok) throw new Error("Network error");
+        return r.json();
+      })
+      .then(res => {
+        overlay.style.display = "none";
+
+        if (res.status === "success") {
+
+          // 🔊 Voice (overlap safe)
+          if (window.speechSynthesis) {
+            speechSynthesis.cancel();
+          }
+
+          const speech =
+            data.studentName +
+            " जी, आपकी फीस सफलतापूर्वक जमा हो गई है। आपका दिन शुभ हो।";
+
+          // ✅ Success message
+          payMsg.innerHTML = `
+            ✅ <b>Payment Successful</b><br>
+            Admission No: <b>${res.admissionNo || "N/A"}</b><br>
+            Date: ${res.date || ""} | Time: ${res.time || ""}
+          `;
+
+          // 🔊 Speak
+          if (window.speechSynthesis) {
+            const u = new SpeechSynthesisUtterance(speech);
+            u.lang = "hi-IN";
+            speechSynthesis.speak(u);
+          }
+
+          // 🧹 Reset form
           paymentForm.reset();
+
+        } else {
+          payMsg.innerHTML = "❌ Payment submit नहीं हो पाया, कृपया पुनः प्रयास करें।";
         }
       })
-      .catch(()=>{
-        overlay.style.display="none";
-        alert("Server error, पुनः प्रयास करें");
+      .catch(err => {
+        console.error(err);
+        overlay.style.display = "none";
+        alert("Server / Network error, बाद में प्रयास करें");
       });
-    };
-    reader.readAsDataURL(file);
-  });
+  };
 
+  reader.readAsDataURL(file);
 });
-</script>
 
 <!-- ================= END PAYMENT POPUP ================= -->
 
