@@ -3455,66 +3455,80 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 });
 </script>
 
-<!-- ================= PAYMENT POPUP (FIXED VERSION) ================= -->
+<!-- ================= PAYMENT POPUP : FINAL ================= -->
 
-<div id="paymentBox" style="
+<div id="paymentBox"
+style="
 display:none;
 position:fixed;
 inset:0;
 background:rgba(0,0,0,.55);
 z-index:99999;
 align-items:center;
-justify-content:center">
+justify-content:center;
+">
 
-<div style="
-background:#fff;
-width:380px;
-max-width:95%;
-padding:16px;
-border-radius:14px">
+  <!-- 🔥 INNER BOX WITH SCROLL -->
+  <div
+  style="
+  background:#fff;
+  width:380px;
+  max-width:95%;
+  max-height:90vh;                 /* 🔥 SCROLL FIX */
+  overflow-y:auto;                 /* 🔥 SCROLL ENABLE */
+  -webkit-overflow-scrolling:touch;
+  padding:16px;
+  border-radius:14px;
+  ">
 
-<h3 style="color:#0b5fa8;text-align:center">💳 Online Fee Payment</h3>
+    <h3 style="color:#0b5fa8;text-align:center">💳 Online Fee Payment</h3>
 
-<!-- ✅ IMAGE PATH FIXED -->
-<img id="upiQR"
-     src="slider_images/logo.jpg"
-     style="width:100%;border-radius:10px;margin-bottom:10px">
+    <!-- ✅ IMAGE (RESPONSIVE + SCROLL SAFE) -->
+    <img id="upiQR"
+    src="slider_images/logo.jpg"
+    style="
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:10px;
+    margin-bottom:10px">
 
-<!-- 🔁 UPI REDIRECT BUTTONS -->
-<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-  <button type="button" class="upiBtn phonepe" onclick="payUPI('phonepe')">📱 PhonePe</button>
-  <button type="button" class="upiBtn gpay" onclick="payUPI('gpay')">💳 Google Pay</button>
-  <button type="button" class="upiBtn paytm" onclick="payUPI('paytm')">💰 Paytm</button>
-</div>
+    <!-- 🔁 UPI REDIRECT BUTTONS -->
+    <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <button type="button" onclick="payUPI('phonepe')">📱 PhonePe</button>
+      <button type="button" onclick="payUPI('gpay')">💳 Google Pay</button>
+      <button type="button" onclick="payUPI('paytm')">💰 Paytm</button>
+    </div>
 
-<form id="paymentForm">
-<input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
-<input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
-<input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
-<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
-<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
-<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
-<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
-<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
+    <!-- ===== FORM ===== -->
+    <form id="paymentForm">
+      <input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
+      <input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
+      <input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
+      <input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
+      <textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+      <input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
+      <input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
+      <textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
 
-<button type="submit"
-style="
-margin-top:10px;
-width:100%;
-background:#0b5fa8;
-color:#fff;
-padding:10px;
-border-radius:8px;
-border:0;
-font-weight:700">
-Submit Payment
-</button>
-</form>
+      <button type="submit"
+      style="
+      margin-top:10px;
+      width:100%;
+      background:#0b5fa8;
+      color:#fff;
+      padding:10px;
+      border-radius:8px;
+      border:0;
+      font-weight:700">
+        Submit Payment
+      </button>
+    </form>
 
-<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
-<button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
+    <p id="payMsg" style="font-weight:800;margin-top:8px"></p>
+    <button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
 
-</div>
+  </div>
 </div>
 
 <!-- ===== LOADING OVERLAY ===== -->
@@ -3544,89 +3558,81 @@ font-weight:800">
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",()=>{
 
-  const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
+  const PAY_API="https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
 
-  const paymentBox = document.getElementById("paymentBox");
-  const paymentForm = document.getElementById("paymentForm");
-  const overlay = document.getElementById("paymentLoadingOverlay");
-  const payDate = document.getElementById("payDate");
-  const payMsg = document.getElementById("payMsg");
-  const payScreenshot = document.getElementById("payScreenshot");
+  const paymentBox=document.getElementById("paymentBox");
+  const paymentForm=document.getElementById("paymentForm");
+  const overlay=document.getElementById("paymentLoadingOverlay");
+  const payDate=document.getElementById("payDate");
+  const payMsg=document.getElementById("payMsg");
+  const payScreenshot=document.getElementById("payScreenshot");
 
-  /* ✅ OPEN PAYMENT */
+  /* OPEN */
   if(window.openPayment){
-    openPayment.onclick = () => {
-      paymentBox.style.display = "flex";
+    openPayment.onclick=()=>{
+      paymentBox.style.display="flex";
       const d=new Date();
-      payDate.value =
-        String(d.getDate()).padStart(2,'0') + "/" +
-        String(d.getMonth()+1).padStart(2,'0') + "/" +
+      payDate.value=
+        String(d.getDate()).padStart(2,'0')+"/"+
+        String(d.getMonth()+1).padStart(2,'0')+"/"+
         d.getFullYear();
     };
   }
 
   /* CLOSE */
-  window.closePay = () => paymentBox.style.display = "none";
+  window.closePay=()=>paymentBox.style.display="none";
 
-  /* ✅ UPI REDIRECT */
-  window.payUPI = (app) => {
-    const upi = "6389259@axl";
-    let url = "";
-
+  /* UPI */
+  window.payUPI=(app)=>{
+    const upi="6389259@axl";
+    let url="";
     if(app==="phonepe") url=`phonepe://pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
     if(app==="gpay")   url=`tez://upi/pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
     if(app==="paytm")  url=`paytmmp://pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
-
-    location.href = url;
+    location.href=url;
   };
 
-  /* ✅ FORM SUBMIT */
-  paymentForm.addEventListener("submit", e=>{
+  /* SUBMIT */
+  paymentForm.addEventListener("submit",e=>{
     e.preventDefault();
-
     if(!payScreenshot.files[0]){
       alert("Payment Screenshot आवश्यक है");
       return;
     }
 
     overlay.style.display="flex";
+    const reader=new FileReader();
+    const file=payScreenshot.files[0];
+    const data=Object.fromEntries(new FormData(paymentForm).entries());
 
-    const reader = new FileReader();
-    const file = payScreenshot.files[0];
-    const data = Object.fromEntries(new FormData(paymentForm).entries());
-
-    reader.onload = ()=>{
-      const p = new URLSearchParams();
-      p.append("data", JSON.stringify(data));
-      p.append("file", reader.result.split(",")[1]);
-      p.append("mimeType", file.type);
+    reader.onload=()=>{
+      const p=new URLSearchParams();
+      p.append("data",JSON.stringify(data));
+      p.append("file",reader.result.split(",")[1]);
+      p.append("mimeType",file.type);
 
       fetch(PAY_API,{method:"POST",body:p})
       .then(r=>r.json())
       .then(res=>{
         overlay.style.display="none";
         if(res.status==="success"){
-          const speech =
-            data.studentName +
-            " जी, S.B. Public School में फीस जमा करने के लिए धन्यवाद।";
-
-          payMsg.innerHTML =
-            `✅ Payment Successful<br>
-             Admission No: <b>${res.admissionNo}</b><br>
-             Date: ${res.date} | Time: ${res.time}`;
-
+          const speech=data.studentName+
+          " जी, आपकी फीस सफलतापूर्वक जमा हो गई है।";
+          payMsg.innerHTML=
+          `✅ Payment Successful<br>
+           Admission No: <b>${res.admissionNo}</b><br>
+           Date: ${res.date} | Time: ${res.time}`;
           speechSynthesis.speak(new SpeechSynthesisUtterance(speech));
           paymentForm.reset();
         }
       })
       .catch(()=>{
         overlay.style.display="none";
-        alert("Server error, कृपया पुनः प्रयास करें");
+        alert("Server error, पुनः प्रयास करें");
       });
     };
-
     reader.readAsDataURL(file);
   });
 
