@@ -3693,129 +3693,78 @@ setInterval(loadAlerts, 60000);
 </script>
 
 <script>
-/* ===== FORCE MOBILE VIEW DETECTION ===== */
+/* ===============================
+   🚨 FORCE MOBILE FIX (HARD)
+   =============================== */
 (function(){
-  if (window.innerWidth <= 768) {
-    document.body.classList.add("mobile-view");
+
+  if (window.innerWidth > 768) return;
+
+  console.log("✅ FORCE MOBILE FIX ACTIVE");
+
+  /* 1️⃣ Header reset */
+  const header = document.querySelector(".header");
+  if(header){
+    header.style.position = "relative";
+    header.style.padding = "12px 10px";
   }
+
+  /* 2️⃣ Running strip remove */
+  const strip = document.querySelector(".school-strip-outer");
+  if(strip) strip.remove();
+
+  /* 3️⃣ Admission ticker compress */
+  document.querySelectorAll(".admission-news-bar").forEach(el=>{
+    el.style.fontSize = "13px";
+    el.style.padding = "8px";
+    el.style.margin = "8px";
+  });
+
+  /* 4️⃣ Grid force column */
+  document.querySelectorAll(".grid").forEach(g=>{
+    g.style.display = "block";
+  });
+
+  /* 5️⃣ Cards spacing */
+  document.querySelectorAll(".card").forEach(c=>{
+    c.style.padding = "10px";
+    c.style.marginBottom = "12px";
+    c.style.borderRadius = "10px";
+  });
+
+  /* 6️⃣ Notifications height */
+  document.querySelectorAll(".notify-wrap").forEach(n=>{
+    n.style.height = "150px";
+  });
+
+  /* 7️⃣ Quick portals full width */
+  document.querySelectorAll(".qp-3d").forEach(btn=>{
+    btn.style.width = "100%";
+    btn.style.minWidth = "100%";
+    btn.style.marginBottom = "10px";
+  });
+
+  /* 8️⃣ Search column */
+  document.querySelectorAll(".search-row").forEach(r=>{
+    r.style.flexDirection = "column";
+  });
+
+  /* 9️⃣ Table font */
+  document.querySelectorAll("table").forEach(t=>{
+    t.style.fontSize = "12px";
+  });
+
+  /* 🔟 Floating bot resize */
+  const bot = document.querySelector(".sg-floating");
+  if(bot){
+    bot.style.width = "60px";
+    bot.style.height = "60px";
+    bot.style.right = "12px";
+    bot.style.bottom = "12px";
+  }
+
 })();
-
-/* =====================================
-   🔥 FINAL HARD MOBILE OVERRIDE SYSTEM
-   ===================================== */
-
-body.mobile-view{
-
-  /* ===== HEADER ===== */
-}
-body.mobile-view .header{
-  position:relative !important;
-  padding:12px 10px !important;
-  border-radius:0 0 10px 10px;
-}
-
-body.mobile-view .header h1{
-  font-size:20px !important;
-}
-
-body.mobile-view .header .meta{
-  font-size:12px !important;
-  line-height:1.4;
-}
-
-body.mobile-view .header .meta small{
-  font-size:11px !important;
-}
-
-/* ❌ Disable running strip */
-body.mobile-view .school-strip-outer{
-  display:none !important;
-}
-
-/* ===== ADMISSION TICKER ===== */
-body.mobile-view .admission-news-bar{
-  font-size:13px !important;
-  padding:8px !important;
-  margin:8px !important;
-}
-
-/* ===== GRID FIX ===== */
-body.mobile-view .grid{
-  display:block !important;
-}
-
-/* ===== CARD FIX ===== */
-body.mobile-view .card{
-  padding:10px !important;
-  border-radius:10px;
-  margin-bottom:12px;
-}
-
-body.mobile-view h2{
-  font-size:15px !important;
-}
-
-/* ===== NOTIFICATIONS ===== */
-body.mobile-view .notify-wrap{
-  height:150px !important;
-}
-
-body.mobile-view .notify-item .text{
-  font-size:13px !important;
-}
-
-/* ===== QUICK PORTALS ===== */
-body.mobile-view .qp-3d-wrap{
-  flex-direction:column !important;
-}
-
-body.mobile-view .qp-3d{
-  width:100% !important;
-  min-width:100% !important;
-  padding:14px !important;
-  font-size:14px !important;
-}
-
-body.mobile-view .qp-3d .ico{
-  font-size:20px;
-}
-
-/* ===== SLIDER ===== */
-body.mobile-view .slider-wrap{
-  margin:8px !important;
-}
-
-/* ===== VIDEO BOX ===== */
-body.mobile-view .portal-video-box{
-  width:100% !important;
-  max-width:100% !important;
-}
-
-/* ===== SEARCH ===== */
-body.mobile-view .search-row{
-  flex-direction:column !important;
-}
-
-body.mobile-view .search-row input,
-body.mobile-view .search-row button{
-  width:100% !important;
-}
-
-/* ===== TABLE ===== */
-body.mobile-view table{
-  font-size:12px !important;
-}
-
-/* ===== FLOATING BOT ===== */
-body.mobile-view .sg-floating{
-  width:60px;
-  height:60px;
-  right:12px;
-  bottom:12px;
-}
-
 </script>
-
 
 </body>
 </html>
