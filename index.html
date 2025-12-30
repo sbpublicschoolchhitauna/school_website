@@ -3692,146 +3692,127 @@ setTimeout(loadAlerts, 3000);
 setInterval(loadAlerts, 60000);
 </script>
 
-/* ===============================
-   FINAL MOBILE RESPONSIVE FIX
-   =============================== */
-
-@media screen and (max-width: 768px){
-
-  /* ===== HEADER FIX ===== */
-  .header{
-    position:relative !important;
-    padding:14px 10px !important;
-    border-radius:0 0 10px 10px;
+<script>
+/* ===== FORCE MOBILE VIEW DETECTION ===== */
+(function(){
+  if (window.innerWidth <= 768) {
+    document.body.classList.add("mobile-view");
   }
+})();
+</script>
 
-  .header h1{
-    font-size:20px !important;
-    line-height:1.2;
-  }
+/* =====================================
+   🔥 FINAL HARD MOBILE OVERRIDE SYSTEM
+   ===================================== */
 
-  .header .meta{
-    font-size:12px !important;
-    line-height:1.4;
-  }
+body.mobile-view{
 
-  .header .meta small{
-    font-size:11px !important;
-    display:block;
-    margin-top:4px;
-  }
-
-  /* ❌ Mobile में running strip बंद */
-  .school-strip-outer{
-    display:none !important;
-  }
-
-  /* ===== NOTICE / TICKER FIX ===== */
-  .admission-news-bar{
-    font-size:13px !important;
-    padding:8px 0 !important;
-    margin:10px 6px !important;
-    border-radius:8px;
-  }
-
-  /* ===== CONTAINER FIX ===== */
-  .container{
-    padding:8px !important;
-  }
-
-  .grid{
-    display:block !important;
-  }
-
-  /* ===== CARD FIX ===== */
-  .card{
-    padding:10px !important;
-    margin-bottom:12px;
-    border-radius:10px;
-  }
-
-  h2{
-    font-size:15px !important;
-  }
-
-  /* ===== NOTIFICATION FIX ===== */
-  .notify-wrap{
-    height:160px !important;
-  }
-
-  .notify-item{
-    padding:8px 10px;
-  }
-
-  .notify-item .text{
-    font-size:13px;
-  }
-
-  /* ===== QUICK PORTALS FIX ===== */
-  .qp-3d-wrap{
-    flex-direction:column !important;
-  }
-
-  .qp-3d{
-    width:100% !important;
-    min-width:100% !important;
-    height:auto;
-    padding:14px !important;
-    font-size:14px;
-  }
-
-  .qp-3d .ico{
-    font-size:20px;
-  }
-
-  /* ===== SLIDER FIX ===== */
-  .slider-wrap{
-    margin:10px 6px !important;
-  }
-
-  /* ===== VIDEO BOX FIX ===== */
-  .portal-video-box{
-    width:100% !important;
-    max-width:100% !important;
-    margin-top:10px;
-  }
-
-  /* ===== STUDENT SEARCH FIX ===== */
-  .search-row{
-    flex-direction:column !important;
-  }
-
-  .search-row input,
-  .search-row button{
-    width:100% !important;
-  }
-
-  /* ===== TABLE FIX ===== */
-  .table-wrap{
-    max-height:260px !important;
-  }
-
-  table{
-    font-size:12px;
-  }
-
-  /* ===== FLOATING BOT FIX ===== */
-  .sg-floating{
-    width:64px;
-    height:64px;
-    right:12px;
-    bottom:12px;
-  }
-
+  /* ===== HEADER ===== */
 }
-@media screen and (max-width:768px){
-  .school-chip{
-    font-size:12px;
-    padding:6px 10px;
-    border-radius:6px;
-    background:#ffedd5;
-    color:#7c2d12;
-  }
+body.mobile-view .header{
+  position:relative !important;
+  padding:12px 10px !important;
+  border-radius:0 0 10px 10px;
+}
+
+body.mobile-view .header h1{
+  font-size:20px !important;
+}
+
+body.mobile-view .header .meta{
+  font-size:12px !important;
+  line-height:1.4;
+}
+
+body.mobile-view .header .meta small{
+  font-size:11px !important;
+}
+
+/* ❌ Disable running strip */
+body.mobile-view .school-strip-outer{
+  display:none !important;
+}
+
+/* ===== ADMISSION TICKER ===== */
+body.mobile-view .admission-news-bar{
+  font-size:13px !important;
+  padding:8px !important;
+  margin:8px !important;
+}
+
+/* ===== GRID FIX ===== */
+body.mobile-view .grid{
+  display:block !important;
+}
+
+/* ===== CARD FIX ===== */
+body.mobile-view .card{
+  padding:10px !important;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+
+body.mobile-view h2{
+  font-size:15px !important;
+}
+
+/* ===== NOTIFICATIONS ===== */
+body.mobile-view .notify-wrap{
+  height:150px !important;
+}
+
+body.mobile-view .notify-item .text{
+  font-size:13px !important;
+}
+
+/* ===== QUICK PORTALS ===== */
+body.mobile-view .qp-3d-wrap{
+  flex-direction:column !important;
+}
+
+body.mobile-view .qp-3d{
+  width:100% !important;
+  min-width:100% !important;
+  padding:14px !important;
+  font-size:14px !important;
+}
+
+body.mobile-view .qp-3d .ico{
+  font-size:20px;
+}
+
+/* ===== SLIDER ===== */
+body.mobile-view .slider-wrap{
+  margin:8px !important;
+}
+
+/* ===== VIDEO BOX ===== */
+body.mobile-view .portal-video-box{
+  width:100% !important;
+  max-width:100% !important;
+}
+
+/* ===== SEARCH ===== */
+body.mobile-view .search-row{
+  flex-direction:column !important;
+}
+
+body.mobile-view .search-row input,
+body.mobile-view .search-row button{
+  width:100% !important;
+}
+
+/* ===== TABLE ===== */
+body.mobile-view table{
+  font-size:12px !important;
+}
+
+/* ===== FLOATING BOT ===== */
+body.mobile-view .sg-floating{
+  width:60px;
+  height:60px;
+  right:12px;
+  bottom:12px;
 }
 
 </body>
