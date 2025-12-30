@@ -3501,29 +3501,65 @@ justify-content:center;
     </div>
 
     <!-- ===== FORM ===== -->
-    <form id="paymentForm">
-      <input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
-      <input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
-      <input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
-      <input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
-      <textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
-      <input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
-      <input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
-      <textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
+<form id="paymentForm" style="font-size:13px">
 
-      <button type="submit"
-      style="
-      margin-top:10px;
-      width:100%;
-      background:#0b5fa8;
-      color:#fff;
-      padding:10px;
-      border-radius:8px;
-      border:0;
-      font-weight:700">
-        Submit Payment
-      </button>
-    </form>
+  <input name="studentName"
+    placeholder="Student Name"
+    required
+    style="width:100%;padding:6px;margin-bottom:5px">
+
+  <input name="fatherName"
+    placeholder="Father Name"
+    required
+    style="width:100%;padding:6px;margin-bottom:5px">
+
+  <input name="mobile"
+    placeholder="Mobile Number"
+    required
+    style="width:100%;padding:6px;margin-bottom:5px">
+
+  <input id="payDate"
+    name="month"
+    readonly
+    style="width:100%;padding:6px;margin-bottom:5px">
+
+  <textarea name="address"
+    placeholder="Address"
+    rows="2"
+    required
+    style="width:100%;padding:6px;margin-bottom:5px"></textarea>
+
+  <input name="upiTxn"
+    placeholder="UPI Transaction ID"
+    required
+    style="width:100%;padding:6px;margin-bottom:5px">
+
+  <input type="file"
+    id="payScreenshot"
+    accept="image/*"
+    required
+    style="width:100%;margin-bottom:5px;font-size:12px">
+
+  <textarea name="feedback"
+    placeholder="Remark (optional)"
+    rows="2"
+    style="width:100%;padding:6px"></textarea>
+
+  <button type="submit"
+    style="
+    margin-top:8px;
+    width:100%;
+    background:#0b5fa8;
+    color:#fff;
+    padding:8px;
+    border-radius:8px;
+    border:0;
+    font-size:14px;
+    font-weight:700">
+    Submit Payment
+  </button>
+
+</form>
 
     <p id="payMsg" style="font-weight:800;margin-top:8px"></p>
     <button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
