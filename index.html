@@ -3455,121 +3455,185 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 });
 </script>
 
-<!-- ===== PAYMENT POPUP (INDEX FIXED VERSION) ===== -->
+<!-- ================= PAYMENT POPUP (FIXED VERSION) ================= -->
 
-<style>
-#paymentOverlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.65);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:999999;
-  padding:14px;
-}
+<div id="paymentBox" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+z-index:99999;
+align-items:center;
+justify-content:center">
 
-.paymentPopup{
-  width:100%;
-  max-width:380px;
-  background:#fff;
-  border-radius:18px;
-  box-shadow:0 25px 70px rgba(0,0,0,.4);
-  animation:payZoom .35s ease;
-}
+<div style="
+background:#fff;
+width:380px;
+max-width:95%;
+padding:16px;
+border-radius:14px">
 
-/* 🔥 IMAGE FIX (MOST IMPORTANT) */
-.paymentPopup img{
-  width:100%;
-  height:auto;
-  display:block;
-  border-radius:18px 18px 0 0;
-}
+<h3 style="color:#0b5fa8;text-align:center">💳 Online Fee Payment</h3>
 
-/* CONTENT */
-.paymentContent{
-  padding:16px;
-  text-align:center;
-  font-family:Arial,sans-serif;
-}
+<!-- ✅ IMAGE PATH FIXED -->
+<img id="upiQR"
+     src="slider_images/logo.jpg"
+     style="width:100%;border-radius:10px;margin-bottom:10px">
 
-.payBtn{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:800;
-  color:#fff;
-  background:linear-gradient(135deg,#0b5fa8,#1167b1);
-}
-
-#closePayment{
-  margin-top:12px;
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:12px;
-  background:#f1f5f9;
-  font-weight:700;
-}
-
-@keyframes payZoom{
-  from{transform:scale(.85);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-</style>
-
-<div id="paymentOverlay">
-  <div class="paymentPopup">
-
-    <!-- ✅ IMAGE PATH FIXED -->
-    <img src="images/upi_qr.jpg" alt="S.B. Public School Payment">
-
-    <div class="paymentContent">
-      <h3>💳 Online Payment</h3>
-      <p>अपना Payment Method चुनें</p>
-
-      <button class="payBtn" onclick="payUPI('phonepe')">📱 PhonePe</button>
-      <button class="payBtn" onclick="payUPI('gpay')">🟢 Google Pay</button>
-      <button class="payBtn" onclick="payUPI('paytm')">🔵 Paytm</button>
-
-      <button id="closePayment">✖ Close</button>
-    </div>
-  </div>
+<!-- 🔁 UPI REDIRECT BUTTONS -->
+<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+  <button type="button" class="upiBtn phonepe" onclick="payUPI('phonepe')">📱 PhonePe</button>
+  <button type="button" class="upiBtn gpay" onclick="payUPI('gpay')">💳 Google Pay</button>
+  <button type="button" class="upiBtn paytm" onclick="payUPI('paytm')">💰 Paytm</button>
 </div>
 
+<form id="paymentForm">
+<input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
+<input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
+<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
+<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
+<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
+<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
+<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
+
+<button type="submit"
+style="
+margin-top:10px;
+width:100%;
+background:#0b5fa8;
+color:#fff;
+padding:10px;
+border-radius:8px;
+border:0;
+font-weight:700">
+Submit Payment
+</button>
+</form>
+
+<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
+<button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
+
+</div>
+</div>
+
+<!-- ===== LOADING OVERLAY ===== -->
+<div id="paymentLoadingOverlay"
+style="
+display:none;
+position:fixed;
+inset:0;
+z-index:999999;
+background:rgba(0,0,0,.6);
+align-items:center;
+justify-content:center;
+flex-direction:column;
+color:#fff;
+font-size:18px;
+font-weight:800">
+  <div style="
+  width:50px;height:50px;
+  border:6px solid #fff;
+  border-top-color:#ffb703;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin-bottom:14px"></div>
+  ⏳ Processing Payment, कृपया प्रतीक्षा करें...
+</div>
+
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
 <script>
-const openPaymentBtn=document.getElementById("openPayment");
-const overlay=document.getElementById("paymentOverlay");
-const closeBtn=document.getElementById("closePayment");
+document.addEventListener("DOMContentLoaded", () => {
 
-openPaymentBtn.onclick=()=>{
-  overlay.style.display="flex";
-  document.body.style.overflow="hidden";
-};
+  const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
 
-closeBtn.onclick=()=>{
-  overlay.style.display="none";
-  document.body.style.overflow="";
-};
+  const paymentBox = document.getElementById("paymentBox");
+  const paymentForm = document.getElementById("paymentForm");
+  const overlay = document.getElementById("paymentLoadingOverlay");
+  const payDate = document.getElementById("payDate");
+  const payMsg = document.getElementById("payMsg");
+  const payScreenshot = document.getElementById("payScreenshot");
 
-function payUPI(app){
-  const upi="6389259@ybl";
-  const name="S.B. PUBLIC SCHOOL";
-  const note="School Fee Payment";
+  /* ✅ OPEN PAYMENT */
+  if(window.openPayment){
+    openPayment.onclick = () => {
+      paymentBox.style.display = "flex";
+      const d=new Date();
+      payDate.value =
+        String(d.getDate()).padStart(2,'0') + "/" +
+        String(d.getMonth()+1).padStart(2,'0') + "/" +
+        d.getFullYear();
+    };
+  }
 
-  let url="";
-  if(app==="phonepe") url=`phonepe://pay?pa=${upi}&pn=${name}&tn=${note}&cu=INR`;
-  if(app==="gpay")   url=`tez://upi/pay?pa=${upi}&pn=${name}&tn=${note}&cu=INR`;
-  if(app==="paytm")  url=`paytmmp://pay?pa=${upi}&pn=${name}&tn=${note}&cu=INR`;
+  /* CLOSE */
+  window.closePay = () => paymentBox.style.display = "none";
 
-  location.href=url;
-}
+  /* ✅ UPI REDIRECT */
+  window.payUPI = (app) => {
+    const upi = "6389259@axl";
+    let url = "";
+
+    if(app==="phonepe") url=`phonepe://pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
+    if(app==="gpay")   url=`tez://upi/pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
+    if(app==="paytm")  url=`paytmmp://pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
+
+    location.href = url;
+  };
+
+  /* ✅ FORM SUBMIT */
+  paymentForm.addEventListener("submit", e=>{
+    e.preventDefault();
+
+    if(!payScreenshot.files[0]){
+      alert("Payment Screenshot आवश्यक है");
+      return;
+    }
+
+    overlay.style.display="flex";
+
+    const reader = new FileReader();
+    const file = payScreenshot.files[0];
+    const data = Object.fromEntries(new FormData(paymentForm).entries());
+
+    reader.onload = ()=>{
+      const p = new URLSearchParams();
+      p.append("data", JSON.stringify(data));
+      p.append("file", reader.result.split(",")[1]);
+      p.append("mimeType", file.type);
+
+      fetch(PAY_API,{method:"POST",body:p})
+      .then(r=>r.json())
+      .then(res=>{
+        overlay.style.display="none";
+        if(res.status==="success"){
+          const speech =
+            data.studentName +
+            " जी, S.B. Public School में फीस जमा करने के लिए धन्यवाद।";
+
+          payMsg.innerHTML =
+            `✅ Payment Successful<br>
+             Admission No: <b>${res.admissionNo}</b><br>
+             Date: ${res.date} | Time: ${res.time}`;
+
+          speechSynthesis.speak(new SpeechSynthesisUtterance(speech));
+          paymentForm.reset();
+        }
+      })
+      .catch(()=>{
+        overlay.style.display="none";
+        alert("Server error, कृपया पुनः प्रयास करें");
+      });
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+});
 </script>
 
-<!-- ===== END PAYMENT POPUP ===== -->
+<!-- ================= END PAYMENT POPUP ================= -->
 
 <!-- 🔔 FINAL IN-APP ANNOUNCEMENT (DIRECT SHEET DATA) -->
 <style>
