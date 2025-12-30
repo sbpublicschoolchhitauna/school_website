@@ -3455,46 +3455,44 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 });
 </script>
 
-<!-- ================= PAYMENT POPUP : FINAL ALL IN ONE ================= -->
+<!-- ===== PAYMENT POPUP (INDEX FIXED VERSION) ===== -->
 
 <style>
-/* ===== OVERLAY ===== */
 #paymentOverlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999999;
-  padding: 14px;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999999;
+  padding:14px;
 }
 
-/* ===== POPUP CARD ===== */
 .paymentPopup{
-  width: 100%;
-  max-width: 380px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 25px 70px rgba(0,0,0,0.4);
-  animation: payZoom .35s ease;
-  font-family: Arial, sans-serif;
+  width:100%;
+  max-width:380px;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 25px 70px rgba(0,0,0,.4);
+  animation:payZoom .35s ease;
 }
 
-.paymentPopup h3{
-  margin: 0 0 6px;
-  color:#0b5fa8;
+/* 🔥 IMAGE FIX (MOST IMPORTANT) */
+.paymentPopup img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:18px 18px 0 0;
 }
 
-.paymentPopup p{
-  margin: 0 0 14px;
-  font-size: 14px;
-  color:#444;
+/* CONTENT */
+.paymentContent{
+  padding:16px;
+  text-align:center;
+  font-family:Arial,sans-serif;
 }
 
-/* ===== PAY BUTTONS ===== */
 .payBtn{
   width:100%;
   padding:14px;
@@ -3503,100 +3501,75 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
   border-radius:14px;
   font-size:16px;
   font-weight:800;
-  cursor:pointer;
   color:#fff;
   background:linear-gradient(135deg,#0b5fa8,#1167b1);
-  box-shadow:0 10px 22px rgba(11,95,168,.35);
 }
 
-.payBtn:active{
-  transform:scale(.97);
-}
-
-/* CLOSE */
 #closePayment{
-  margin-top:14px;
+  margin-top:12px;
   width:100%;
   padding:10px;
   border:none;
   border-radius:12px;
   background:#f1f5f9;
-  color:#111;
   font-weight:700;
-  cursor:pointer;
 }
 
-/* ANIMATION */
 @keyframes payZoom{
   from{transform:scale(.85);opacity:0}
   to{transform:scale(1);opacity:1}
 }
-
-/* MOBILE EXTRA FIX */
-@media(max-width:480px){
-  .paymentPopup{
-    border-radius:16px;
-    padding:18px;
-  }
-}
 </style>
 
-<!-- ===== POPUP HTML ===== -->
 <div id="paymentOverlay">
   <div class="paymentPopup">
-    <h3>💳 Online Payment</h3>
-    <p>अपना Payment Method चुनें</p>
 
-    <button class="payBtn" onclick="payUPI('phonepe')">📱 PhonePe</button>
-    <button class="payBtn" onclick="payUPI('gpay')">🟢 Google Pay</button>
-    <button class="payBtn" onclick="payUPI('paytm')">🔵 Paytm</button>
+    <!-- ✅ IMAGE PATH FIXED -->
+    <img src="slider_images/logo.jpg" alt="S.B. Public School Payment">
 
-    <button id="closePayment">✖ Close</button>
+    <div class="paymentContent">
+      <h3>💳 Online Payment</h3>
+      <p>अपना Payment Method चुनें</p>
+
+      <button class="payBtn" onclick="payUPI('phonepe')">📱 PhonePe</button>
+      <button class="payBtn" onclick="payUPI('gpay')">🟢 Google Pay</button>
+      <button class="payBtn" onclick="payUPI('paytm')">🔵 Paytm</button>
+
+      <button id="closePayment">✖ Close</button>
+    </div>
   </div>
 </div>
 
 <script>
-/* ===== OPEN / CLOSE ===== */
-const openPaymentBtn = document.getElementById("openPayment");
-const paymentOverlay = document.getElementById("paymentOverlay");
-const closePaymentBtn = document.getElementById("closePayment");
+const openPaymentBtn=document.getElementById("openPayment");
+const overlay=document.getElementById("paymentOverlay");
+const closeBtn=document.getElementById("closePayment");
 
-if(openPaymentBtn){
-  openPaymentBtn.addEventListener("click", ()=>{
-    paymentOverlay.style.display = "flex";
-    document.body.style.overflow = "hidden"; // mobile scroll lock
-  });
-}
+openPaymentBtn.onclick=()=>{
+  overlay.style.display="flex";
+  document.body.style.overflow="hidden";
+};
 
-closePaymentBtn.addEventListener("click", ()=>{
-  paymentOverlay.style.display = "none";
-  document.body.style.overflow = "";
-});
+closeBtn.onclick=()=>{
+  overlay.style.display="none";
+  document.body.style.overflow="";
+};
 
-/* ===== UPI REDIRECT ===== */
 function payUPI(app){
-  const upiId = "6389259@ybl";   // 🔴 आपका UPI
-  const name  = "S.B. PUBLIC SCHOOL";
-  const note  = "School Fee Payment";
-  const amount = ""; // optional
+  const upi="6389259@ybl";
+  const name="S.B. PUBLIC SCHOOL";
+  const note="School Fee Payment";
 
-  let url = "";
+  let url="";
+  if(app==="phonepe") url=`phonepe://pay?pa=${upi}&pn=${name}&tn=${note}&cu=INR`;
+  if(app==="gpay")   url=`tez://upi/pay?pa=${upi}&pn=${name}&tn=${note}&cu=INR`;
+  if(app==="paytm")  url=`paytmmp://pay?pa=${upi}&pn=${name}&tn=${note}&cu=INR`;
 
-  if(app === "phonepe"){
-    url = `phonepe://pay?pa=${upiId}&pn=${name}&tn=${note}&am=${amount}&cu=INR`;
-  }
-  if(app === "gpay"){
-    url = `tez://upi/pay?pa=${upiId}&pn=${name}&tn=${note}&am=${amount}&cu=INR`;
-  }
-  if(app === "paytm"){
-    url = `paytmmp://pay?pa=${upiId}&pn=${name}&tn=${note}&am=${amount}&cu=INR`;
-  }
-
-  window.location.href = url;
+  location.href=url;
 }
 </script>
 
-<!-- ================= END PAYMENT POPUP ================= -->
+<!-- ===== END PAYMENT POPUP ===== -->
 
 <!-- 🔔 FINAL IN-APP ANNOUNCEMENT (DIRECT SHEET DATA) -->
 <style>
