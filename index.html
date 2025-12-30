@@ -3455,112 +3455,148 @@ document.getElementById("helpForm").addEventListener("submit", function(e){
 });
 </script>
 
-<!-- PAYMENT POPUP -->
-<div id="paymentBox" style="display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.55);z-index:99999;align-items:center;justify-content:center">
+<!-- ================= PAYMENT POPUP : FINAL ALL IN ONE ================= -->
 
-<div style="background:#fff;width:380px;max-width:95%;padding:16px;border-radius:14px">
+<style>
+/* ===== OVERLAY ===== */
+#paymentOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  padding: 14px;
+}
 
-<h3 style="color:#0b5fa8">💳 Online Fee Payment</h3>
+/* ===== POPUP CARD ===== */
+.paymentPopup{
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+  animation: payZoom .35s ease;
+  font-family: Arial, sans-serif;
+}
 
-<img id="upiQR" style="width:100%;border-radius:10px;margin-bottom:10px">
+.paymentPopup h3{
+  margin: 0 0 6px;
+  color:#0b5fa8;
+}
 
-<!-- 🔁 UPI REDIRECT BUTTONS -->
-<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-  <button type="button" class="upiBtn phonepe" onclick="payUPI()">📱 PhonePe</button>
-  <button type="button" class="upiBtn gpay" onclick="payUPI()">💳 Google Pay</button>
-  <button type="button" class="upiBtn paytm" onclick="payUPI()">💰 Paytm</button>
+.paymentPopup p{
+  margin: 0 0 14px;
+  font-size: 14px;
+  color:#444;
+}
+
+/* ===== PAY BUTTONS ===== */
+.payBtn{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,#0b5fa8,#1167b1);
+  box-shadow:0 10px 22px rgba(11,95,168,.35);
+}
+
+.payBtn:active{
+  transform:scale(.97);
+}
+
+/* CLOSE */
+#closePayment{
+  margin-top:14px;
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  background:#f1f5f9;
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ANIMATION */
+@keyframes payZoom{
+  from{transform:scale(.85);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+/* MOBILE EXTRA FIX */
+@media(max-width:480px){
+  .paymentPopup{
+    border-radius:16px;
+    padding:18px;
+  }
+}
+</style>
+
+<!-- ===== POPUP HTML ===== -->
+<div id="paymentOverlay">
+  <div class="paymentPopup">
+    <h3>💳 Online Payment</h3>
+    <p>अपना Payment Method चुनें</p>
+
+    <button class="payBtn" onclick="payUPI('phonepe')">📱 PhonePe</button>
+    <button class="payBtn" onclick="payUPI('gpay')">🟢 Google Pay</button>
+    <button class="payBtn" onclick="payUPI('paytm')">🔵 Paytm</button>
+
+    <button id="closePayment">✖ Close</button>
+  </div>
 </div>
-
-<form id="paymentForm">
-<input name="studentName" placeholder="Student Name" required style="width:100%;padding:8px;margin-bottom:6px">
-<input name="fatherName" placeholder="Father Name" required style="width:100%;padding:8px;margin-bottom:6px">
-<input name="mobile" placeholder="Mobile Number" required style="width:100%;padding:8px;margin-bottom:6px">
-<input id="payDate" name="month" readonly style="width:100%;padding:8px;margin-bottom:6px">
-<textarea name="address" placeholder="Address" required style="width:100%;padding:8px;margin-bottom:6px"></textarea>
-<input name="upiTxn" placeholder="UPI Transaction ID" required style="width:100%;padding:8px;margin-bottom:6px">
-<input type="file" id="payScreenshot" accept="image/*" required style="width:100%;margin-bottom:6px">
-<textarea name="feedback" placeholder="FeedBack / Remark" style="width:100%;padding:8px"></textarea>
-
-<button type="submit" id="submitPaymentBtn"
-style="margin-top:10px;width:100%;background:#0b5fa8;color:#fff;
-padding:10px;border-radius:8px;border:0;font-weight:700">
-Submit Payment
-</button>
-</form>
-
-<p id="payMsg" style="font-weight:800;margin-top:8px"></p>
-<button onclick="closePay()" style="margin-top:6px;width:100%">Close</button>
-
-</div>
-</div>
-
-<div id="paymentLoadingOverlay"
-style="display:none;position:fixed;inset:0;z-index:999999;
-background:rgba(0,0,0,.6);align-items:center;justify-content:center;
-flex-direction:column;color:#fff;font-size:18px;font-weight:800">
-  <div style="width:50px;height:50px;border:6px solid #fff;
-  border-top-color:#ffb703;border-radius:50%;
-  animation:spin 1s linear infinite;margin-bottom:14px"></div>
-  ⏳ Processing Payment, कृपया प्रतीक्षा करें...
-</div>
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+/* ===== OPEN / CLOSE ===== */
+const openPaymentBtn = document.getElementById("openPayment");
+const paymentOverlay = document.getElementById("paymentOverlay");
+const closePaymentBtn = document.getElementById("closePayment");
 
-  const PAY_API = "https://script.google.com/macros/s/AKfycbzvvXEEUjkRyc0bRps25xtGY6oUl4fyj80x7_JKLlOm7W15YQWZ3Ov4gf3A5w8LtkRCqQ/exec";
-  const QR_IMAGE = "images/upi_qr.jpeg";
-  const overlay = document.getElementById("paymentLoadingOverlay");
-
-  openPayment.onclick = () => {
-    paymentBox.style.display = "flex";
-    upiQR.src = QR_IMAGE;
-    const d=new Date();
-    payDate.value=String(d.getDate()).padStart(2,'0')+"/"+String(d.getMonth()+1).padStart(2,'0')+"/"+d.getFullYear();
-  };
-
-  window.closePay = () => paymentBox.style.display = "none";
-
-  window.payUPI = () => {
-    const upi="6389259@axl";
-    location.href=`upi://pay?pa=${upi}&pn=S.B.%20Public%20School&cu=INR&tn=School%20Fee`;
-  };
-
-  paymentForm.addEventListener("submit", e=>{
-    e.preventDefault();
-    overlay.style.display="flex";
-
-    const reader=new FileReader();
-    const file=payScreenshot.files[0];
-    const data=Object.fromEntries(new FormData(paymentForm).entries());
-
-    reader.onload=()=>{
-      const p=new URLSearchParams();
-      p.append("data",JSON.stringify(data));
-      p.append("file",reader.result.split(",")[1]);
-      p.append("mimeType",file.type);
-
-      fetch(PAY_API,{method:"POST",body:p})
-      .then(r=>r.json())
-      .then(res=>{
-        overlay.style.display="none";
-        if(res.status==="success"){
-          const speech=data.studentName+
-          ", S.B. Public School में फीस जमा करने के लिए धन्यवाद, आपकी रसीद सुरक्षित रखी गई है।आप का दिन शुभ हो";
-          payMsg.innerHTML=`✅ ${speech}<br>Admission No: <b>${res.admissionNo}</b>
-          <br>Date: ${res.date} | Time: ${res.time}
-          <br><a href="${res.screenshot}" target="_blank">📸 Screenshot देखें</a>`;
-          speechSynthesis.speak(new SpeechSynthesisUtterance(speech));
-          paymentForm.reset();
-        }
-      }).catch(()=>overlay.style.display="none");
-    };
-    reader.readAsDataURL(file);
+if(openPaymentBtn){
+  openPaymentBtn.addEventListener("click", ()=>{
+    paymentOverlay.style.display = "flex";
+    document.body.style.overflow = "hidden"; // mobile scroll lock
   });
+}
 
+closePaymentBtn.addEventListener("click", ()=>{
+  paymentOverlay.style.display = "none";
+  document.body.style.overflow = "";
 });
+
+/* ===== UPI REDIRECT ===== */
+function payUPI(app){
+  const upiId = "6389259@ybl";   // 🔴 आपका UPI
+  const name  = "S.B. PUBLIC SCHOOL";
+  const note  = "School Fee Payment";
+  const amount = ""; // optional
+
+  let url = "";
+
+  if(app === "phonepe"){
+    url = `phonepe://pay?pa=${upiId}&pn=${name}&tn=${note}&am=${amount}&cu=INR`;
+  }
+  if(app === "gpay"){
+    url = `tez://upi/pay?pa=${upiId}&pn=${name}&tn=${note}&am=${amount}&cu=INR`;
+  }
+  if(app === "paytm"){
+    url = `paytmmp://pay?pa=${upiId}&pn=${name}&tn=${note}&am=${amount}&cu=INR`;
+  }
+
+  window.location.href = url;
+}
 </script>
+
+<!-- ================= END PAYMENT POPUP ================= -->
 
 <!-- 🔔 FINAL IN-APP ANNOUNCEMENT (DIRECT SHEET DATA) -->
 <style>
