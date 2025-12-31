@@ -239,6 +239,27 @@ document.addEventListener("DOMContentLoaded", () => {
   <source src="festival-music.mp3" type="audio/mpeg">
 </audio>
 
+<script>
+/* 🔁 AUTO LOAD TODAY FESTIVAL */
+(function(){
+  const today = new Date();
+
+  const key =
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
+
+  if (FESTIVALS[key]) {
+    window.todayFestivalTitle = FESTIVALS[key].title;
+    window.todayFestivalText  = FESTIVALS[key].text;
+    window.todayFestivalVoice = FESTIVALS[key].voice;
+
+    console.log("🎉 Festival Found:", FESTIVALS[key].title);
+  } else {
+    console.log("❌ No festival today");
+  }
+})();
+</script>
+
 <!-- 🎆 FESTIVAL ANIMATION LAYER -->
 <div id="festivalAnimationLayer"></div>
 
