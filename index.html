@@ -3882,80 +3882,73 @@ setInterval(loadAlerts, 60000);
 })();
 </script>
 
-<style>
-/* 🎉 FESTIVAL POPUP THEME MATCH */
-.festival-popup-box{
-  background: linear-gradient(135deg,#0b5fa8,#1167b1);
-  color:#ffffff;
-  padding:32px 28px;
-  border-radius:22px;
-  max-width:92%;
-  text-align:center;
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.35),
-    inset 0 0 40px rgba(255,255,255,.08);
-  animation: festivalPop 0.6s ease;
-}
-
-.festival-popup-box h1{
-  margin:0 0 12px;
-  font-size:32px;
-  font-weight:900;
-  text-shadow:0 4px 12px rgba(0,0,0,.35);
-}
-
-.festival-popup-box p{
-  font-size:18px;
-  line-height:1.6;
-  margin-bottom:18px;
-  opacity:.95;
-}
-
-/* Close button */
-.festival-popup-box button{
-  background:#ffb703;
-  color:#000;
-  border:none;
-  padding:10px 22px;
-  font-size:16px;
-  font-weight:900;
-  border-radius:999px;
-  cursor:pointer;
-  box-shadow:0 6px 0 #c28700;
-}
-.festival-popup-box button:hover{
-  transform:translateY(-2px);
-}
-.festival-popup-box button:active{
-  transform:translateY(2px);
-  box-shadow:0 3px 0 #c28700;
-}
-
-/* popup animation */
-@keyframes festivalPop{
-  from{transform:scale(.6);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-</style>
-
-<!-- ✅ FESTIVAL POPUP OVERLAY (REQUIRED) -->
+<!-- 🎉 FESTIVAL POPUP OVERLAY (UPDATED THEME) -->
 <div id="popupOverlay" style="
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.7);
+  background:linear-gradient(
+    135deg,
+    rgba(11,95,168,.85),
+    rgba(17,103,177,.9)
+  );
   z-index:9999999;
   align-items:center;
   justify-content:center;
+  backdrop-filter:blur(6px);
 ">
   <div style="
-<div class="festival-popup-box">
+    background:linear-gradient(
+      145deg,
+      #0b5fa8,
+      #0a4c8a,
+      #1167b1
+    );
+    color:#ffffff;
+    padding:34px 30px;
+    border-radius:26px;
+    max-width:90%;
+    text-align:center;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,.55),
+      inset 0 1px 0 rgba(255,255,255,.25),
+      inset 0 -10px 28px rgba(0,0,0,.4);
+  ">
+    <h1 id="popupTitle" style="
+      font-size:34px;
+      font-weight:900;
+      margin-bottom:14px;
+      text-shadow:0 4px 12px rgba(0,0,0,.6);
+    "></h1>
 
-    <h1 id="popupTitle"></h1>
-    <p id="popupText"></p>
-    <div id="popupCountdown"></div>
-    <button onclick="document.getElementById('popupOverlay').style.display='none'">
-      ❌ Close
+    <p id="popupText" style="
+      font-size:19px;
+      line-height:1.7;
+      margin-bottom:18px;
+      opacity:.95;
+    "></p>
+
+    <div id="popupCountdown" style="
+      font-size:14px;
+      opacity:.85;
+      margin-bottom:18px;
+    "></div>
+
+    <button onclick="document.getElementById('popupOverlay').style.display='none'"
+      style="
+        background:linear-gradient(180deg,#ffd166,#ffb703);
+        color:#000;
+        border:none;
+        padding:12px 30px;
+        font-size:16px;
+        font-weight:900;
+        border-radius:999px;
+        cursor:pointer;
+        box-shadow:
+          0 8px 0 #c28700,
+          0 14px 30px rgba(0,0,0,.35);
+      ">
+      ❌ बंद करें
     </button>
   </div>
 </div>
