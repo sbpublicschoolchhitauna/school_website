@@ -558,6 +558,16 @@ document.addEventListener("DOMContentLoaded", () => {
   </span>
 </button>
 
+<button
+  id="studyZoneBtn"
+  class="qp-3d marksheet-3d idle"
+  type="button">
+  <span class="face">
+    <span class="ico">📚</span>
+    Study Zone
+  </span>
+</button>
+
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -3880,6 +3890,141 @@ setInterval(loadAlerts, 60000);
   }
 
 })();
+
+.study-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999999;
+}
+.study-card{
+  width:90%;
+  max-width:420px;
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+.study-card h2{
+  color:#0b5fa8;
+}
+.study-card select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  margin:10px 0;
+}
+.study-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
+.study-actions button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  background:#0b5fa8;
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+#studyResult a{
+  display:block;
+  margin:8px 0;
+  padding:8px;
+  background:#f1f7ff;
+  border-radius:8px;
+  text-decoration:none;
+  color:#0b5fa8;
+  font-weight:700;
+}
+.closeBtn{
+  margin-top:12px;
+  background:#ff3b30;
+  color:#fff;
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+</script>
+
+<div id="studyZonePopup" class="study-popup">
+  <div class="study-card">
+    <h2>📚 Study Zone</h2>
+
+    <select id="classSelect">
+      <option value="">Select Class</option>
+      <option>1</option><option>2</option><option>3</option>
+      <option>4</option><option>5</option><option>6</option>
+      <option>7</option><option>8</option><option>9</option><option>10</option>
+    </select>
+
+    <div class="study-actions">
+      <button onclick="loadTimeTable()">🕒 Time Table</button>
+      <button onclick="loadStudyMaterial()">📘 Study Material</button>
+    </div>
+
+    <div id="studyResult"></div>
+
+    <button class="closeBtn" onclick="closeStudy()">✖ Close</button>
+  </div>
+</div>
+
+<script>
+const STUDY_SHEET_ID = "https://docs.google.com/spreadsheets/d/10H8SzDxWN_djGqDVg85r7g3a29X7osfAC2_CdvXxPGo/edit?usp=sharing";
+
+document.getElementById("studyZoneBtn").onclick = ()=>{
+  document.getElementById("studyZonePopup").style.display="flex";
+};
+
+function closeStudy(){
+  document.getElementById("studyZonePopup").style.display="none";
+}
+
+async function loadTimeTable(){
+  loadStudyData("TimeTable");
+}
+
+async function loadStudyMaterial(){
+  loadStudyData("StudyMaterial");
+}
+
+async function loadStudyData(sheetName){
+  const cls = document.getElementById("classSelect").value;
+  if(!cls) return alert("Class select करें");
+
+  const box = document.getElementById("studyResult");
+  box.innerHTML = "Loading...";
+
+  const url = `https://docs.google.com/spreadsheets/d/${STUDY_SHEET_ID}/gviz/tq?sheet=${sheetName}&tqx=out:json`;
+  const res = await fetch(url);
+  const txt = await res.text();
+  const json = JSON.parse(txt.replace(/^[^{]*/,'').replace(/\);\s*$/,''));
+
+  const cols = json.table.cols.map(c=>c.label);
+  const rows = json.table.rows.map(r=>r.c);
+
+  box.innerHTML = "";
+
+  rows.forEach(r=>{
+    if(r[0] && r[0].v == cls){
+      const title = r[2]?.v || r[1]?.v || "Download";
+      const link = r[r.length-1]?.v;
+      if(link){
+        box.innerHTML += `<a href="${link}" target="_blank">⬇️ ${title}</a>`;
+      }
+    }
+  });
+
+  if(box.innerHTML==="") box.innerHTML="No data found";
+}
 </script>
 
 </body>
