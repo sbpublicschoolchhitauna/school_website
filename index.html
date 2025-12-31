@@ -3957,12 +3957,31 @@ document.addEventListener("DOMContentLoaded", function(){
   const popup = document.getElementById("popupOverlay");
   if(!popup) return;
 
-  // 🚫 पहले से visible है तो hide कर दो
   popup.style.display = "none";
 
-  // ⏱️ 15 सेकंड बाद दिखाओ
+  // Festival data check
+  if(
+    typeof window.todayFestivalTitle === "undefined" ||
+    window.todayFestivalTitle === "" ||
+    window.todayFestivalText === ""
+  ){
+    return;
+  }
+
+  // ⏱️ 15 sec delay
   setTimeout(function(){
     popup.style.display = "flex";
+
+    // 🎤 VOICE
+    if("speechSynthesis" in window && window.todayFestivalVoice){
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      u.lang = "hi-IN";
+      u.rate = 0.95;
+      u.pitch = 1;
+      speechSynthesis.speak(u);
+    }
+
   }, 15000);
 
 });
