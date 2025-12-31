@@ -3955,28 +3955,30 @@ setInterval(loadAlerts, 60000);
 document.addEventListener("DOMContentLoaded", function(){
 
   const popup = document.getElementById("popupOverlay");
-  if(!popup) return;
+  const titleEl = document.getElementById("popupTitle");
+  const textEl  = document.getElementById("popupText");
+
+  if(!popup || !titleEl || !textEl) return;
 
   // 🚫 पहले hide
   popup.style.display = "none";
-
-  // 🔑 Default voice text (अगर festival वाला नहीं है)
-  const voiceText =
-    window.todayFestivalVoice ||
-    "एस बी पब्लिक स्कूल परिवार की ओर से हार्दिक शुभकामनाएँ।";
 
   // ⏱️ 15 सेकंड बाद popup + voice
   setTimeout(function(){
 
     popup.style.display = "flex";
 
+    // 🧠 जो स्क्रीन पर लिखा है वही बोलो
+    const speakText =
+      titleEl.innerText + "। " + textEl.innerText;
+
     // 🎤 VOICE
     if ("speechSynthesis" in window) {
       speechSynthesis.cancel();
 
-      const u = new SpeechSynthesisUtterance(voiceText);
+      const u = new SpeechSynthesisUtterance(speakText);
       u.lang = "hi-IN";   // Hindi
-      u.rate = 0.95;
+      u.rate = 0.95;      // आराम से बोले
       u.pitch = 1;
 
       speechSynthesis.speak(u);
