@@ -3957,28 +3957,28 @@ document.addEventListener("DOMContentLoaded", function(){
   const popup = document.getElementById("popupOverlay");
   if(!popup) return;
 
+  // 🚫 पहले hide
   popup.style.display = "none";
 
-  // Festival data check
-  if(
-    typeof window.todayFestivalTitle === "undefined" ||
-    window.todayFestivalTitle === "" ||
-    window.todayFestivalText === ""
-  ){
-    return;
-  }
+  // 🔑 Default voice text (अगर festival वाला नहीं है)
+  const voiceText =
+    window.todayFestivalVoice ||
+    "एस बी पब्लिक स्कूल परिवार की ओर से हार्दिक शुभकामनाएँ।";
 
-  // ⏱️ 15 sec delay
+  // ⏱️ 15 सेकंड बाद popup + voice
   setTimeout(function(){
+
     popup.style.display = "flex";
 
     // 🎤 VOICE
-    if("speechSynthesis" in window && window.todayFestivalVoice){
+    if ("speechSynthesis" in window) {
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
-      u.lang = "hi-IN";
+
+      const u = new SpeechSynthesisUtterance(voiceText);
+      u.lang = "hi-IN";   // Hindi
       u.rate = 0.95;
       u.pitch = 1;
+
       speechSynthesis.speak(u);
     }
 
