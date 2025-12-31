@@ -3953,5 +3953,29 @@ setInterval(loadAlerts, 60000);
   </div>
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  const popup = document.getElementById("popupOverlay");
+
+  if(!popup) return;
+
+  // 🚫 Festival data नहीं है तो popup नहीं
+  if(
+    typeof window.todayFestivalTitle === "undefined" ||
+    window.todayFestivalTitle === "" ||
+    window.todayFestivalText === ""
+  ){
+    return;
+  }
+
+  // ⏱️ 15 सेकंड delay
+  setTimeout(function(){
+    popup.style.display = "flex";
+  }, 15000);
+
+});
+</script>
+
 </body>
 </html>
