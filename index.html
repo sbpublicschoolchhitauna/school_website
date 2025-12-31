@@ -234,22 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<script>
-/* 🔗 BRIDGE: festival → global popup vars */
-(function(){
-  const d = new Date();
-  const key =
-    String(d.getMonth()+1).padStart(2,"0") + "-" +
-    String(d.getDate()).padStart(2,"0");
-
-  if (typeof festivals !== "undefined" && festivals[key]) {
-    window.todayFestivalTitle = festivals[key].title;
-    window.todayFestivalText  = festivals[key].text;
-    window.todayFestivalVoice = festivals[key].voice;
-  }
-})();
-</script>
-
 
 <audio id="festivalMusic" loop>
   <source src="festival-music.mp3" type="audio/mpeg">
@@ -3227,6 +3211,21 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
+<script>
+/* 🔗 Bridge: festivals → HARD BLOCK system */
+(function(){
+  const d = new Date();
+  const key =
+    String(d.getMonth()+1).padStart(2,"0") + "-" +
+    String(d.getDate()).padStart(2,"0");
+
+  if (typeof festivals !== "undefined" && festivals[key]) {
+    window.todayFestivalTitle = festivals[key].title;
+    window.todayFestivalText  = festivals[key].text;
+    window.todayFestivalVoice = festivals[key].voice;
+  }
+})();
+</script>
 
 <style>
 
