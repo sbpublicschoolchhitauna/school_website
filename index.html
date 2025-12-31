@@ -3882,6 +3882,62 @@ setInterval(loadAlerts, 60000);
 })();
 </script>
 
+<style>
+/* 🎉 FESTIVAL POPUP THEME MATCH */
+.festival-popup-box{
+  background: linear-gradient(135deg,#0b5fa8,#1167b1);
+  color:#ffffff;
+  padding:32px 28px;
+  border-radius:22px;
+  max-width:92%;
+  text-align:center;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.35),
+    inset 0 0 40px rgba(255,255,255,.08);
+  animation: festivalPop 0.6s ease;
+}
+
+.festival-popup-box h1{
+  margin:0 0 12px;
+  font-size:32px;
+  font-weight:900;
+  text-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+
+.festival-popup-box p{
+  font-size:18px;
+  line-height:1.6;
+  margin-bottom:18px;
+  opacity:.95;
+}
+
+/* Close button */
+.festival-popup-box button{
+  background:#ffb703;
+  color:#000;
+  border:none;
+  padding:10px 22px;
+  font-size:16px;
+  font-weight:900;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:0 6px 0 #c28700;
+}
+.festival-popup-box button:hover{
+  transform:translateY(-2px);
+}
+.festival-popup-box button:active{
+  transform:translateY(2px);
+  box-shadow:0 3px 0 #c28700;
+}
+
+/* popup animation */
+@keyframes festivalPop{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+</style>
+
 <!-- ✅ FESTIVAL POPUP OVERLAY (REQUIRED) -->
 <div id="popupOverlay" style="
   display:none;
@@ -3893,12 +3949,8 @@ setInterval(loadAlerts, 60000);
   justify-content:center;
 ">
   <div style="
-    background:#fff;
-    padding:30px;
-    border-radius:18px;
-    max-width:90%;
-    text-align:center;
-  ">
+<div class="festival-popup-box">
+
     <h1 id="popupTitle"></h1>
     <p id="popupText"></p>
     <div id="popupCountdown"></div>
