@@ -3209,6 +3209,18 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
+<script>
+/* ===== TODAY DATE KEY ===== */
+(function () {
+  const d = new Date();
+
+  window.__TODAY_KEY__ =
+    String(d.getDate()).padStart(2, "0") + "-" +
+    String(d.getMonth() + 1).padStart(2, "0");
+
+  console.log("📅 Today:", window.__TODAY_KEY__);
+})();
+</script>
 
 <style>
 
@@ -3952,44 +3964,8 @@ setInterval(loadAlerts, 60000);
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+/* ===== FESTIVAL POPUP FINAL ===== */
 
-  const popup = document.getElementById("popupOverlay");
-  const titleEl = document.getElementById("popupTitle");
-  const textEl  = document.getElementById("popupText");
-
-  if(!popup || !titleEl || !textEl) return;
-
-  // 🚫 पहले hide
-  popup.style.display = "none";
-
-  // ⏱️ 15 सेकंड बाद popup + voice
-  setTimeout(function(){
-
-    popup.style.display = "flex";
-
-    // 🧠 जो स्क्रीन पर लिखा है वही बोलो
-    const speakText =
-      titleEl.innerText + "। " + textEl.innerText;
-
-    // 🎤 VOICE
-    if ("speechSynthesis" in window) {
-      speechSynthesis.cancel();
-
-      const u = new SpeechSynthesisUtterance(speakText);
-      u.lang = "hi-IN";   // Hindi
-      u.rate = 0.95;      // आराम से बोले
-      u.pitch = 1;
-
-      speechSynthesis.speak(u);
-    }
-
-  }, 15000);
-
-});
-</script>
-
-<script>
 document.addEventListener("DOMContentLoaded", () => {
 
   const overlay = document.getElementById("popupOverlay");
@@ -3998,32 +3974,57 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔒 Default: popup बंद
   overlay.style.display = "none";
 
-  // ❌ HARD BLOCK — festival data नहीं है
+  // ❌ Festival नहीं → STOP
   if (
-    typeof window.todayFestivalTitle !== "string" ||
-    window.todayFestivalTitle.trim() === "" ||
-    typeof window.todayFestivalText !== "string" ||
-    window.todayFestivalText.trim() === ""
+    !window.todayFestivalTitle ||
+    !window.todayFestivalText
   ) {
-    console.log("🚫 Festival popup blocked — no festival data");
+    console.log("⛔ Popup blocked (no festival)");
     return;
   }
 
-  // ✅ Festival CONFIRMED → popup दिखे
+  // ✅ Festival है → popup दिखाओ
   setTimeout(() => {
 
     overlay.style.display = "flex";
 
-    // 🎤 Voice (optional)
+    // 🎤 Voice
     if (window.speechSynthesis && window.todayFestivalVoice) {
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      const u = new SpeechSynthesisUtterance(
+        window.todayFestivalVoice
+      );
       u.lang = "hi-IN";
       speechSynthesis.speak(u);
     }
 
   }, 15000);
 });
+</script>
+
+<script>
+/* ===== FESTIVAL DATE MATCH ===== */
+(function () {
+
+  const FESTS = window.FESTIVALS_2026;
+  if (!FESTS) return;
+
+  const fest = FESTS[window.__TODAY_KEY__];
+
+  // ❌ आज कोई festival नहीं
+  if (!fest) {
+    console.log("🚫 No festival today");
+    return;
+  }
+
+  // ✅ Festival मिला
+  window.todayFestivalTitle = fest.title || "";
+  window.todayFestivalText  = fest.text  || "";
+  window.todayFestivalVoice = fest.voice || "";
+
+  console.log("🎉 Festival Found:", fest.title);
+
+})();
 </script>
 
 </body>
