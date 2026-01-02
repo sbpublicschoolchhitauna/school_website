@@ -4027,5 +4027,21 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxPdFUuL_IMo5hV1blXWpNyoluA12c_ZKwaHzuuUzdw1n_zi_OrnRCAyYaPfbv6N-nc/exec";  // Apps Script से मिला URL
+
+async function loadCounting(){
+  const res = await fetch(API_URL + "?sheet=COUNTING");
+  const data = await res.json();
+
+  data.forEach((row, i) => {
+    if(i === 0) return;  // skip header
+    console.log(row);  // मोबाइल/वेबसाइट पर row data मिलेगा
+  });
+}
+
+loadCounting();
+</script>
+
 </body>
 </html>
