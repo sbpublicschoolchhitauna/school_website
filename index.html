@@ -3953,6 +3953,43 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const today = new Date();
+  const key =
+    String(today.getDate()).padStart(2, "0") + "-" +
+    String(today.getMonth() + 1).padStart(2, "0");
+
+  const fest = FESTIVALS_2026[key];
+  if (!fest) return;
+
+  // 🔐 One-time per day protection
+  const seenKey = "festival_seen_" + key;
+  if (localStorage.getItem(seenKey)) return;
+
+  const overlay = document.getElementById("popupOverlay");
+  if (!overlay) return;
+
+  document.getElementById("festivalTitle").innerText = fest.title;
+  document.getElementById("festivalText").innerText  = fest.text;
+
+  setTimeout(() => {
+    overlay.style.display = "flex";
+    localStorage.setItem(seenKey, "yes");
+
+    if (window.speechSynthesis) {
+      const u = new SpeechSynthesisUtterance(fest.voice);
+      u.lang = "hi-IN";
+      speechSynthesis.speak(u);
+    }
+
+    console.log("Festival popup shown");
+
+  }, 15000);
+});
+</script>
+
 </body>
 
 <script>
