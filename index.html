@@ -3989,5 +3989,29 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
+<script>
+(function () {
+  const today = new Date();
+  const key =
+    String(today.getDate()).padStart(2, "0") +
+    "-" +
+    String(today.getMonth() + 1).padStart(2, "0");
+
+  const festival = FESTIVALS_2026[key];
+
+  // ❌ अगर आज कोई फेस्टिवल नहीं है → कुछ भी मत दिखाओ
+  if (!festival) {
+    console.log("✅ Today is NOT a festival:", key);
+    return;
+  }
+
+  // ✅ Festival मिला → global variables set करो
+  window.todayFestivalTitle = festival.title;
+  window.todayFestivalText = festival.text;
+  window.todayFestivalVoice = festival.voice;
+})();
+</script>
+
+
 </body>
 </html>
