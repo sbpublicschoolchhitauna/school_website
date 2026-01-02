@@ -4031,13 +4031,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
-window.OneSignalDeferred = window.OneSignalDeferred || [];
-OneSignalDeferred.push(function(OneSignal) {
-  OneSignal.init({
-    appId: "os_v2_app_edwqgq2jh5hy5kt5ldobv22fo4p2govtutcufafykg52fb7raa7gpjmsyoowzpweeme5x2i74hbf4evmfcafavmkc2g3m7bist5xegy",
-    notifyButton: { enable: true }
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "20ed0343-493f-4f8e-aa7d-58dc1aeb4577",
+    });
   });
-});
 </script>
-
 </html>
