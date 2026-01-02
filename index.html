@@ -4013,5 +4013,31 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
+document.addEventListener("DOMContentLoaded", () => {
+
+  const overlay = document.getElementById("popupOverlay");
+  if (!overlay) return;
+
+  overlay.style.display = "none";
+
+  // ❌ Festival नहीं → popup बंद
+  if(window.__FESTIVAL_VALID__ !== true){
+    return;
+  }
+
+  // ✅ Festival है → delay के बाद popup
+  setTimeout(() => {
+    overlay.style.display = "flex";
+
+    if (window.speechSynthesis && window.todayFestivalVoice) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      u.lang = "hi-IN";
+      speechSynthesis.speak(u);
+    }
+
+  }, 15000);
+});
+
 </body>
 </html>
