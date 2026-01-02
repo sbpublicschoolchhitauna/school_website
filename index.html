@@ -558,6 +558,16 @@ document.addEventListener("DOMContentLoaded", () => {
   </span>
 </button>
 
+<button
+  id="openKidsLearning"
+  class="qp-3d teacher-3d idle"
+  type="button">
+  <span class="face">
+    <span class="ico">🧒</span>
+    Kids Learning
+  </span>
+</button>
+
   <!-- START: Quick Portals + Video column (inserted) -->
   <style>
   /* Quick portals + video side-by-side container */
@@ -4027,6 +4037,147 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
+<div id="kidsPopup" style="
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;
+  z-index:1000000;
+  align-items:center;
+  justify-content:center;
+">
+  <div style="
+    background:#fff;
+    width:95%;
+    max-width:1100px;
+    max-height:92vh;
+    border-radius:16px;
+    overflow:auto;
+    padding:16px;
+  ">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2 style="margin:0;color:#0b5fa8">🧒 Kids Learning Zone</h2>
+      <button onclick="closeKidsPopup()" class="btn">❌ Close</button>
+    </div>
+
+    <h3>🔢 गिनती</h3>
+    <div id="KL_COUNTING" class="kids-grid"></div>
+
+    <h3>🔤 हिंदी</h3>
+    <div id="KL_HINDI" class="kids-grid"></div>
+
+    <h3>🔠 English</h3>
+    <div id="KL_ENGLISH" class="kids-grid"></div>
+
+    <h3>👦 शरीर के अंग</h3>
+    <div id="KL_BODY" class="kids-grid"></div>
+
+    <h3>👨‍👩‍👧 रिश्ते</h3>
+    <div id="KL_RELATIVES" class="kids-grid"></div>
+  </div>
+</div>
+
+<style>
+.kids-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:14px;
+  margin:12px 0;
+}
+.kid-card{
+  background:#f6fbff;
+  border-radius:14px;
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+}
+.kid-card img{
+  width:90px;
+  height:90px;
+  object-fit:contain;
+}
+</style>
+
+<script>
+const KIDS_API =
+"https://script.google.com/macros/s/AKfycbxPdFUuL_IMo5hV1blXWpNyoluA12c_ZKwaHzuuUzdw1n_zi_OrnRCAyYaPfbv6N-nc/exec";
+
+/* ---------- OPEN / CLOSE ---------- */
+document.getElementById("openKidsLearning")
+  .addEventListener("click", ()=>{
+    document.getElementById("kidsPopup").style.display="flex";
+    loadKidsAll();
+  });
+
+function closeKidsPopup(){
+  document.getElementById("kidsPopup").style.display="none";
+  speechSynthesis.cancel();
+}
+
+/* ---------- VOICE ---------- */
+function speak(text){
+  speechSynthesis.cancel();
+  let u=new SpeechSynthesisUtterance(text);
+  u.lang="hi-IN";
+  speechSynthesis.speak(u);
+}
+
+/* ---------- LOAD ONE SHEET ---------- */
+async function loadSheet(sheet, boxId, map){
+  const r=await fetch(KIDS_API+"?sheet="+sheet);
+  const d=await r.json();
+  const box=document.getElementById(boxId);
+  box.innerHTML="";
+  for(let i=1;i<d.length;i++){
+    box.appendChild(map(d[i]));
+  }
+}
+
+/* ---------- LOAD ALL ---------- */
+function loadKidsAll(){
+
+  loadSheet("COUNTING","KL_COUNTING",(r)=>{
+    let c=document.createElement("div");
+    c.className="kid-card";
+    c.innerHTML=`<img src="${r[3]}"><b>${r[0]}</b><br>${r[1]}`;
+    c.onclick=()=>speak(r[4]);
+    return c;
+  });
+
+  loadSheet("HINDI","KL_HINDI",(r)=>{
+    let c=document.createElement("div");
+    c.className="kid-card";
+    c.innerHTML=`<img src="${r[2]}"><b>${r[0]}</b><br>${r[1]}`;
+    c.onclick=()=>speak(r[3]);
+    return c;
+  });
+
+  loadSheet("ENGLISH","KL_ENGLISH",(r)=>{
+    let c=document.createElement("div");
+    c.className="kid-card";
+    c.innerHTML=`<img src="${r[2]}"><b>${r[0]}</b><br>${r[1]}`;
+    c.onclick=()=>speak(r[3]);
+    return c;
+  });
+
+  loadSheet("BODY","KL_BODY",(r)=>{
+    let c=document.createElement("div");
+    c.className="kid-card";
+    c.innerHTML=`<img src="${r[1]}"><b>${r[0]}</b>`;
+    c.onclick=()=>speak(r[2]);
+    return c;
+  });
+
+  loadSheet("RELATIVES","KL_RELATIVES",(r)=>{
+    let c=document.createElement("div");
+    c.className="kid-card";
+    c.innerHTML=`<img src="${r[1]}"><b>${r[0]}</b>`;
+    c.onclick=()=>speak(r[2]);
+    return c;
+  });
+}
+</script>
 
 </body>
 </html>
