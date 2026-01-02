@@ -4027,41 +4027,5 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
-<!-- OneSignal Push Notifications -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(function(OneSignal) {
-    OneSignal.init({
-      appId: "20ed0343-493f-4f8e-aa7d-58dc1aeb4577",
-
-      // 🔔 Bell / Subscribe Button
-      notifyButton: {
-        enable: true,
-      },
-
-      // Optional (safe for GitHub Pages)
-      allowLocalhostAsSecureOrigin: true
-    });
-  });
-</script>
-
 </body>
-
-...
-<link rel="manifest" href="manifest.json">
-
-<!-- 👇 OneSignal code यहाँ -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(function(OneSignal) {
-    OneSignal.init({
-      appId: "20ed0343-493f-4f8e-aa7d-58dc1aeb4577",
-      notifyButton: { enable: true }
-    });
-  });
-</script>
-</head>
-
 </html>
