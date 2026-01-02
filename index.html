@@ -3990,26 +3990,40 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 
 <script>
-(function () {
-  const today = new Date();
-  const key =
-    String(today.getDate()).padStart(2, "0") +
-    "-" +
-    String(today.getMonth() + 1).padStart(2, "0");
+document.addEventListener("DOMContentLoaded", () => {
 
-  const festival = FESTIVALS_2026[key];
+  const overlay = document.getElementById("popupOverlay");
+  if (!overlay) return;
 
-  // ❌ अगर आज कोई फेस्टिवल नहीं है → कुछ भी मत दिखाओ
-  if (!festival) {
-    console.log("✅ Today is NOT a festival:", key);
+  // 🔒 Default: popup बंद
+  overlay.style.display = "none";
+
+  // ❌ HARD BLOCK — festival data नहीं है
+  if (
+    typeof window.todayFestivalTitle !== "string" ||
+    window.todayFestivalTitle.trim() === "" ||
+    typeof window.todayFestivalText !== "string" ||
+    window.todayFestivalText.trim() === ""
+  ) {
+    console.log("🚫 Festival popup blocked — no festival data");
     return;
   }
 
-  // ✅ Festival मिला → global variables set करो
-  window.todayFestivalTitle = festival.title;
-  window.todayFestivalText = festival.text;
-  window.todayFestivalVoice = festival.voice;
-})();
+  // ✅ Festival CONFIRMED → popup दिखे
+  setTimeout(() => {
+
+    overlay.style.display = "flex";
+
+    // 🎤 Voice (optional)
+    if (window.speechSynthesis && window.todayFestivalVoice) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      u.lang = "hi-IN";
+      speechSynthesis.speak(u);
+    }
+
+  }, 15000);
+});
 </script>
 
 </body>
