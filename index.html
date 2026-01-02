@@ -198,6 +198,42 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 
 <script>
 
+/* 🚫 HARD BLOCK FESTIVAL POPUP IF NO FESTIVAL */
+document.addEventListener("DOMContentLoaded", () => {
+
+  const overlay = document.getElementById("popupOverlay");
+  if (!overlay) return;
+
+  // 🛑 Default: popup कभी नहीं दिखे
+  overlay.style.display = "none";
+
+  // ❌ Festival data ही नहीं है
+  if (
+    typeof window.todayFestivalTitle === "undefined" ||
+    window.todayFestivalTitle === "" ||
+    window.todayFestivalText === ""
+  ) {
+    console.log("✅ No festival today — popup fully disabled");
+    return; // ⛔ STOP EVERYTHING
+  }
+
+  // ✅ Festival है → 15सेकंड बाद दिखे
+  setTimeout(() => {
+
+    overlay.style.display = "flex";
+
+    // 🎤 Voice
+    if (window.speechSynthesis && window.todayFestivalVoice) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(window.todayFestivalVoice);
+      u.lang = "hi-IN";
+      speechSynthesis.speak(u);
+    }
+
+  }, 15000);
+});
+</script>
+
 
 <audio id="festivalMusic" loop>
   <source src="festival-music.mp3" type="audio/mpeg">
@@ -3953,88 +3989,5 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const today = new Date();
-  const key =
-    String(today.getDate()).padStart(2, "0") + "-" +
-    String(today.getMonth() + 1).padStart(2, "0");
-
-  const fest = FESTIVALS_2026[key];
-  if (!fest) return;
-
-  // 🔐 One-time per day protection
-  const seenKey = "festival_seen_" + key;
-  if (localStorage.getItem(seenKey)) return;
-
-  const overlay = document.getElementById("popupOverlay");
-  if (!overlay) return;
-
-  document.getElementById("festivalTitle").innerText = fest.title;
-  document.getElementById("festivalText").innerText  = fest.text;
-
-  setTimeout(() => {
-    overlay.style.display = "flex";
-    localStorage.setItem(seenKey, "yes");
-
-    if (window.speechSynthesis) {
-      const u = new SpeechSynthesisUtterance(fest.voice);
-      u.lang = "hi-IN";
-      speechSynthesis.speak(u);
-    }
-
-    console.log("Festival popup shown");
-
-  }, 15000);
-});
-</script>
-
 </body>
-
-<script>
-const FESTIVALS_2026 = {
-  "01-01": {
-    title: "🎉 नव वर्ष",
-    text: "नया वर्ष नई आशाएँ और नई सफलता लेकर आता है।",
-    voice: "नया वर्ष नई आशाएँ और नई सफलता लेकर आया है।"
-  },
-  "01-12": {
-    title: "👤 स्वामी विवेकानंद जयंती",
-    text: "स्वामी विवेकानंद युवाओं को आत्मविश्वास और राष्ट्र सेवा सिखाते हैं।",
-    voice: "स्वामी विवेकानंद युवाओं को आत्मविश्वास और राष्ट्र सेवा की प्रेरणा देते हैं।"
-  }
-};
-</script>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const today = new Date();
-  const key =
-    String(today.getDate()).padStart(2, "0") + "-" +
-    String(today.getMonth() + 1).padStart(2, "0");
-
-  const fest = FESTIVALS_2026[key];
-  if (!fest) return; // ❌ festival नहीं है → popup नहीं
-
-  const overlay = document.getElementById("popupOverlay");
-  if (!overlay) return;
-
-  document.getElementById("festivalTitle").innerText = fest.title;
-  document.getElementById("festivalText").innerText  = fest.text;
-
-  setTimeout(() => {
-    overlay.style.display = "flex";
-
-    if (window.speechSynthesis) {
-      const u = new SpeechSynthesisUtterance(fest.voice);
-      u.lang = "hi-IN";
-      speechSynthesis.speak(u);
-    }
-  }, 15000);
-});
-</script>
-
 </html>
