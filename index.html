@@ -4025,7 +4025,73 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🎉 Festival Found:", fest.title);
 
 })();
+
+/* 🇮🇳 ONLY INDIA FLAG – FINAL SAFE */
+#indiaFlagOnly{
+  position:fixed;
+  top:85px;            /* header के नीचे */
+  right:12px;
+  z-index:999999;      /* सबके ऊपर */
+  pointer-events:none;/* किसी button को block नहीं करेगा */
+}
+
+/* Flag design */
+.flagOnly{
+  width:64px;
+  height:42px;
+  position:relative;
+  overflow:hidden;
+  border-radius:4px;
+  box-shadow:0 10px 22px rgba(0,0,0,.45);
+  transform-style:preserve-3d;
+  animation:flagWaveOnly 3s ease-in-out infinite;
+}
+
+.flagOnly span{
+  display:block;
+  width:100%;
+  height:33.33%;
+}
+
+.saffron{background:#FF9933;}
+.white{background:#FFFFFF;}
+.green{background:#138808;}
+
+.chakra{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:14px;
+  height:14px;
+  border:2px solid #000080;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+
+/* Wave animation */
+@keyframes flagWaveOnly{
+  0%{transform:rotateY(0deg);}
+  50%{transform:rotateY(-20deg);}
+  100%{transform:rotateY(0deg);}
+}
+
+/* Mobile adjust */
+@media(max-width:640px){
+  #indiaFlagOnly{top:70px;}
+  .flagOnly{width:52px;height:34px;}
+}
+
 </script>
+
+<!-- 🇮🇳 ONLY FLOATING INDIA FLAG -->
+<div id="indiaFlagOnly">
+  <div class="flagOnly">
+    <span class="saffron"></span>
+    <span class="white"></span>
+    <span class="green"></span>
+    <div class="chakra"></div>
+  </div>
+</div>
 
 </body>
 </html>
