@@ -715,6 +715,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
 
+<!-- 🤖 4D CARTOON CHARACTER -->
+<div id="cartoon4d">👦</div>
+
 <script>
 /* CONFIG */
 const SHEET_ID = "1BtoDja9imrMyHMKt5oqSYoOzj9w2GWe13JcbRu1vWO8";
@@ -4025,6 +4028,66 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🎉 Festival Found:", fest.title);
 
 })();
+</script>
+
+<style>
+/* 🤖 4D Cartoon Style */
+#cartoon4d{
+  position:fixed;
+  left:50%;
+  top:60%;
+  transform:translate(-50%,-50%) scale(1);
+  font-size:70px;
+  cursor:pointer;
+  z-index:999999;
+  transition:all 1.2s cubic-bezier(.25,.8,.25,1);
+  filter: drop-shadow(0 18px 25px rgba(0,0,0,.4));
+  animation: idleFloat 3s ease-in-out infinite;
+}
+
+/* floating idle */
+@keyframes idleFloat{
+  0%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-12px) rotate(3deg)}
+  100%{transform:translateY(0) rotate(0deg)}
+}
+
+/* jump */
+.jump{
+  animation: jump 1s ease;
+}
+@keyframes jump{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-80px) scale(1.1)}
+  100%{transform:translateY(0)}
+}
+</style>
+
+<script>
+const cartoon = document.getElementById("cartoon4d");
+
+function randomMove(){
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 120);
+
+  cartoon.style.left = x + "px";
+  cartoon.style.top  = y + "px";
+
+  const scale = (Math.random()*0.4 + 0.9).toFixed(2);
+  const rotate = Math.floor(Math.random()*20 - 10);
+
+  cartoon.style.transform =
+    `scale(${scale}) rotate(${rotate}deg)`;
+}
+
+/* auto random movement */
+setInterval(randomMove, 3500);
+
+/* click interaction */
+cartoon.addEventListener("click", ()=>{
+  cartoon.classList.add("jump");
+  setTimeout(()=>cartoon.classList.remove("jump"),1000);
+});
 </script>
 
 </body>
