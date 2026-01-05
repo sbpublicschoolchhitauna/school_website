@@ -714,28 +714,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
+<!-- 🧑‍🎓 REAL SCHOOL UNIFORM CARTOON -->
+<div id="schoolCartoon">
+<svg viewBox="0 0 200 420" width="130">
 
-<!-- 🧒 REAL SVG CARTOON CHARACTER -->
-<div id="realCartoon">
-<svg viewBox="0 0 200 420" width="120">
   <!-- Head -->
-  <circle cx="100" cy="70" r="45" fill="#f1c27d"/>
+  <circle cx="100" cy="60" r="42" fill="#f1c27d"/>
   <!-- Eyes -->
-  <circle cx="85" cy="65" r="6" fill="#000"/>
-  <circle cx="115" cy="65" r="6" fill="#000"/>
-  <!-- Mouth -->
-  <path d="M85 85 Q100 95 115 85" stroke="#000" stroke-width="3" fill="none"/>
+  <circle cx="85" cy="55" r="5" fill="#000"/>
+  <circle cx="115" cy="55" r="5" fill="#000"/>
+  <!-- Smile -->
+  <path d="M85 75 Q100 85 115 75" stroke="#000" stroke-width="3" fill="none"/>
 
-  <!-- Body -->
-  <rect x="70" y="120" rx="20" ry="20" width="60" height="90" fill="#0b5fa8"/>
+  <!-- Shirt -->
+  <rect x="65" y="110" rx="18" ry="18" width="70" height="75" fill="#ffffff" stroke="#0b5fa8" stroke-width="3"/>
+
+  <!-- Tie -->
+  <polygon points="100,120 92,155 108,155" fill="#c1121f"/>
+
+  <!-- Pants -->
+  <rect x="70" y="185" width="25" height="90" rx="10" fill="#0b5fa8"/>
+  <rect x="105" y="185" width="25" height="90" rx="10" fill="#0b5fa8"/>
+
+  <!-- Shoes -->
+  <rect x="68" y="275" width="30" height="14" rx="6" fill="#000"/>
+  <rect x="103" y="275" width="30" height="14" rx="6" fill="#000"/>
 
   <!-- Arms -->
-  <rect class="arm left" x="30" y="130" rx="10" ry="10" width="40" height="15" fill="#f1c27d"/>
-  <rect class="arm right" x="130" y="130" rx="10" ry="10" width="40" height="15" fill="#f1c27d"/>
+  <rect class="arm left" x="25" y="120" width="40" height="14" rx="7" fill="#f1c27d"/>
+  <rect class="arm right" x="135" y="120" width="40" height="14" rx="7" fill="#f1c27d"/>
 
-  <!-- Legs -->
-  <rect class="leg left" x="80" y="210" rx="10" ry="10" width="18" height="90" fill="#333"/>
-  <rect class="leg right" x="102" y="210" rx="10" ry="10" width="18" height="90" fill="#333"/>
 </svg>
 </div>
 
@@ -4052,61 +4060,62 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <style>
-#realCartoon{
+#schoolCartoon{
   position:fixed;
-  left:40%;
+  left:45%;
   top:55%;
   z-index:999999;
   cursor:pointer;
-  transition:all 1.2s ease;
   animation: float 3s ease-in-out infinite;
+  transition:all 1.2s ease;
 }
 
+/* floating */
 @keyframes float{
   0%{transform:translateY(0)}
-  50%{transform:translateY(-12px)}
+  50%{transform:translateY(-10px)}
   100%{transform:translateY(0)}
 }
 
-/* walking */
-.walk .leg.left{animation:leg 0.6s infinite}
-.walk .leg.right{animation:leg 0.6s infinite reverse}
+/* walking animation */
 .walk .arm.left{animation:arm 0.6s infinite reverse}
 .walk .arm.right{animation:arm 0.6s infinite}
+.walk svg{animation:step 0.6s infinite}
 
-@keyframes leg{
-  0%{transform:rotate(15deg)}
-  50%{transform:rotate(-15deg)}
-  100%{transform:rotate(15deg)}
-}
 @keyframes arm{
   0%{transform:rotate(-20deg)}
   50%{transform:rotate(20deg)}
   100%{transform:rotate(-20deg)}
 }
+@keyframes step{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(4px)}
+  100%{transform:translateX(0)}
+}
 </style>
 
 <script>
-const rc = document.getElementById("realCartoon");
+const sc = document.getElementById("schoolCartoon");
 
-function moveCartoon(){
-  rc.classList.add("walk");
+function randomMove(){
+  sc.classList.add("walk");
 
-  const x = Math.random()*(window.innerWidth-150);
+  const x = Math.random()*(window.innerWidth-160);
   const y = Math.random()*(window.innerHeight-300);
 
-  rc.style.left = x+"px";
-  rc.style.top  = y+"px";
+  sc.style.left = x+"px";
+  sc.style.top  = y+"px";
 
-  setTimeout(()=>rc.classList.remove("walk"),1200);
+  setTimeout(()=>sc.classList.remove("walk"),1200);
 }
 
-setInterval(moveCartoon,3500);
+/* auto move */
+setInterval(randomMove,3500);
 
 /* click jump */
-rc.onclick = ()=>{
-  rc.style.transform="translateY(-50px)";
-  setTimeout(()=>rc.style.transform="",500);
+sc.onclick = ()=>{
+  sc.style.transform="translateY(-50px)";
+  setTimeout(()=>sc.style.transform="",500);
 };
 </script>
 
