@@ -714,14 +714,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
-<!-- 🤖 FULL BODY CARTOON -->
-<div id="cartoon4d">
-  <div class="head"></div>
-  <div class="body"></div>
-  <div class="arm left"></div>
-  <div class="arm right"></div>
-  <div class="leg left"></div>
-  <div class="leg right"></div>
+
+<!-- 🧒 REAL SVG CARTOON CHARACTER -->
+<div id="realCartoon">
+<svg viewBox="0 0 200 420" width="120">
+  <!-- Head -->
+  <circle cx="100" cy="70" r="45" fill="#f1c27d"/>
+  <!-- Eyes -->
+  <circle cx="85" cy="65" r="6" fill="#000"/>
+  <circle cx="115" cy="65" r="6" fill="#000"/>
+  <!-- Mouth -->
+  <path d="M85 85 Q100 95 115 85" stroke="#000" stroke-width="3" fill="none"/>
+
+  <!-- Body -->
+  <rect x="70" y="120" rx="20" ry="20" width="60" height="90" fill="#0b5fa8"/>
+
+  <!-- Arms -->
+  <rect class="arm left" x="30" y="130" rx="10" ry="10" width="40" height="15" fill="#f1c27d"/>
+  <rect class="arm right" x="130" y="130" rx="10" ry="10" width="40" height="15" fill="#f1c27d"/>
+
+  <!-- Legs -->
+  <rect class="leg left" x="80" y="210" rx="10" ry="10" width="18" height="90" fill="#333"/>
+  <rect class="leg right" x="102" y="210" rx="10" ry="10" width="18" height="90" fill="#333"/>
+</svg>
 </div>
 
 <script>
@@ -4037,105 +4052,61 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <style>
-/* ===== FULL BODY CARTOON ===== */
-#cartoon4d{
+#realCartoon{
   position:fixed;
   left:40%;
-  top:60%;
-  width:80px;
-  height:140px;
+  top:55%;
   z-index:999999;
   cursor:pointer;
-  animation: float 3s ease-in-out infinite;
   transition:all 1.2s ease;
+  animation: float 3s ease-in-out infinite;
 }
 
-/* head */
-#cartoon4d .head{
-  width:40px;height:40px;
-  background:#ffcc99;
-  border-radius:50%;
-  margin:auto;
-}
-
-/* body */
-#cartoon4d .body{
-  width:36px;height:50px;
-  background:#0b5fa8;
-  margin:4px auto;
-  border-radius:10px;
-}
-
-/* arms */
-#cartoon4d .arm{
-  width:12px;height:45px;
-  background:#ffcc99;
-  position:absolute;
-  top:50px;
-  border-radius:6px;
-}
-#cartoon4d .arm.left{left:5px;transform-origin:top;}
-#cartoon4d .arm.right{right:5px;transform-origin:top;}
-
-/* legs */
-#cartoon4d .leg{
-  width:14px;height:45px;
-  background:#333;
-  position:absolute;
-  top:95px;
-  border-radius:6px;
-}
-#cartoon4d .leg.left{left:26px;}
-#cartoon4d .leg.right{right:26px;}
-
-/* floating */
 @keyframes float{
   0%{transform:translateY(0)}
   50%{transform:translateY(-12px)}
   100%{transform:translateY(0)}
 }
 
-/* walking animation */
-.walk .leg.left{animation:legMove .6s infinite}
-.walk .leg.right{animation:legMove .6s infinite reverse}
-.walk .arm.left{animation:armMove .6s infinite reverse}
-.walk .arm.right{animation:armMove .6s infinite}
+/* walking */
+.walk .leg.left{animation:leg 0.6s infinite}
+.walk .leg.right{animation:leg 0.6s infinite reverse}
+.walk .arm.left{animation:arm 0.6s infinite reverse}
+.walk .arm.right{animation:arm 0.6s infinite}
 
-@keyframes legMove{
-  0%{transform:rotate(20deg)}
-  50%{transform:rotate(-20deg)}
-  100%{transform:rotate(20deg)}
+@keyframes leg{
+  0%{transform:rotate(15deg)}
+  50%{transform:rotate(-15deg)}
+  100%{transform:rotate(15deg)}
 }
-@keyframes armMove{
-  0%{transform:rotate(-25deg)}
-  50%{transform:rotate(25deg)}
-  100%{transform:rotate(-25deg)}
+@keyframes arm{
+  0%{transform:rotate(-20deg)}
+  50%{transform:rotate(20deg)}
+  100%{transform:rotate(-20deg)}
 }
 </style>
 
 <script>
-const c = document.getElementById("cartoon4d");
+const rc = document.getElementById("realCartoon");
 
-/* random movement */
-function randomMove(){
-  c.classList.add("walk");
+function moveCartoon(){
+  rc.classList.add("walk");
 
-  const x = Math.random()*(window.innerWidth-120);
-  const y = Math.random()*(window.innerHeight-180);
+  const x = Math.random()*(window.innerWidth-150);
+  const y = Math.random()*(window.innerHeight-300);
 
-  c.style.left = x+"px";
-  c.style.top  = y+"px";
+  rc.style.left = x+"px";
+  rc.style.top  = y+"px";
 
-  setTimeout(()=>c.classList.remove("walk"),1200);
+  setTimeout(()=>rc.classList.remove("walk"),1200);
 }
 
-/* auto move */
-setInterval(randomMove,3500);
+setInterval(moveCartoon,3500);
 
 /* click jump */
-c.onclick = ()=>{
-  c.style.transform="translateY(-40px)";
-  setTimeout(()=>c.style.transform="",500);
+rc.onclick = ()=>{
+  rc.style.transform="translateY(-50px)";
+  setTimeout(()=>rc.style.transform="",500);
 };
 </script>
 
