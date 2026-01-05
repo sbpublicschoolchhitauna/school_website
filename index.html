@@ -183,23 +183,29 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
 
 <body>
   <!-- CENTERED HEADER -->
-  <div class="header" role="banner" aria-label="School header">
-    <h1>S.B. PUBLIC SCHOOL</h1>
-    <div class="meta">
-      Village Chhitauna · Post Meghauli Kala · Pin Code 273305
-      <small>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</small>
+<div class="header" role="banner" aria-label="School header">
+
+  <div class="header-flex">
+
+    <!-- 🇮🇳 TIRANGA -->
+    <div class="flag">
+      <div class="saffron"></div>
+      <div class="white">
+        <div class="chakra"></div>
+      </div>
+      <div class="green"></div>
     </div>
 
-<!-- 🇮🇳 INDIA FLAG 8D -->
-<div id="indiaFlagBox">
-  <div class="flag">
-    <div class="saffron"></div>
-    <div class="white">
-      <div class="chakra"></div>
+    <!-- SCHOOL DETAILS -->
+    <div>
+      <h1>S.B. PUBLIC SCHOOL</h1>
+      <div class="meta">
+        Village Chhitauna · Post Meghauli Kala · Pin Code 273305
+        <small>Principal — Mr. Gajendra Yadav Sir · Call: +91 6389259200 · Created By — Upendra Vishwakarma</small>
+      </div>
     </div>
-    <div class="green"></div>
+
   </div>
-</div>
 
     <!-- horizontal strip populated from Notification sheet -->
     <div class="school-strip-outer" id="schoolStripOuter" aria-live="polite">
@@ -4039,68 +4045,52 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <style>
-/* 🇮🇳 FLAG CONTAINER */
-#indiaFlagBox{
+/* HEADER SIDE ALIGN */
+.header-flex{
   display:flex;
-  justify-content:center;
-  margin-top:10px;
-  perspective:1200px; /* 8D feel */
-}
-
-/* FLAG BODY */
-.flag{
-  width:90px;
-  height:60px;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  transform-style:preserve-3d;
-  animation: wave 4s ease-in-out infinite;
-}
-
-/* stripes */
-.saffron{background:#ff9933;height:20px}
-.white{
-  background:#ffffff;
-  height:20px;
-  display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+  gap:14px;
 }
-.green{background:#138808;height:20px}
 
-/* Ashok Chakra */
+/* 🇮🇳 FLAG */
+.flag{
+  width:70px;
+  height:48px;
+  animation: wave 3s ease-in-out infinite;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+
+.saffron{height:16px;background:#ff9933}
+.white{
+  height:16px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.green{height:16px;background:#138808}
+
+/* ASHOK CHAKRA */
 .chakra{
-  width:18px;
-  height:18px;
+  width:14px;
+  height:14px;
   border:2px solid #000080;
   border-radius:50%;
-  position:relative;
   animation: spin 1.2s linear infinite;
-  transform:translateZ(20px);
-}
-.chakra::before{
-  content:"";
-  position:absolute;
-  inset:3px;
-  border:1px solid #000080;
-  border-radius:50%;
 }
 
-/* flag wave animation */
+/* FLAG WAVE */
 @keyframes wave{
   0%{transform:rotateY(0deg)}
   50%{transform:rotateY(18deg)}
   100%{transform:rotateY(0deg)}
 }
 
-/* chakra rotation */
+/* CHAKRA ROTATE */
 @keyframes spin{
   from{transform:rotate(0deg)}
   to{transform:rotate(360deg)}
-}
-
-/* mobile size */
-@media(max-width:600px){
-  .flag{width:70px;height:48px}
 }
 </style>
 
