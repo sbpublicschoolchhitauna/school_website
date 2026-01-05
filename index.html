@@ -714,9 +714,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
   </div>
-
-<!-- 🤖 4D CARTOON CHARACTER -->
-<div id="cartoon4d">👦</div>
+<!-- 🤖 FULL BODY CARTOON -->
+<div id="cartoon4d">
+  <div class="head"></div>
+  <div class="body"></div>
+  <div class="arm left"></div>
+  <div class="arm right"></div>
+  <div class="leg left"></div>
+  <div class="leg right"></div>
+</div>
 
 <script>
 /* CONFIG */
@@ -4031,63 +4037,106 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <style>
-/* 🤖 4D Cartoon Style */
+/* ===== FULL BODY CARTOON ===== */
 #cartoon4d{
   position:fixed;
-  left:50%;
+  left:40%;
   top:60%;
-  transform:translate(-50%,-50%) scale(1);
-  font-size:70px;
-  cursor:pointer;
+  width:80px;
+  height:140px;
   z-index:999999;
-  transition:all 1.2s cubic-bezier(.25,.8,.25,1);
-  filter: drop-shadow(0 18px 25px rgba(0,0,0,.4));
-  animation: idleFloat 3s ease-in-out infinite;
+  cursor:pointer;
+  animation: float 3s ease-in-out infinite;
+  transition:all 1.2s ease;
 }
 
-/* floating idle */
-@keyframes idleFloat{
-  0%{transform:translateY(0) rotate(0deg)}
-  50%{transform:translateY(-12px) rotate(3deg)}
-  100%{transform:translateY(0) rotate(0deg)}
+/* head */
+#cartoon4d .head{
+  width:40px;height:40px;
+  background:#ffcc99;
+  border-radius:50%;
+  margin:auto;
 }
 
-/* jump */
-.jump{
-  animation: jump 1s ease;
+/* body */
+#cartoon4d .body{
+  width:36px;height:50px;
+  background:#0b5fa8;
+  margin:4px auto;
+  border-radius:10px;
 }
-@keyframes jump{
+
+/* arms */
+#cartoon4d .arm{
+  width:12px;height:45px;
+  background:#ffcc99;
+  position:absolute;
+  top:50px;
+  border-radius:6px;
+}
+#cartoon4d .arm.left{left:5px;transform-origin:top;}
+#cartoon4d .arm.right{right:5px;transform-origin:top;}
+
+/* legs */
+#cartoon4d .leg{
+  width:14px;height:45px;
+  background:#333;
+  position:absolute;
+  top:95px;
+  border-radius:6px;
+}
+#cartoon4d .leg.left{left:26px;}
+#cartoon4d .leg.right{right:26px;}
+
+/* floating */
+@keyframes float{
   0%{transform:translateY(0)}
-  50%{transform:translateY(-80px) scale(1.1)}
+  50%{transform:translateY(-12px)}
   100%{transform:translateY(0)}
+}
+
+/* walking animation */
+.walk .leg.left{animation:legMove .6s infinite}
+.walk .leg.right{animation:legMove .6s infinite reverse}
+.walk .arm.left{animation:armMove .6s infinite reverse}
+.walk .arm.right{animation:armMove .6s infinite}
+
+@keyframes legMove{
+  0%{transform:rotate(20deg)}
+  50%{transform:rotate(-20deg)}
+  100%{transform:rotate(20deg)}
+}
+@keyframes armMove{
+  0%{transform:rotate(-25deg)}
+  50%{transform:rotate(25deg)}
+  100%{transform:rotate(-25deg)}
 }
 </style>
 
 <script>
-const cartoon = document.getElementById("cartoon4d");
+const c = document.getElementById("cartoon4d");
 
+/* random movement */
 function randomMove(){
-  const x = Math.random() * (window.innerWidth - 100);
-  const y = Math.random() * (window.innerHeight - 120);
+  c.classList.add("walk");
 
-  cartoon.style.left = x + "px";
-  cartoon.style.top  = y + "px";
+  const x = Math.random()*(window.innerWidth-120);
+  const y = Math.random()*(window.innerHeight-180);
 
-  const scale = (Math.random()*0.4 + 0.9).toFixed(2);
-  const rotate = Math.floor(Math.random()*20 - 10);
+  c.style.left = x+"px";
+  c.style.top  = y+"px";
 
-  cartoon.style.transform =
-    `scale(${scale}) rotate(${rotate}deg)`;
+  setTimeout(()=>c.classList.remove("walk"),1200);
 }
 
-/* auto random movement */
-setInterval(randomMove, 3500);
+/* auto move */
+setInterval(randomMove,3500);
 
-/* click interaction */
-cartoon.addEventListener("click", ()=>{
-  cartoon.classList.add("jump");
-  setTimeout(()=>cartoon.classList.remove("jump"),1000);
-});
+/* click jump */
+c.onclick = ()=>{
+  c.style.transform="translateY(-40px)";
+  setTimeout(()=>c.style.transform="",500);
+};
 </script>
 
 </body>
