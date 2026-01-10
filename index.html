@@ -712,8 +712,9 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
 
-    <div class="footer">© <span id="year"></span> S.B. PUBLIC SCHOOL — All Rights Reserved</div>
-  </div>
+    <div class="footer footer-premium">
+  © <span id="year"></span> <strong>S.B. PUBLIC SCHOOL</strong> — All Rights Reserved 🌈
+</div>
 
 <script>
 /* CONFIG */
@@ -4025,6 +4026,29 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🎉 Festival Found:", fest.title);
 
 })();
+
+.footer-premium{
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  color:#ffffff;
+  padding:18px 10px;
+  text-align:center;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:.4px;
+  border-top:2px solid rgba(255,255,255,0.25);
+}
+
+.footer-premium strong{
+  font-weight:900;
+}
+
+@media(max-width:600px){
+  .footer-premium{
+    font-size:14px;
+    padding:16px 8px;
+  }
+}
+
 </script>
 
 </body>
