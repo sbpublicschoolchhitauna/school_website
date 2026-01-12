@@ -2997,6 +2997,20 @@ setTimeout(()=>{
 </style>
 
 <script>
+function burst3D(layer, emoji, count){
+  for(let i=0;i<count;i++){
+    const e=document.createElement("div");
+    e.innerText=emoji;
+    e.className=emoji==="🇮🇳"?"flag":"flower";
+    e.style.left=Math.random()*100+"%";
+    e.style.fontSize=(24+Math.random()*22)+"px";
+    e.style.animationDuration=(5+Math.random()*6)+"s";
+    layer.appendChild(e);
+  }
+}
+</script>
+
+<script>
 document.addEventListener("DOMContentLoaded", function(){
 
   const popup = document.getElementById("popupOverlay");
