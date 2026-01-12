@@ -4069,5 +4069,34 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
+<!-- 🌸 HOLI COLOR LAYER -->
+<div id="holiLayer"></div>
+
+<style>
+/* 🌈 HOLI FULL SCREEN LAYER */
+#holiLayer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999999;
+  overflow:hidden;
+  display:none;
+}
+
+/* 🎨 Gulal particles */
+.holi-gulal{
+  position:absolute;
+  top:-40px;
+  font-size:22px;
+  animation: gulalFall linear infinite;
+  opacity:0.85;
+}
+
+@keyframes gulalFall{
+  from{ transform:translateY(0) rotate(0deg); }
+  to{ transform:translateY(110vh) rotate(360deg); }
+}
+</style>
+
 </body>
 </html>
