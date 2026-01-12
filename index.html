@@ -3139,9 +3139,12 @@ document.addEventListener("DOMContentLoaded", function(){
     String(d.getMonth()+1).padStart(2,"0") + "-" +
     String(d.getDate()).padStart(2,"0");
 
-  if(!festivals[key]) return;
+if(!festivals[key]) return;
 
-  const fest = festivals[key];
+const fest = festivals[key];
+
+// ⏳ OPTIONAL DELAY (recommended)
+setTimeout(() => {
 
   /* SHOW POPUP */
   popup.style.display = "flex";
@@ -3170,6 +3173,8 @@ document.addEventListener("DOMContentLoaded", function(){
     music.currentTime = 0;
     music.play().catch(()=>{});
   },800);
+
+}, 3000); // ✅ 3 सेकंड बाद popup
 
   /* 🎆 ANIMATION */
   layer.innerHTML="";
@@ -3209,18 +3214,6 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-<script>
-/* ===== TODAY DATE KEY ===== */
-(function () {
-  const d = new Date();
-
-  window.__TODAY_KEY__ =
-    String(d.getDate()).padStart(2, "0") + "-" +
-    String(d.getMonth() + 1).padStart(2, "0");
-
-  console.log("📅 Today:", window.__TODAY_KEY__);
-})();
-</script>
 
 <style>
 
