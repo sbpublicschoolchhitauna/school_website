@@ -216,17 +216,6 @@ justify-content:center;
   </div>
 </div>
 
-<script>
-window.todayFestivalTitle = "🎉 आज का त्यौहार";
-window.todayFestivalText  = "आज भारत में विशेष पर्व मनाया जा रहा है";
-window.todayFestivalVoice = "आज भारत में विशेष पर्व मनाया जा रहा है";
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  document.getElementById("festivalTitle").innerText = window.todayFestivalTitle;
-  document.getElementById("festivalText").innerText  = window.todayFestivalText;
-});
-</script>
-
 /* 🚫 HARD BLOCK FESTIVAL POPUP IF NO FESTIVAL */
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -4054,6 +4043,17 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🎉 Festival Found:", fest.title);
 
 })();
+</script>
+
+<script>
+window.todayFestivalTitle = "🎉 आज का त्यौहार";
+window.todayFestivalText  = "आज भारत में विशेष पर्व मनाया जा रहा है";
+window.todayFestivalVoice = "आज भारत में विशेष पर्व मनाया जा रहा है";
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("festivalTitle").innerText = window.todayFestivalTitle;
+  document.getElementById("festivalText").innerText  = window.todayFestivalText;
+});
 </script>
 
 </body>
