@@ -4027,37 +4027,5 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const festivals = {
-    "01-26": {
-      title: "🇮🇳 गणतंत्र दिवस",
-      text: "गणतंत्र दिवस की हार्दिक शुभकामनाएँ"
-    },
-    "08-15": {
-      title: "🇮🇳 स्वतंत्रता दिवस",
-      text: "स्वतंत्रता दिवस की शुभकामनाएँ"
-    }
-  };
-
-  const today = new Date();
-  const key =
-    String(today.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(today.getDate()).padStart(2, "0");
-
-  if (!festivals[key]) return;
-
-  const popup = document.getElementById("popupOverlay");
-  document.getElementById("festivalTitle").innerText = festivals[key].title;
-  document.getElementById("festivalText").innerText = festivals[key].text;
-
-  setTimeout(() => {
-    popup.style.display = "flex";
-  }, 3000);
-});
-</script>
-
 </body>
 </html>
