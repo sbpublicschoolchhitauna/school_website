@@ -103,7 +103,7 @@ thead th{background:#f5fbff;color:var(--accent);position:sticky;top:0;z-index:1}
 
 /* ===== ADDED: Admission CTA styles (assistant injected) ===== */
 .quick-apply-btn{
-  
+  display:inline-flex;
   align-items:center;
   gap:10px;
   padding:10px 16px;
@@ -197,24 +197,6 @@ a.btn[data-portal="true"], button.btn[data-portal="true"], button.btn.search-btn
   </div>
 
 <script>
-
-<div id="popupOverlay" style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-z-index:999999;
-align-items:center;
-justify-content:center;
-">
-  <div style="background:#fff;padding:20px;border-radius:12px;text-align:center;max-width:320px">
-    <h2 id="festivalTitle"></h2>
-    <p id="festivalText"></p>
-    <button onclick="document.getElementById('popupOverlay').style.display='none'">
-      बंद करें
-    </button>
-  </div>
-</div>
 
 /* 🚫 HARD BLOCK FESTIVAL POPUP IF NO FESTIVAL */
 document.addEventListener("DOMContentLoaded", () => {
@@ -4043,17 +4025,6 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🎉 Festival Found:", fest.title);
 
 })();
-</script>
-
-<script>
-window.todayFestivalTitle = "🎉 आज का त्यौहार";
-window.todayFestivalText  = "आज भारत में विशेष पर्व मनाया जा रहा है";
-window.todayFestivalVoice = "आज भारत में विशेष पर्व मनाया जा रहा है";
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  document.getElementById("festivalTitle").innerText = window.todayFestivalTitle;
-  document.getElementById("festivalText").innerText  = window.todayFestivalText;
-});
 </script>
 
 </body>
