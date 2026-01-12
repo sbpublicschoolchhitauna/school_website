@@ -4098,5 +4098,42 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 </style>
 
+<script>
+(function(){
+
+  // 🔴 होली की तारीख (हर साल बदलती है)
+  // 2026 के लिए example: 04 March 2026
+  const HOLI_DATE = "2026-03-04"; // YYYY-MM-DD
+
+  const today = new Date();
+  const todayStr = today.toISOString().split("T")[0];
+
+  if(todayStr !== HOLI_DATE) return; // ❌ होली नहीं है
+
+  const layer = document.getElementById("holiLayer");
+  if(!layer) return;
+
+  layer.style.display = "block";
+
+  const colors = ["🔴","🟡","🟢","🔵","🟣","🟠","🌸","🌼"];
+
+  function createGulal(){
+    const g = document.createElement("div");
+    g.className = "holi-gulal";
+    g.innerText = colors[Math.floor(Math.random()*colors.length)];
+    g.style.left = Math.random()*100 + "vw";
+    g.style.animationDuration = (5 + Math.random()*6) + "s";
+    g.style.fontSize = (16 + Math.random()*22) + "px";
+    layer.appendChild(g);
+
+    setTimeout(()=>g.remove(),12000);
+  }
+
+  // 🌈 लगातार गुलाल गिरता रहेगा
+  setInterval(createGulal, 250);
+
+})();
+</script>
+
 </body>
 </html>
