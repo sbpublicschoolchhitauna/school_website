@@ -4072,8 +4072,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- 🌸 HOLI COLOR LAYER -->
 <div id="holiLayer"></div>
 
-<div id="holiGreeting">होली की हार्दिक शुभकामनाएं</div>
-
 <style>
 /* 🌈 HOLI FULL SCREEN LAYER */
 #holiLayer{
@@ -4212,55 +4210,6 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 </style>
 
-<style>
-#holiGreeting{
-  position:fixed;
-  top:-80px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:clamp(22px,4vw,42px);
-  font-weight:900;
-  letter-spacing:1.5px;
-  white-space:nowrap;
-  z-index:999999;
-  pointer-events:none;
-
-  background:linear-gradient(
-    90deg,
-    #ff1744,
-    #ff9100,
-    #ffea00,
-    #00e676,
-    #2979ff,
-    #d500f9,
-    #ff1744
-  );
-  background-size:300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-
-  animation:
-    holiTextFall 10s linear infinite,
-    holiTextWave 1.8s ease-in-out infinite,
-    holiTextColor 4s linear infinite;
-}
-
-@keyframes holiTextFall{
-  from{ top:-80px; }
-  to{ top:110vh; }
-}
-
-@keyframes holiTextWave{
-  0%{ transform:translateX(-50%) rotate(-2deg); }
-  50%{ transform:translateX(-50%) rotate(2deg); }
-  100%{ transform:translateX(-50%) rotate(-2deg); }
-}
-
-@keyframes holiTextColor{
-  0%{ background-position:0% }
-  100%{ background-position:300% }
-}
-</style>
 
 </body>
 </html>
