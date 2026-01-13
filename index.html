@@ -4140,6 +4140,23 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 (function(){
 
+  // 🔴 वही होली की तारीख जो पहले से use कर रहे हो
+  const HOLI_DATE = "2026-03-04";
+
+  const today = new Date().toISOString().split("T")[0];
+  if(today !== HOLI_DATE) return;
+
+  const text = document.getElementById("holiGreeting");
+  if(!text) return;
+
+  text.style.display = "block";
+
+})();
+</script>
+
+<script>
+(function(){
+
   /* 🔴 वही होली की तारीख रखो जो पहले से है */
   const HOLI_DATE = "2026-03-04";  
 
@@ -4262,22 +4279,6 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 </style>
 
-<script>
-(function(){
-
-  // 🔴 वही होली की तारीख जो पहले से use कर रहे हो
-  const HOLI_DATE = "2026-03-04";
-
-  const today = new Date().toISOString().split("T")[0];
-  if(today !== HOLI_DATE) return;
-
-  const text = document.getElementById("holiGreeting");
-  if(!text) return;
-
-  text.style.display = "block";
-
-})();
-</script>
 
 </body>
 </html>
