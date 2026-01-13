@@ -4135,5 +4135,80 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
+<script>
+(function(){
+
+  /* 🔴 वही होली की तारीख रखो जो पहले से है */
+  const HOLI_DATE = "2026-01-13";  
+
+  const today = new Date().toISOString().split("T")[0];
+  if(today !== HOLI_DATE) return;
+
+  /* ⬇️ वही layer use होगी जो पहले से है */
+  const layer = document.getElementById("holiLayer");
+  if(!layer) return;
+
+  const gulalColors = [
+    "#ff1744","#ff9100","#ffea00",
+    "#00e676","#2979ff","#d500f9"
+  ];
+
+  function addFlyingGulal(){
+    const g = document.createElement("div");
+    g.className = "holi-gulal-powder";
+
+    const size = 8 + Math.random()*26;
+    g.style.width = g.style.height = size+"px";
+    g.style.background =
+      gulalColors[Math.floor(Math.random()*gulalColors.length)];
+
+    g.style.left = Math.random()*100 + "vw";
+    g.style.top  = (30 + Math.random()*50) + "vh";
+
+    g.style.setProperty("--x1",(Math.random()*120-60)+"px");
+    g.style.setProperty("--y1",(-Math.random()*120)+"px");
+    g.style.setProperty("--x2",(Math.random()*240-120)+"px");
+    g.style.setProperty("--y2",(-Math.random()*260)+"px");
+
+    g.style.animationDuration = (3 + Math.random()*4) + "s";
+
+    layer.appendChild(g);
+    setTimeout(()=>g.remove(),7000);
+  }
+
+  /* 🌬️ gulal continuous */
+  setInterval(addFlyingGulal, 220);
+
+})();
+</script>
+
+<style>
+/* 🎨 EXTRA HOLI GULAL (ADD-ON) */
+.holi-gulal-powder{
+  position:absolute;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  opacity:0.85;
+  filter: blur(0.6px);
+  animation: gulalAir linear forwards;
+}
+
+@keyframes gulalAir{
+  0%{
+    transform:translate(0,0) scale(0.5);
+    opacity:0;
+  }
+  20%{opacity:0.9}
+  60%{
+    transform:translate(var(--x1), var(--y1)) scale(1.2);
+  }
+  100%{
+    transform:translate(var(--x2), var(--y2)) scale(0.3);
+    opacity:0;
+  }
+}
+</style>
+
 </body>
 </html>
