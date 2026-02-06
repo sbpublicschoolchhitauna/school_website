@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try{ const res = await fetch('/api/images'); if(res.ok){ const j = await res.json(); if(Array.isArray(j.images) && j.images.length) return j.images; } }catch(e){}
     try{ const res2 = await fetch('images.json'); if(res2.ok){ const j2 = await res2.json(); if(Array.isArray(j2.images) && j2.images.length) return j2.images; } }catch(e){}
     return [
-      'slider_images/IMG_8871.jpg',
+      'slider_images/Class 10th Farewell Party.jpg',
       'slider_images/20251127_154340.jpg',
       'slider_images/WhatsApp Image 2025-11-16 at 10.33.37_c4bd2e68.jpg',
       'slider_images/WhatsApp Image 2025-10-30 at 19.36.04_e42049db.jpg',
